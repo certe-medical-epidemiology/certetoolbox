@@ -17,6 +17,8 @@ as.UTC(x, ...)
 }
 \arguments{
 \item{x}{a vector of datetime values}
+
+\item{...}{not used at the moment}
 }
 \description{
 Force Time as UTC

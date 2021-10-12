@@ -58,9 +58,6 @@
 #' a %like% b[1]
 #' #> TRUE FALSE FALSE
 like <- function(x, pattern, ignore.case = TRUE) {
-  meet_criteria(x, allow_NA = TRUE)
-  meet_criteria(pattern, allow_NA = FALSE)
-  meet_criteria(ignore.case, allow_class = "logical", has_length = 1)
   
   if (all(is.na(x))) {
     return(rep(FALSE, length(x)))
@@ -85,8 +82,8 @@ like <- function(x, pattern, ignore.case = TRUE) {
     if (length(x) == 1) {
       x <- rep(x, length(pattern))
     } else if (length(pattern) != length(x)) {
-      stop_("arguments `x` and `pattern` must be of same length, or either one must be 1 ",
-            "(`x` has length ", length(x), " and `pattern` has length ", length(pattern), ")")
+      stop("arguments `x` and `pattern` must be of same length, or either one must be 1 ",
+           "(`x` has length ", length(x), " and `pattern` has length ", length(pattern), ")", call. = FALSE)
     }
     unlist(
       mapply(FUN = grepl,
@@ -104,32 +101,24 @@ like <- function(x, pattern, ignore.case = TRUE) {
 #' @rdname like
 #' @export
 "%like%" <- function(x, pattern) {
-  meet_criteria(x, allow_NA = TRUE)
-  meet_criteria(pattern, allow_NA = FALSE)
   like(x, pattern, ignore.case = TRUE)
 }
 
 #' @rdname like
 #' @export
 "%unlike%" <- function(x, pattern) {
-  meet_criteria(x, allow_NA = TRUE)
-  meet_criteria(pattern, allow_NA = FALSE)
   !like(x, pattern, ignore.case = TRUE)
 }
 
 #' @rdname like
 #' @export
 "%like_case%" <- function(x, pattern) {
-  meet_criteria(x, allow_NA = TRUE)
-  meet_criteria(pattern, allow_NA = FALSE)
   like(x, pattern, ignore.case = FALSE)
 }
 
 #' @rdname like
 #' @export
 "%unlike_case%" <- function(x, pattern) {
-  meet_criteria(x, allow_NA = TRUE)
-  meet_criteria(pattern, allow_NA = FALSE)
   !like(x, pattern, ignore.case = FALSE)
 }
 

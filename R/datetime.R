@@ -19,6 +19,7 @@
 
 #' Force Time as UTC
 #' @param x a vector of datetime values
+#' @param ... not used at the moment
 #' @export
 as.UTC <- function(x, ...) {
   UseMethod("as.UTC")
@@ -449,6 +450,7 @@ nth_weekday <- function(ref = today(), n, weekday) {
 }
 
 #' @rdname days_around_today
+#' @param n relative number of weeks
 #' @export
 nth_monday <- function(ref = today(), n = 1) {
   nth_weekday(ref = ref, n = n, weekday = 1)
@@ -492,6 +494,7 @@ nth_sunday <- function(ref = today(), n = 1) {
 
 #' @rdname days_around_today
 #' @export
-year <- function(x) {
-  as.integer(lubridate::year(x))
+year <- function(ref = today()) {
+  as.integer(lubridate::year(ref))
 }
+

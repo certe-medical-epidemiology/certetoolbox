@@ -119,7 +119,7 @@ nth_saturday(ref = today(), n = 1)
 
 nth_sunday(ref = today(), n = 1)
 
-year(x)
+year(ref = today())
 }
 \arguments{
 \item{ref}{reference date (defaults to today)}
@@ -131,6 +131,8 @@ year(x)
 \item{wk}{week to search for}
 
 \item{yr}{year to search for, defaults to current year}
+
+\item{n}{relative number of weeks}
 }
 \description{
 All functions return a vector of dates, except for \code{\link[=yesterday]{yesterday()}}, \code{\link[=today]{today()}}, \code{\link[=tomorrow]{tomorrow()}}, \code{\link[=week2date]{week2date()}}, and the \verb{start_of_*()}, \verb{end_of_*()} and \verb{nth_*()} functions; these return 1 date.
