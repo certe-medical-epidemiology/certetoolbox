@@ -55,14 +55,13 @@ as.UTC.default <- function(x, ...) {
 
 #' Dates around Today
 #'
+#' All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
 #' @param ref reference date (defaults to today)
 #' @param only_start_end logical to indicate whether only the first and last value of the resulting vector should be returned
 #' @param day day to return (0 are 7 are Sunday, 1 is Monday, etc.)
 #' @param wk week to search for
 #' @param yr year to search for, defaults to current year
-#' @details All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
-#' 
-#' Week ranges always start on Mondays and end on Sundays.
+#' @details Week ranges always start on Mondays and end on Sundays.
 #'
 #' [year()] always returns an [integer].
 #' @rdname days_around_today
@@ -73,6 +72,8 @@ as.UTC.default <- function(x, ...) {
 #' @export
 #' @examples
 #' today() %in% this_month()
+#' 
+#' library(dplyr, warn.conflicts = FALSE)
 #' 
 #' # 2nd Monday of last month:
 #' last_month() %>% nth_monday(2)
@@ -99,7 +100,6 @@ as.UTC.default <- function(x, ...) {
 #'   filter(as.Date(time) %in% last_week())
 #'   
 #' \dontrun{
-#' 
 #' data <- certedb_getmmb(dates = last_week(only_start_end = TRUE))
 #' data <- certedb_getmmb(where = db$o.ontvangstdatum %in% last_week())
 #' data <- certedb_getmmb(where = db$dlt.modbac_datumtijd > start_of_this_month())
@@ -109,7 +109,6 @@ yesterday <- function(ref = today()) {
   ref - 1
 }
 
-#' @rdname days_around_today
 #' @importFrom lubridate today
 #' @export
 lubridate::today

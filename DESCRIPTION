@@ -19,7 +19,7 @@ Authors@R: c(
 Description: A Certe R Package for miscellaneous functions that do not fit
   a dedicated package.
   This package is part of the 'certedata' universe.
-URL: https://github.com/certe-medical-epidemiology
+URL: https://github.com/certe-medical-epidemiology/certetoolbox
 Depends: 
   R (>= 3.6.0)
 Imports:
