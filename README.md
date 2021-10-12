@@ -1,4 +1,4 @@
-# The `certetemplate` package for R
+# The `certetoolbox` package for R
 
 ### General Information
 

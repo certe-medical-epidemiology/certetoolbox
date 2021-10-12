@@ -1,5 +1,5 @@
-Package: certetemplate
-Title: A Certe R Package for ...
+Package: certetoolbox
+Title: A Certe R Package for Miscellaneous Functions
 Version: 0.0.1
 Authors@R: c(
   person(given = c("Matthijs", "S."), 
@@ -16,11 +16,18 @@ Authors@R: c(
          email = "e.dijkstra@certe.nl"),
   person(given = "Certe Medical Diagnostics & Advice Foundation",
          role = c("cph", "fnd")))
-Description: A Certe R Package for ... .
+Description: A Certe R Package for miscellaneous functions that do not fit
+  a dedicated package.
   This package is part of the 'certedata' universe.
 URL: https://github.com/certe-medical-epidemiology
 Depends: 
-  R (>= 4.0.0)
+  R (>= 3.6.0)
+Imports:
+  dplyr (>= 1.0.0),
+  lubridate (>= 1.7),
+  magrittr (>= 2.0.0),
+  rstudioapi (>= 0.13),
+  stringr (>= 1.4.0)
 Suggests: 
   testthat (>= 2.0.0)
 License: GPL-2

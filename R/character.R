@@ -17,7 +17,35 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-library(testthat)
-library(certetoolbox)
+#' Paste Elements Together
+#'
+#' This function is identical to `paste(..., sep = "", collapse = "")`.
+#' @param ... elements to be pasted together
+#' @export
+#' @examples 
+#' concat("a", "b", "c")
+concat <- function(...) {
+  paste(..., collapse = "", sep = "")
+}
 
-test_check("certetoolbox")
+#' Human-readable File Size
+#' 
+#' Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).
+#' @param bytes number of bytes
+#' @param decimals precision, not used for bytes and kilobytes
+#' @param decimal.mark decimal mark to use
+#' @export
+size_humanreadable <- function(bytes, decimals = 1, decimal.mark = ",") {
+  bytes <- as.double(bytes)
+  # Adapted from:
+  # http://jeffreysambells.com/2012/10/25/human-readable-filesize-php
+  size <- c("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+  factor <- floor((nchar(formatC(bytes, format = "f", digits = 0)) - 1) / 3)
+  factor <- min(factor, length(size) - 1)
+  # added slight improvement; no decimals for B and kB:
+  decimals <- rep(decimals, length(bytes))
+  decimals[size[factor + 1]  %in% c("B", "kB")] <- 0
+  out <- paste(sprintf(paste0("%.", decimals, "f"), bytes / (1024 ^ factor)), size[factor + 1])
+  out <- trimws(gsub(".", decimal.mark, out, fixed = TRUE))
+  out
+}
