@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{today}
+\alias{now}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{lubridate}{\code{\link[lubridate:now]{today}}}
+  \item{lubridate}{\code{\link[lubridate]{now}}, \code{\link[lubridate:now]{today}}}
 }}
 

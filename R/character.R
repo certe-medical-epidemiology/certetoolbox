@@ -35,13 +35,17 @@ concat <- function(...) {
 #' @param decimals precision, not used for bytes and kilobytes
 #' @param decimal.mark decimal mark to use
 #' @export
+#' @examples 
+#' size_humanreadable(c(12, 1234, 123456, 12345678))
+#' 
+#' size_humanreadable(1024 ^ c(0:4))
 size_humanreadable <- function(bytes, decimals = 1, decimal.mark = ",") {
   bytes <- as.double(bytes)
   # Adapted from:
   # http://jeffreysambells.com/2012/10/25/human-readable-filesize-php
   size <- c("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
   factor <- floor((nchar(formatC(bytes, format = "f", digits = 0)) - 1) / 3)
-  factor <- min(factor, length(size) - 1)
+  factor[factor > length(size) - 1] <- length(size) - 1
   # added slight improvement; no decimals for B and kB:
   decimals <- rep(decimals, length(bytes))
   decimals[size[factor + 1]  %in% c("B", "kB")] <- 0

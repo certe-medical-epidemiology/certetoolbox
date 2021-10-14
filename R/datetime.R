@@ -114,6 +114,10 @@ yesterday <- function(ref = today()) {
 #' @export
 lubridate::today
 
+#' @importFrom lubridate now
+#' @export
+lubridate::now
+
 #' @rdname days_around_today
 #' @export
 tomorrow <- function(ref = today()) {

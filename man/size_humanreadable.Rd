@@ -16,3 +16,8 @@ size_humanreadable(bytes, decimals = 1, decimal.mark = ",")
 \description{
 Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).
 }
+\examples{
+size_humanreadable(c(12, 1234, 123456, 12345678))
+
+size_humanreadable(1024 ^ c(0:4))
+}

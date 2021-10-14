@@ -21,7 +21,7 @@ title: "certetoolbox"
 url: "https://certe-medical-epidemiology.github.io/certetoolbox/"
 
 navbar:
-  title: "AMR (for R)"
+  title: "certetoolbox"
   left:
     - text: "Home"
       icon: "fa-home"
