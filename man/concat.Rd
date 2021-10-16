@@ -7,11 +7,13 @@
 concat(...)
 }
 \arguments{
-\item{...}{elements to be pasted together}
+\item{...}{elements to be pasted together, can also be vectors}
 }
 \description{
-This function is identical to \code{paste(..., sep = "", collapse = "")}.
+This function is identical to \code{paste(c(...), sep = "", collapse = "")}.
 }
 \examples{
 concat("a", "b", "c")
+
+concat(c("a", "b"), "c")
 }

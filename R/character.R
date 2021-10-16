@@ -19,13 +19,15 @@
 
 #' Paste Elements Together
 #'
-#' This function is identical to `paste(..., sep = "", collapse = "")`.
-#' @param ... elements to be pasted together
+#' This function is identical to `paste(c(...), sep = "", collapse = "")`.
+#' @param ... elements to be pasted together, can also be vectors
 #' @export
 #' @examples 
 #' concat("a", "b", "c")
+#' 
+#' concat(c("a", "b"), "c")
 concat <- function(...) {
-  paste(..., collapse = "", sep = "")
+  paste(c(...), collapse = "", sep = "")
 }
 
 #' Human-readable File Size

@@ -21,6 +21,9 @@
 #' @param x a vector of datetime values
 #' @param ... not used at the moment
 #' @export
+#' @examples 
+#' Sys.time()
+#' as.UTC(Sys.time())
 as.UTC <- function(x, ...) {
   UseMethod("as.UTC")
 }
@@ -47,22 +50,20 @@ as.UTC.POSIXct <- function(x, ...) {
 #' @rdname as.UTC
 #' @export
 as.UTC.default <- function(x, ...) {
-  if (inherits(x, "POSIXct")) {
-    attr(x, "tzone") <- "UTC"
-  }
   x
 }
 
 
 #' Dates around Today
 #'
-#' All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
 #' @param ref reference date (defaults to today)
 #' @param only_start_end logical to indicate whether only the first and last value of the resulting vector should be returned
 #' @param day day to return (0 are 7 are Sunday, 1 is Monday, etc.)
 #' @param wk week to search for
 #' @param yr year to search for, defaults to current year
-#' @details Week ranges always start on Mondays and end on Sundays.
+#' @details All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
+#' 
+#' Week ranges always start on Mondays and end on Sundays.
 #'
 #' [year()] always returns an [integer].
 #' @rdname days_around_today
@@ -73,6 +74,9 @@ as.UTC.default <- function(x, ...) {
 #' @export
 #' @examples
 #' today() %in% this_month()
+#' 
+#' next_week()
+#' next_week(only_start_end = TRUE)
 #' 
 #' library(dplyr, warn.conflicts = FALSE)
 #' 
@@ -110,10 +114,12 @@ yesterday <- function(ref = today()) {
   ref - 1
 }
 
+#' @rdname days_around_today
 #' @importFrom lubridate today
 #' @export
 lubridate::today
 
+#' @rdname days_around_today
 #' @importFrom lubridate now
 #' @export
 lubridate::now
@@ -343,6 +349,21 @@ end_of_this_month <- function(ref = today()) {
 
 #' @rdname days_around_today
 #' @export
+start_of_next_month <- function(ref = today()) {
+  ref <- as_date(ref)
+  next_month(ref)[1]
+}
+
+#' @rdname days_around_today
+#' @export
+end_of_next_month <- function(ref = today()) {
+  ref <- as_date(ref)
+  out <- next_month(ref)
+  out[length(out)]
+}
+
+#' @rdname days_around_today
+#' @export
 start_of_last_quarter <- function(ref = today()) {
   ref <- as_date(ref)
   last_quarter(ref)[1]
@@ -373,6 +394,21 @@ end_of_this_quarter <- function(ref = today()) {
 
 #' @rdname days_around_today
 #' @export
+start_of_next_quarter <- function(ref = today()) {
+  ref <- as_date(ref)
+  next_quarter(ref)[1]
+}
+
+#' @rdname days_around_today
+#' @export
+end_of_next_quarter <- function(ref = today()) {
+  ref <- as_date(ref)
+  out <- next_quarter(ref)
+  out[length(out)]
+}
+
+#' @rdname days_around_today
+#' @export
 start_of_last_year <- function(ref = today()) {
   ref <- as_date(ref)
   last_year(ref)[1]
@@ -398,6 +434,21 @@ start_of_this_year <- function(ref = today()) {
 end_of_this_year <- function(ref = today()) {
   ref <- as_date(ref)
   out <- this_year(ref)
+  out[length(out)]
+}
+
+#' @rdname days_around_today
+#' @export
+start_of_next_year <- function(ref = today()) {
+  ref <- as_date(ref)
+  next_year(ref)[1]
+}
+
+#' @rdname days_around_today
+#' @export
+end_of_next_year <- function(ref = today()) {
+  ref <- as_date(ref)
+  out <- next_year(ref)
   out[length(out)]
 }
 
@@ -501,4 +552,3 @@ nth_sunday <- function(ref = today(), n = 1) {
 year <- function(ref = today()) {
   as.integer(lubridate::year(ref))
 }
-

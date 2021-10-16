@@ -23,3 +23,7 @@ as.UTC(x, ...)
 \description{
 Force Time as UTC
 }
+\examples{
+Sys.time()
+as.UTC(Sys.time())
+}
