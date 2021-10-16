@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Paste Elements Together — concat • certetoolbox</title>
+<title>Case When — .case_when • certetoolbox</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Paste Elements Together — concat" />
-<meta property="og:description" content="This function is identical to paste(c(...), sep = &quot;&quot;, collapse = &quot;&quot;)." />
+<meta property="og:title" content="Case When — .case_when" />
+<meta property="og:description" content="Inspired by dplyr::case_when(), but allows different lengths of outcomes (just like ifelse())." />
 
 
 
@@ -121,32 +121,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Paste Elements Together</h1>
-    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/character.R'><code>R/character.R</code></a></small>
-    <div class="hidden name"><code>concat.Rd</code></div>
+    <h1>Case When</h1>
+    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/dependency_prevention.R'><code>R/dependency_prevention.R</code></a></small>
+    <div class="hidden name"><code>case_when.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function is identical to <code><a href='https://rdrr.io/r/base/paste.html'>paste(c(...), sep = "", collapse = "")</a></code>.</p>
+    <p>Inspired by <code><a href='https://dplyr.tidyverse.org/reference/case_when.html'>dplyr::case_when()</a></code>, but allows different lengths of outcomes (just like <code><a href='https://rdrr.io/r/base/ifelse.html'>ifelse()</a></code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>concat</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.case_when</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>elements to be pasted together, can also be vectors</p></td>
+      <td><p>a sequence of two-sided formulas</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Code copied from <code>poorman::case_when()</code> under same license.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>concat</span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "abc"</div><div class='input'>
-<span class='fu'>concat</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, <span class='st'>"c"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "abc"</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span>
+<span class='fu'>.case_when</span><span class='op'>(</span>
+  <span class='va'>x</span> <span class='op'>%%</span> <span class='fl'>35</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"fizz buzz"</span>,
+  <span class='va'>x</span> <span class='op'>%%</span> <span class='fl'>5</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"fizz"</span>,
+  <span class='va'>x</span> <span class='op'>%%</span> <span class='fl'>7</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"buzz"</span>,
+  <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "1"         "2"         "3"         "4"         "fizz"      "6"        
+#&gt;  [7] "buzz"      "8"         "9"         "fizz"      "11"        "12"       
+#&gt; [13] "13"        "buzz"      "fizz"      "16"        "17"        "18"       
+#&gt; [19] "19"        "fizz"      "buzz"      "22"        "23"        "24"       
+#&gt; [25] "fizz"      "26"        "27"        "buzz"      "29"        "fizz"     
+#&gt; [31] "31"        "32"        "33"        "34"        "fizz buzz" "36"       
+#&gt; [37] "37"        "38"        "39"        "fizz"      "41"        "buzz"     
+#&gt; [43] "43"        "44"        "fizz"      "46"        "47"        "48"       
+#&gt; [49] "buzz"      "fizz"     </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
