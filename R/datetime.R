@@ -68,8 +68,7 @@ as.UTC.default <- function(x, ...) {
 #' [year()] always returns an [integer].
 #' @rdname days_around_today
 #' @name days_around_today
-#' @importFrom magrittr `%>%`
-#' @importFrom dplyr filter
+#' @importFrom dplyr `%>%` filter
 #' @importFrom lubridate as_date dweeks dmonths dyears floor_date ceiling_date
 #' @export
 #' @examples

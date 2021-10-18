@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
   person(given = c("Matthijs", "S."), 
          family = "Berends",
@@ -23,9 +23,13 @@ URL: https://github.com/certe-medical-epidemiology/certetoolbox
 Depends: 
   R (>= 3.6.0)
 Imports:
+  certestyle,
+  cleaner (>= 1.5.1),
   dplyr (>= 1.0.0),
+  flextable (>= 0.6.8),
   lubridate (>= 1.7),
-  magrittr (>= 2.0.0),
+  knitr (>= 1.32),
+  officer (>= 0.4.0),
   rstudioapi (>= 0.13),
   stringr (>= 1.4.0)
 Suggests: 

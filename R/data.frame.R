@@ -17,3 +17,684 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+#' Format Table as Flextable
+#'
+#' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats.
+#' @param x a [data.frame]
+#' @param rows.height height of the rows in centimetres
+#' @param row.names.bold display row names in bold
+#' @param rows.italic column indexes of rows in italics
+#' @param rows.bold column indexes of rows in bold
+#' @param rows.fill the column indices of rows to be shaded
+#' @param rows.fill.picker the colour for values in `rows.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param rows.zebra banded rows in the body - equivalent to `rows.fill = seq(2, nrow(x), 2)`
+#' @param row.total add a row total (at the bottom of the table)
+#' @param row.total.name name of the row total
+#' @param row.total.function function used to calculate all numeric values per column (non-numeric columns are skipped)
+#' @param row.total.widths cell width in row total
+#' @param row.total.bold bold formatting of row total
+#' @param row.extra.header an extra header to be displayed above the table
+#' @param row.extra.footer an extra footer to show below the table
+#' @param columns.width width of columns. For `autofit.fullpage = TRUE`, these are proportions to `autofit.fullpage.width`. For `autofit.fullpage = FALSE`, these are centimeters
+#' @param column.names.bold display column names in bold
+#' @param columns.italic column indices of columns to be displayed in italics
+#' @param columns.bold column indices of columns in bold
+#' @param columns.fill the column indices of rows to be shaded
+#' @param columns.fill.picker the colour for values in `columns.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param columns.zebra banded columns - equivalent to `columns.fill = seq(2, ncol(x), 2)`
+#' @param column.total adding a column total (to the right of the table)
+#' @param column.total.name name of the column total
+#' @param column.total.function function used to calculate all numeric values per row
+#' @param column.total.bold bold formatting of column total
+#' @param decimal.mark decimal separator
+#' @param big.mark thousands separator
+#' @param font.family table font family
+#' @param font.size table font size
+#' @param font.size.header font size of header
+#' @param values.colour,values.fill,values.bold,values.italic values to be formatted
+#' @param values.colour.picker,values.fill.picker the colour for values in `values.colour` or `values.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param autofit format table in width automatically
+#' @param autofit.fullpage display table across width of page
+#' @param autofit.fullpage.width set number of centimetres to width of table
+#' @param vline indices of columns to have a vertical line to their right
+#' @param vline.border function to define vertical line
+#' @param vline.part part of the table where the vertical lines should be placed ("all", "header", "body", "footer")
+#' @param ... not used
+#' @param row.names row names to be displayed. Will be `1:nrow(x)` if set to TRUE, but can be a vector of values.
+#' @param column.names column names to be displayed. Can also be a named vector where the names are existing columns, or indices of columns. When this vector is smaller than `ncol(x)`, only the first `length(column.names)` are replaced. When this vector is longer than `ncol(x)`, all column names are replaced
+#' @param align default is "c", which aligns everything centrally. Use "r", "l", "c" and "j"/"u" (justify/align) to change alignment. Can be a vector or a character (like "lrrrcc")
+#' @param align.part part of the table where the alignment should take place ("all", "header", "body", "footer")
+#' @param caption table caption
+#' @param na text for missing values
+#' @param format.dates see [certestyle::format2()]
+#' @param logicals vector with two values that replace `TRUE` and `FALSE`
+#' @param columns.percent display the column indices as percentages using [certestyle::format2()] - example: `columns.percent = c(2, 3)`
+#' @param round.numbers number of decimal places to round up for numbers
+#' @param round.percent number of decimal places to round to when using `columns.percent`
+#' @param print forced printing (required in a `for`` loop)
+#' @seealso [flextable()]
+#' @return list
+#' @rdname tbl_flextable
+#' @importFrom certestyle colourpicker format2
+#' @importFrom dplyr `%>%` bind_cols pull
+#' @importFrom flextable flextable add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd
+#' @importFrom cleaner as.percentage
+#' @export
+#' @examples
+#' # generate a data.frame
+#' df <- data.frame(text = LETTERS[1:10],
+#'                  `decimal numbers` = runif(10, 0, 10),
+#'                  `whole numbers` = as.integer(runif(10, 0, 10)),
+#'                  `logical values` = as.logical(round(runif(10, 0, 1))),
+#'                  dates = today() - runif(10, 200, 2000),
+#'                  stringsAsFactors = FALSE)
+#'
+#' # default
+#' tbl_flextable(df)      # dataset heeft geen rijnamen
+#' tbl_flextable(mtcars)  # dataset heeft wel rijnamen
+#'
+#' # extra formatting
+#' tbl_flextable(df,
+#'               logicals = c("X", "-"),     # replaces TRUE en FALSE
+#'               values.colour = "X",
+#'               values.fill = "X",
+#'               row.names = "S. aureus",
+#'               columns.italic = 1,
+#'               format.dates = "ddd dd-mm-yy",
+#'               round.numbers = 3)
+#'
+#' # row totals
+#' tbl_flextable(df,
+#'               row.total = TRUE,           # add row total
+#'               row.total.function = max,   # instead of sum()
+#'               row.total.name = "Maximum", # also works with dates
+#'               columns.percent = 2,        # 2nd column as percentages
+#'               round.percent = 0)          # rounding percentages
+#'
+#' # column names
+#' tbl_flextable(df,
+#'               column.names = c("1" = "Kolom 1",
+#'                                "2" = "Kolom 2",
+#'                                dates = "DATES!"))
+#' tbl_flextable(df,
+#'               column.names = LETTERS)
+#'
+#' # vertical lines, alignment and row names
+#' tbl_flextable(df,
+#'               align = "lrrcc", # also works: c("l", "r", "r", "c", "c")
+#'               font.size = 12,
+#'               vline = c(2, 4),
+#'               vline.part = "all",
+#'               row.names = paste("Experiment", 1:10))
+#'
+#' # width of cells and table
+#' tbl_flextable(data.frame(test1 = "A", test2 = "B"),
+#'               vline = 1,
+#'               autofit.fullpage.width = 16, # default values in cm
+#'               columns.width = c(1, 3))     # ratio; cells become 4 and 12 cm
+#'
+#' tbl_flextable(data.frame(test1 = "A", test2 = "B"),
+#'               vline = 1,
+#'               autofit.fullpage = FALSE,    # no fullpage autofit
+#'               columns.width = c(1, 3))     # cells become 1 and 3 cm
+tbl_flextable <- function(x,
+                          row.names = rownames(x),
+                          row.names.bold = TRUE,
+                          rows.italic = NULL,
+                          rows.bold = NULL,
+                          rows.height = NULL,
+                          rows.fill = NULL,
+                          rows.fill.picker = "certeblauw5",
+                          rows.zebra = FALSE,
+                          row.total = FALSE,
+                          row.total.name = "Totaal",
+                          row.total.function = sum,
+                          row.total.widths = NULL,
+                          row.total.bold = TRUE,
+                          row.extra.header = list(values = NULL, widths = 1),
+                          row.extra.footer = list(values = NULL, widths = 1),
+                          column.names = colnames(x),
+                          column.names.bold = TRUE,
+                          columns.width = NULL,
+                          columns.percent = NULL,
+                          columns.italic = NULL,
+                          columns.bold = NULL,
+                          columns.fill = NULL,
+                          columns.fill.picker = "certeblauw5",
+                          columns.zebra = FALSE,
+                          column.total = FALSE,
+                          column.total.name = "Totaal",
+                          column.total.function = sum,
+                          column.total.bold = TRUE,
+                          align = "c",
+                          align.part = "all",
+                          caption = "",
+                          na = '',
+                          logicals = c("X", ""),
+                          round.numbers = 2,
+                          round.percent = 1,
+                          format.dates = 'd mmm yyyy',
+                          decimal.mark = ",",
+                          big.mark = ".",
+                          font.family = "Calibri",
+                          font.size = 9,
+                          font.size.header = font.size + 1,
+                          values.colour = NULL,
+                          values.colour.picker = "certeroze",
+                          values.fill = NULL,
+                          values.fill.picker = "certeroze3",
+                          values.bold = NULL,
+                          values.italic = NULL,
+                          autofit = is.null(columns.width) & is.null(rows.height),
+                          autofit.fullpage = TRUE,
+                          autofit.fullpage.width = 16,
+                          vline = NULL,
+                          vline.border = officer::fp_border(),
+                          vline.part = c("body", "footer"),
+                          print = FALSE,
+                          ...) {
+  
+  # beetje lief zijn voor typefouten
+  dots <- list(...)
+  if (is.null(vline) & missing(vline)) {
+    vline <- dots$vline.columns
+  }
+  if (!is.null(dots$vline.parts)) {
+    vline.part <- dots$vline.parts
+  }
+  if (!is.null(dots$col.names)) {
+    column.names <- dots$col.names
+  }
+  if (!is.null(dots$row.height)) {
+    rows.height <- dots$row.height
+  }
+  
+  x <- as.data.frame(x, stringsAsFactors = FALSE)
+  
+  addif <- function(ft, test, elem) {
+    if (isTRUE(test)) {
+      elem
+    } else {
+      ft
+    }
+  }
+  
+  if (identical(row.names, as.character(c(1:nrow(x)))) & missing(row.names)) {
+    # rijnamen zijn niet ingesteld en zijn dus 1:nrow(x)
+    row.names <- FALSE
+  }
+  
+  if (!isFALSE(row.names)) {
+    if (isTRUE(row.names)) {
+      row.names <- c(1:nrow(x))
+    } else if (length(row.names) == 1) {
+      row.names <- rep(row.names, nrow(x))
+    } else if (length(row.names) != nrow(x)) {
+      stop("length of row.names is not equal to number of rows")
+    }
+    row.names <- as.character(row.names)
+    x <- bind_cols(data.frame("col123456" = row.names), x)
+  }
+  
+  if (is.null(ncol(x))) {
+    col_count <- 1
+  } else {
+    col_count <- ncol(x)
+  }
+  
+  if (column.total == TRUE) {
+    column.total.df <- x[, sapply(x, is.numeric), drop = FALSE]
+    column.total.values <- apply(column.total.df,
+                                 1,
+                                 function(x,
+                                          FUN = column.total.function) {
+                                   if (is.numeric(x)) {
+                                     FUN(x)
+                                   } else {
+                                     ""
+                                   }
+                                 })
+    if (!all(x == "")) {
+      x$col789123 <- column.total.values
+      colnames(x)[ncol(x)] <- column.total.name
+    }
+  }
+  
+  x.bak <- x
+  
+  if (is.null(columns.percent)) {
+    columns.percent <- integer(0)
+  }
+  for (i in 1:col_count) {
+    if (class(x[1, i])[1] %in% c('Date', 'POSIXct', 'POSIXlt')) {
+      x[, i] <- x %>%
+        pull(i) %>% 
+        format2(format = format.dates)
+    }
+    if (class(x[1, i])[1] %in% "logical") {
+      x[, i] <- x %>%
+        pull(i) %>% 
+        as.character() %>% 
+        gsub("TRUE", logicals[1], .) %>%
+        gsub("FALSE", logicals[2], .)
+    }
+    if (class(x[1, i])[1] %in% c('double', 'integer', 'numeric', 'single') &
+        !i %in% columns.percent) {
+      x[, i] <- x %>%
+        pull(i) %>% 
+        format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
+    }
+    if (i %in% columns.percent) {
+      x[, i] <- x %>% 
+        pull(i) %>%
+        as.percentage() %>% 
+        format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
+    }
+  }
+  
+  # NA vervangen
+  colnames.bak <- colnames(x)
+  x <- as.data.frame(sapply(x,
+                              function(x, na_val = na) {
+                                x <- as.character(x)
+                                x[is.na(x)] <- na_val
+                                x
+                              }, simplify = FALSE),
+                       stringsAsFactors = FALSE)
+  colnames(x) <- colnames.bak
+  
+  # kolomnamen VOOR de flextable (set_header_labels is niet zo makkelijk...)
+  colnames_bak <- NULL
+  if (length(column.names) > 0) {
+    if (!is.null(names(column.names))) {
+      for (i in 1:length(column.names)) {
+        col.name <- names(column.names)[i]
+        if (col.name != "") {
+          if (as.character(col.name) %in% as.character(c(1:ncol(x)))) {
+            # is een index van een kolom
+            colnames(x)[as.integer(col.name)] <- column.names[i]
+          } else {
+            colnames(x)[colnames(x) == col.name] <- column.names[i]
+          }
+        }
+      }
+    } else {
+      if (length(column.names) != ncol(x)) {
+        if (length(column.names) < ncol(x)) {
+          warning("Only the first ", length(column.names), " column names will be replaced")
+          colnames(x)[1:length(column.names)] <- column.names
+        } else {
+          warning("Only the first ", ncol(x), " items of column.names will be used")
+          colnames(x) <- column.names[1:ncol(x)]
+        }
+      } else {
+        colnames(x) <- column.names
+      }
+      if (colnames(x)[1] == "col123456") {
+        colnames(x)[1] <- " "
+      }
+    }
+    # meerdere dezelfde kolomnamen ondersteunen, zodat dit werkt:
+    # data.frame(col1 = 1, col2 = 2) %>%
+    #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
+    colnames_bak <- colnames(x)
+    # A t/m Z, daarna AA t/m ZZ (totaal 26 + 26 * 26 = 702)
+    letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
+    colnames(x) <- letter_vector[1:ncol(x)]
+    names(colnames_bak) <- colnames(x) # hierdoor werkt set_header_labels, verderop
+  }
+  
+  ft <- flextable(x)
+  
+  # Rij- en kolomtotalen
+  if (row.total == TRUE) {
+    ind <- 0
+    row.total.values <- sapply(x.bak, function(x,
+                                               FUN = row.total.function,
+                                               dec = decimal.mark,
+                                               big = big.mark,
+                                               date_format = format.dates,
+                                               round = round.numbers,
+                                               round_pct = round.percent) {
+      ind <<- ind + 1
+      if (ind %in% columns.percent) {
+        x %>% 
+          FUN() %>%
+          as.percentage() %>%
+          format2(round = round.percent, decimal.mark = dec, big.mark = big)
+      } else if (!identical(FUN, sum) & inherits(x, c("Date", "POSIXt"))) {
+        x %>%
+          FUN() %>%
+          format2(format = date_format)
+      } else if (is.numeric(x)) {
+        x %>% 
+          FUN() %>%
+          format2(round = round, decimal.mark = dec, big.mark = big)
+      } else {
+        ""
+      }
+    })
+    if (!all(row.total.values == "")) {
+      # naam toevoegen op eerste kolomplek
+      row.total.values[1] <- row.total.name
+      if (is.null(row.total.widths)) {
+        row.total.widths <- 1
+      }
+      if (length(row.total.widths) == 1) {
+        row.total.widths <- rep(row.total.widths, ncol(x))
+      }
+      ft <- ft %>%
+        add_footer_row(values = row.total.values,
+                       colwidths = row.total.widths) %>%
+        addif(row.total.bold == TRUE,
+              bold(., part = "footer", i = nrow(.$footer$dataset)))
+    }
+  }
+  if (is.list(row.extra.header)) {
+    if (!is.null(row.extra.header$values)) {
+      if (length(row.extra.header$widths) == 1) {
+        row.extra.header$widths <- rep(row.extra.header$widths, ncol(x))
+      }
+      ft <- ft %>%
+        add_header_row(values = row.extra.header$values,
+                       colwidths = row.extra.header$widths)
+    }
+  }
+  if (is.list(row.extra.footer)) {
+    if (!is.null(row.extra.footer$values)) {
+      if (length(row.extra.footer$widths) == 1) {
+        row.extra.footer$widths <- rep(row.extra.footer$widths, ncol(x))
+      }
+      ft <- ft %>%
+        add_footer_row(values = row.extra.footer$values,
+                       colwidths = row.extra.footer$widths)
+    }
+  }
+  
+  # specifieke waarden opmaken
+  if (!is.null(values.colour)) {
+    ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
+    for (row in 1:nrow(ind)) {
+      ft <- ft %>% color(i = ind[row, 'row'],
+                                    j = ind[row, 'col'],
+                                    color = colourpicker(values.colour.picker))
+    }
+  }
+  if (!is.null(values.fill)) {
+    ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
+    for (row in 1:nrow(ind)) {
+      ft <- ft %>% bg(i = ind[row, 'row'],
+                                 j = ind[row, 'col'],
+                                 bg = colourpicker(values.fill.picker))
+    }
+  }
+  if (!is.null(values.bold)) {
+    ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
+    for (row in 1:nrow(ind)) {
+      ft <- ft %>% bold(i = ind[row, 'row'],
+                                   j = ind[row, 'col'])
+    }
+  }
+  if (!is.null(values.italic)) {
+    ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
+    for (row in 1:nrow(ind)) {
+      ft <- ft %>% italic(i = ind[row, 'row'],
+                                     j = ind[row, 'col'])
+    }
+  }
+  
+  # kolomtotaal nog opmaken
+  if (column.total == TRUE & column.total.bold == TRUE) {
+    ft <- ft %>% bold(j = ncol(x.bak), part = "all")
+  }
+  
+  # verticale lijnen
+  if (!is.null(vline)) {
+    for (i in 1:length(vline.part)) {
+      ft <- ft %>% vline(border = vline.border,
+                                    j = vline,
+                                    part = vline.part[i])
+    }
+  }
+  
+  # zebra printjes
+  if (isTRUE(rows.zebra)) {
+    rows.fill <- seq(2, nrow(x), 2)
+  }
+  if (isTRUE(columns.zebra)) {
+    columns.fill <- seq(2, ncol(x), 2)
+  }
+  
+  # Certe theme
+  ft <- ft %>%
+    addif(caption != "",
+          set_caption(., caption)) %>%
+    # koppen vet
+    addif(column.names.bold == TRUE,
+          bold(., part = "header")) %>%
+    # rijnamen vet
+    addif(!isFALSE(row.names) & row.names.bold == TRUE,
+          bold(., j = 1)) %>%
+    font(fontname = font.family, part = "all") %>%
+    fontsize(size = font.size, part = "all") %>%
+    addif(font.size.header != font.size,
+          fontsize(., size = font.size.header, part = "header")) %>%
+    addif(!is.null(columns.italic),
+          italic(., j = columns.italic)) %>%
+    addif(!is.null(columns.bold),
+          bold(., j = columns.bold)) %>%
+    addif(!is.null(rows.italic),
+          italic(., i = rows.italic)) %>%
+    addif(!is.null(rows.bold),
+          bold(., i = rows.bold)) %>%
+    addif(!is.null(colnames_bak),
+          set_header_labels(., values = colnames_bak)) %>%
+    addif(!is.null(rows.fill),
+          bg(., i = rows.fill,
+                        bg = colourpicker(rows.fill.picker),
+                        part = "body")) %>%
+    addif(!is.null(columns.fill),
+          bg(., j = columns.fill,
+                        bg = colourpicker(columns.fill.picker),
+                        part = "body"))
+  
+  # breedtes instellen
+  if (!is.null(columns.width)) {
+    if (length(columns.width) == 1) {
+      columns.width <- rep(columns.width, ncol(x))
+    }
+    if (autofit.fullpage.width == TRUE) {
+      # als autofit.fullpage = TRUE, dan moeten de breedtes geen inches zijn,
+      # maar verhoudingen van autofit.fullpage.width
+      columns.width <- (columns.width / sum(columns.width)) * autofit.fullpage.width
+    } else {
+      # anders zijn het centimeters, maar flextable() werkt met inches, dus:
+      columns.width <- columns.width / 2.54
+    }
+    for (j in 1:ncol(x)) {
+      ft <- ft %>% width(j = j, width = columns.width[j])
+    }
+  }
+  # hoogtes instellen
+  if (!is.null(rows.height)) {
+    if (length(rows.height) == 1) {
+      rows.height <- rep(rows.height, nrow(x))
+    }
+    rows.height <- rows.height / 2.54
+    for (i in 1:nrow(x)) {
+      ft <- ft %>% height(i = i, height = rows.height[i])
+    }
+  }
+  
+  # tabel over ingestelde breedte maken
+  ft <- ft %>%
+    addif(autofit == TRUE,
+          autofit(.)) %>%
+    addif(autofit.fullpage == TRUE,
+          # breedte als inch opgeven (delen door 2.54)
+          width(., width = dim(.)$widths * (autofit.fullpage.width / 2.54) / (flextable_dim(.)$widths)))
+  
+  # alignment
+  if (!is.null(align)) {
+    align_setting <- substr(unlist(strsplit(align, "")), 1, 1) # nu een vector met "c", "l", "r" enzo
+    if (length(align_setting) == 1) {
+      align_setting <- rep(align_setting, ncol(x))
+    }
+    if (length(align_setting) != ncol(x)) {
+      if (length(align_setting) < ncol(x)) {
+        warning("Only the first ", length(align_setting), " columns have set alignment - the remaining ",
+                ncol(x) - length(align_setting), " will be centred")
+        align_setting <- c(align_setting, rep("c", ncol(x) - length(align_setting)))
+      } else {
+        warning("Only the first ", ncol(x), " alignment settings will be used")
+        align_setting <- align_setting[1:ncol(x)]
+      }
+    }
+    if (!isFALSE(row.names)) {
+      # eerste kolom zijn rijnamen; altijd links uitlijnen
+      align_setting[1] <- "l"
+    }
+    align_setting[align_setting == "j"] <- "u" # uitlijnen
+    if (any(align_setting == "l")) {
+      ft <- ft %>% align(align = "left", j = which(align_setting == "l"), part = align.part)
+    }
+    if (any(align_setting == "c")) {
+      ft <- ft %>% align(align = "center", j = which(align_setting == "c"), part = align.part)
+    }
+    if (any(align_setting == "r")) {
+      ft <- ft %>% align(align = "right", j = which(align_setting == "r"), part = align.part)
+    }
+    if (any(align_setting == "j")) {
+      ft <- ft %>% align(align = "justify", j = which(align_setting == "j"), part = align.part)
+    }
+  }
+  
+  if (isTRUE(print)) {
+    if (interactive()) {
+      print(ft)
+    } else {
+      # not interactive like in R Markdown - print as markdown table
+      flextable_to_rmd(ft)
+    }
+  } else {
+    ft
+  }
+}
+
+#' Print Table as Markdown, LaTeX of HTML
+#'
+#' Prints a [data.frame] as Markdown, LaTeX or HTML using [knitr::kable()], with bold headers and Dutch number formats.
+#' @param x a [data.frame]
+#' @param row.names row names to be displayed
+#' @param column.names column names to be displayed
+#' @param align alignment of columns (default: numbers to the right, others to the left)
+#' @param padding extra cell padding
+#' @param caption caption of table
+#' @param na text for missing values (default: `""`)
+#' @param type type of formatting the table - valid options are `"latex"`, `"html"`, `"markdown"`, `"pandoc"` and `"rst"`
+#' @param format.dates formatting of dates, will be evaluated with [certestyle::format2()]
+#' @param newlines.leading number of white lines to print before the table
+#' @param newlines.trailing number of white lines to print after the table
+#' @inheritParams tbl_flextable
+#' @details When in an R Markdown rapport a table is printed using this function, column headers only print well if `newlines.leading` >= 2, or by manually using `cat("\\n\\n")` before printing the table.
+#' @seealso [knitr::kable()]
+#' @return character
+#' @importFrom dplyr `%>%` pull 
+#' @importFrom flextable flextable_to_rmd
+#' @importFrom knitr kable
+#' @export
+#' tbl_markdown(mtcars[1:6, 1:6], padding = 1)
+tbl_markdown <- function(x,
+                         row.names = !is.null(rownames(x)),
+                         column.names = colnames(x),
+                         align = NULL,
+                         padding = 2,
+                         caption = '',
+                         na = '',
+                         format.x = 'markdown',
+                         format.dates = 'dd-mm-yyyy',
+                         decimal.mark = ",",
+                         big.mark = ".",
+                         logicals = c("X", ""),
+                         columns.percent = NA,
+                         column.names.bold = TRUE,
+                         round.numbers = 2,
+                         round.percent = 1,
+                         newlines.leading = 0,
+                         newlines.trailing = 2) {
+  
+  if (inherits(x, "flextable")) {
+    for (i in seq_len(newlines.leading)) {
+      cat("\n\\ ")
+    }
+    flextable_to_rmd(x)
+    for (i in seq_len(newlines.trailing)) {
+      cat("\n\\ ")
+    }
+    return(invisible())
+  }
+  
+  x <- as.data.frame(x)
+  
+  x_name <- deparse(substitute(x))
+  if (caption == "") {
+    caption <- NULL
+  }
+  
+  if (column.names.bold == TRUE) {
+    column.names <- paste0("**", column.names, "**")
+  }
+  
+  if (is.null(ncol(x))) {
+    col_count <- 1
+  } else {
+    col_count <- ncol(x)
+  }
+  
+  for (i in 1:col_count) {
+    if (class(x[1, i])[1] %in% c("Date", "POSIXct", "POSIXlt")) {
+      x[, i] <- x %>% 
+        pull(i) %>%
+        format2(format = format.dates)
+    }
+    if (class(x[1, i])[1] %in% "logical") {
+      x[, i] <- x %>%
+        pull(i) %>% 
+        as.character() %>%
+        gsub("TRUE", logicals[1], .) %>%
+        gsub("FALSE", logicals[2], .)
+    }
+    if (class(x[1, i])[1] %in% c("double", "integer", "numeric", "single") &
+        !i %in% columns.percent) {
+      x[, i] <- x %>%
+        pull(i) %>%
+        format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
+    }
+    if (i %in% columns.percent) {
+      x[, i] <- x %>%
+        pull(i) %>%
+        as.percentage() %>%
+        format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
+    }
+  }
+  
+  opt.old <- options()$knitr.kable.NA
+  options(knitr.kable.NA = na)
+  
+  cat(rep("\n", newlines.leading) %>% concat())
+  print(
+    kable(
+      x,
+      table.attr = paste0("id=\"", x_name, "\""),
+      col.names = column.names,
+      row.names = row.names,
+      align = align,
+      format = format.x,
+      padding = padding,
+      caption = caption
+    )
+  )
+  cat(rep("\n", newlines.trailing) %>% concat())
+  
+  options(knitr.kable.NA = opt.old)
+}

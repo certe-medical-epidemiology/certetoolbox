@@ -3,4 +3,5 @@
 ^LICENSE\.md$
 ^\.github$
 ^certetoolbox\.Rproj$
-_pkgdown\.yml$
+^_pkgdown\.yml$
+^logo\.svg$
