@@ -6,13 +6,13 @@
 \usage{
 tbl_markdown(
   x,
-  row.names = FALSE,
+  row.names = !is.null(rownames(x)),
   column.names = colnames(x),
   align = NULL,
   padding = 2,
   caption = "",
   na = "",
-  format.x = "markdown",
+  type = "markdown",
   format.dates = "dd-mm-yyyy",
   decimal.mark = ",",
   big.mark = ".",
@@ -40,6 +40,8 @@ tbl_markdown(
 
 \item{na}{text for missing values (default: \code{""})}
 
+\item{type}{type of formatting the table - valid options are \code{"latex"}, \code{"html"}, \code{"markdown"}, \code{"pandoc"} and \code{"rst"}}
+
 \item{format.dates}{formatting of dates, will be evaluated with \code{\link[certestyle:format2]{certestyle::format2()}}}
 
 \item{decimal.mark}{decimal separator}
@@ -59,8 +61,6 @@ tbl_markdown(
 \item{newlines.leading}{number of white lines to print before the table}
 
 \item{newlines.trailing}{number of white lines to print after the table}
-
-\item{type}{type of formatting the table - valid options are \code{"latex"}, \code{"html"}, \code{"markdown"}, \code{"pandoc"} and \code{"rst"}}
 }
 \value{
 character
@@ -70,6 +70,9 @@ Prints a \link{data.frame} as Markdown, LaTeX or HTML using \code{\link[knitr:ka
 }
 \details{
 When in an R Markdown rapport a table is printed using this function, column headers only print well if \code{newlines.leading} >= 2, or by manually using \code{cat("\\\\n\\\\n")} before printing the table.
+}
+\examples{
+tbl_markdown(mtcars[1:6, 1:6], padding = 1)
 }
 \seealso{
 \code{\link[knitr:kable]{knitr::kable()}}

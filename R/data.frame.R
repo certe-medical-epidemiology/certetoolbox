@@ -17,6 +17,8 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+globalVariables(c("."))
+
 #' Format Table as Flextable
 #'
 #' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats.
@@ -77,7 +79,7 @@
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
 #' @importFrom dplyr `%>%` bind_cols pull
-#' @importFrom flextable flextable add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd
+#' @importFrom flextable flextable add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
@@ -603,16 +605,17 @@ tbl_flextable <- function(x,
 #' @importFrom flextable flextable_to_rmd
 #' @importFrom knitr kable
 #' @export
+#' @examples 
 #' tbl_markdown(mtcars[1:6, 1:6], padding = 1)
 tbl_markdown <- function(x,
                          row.names = !is.null(rownames(x)),
                          column.names = colnames(x),
                          align = NULL,
                          padding = 2,
-                         caption = '',
-                         na = '',
-                         format.x = 'markdown',
-                         format.dates = 'dd-mm-yyyy',
+                         caption = "",
+                         na = "",
+                         type = "markdown",
+                         format.dates = "dd-mm-yyyy",
                          decimal.mark = ",",
                          big.mark = ".",
                          logicals = c("X", ""),
