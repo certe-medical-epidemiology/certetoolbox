@@ -7,9 +7,6 @@
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/as.UTC.html</loc>
   </url>
   <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/case_when.html</loc>
-  </url>
-  <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/concat.html</loc>
   </url>
   <url>
@@ -20,5 +17,11 @@
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/size_humanreadable.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/tbl_flextable.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox//reference/tbl_markdown.html</loc>
   </url>
 </urlset>
