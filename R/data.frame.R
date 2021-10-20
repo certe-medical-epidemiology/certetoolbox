@@ -692,7 +692,7 @@ tbl_markdown <- function(x,
       col.names = column.names,
       row.names = row.names,
       align = align,
-      format = format.x,
+      format = type,
       padding = padding,
       caption = caption
     )
