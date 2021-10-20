@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: c(
   person(given = c("Matthijs", "S."), 
          family = "Berends",
@@ -30,6 +30,7 @@ Imports:
   lubridate (>= 1.7),
   knitr (>= 1.32),
   officer (>= 0.4.0),
+  readr (>= 2.0.0),
   rstudioapi (>= 0.13),
   stringr (>= 1.4.0)
 Suggests: 
