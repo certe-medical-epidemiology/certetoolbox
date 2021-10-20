@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
       </span>
     </div>
 
@@ -434,11 +434,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 2,42 6    9 Oct 2018
-#&gt; 2 B 6,27 1 X 22 Jan 2021
-#&gt; 3 C 1,68 3   10 Mar 2017
-#&gt; 4 D 4,45 6    4 Nov 2019
-#&gt; 5 E 1,65 4 X 13 Jan 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span>
+#&gt; 1 A 2,42 6   10 Oct 2018
+#&gt; 2 B 6,27 1 X 23 Jan 2021
+#&gt; 3 C 1,68 3   11 Mar 2017
+#&gt; 4 D 4,45 6    5 Nov 2019
+#&gt; 5 E 1,65 4 X 14 Jan 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span>
 </div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` 
 #&gt; header has 1 row(s) 
@@ -465,11 +465,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;           A B     C D E            F
-#&gt; 1 S. aureus A 2,425 6 - Tue 09-10-18
-#&gt; 2 S. aureus B 6,272 1 X Fri 22-01-21
-#&gt; 3 S. aureus C 1,684 3 - Fri 10-03-17
-#&gt; 4 S. aureus D 4,448 6 - Mon 04-11-19
-#&gt; 5 S. aureus E 1,647 4 X Mon 13-01-20</div><div class='input'>
+#&gt; 1 S. aureus A 2,425 6 - Wed 10-10-18
+#&gt; 2 S. aureus B 6,272 1 X Sat 23-01-21
+#&gt; 3 S. aureus C 1,684 3 - Sat 11-03-17
+#&gt; 4 S. aureus D 4,448 6 - Tue 05-11-19
+#&gt; 5 S. aureus E 1,647 4 X Tue 14-01-20</div><div class='input'>
 <span class='co'># row totals</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               row.total <span class='op'>=</span> <span class='cn'>TRUE</span>,           <span class='co'># add row total</span>
@@ -483,11 +483,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 242% 6    9 Oct 2018
-#&gt; 2 B 627% 1 X 22 Jan 2021
-#&gt; 3 C 168% 3   10 Mar 2017
-#&gt; 4 D 445% 6    4 Nov 2019
-#&gt; 5 E 165% 4 X 13 Jan 2020</div><div class='input'>
+#&gt; 1 A 242% 6   10 Oct 2018
+#&gt; 2 B 627% 1 X 23 Jan 2021
+#&gt; 3 C 168% 3   11 Mar 2017
+#&gt; 4 D 445% 6    5 Nov 2019
+#&gt; 5 E 165% 4 X 14 Jan 2020</div><div class='input'>
 <span class='co'># column names</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               column.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Kolom 1"</span>,
@@ -499,11 +499,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 2,42 6    9 Oct 2018
-#&gt; 2 B 6,27 1 X 22 Jan 2021
-#&gt; 3 C 1,68 3   10 Mar 2017
-#&gt; 4 D 4,45 6    4 Nov 2019
-#&gt; 5 E 1,65 4 X 13 Jan 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
+#&gt; 1 A 2,42 6   10 Oct 2018
+#&gt; 2 B 6,27 1 X 23 Jan 2021
+#&gt; 3 C 1,68 3   11 Mar 2017
+#&gt; 4 D 4,45 6    5 Nov 2019
+#&gt; 5 E 1,65 4 X 14 Jan 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               column.names <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "NL_nl" cannot be honored</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 items of column.names will be used</span></div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
@@ -511,11 +511,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 2,42 6    9 Oct 2018
-#&gt; 2 B 6,27 1 X 22 Jan 2021
-#&gt; 3 C 1,68 3   10 Mar 2017
-#&gt; 4 D 4,45 6    4 Nov 2019
-#&gt; 5 E 1,65 4 X 13 Jan 2020</div><div class='input'>
+#&gt; 1 A 2,42 6   10 Oct 2018
+#&gt; 2 B 6,27 1 X 23 Jan 2021
+#&gt; 3 C 1,68 3   11 Mar 2017
+#&gt; 4 D 4,45 6    5 Nov 2019
+#&gt; 5 E 1,65 4 X 14 Jan 2020</div><div class='input'>
 <span class='co'># vertical lines, alignment and row names</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               align <span class='op'>=</span> <span class='st'>"lrrcc"</span>, <span class='co'># also works: c("l", "r", "r", "c", "c")</span>
@@ -529,11 +529,11 @@
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;              A B    C D E           F
-#&gt; 1 Experiment 1 A 2,42 6    9 Oct 2018
-#&gt; 2 Experiment 2 B 6,27 1 X 22 Jan 2021
-#&gt; 3 Experiment 3 C 1,68 3   10 Mar 2017
-#&gt; 4 Experiment 4 D 4,45 6    4 Nov 2019
-#&gt; 5 Experiment 5 E 1,65 4 X 13 Jan 2020</div><div class='input'>
+#&gt; 1 Experiment 1 A 2,42 6   10 Oct 2018
+#&gt; 2 Experiment 2 B 6,27 1 X 23 Jan 2021
+#&gt; 3 Experiment 3 C 1,68 3   11 Mar 2017
+#&gt; 4 Experiment 4 D 4,45 6    5 Nov 2019
+#&gt; 5 Experiment 5 E 1,65 4 X 14 Jan 2020</div><div class='input'>
 <span class='co'># width of cells and table</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,
               vline <span class='op'>=</span> <span class='fl'>1</span>,
