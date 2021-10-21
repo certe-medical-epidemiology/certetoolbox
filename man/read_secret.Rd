@@ -4,23 +4,41 @@
 \alias{read_secret}
 \title{Read Certe Secret From File}
 \usage{
-read_secret(property)
+read_secret(property, file = Sys.getenv("secrets_file"))
 }
 \arguments{
 \item{property}{the property to read, case-sensitive}
+
+\item{file}{Either a path to a file, a connection, or literal data
+(either a single string or a raw vector).
+
+Files ending in \code{.gz}, \code{.bz2}, \code{.xz}, or \code{.zip} will
+be automatically uncompressed. Files starting with \verb{http://},
+\verb{https://}, \verb{ftp://}, or \verb{ftps://} will be automatically
+downloaded. Remote gz files can also be automatically downloaded and
+decompressed.
+
+Literal data is most useful for examples and tests. To be recognised as a
+path, it must be wrapped with \code{I()}, be a string containing at least one
+new line, or be a vector containing at least one string with a new line.
+
+Using a value of \code{\link[readr:clipboard]{clipboard()}} will read from the system clipboard.}
 }
 \description{
 This function reads from a local or remote YAML file, as set in the environmental variable \code{"secrets_file"}.
 }
 \details{
 This function will return a vector of length > 1 if the property value contains comma's. The property name and value have to be separated with a colon (\code{:}).
+
+The file will be read using \code{\link[readr:read_lines]{readr::read_lines()}}, which allows almost any path or remote connection.
 }
 \examples{
-# for this example, a temporary 'secrets' file
+# for this example, create a temporary 'secrets' file
 my_secrets_file <- tempfile(fileext = ".yaml")
 Sys.setenv(secrets_file = my_secrets_file)
-writeLines("tenant_id: 8fb3c03060e02e89", my_secrets_file)
-writeLines("default_users: user_1, user_2", my_secrets_file)
+writeLines(c("tenant_id: 8fb3c03060e02e89",
+             "default_users: user_1, user_2"),
+           my_secrets_file)
 
 read_secret("tenant_id")
 read_secret("default_users")

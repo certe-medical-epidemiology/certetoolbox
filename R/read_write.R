@@ -21,33 +21,28 @@
 #' 
 #' This function reads from a local or remote YAML file, as set in the environmental variable `"secrets_file"`.
 #' @param property the property to read, case-sensitive
+#' @inheritParams readr::read_lines
 #' @details This function will return a vector of length > 1 if the property value contains comma's. The property name and value have to be separated with a colon (`:`).
+#' 
+#' The file will be read using [readr::read_lines()], which allows almost any path or remote connection.
 #' @importFrom readr read_lines
 #' @export
 #' @examples 
-#' # for this example, a temporary 'secrets' file
+#' # for this example, create a temporary 'secrets' file
 #' my_secrets_file <- tempfile(fileext = ".yaml")
 #' Sys.setenv(secrets_file = my_secrets_file)
-#' writeLines("tenant_id: 8fb3c03060e02e89", my_secrets_file)
-#' writeLines("default_users: user_1, user_2", my_secrets_file)
+#' writeLines(c("tenant_id: 8fb3c03060e02e89",
+#'              "default_users: user_1, user_2"),
+#'            my_secrets_file)
 #' 
 #' read_secret("tenant_id")
 #' read_secret("default_users")
-read_secret <- function(property) {
-  file <- Sys.getenv("secrets_file")
-  if (file == "" || !file.exists(file)) {
-    stop("Environmental variable 'secrets_file' not set")
+read_secret <- function(property, file = Sys.getenv("secrets_file")) {
+  if (file == "" && identical(file, Sys.getenv("secrets_file"))) {
+    stop("In read_secret(): environmental variable 'secrets_file' not set", call. = FALSE)
   }
-  file_lines <- lapply(strsplit(read_lines(Sys.getenv("secrets_file")), ":"), trimws)
-  # set name to list item
-  names(file_lines) <- sapply(file_lines, function(l) l[1])
-  # strip name from vector
-  file_lines <- lapply(file_lines, function(l) l[c(2:length(l))])
-  # get property
-  out <- file_lines[[property]]
-  if (is.null(out)) {
-    return(NULL)
-  }
-  # split on comma
-  trimws(strsplit(out, ",")[[1]])
+  contents <- read_lines(file)
+  lst <- stats::setNames(lapply(strsplit(contents, ":"), function(l) trimws(strsplit(l[c(2:length(l))], ",")[[1]])),
+                         lapply(strsplit(contents, ":"), function(l) trimws(l[1])))
+  lst[[property]]
 }
