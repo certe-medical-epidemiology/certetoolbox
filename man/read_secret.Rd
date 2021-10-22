@@ -28,7 +28,9 @@ Using a value of \code{\link[readr:clipboard]{clipboard()}} will read from the s
 This function reads from a local or remote YAML file, as set in the environmental variable \code{"secrets_file"}.
 }
 \details{
-This function will return a vector of length > 1 if the property value contains comma's. The property name and value have to be separated with a colon (\code{:}).
+This function will return a vector of length > 1 if the property value contains comma's. In the secrets file, the property name and value have to be separated with a colon (\code{:}), as is intended in YAML files.
+
+The default value for \code{file} is the environmental variable \code{"secrets_file"}.
 
 The file will be read using \code{\link[readr:read_lines]{readr::read_lines()}}, which allows almost any path or remote connection.
 }

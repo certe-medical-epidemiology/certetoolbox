@@ -22,7 +22,9 @@
 #' This function reads from a local or remote YAML file, as set in the environmental variable `"secrets_file"`.
 #' @param property the property to read, case-sensitive
 #' @inheritParams readr::read_lines
-#' @details This function will return a vector of length > 1 if the property value contains comma's. The property name and value have to be separated with a colon (`:`).
+#' @details This function will return a vector of length > 1 if the property value contains comma's. In the secrets file, the property name and value have to be separated with a colon (`:`), as is intended in YAML files.
+#' 
+#' The default value for `file` is the environmental variable `"secrets_file"`.
 #' 
 #' The file will be read using [readr::read_lines()], which allows almost any path or remote connection.
 #' @importFrom readr read_lines
@@ -39,10 +41,13 @@
 #' read_secret("default_users")
 read_secret <- function(property, file = Sys.getenv("secrets_file")) {
   if (file == "" && identical(file, Sys.getenv("secrets_file"))) {
-    stop("In read_secret(): environmental variable 'secrets_file' not set", call. = FALSE)
+    stop("In certetoolbox::read_secret(): environmental variable 'secrets_file' not set", call. = FALSE)
   }
-  contents <- read_lines(file)
+  contents <- read_lines(file, n_max = -1, progress = FALSE)
   lst <- stats::setNames(lapply(strsplit(contents, ":"), function(l) trimws(strsplit(l[c(2:length(l))], ",")[[1]])),
                          lapply(strsplit(contents, ":"), function(l) trimws(l[1])))
+  if (!property %in% names(lst)) {
+    stop("In certetoolbox::read_secret(): item '", property, "' not found", call. = FALSE)
+  }
   lst[[property]]
 }
