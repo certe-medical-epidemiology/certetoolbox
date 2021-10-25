@@ -297,12 +297,12 @@ tbl_flextable <- function(x,
   # NA vervangen
   colnames.bak <- colnames(x)
   x <- as.data.frame(sapply(x,
-                              function(x, na_val = na) {
-                                x <- as.character(x)
-                                x[is.na(x)] <- na_val
-                                x
-                              }, simplify = FALSE),
-                       stringsAsFactors = FALSE)
+                            function(x, na_val = na) {
+                              x <- as.character(x)
+                              x[is.na(x)] <- na_val
+                              x
+                            }, simplify = FALSE),
+                     stringsAsFactors = FALSE)
   colnames(x) <- colnames.bak
   
   # kolomnamen VOOR de flextable (set_header_labels is niet zo makkelijk...)
@@ -418,30 +418,30 @@ tbl_flextable <- function(x,
     ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
     for (row in 1:nrow(ind)) {
       ft <- ft %>% color(i = ind[row, 'row'],
-                                    j = ind[row, 'col'],
-                                    color = colourpicker(values.colour.picker))
+                         j = ind[row, 'col'],
+                         color = colourpicker(values.colour.picker))
     }
   }
   if (!is.null(values.fill)) {
     ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
     for (row in 1:nrow(ind)) {
       ft <- ft %>% bg(i = ind[row, 'row'],
-                                 j = ind[row, 'col'],
-                                 bg = colourpicker(values.fill.picker))
+                      j = ind[row, 'col'],
+                      bg = colourpicker(values.fill.picker))
     }
   }
   if (!is.null(values.bold)) {
     ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
     for (row in 1:nrow(ind)) {
       ft <- ft %>% bold(i = ind[row, 'row'],
-                                   j = ind[row, 'col'])
+                        j = ind[row, 'col'])
     }
   }
   if (!is.null(values.italic)) {
     ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
     for (row in 1:nrow(ind)) {
       ft <- ft %>% italic(i = ind[row, 'row'],
-                                     j = ind[row, 'col'])
+                          j = ind[row, 'col'])
     }
   }
   
@@ -454,8 +454,8 @@ tbl_flextable <- function(x,
   if (!is.null(vline)) {
     for (i in 1:length(vline.part)) {
       ft <- ft %>% vline(border = vline.border,
-                                    j = vline,
-                                    part = vline.part[i])
+                         j = vline,
+                         part = vline.part[i])
     }
   }
   
@@ -493,12 +493,12 @@ tbl_flextable <- function(x,
           set_header_labels(., values = colnames_bak)) %>%
     addif(!is.null(rows.fill),
           bg(., i = rows.fill,
-                        bg = colourpicker(rows.fill.picker),
-                        part = "body")) %>%
+             bg = colourpicker(rows.fill.picker),
+             part = "body")) %>%
     addif(!is.null(columns.fill),
           bg(., j = columns.fill,
-                        bg = colourpicker(columns.fill.picker),
-                        part = "body"))
+             bg = colourpicker(columns.fill.picker),
+             part = "body"))
   
   # breedtes instellen
   if (!is.null(columns.width)) {
@@ -700,4 +700,81 @@ tbl_markdown <- function(x,
   cat(rep("\n", newlines.trailing) %>% concat())
   
   options(knitr.kable.NA = opt.old)
+}
+
+#' Automatically Transform Data Set
+#' 
+#' This function transforms a [data.frame] by guessing the right data classes and applying them.
+#' @param x a [data.frame]
+#' @param datenames language of the date names, such as weekdays and months
+#' @param dateformat expected date format, will be coerced with [cleaner::format_datetime()]
+#' @param timeformat expected time format, will be coerced with [cleaner::format_datetime()]
+#' @param decimal.mark separator for decimal numbers
+#' @param big.mark separator for thousands
+#' @param timezone expected time zone
+#' @param na values to interpret as `NA`
+#' @param ... not used as the time, allows for future extension
+#' @importFrom cleaner format_datetime
+#' @importFrom readr parse_guess locale
+#' @importFrom dplyr `%>%`
+#' @importFrom AMR as.rsi as.mic
+#' @export
+auto_transform <- function(x,
+                           datenames = "en",
+                           dateformat = "yyyy-mm-dd",
+                           timeformat = "HH:MM",
+                           decimal.mark = ".",
+                           big.mark = "",
+                           timezone = "",
+                           na = c("", "NULL", "NA", "<NA>"),
+                           ...) {
+  if (!inherits(x, "data.frame")) {
+    warning("auto_transform() can only transform a 'data.frame', not ",
+            paste0("'", class(x), "'", collapse = "/"),
+            " (data left unchanged)", call. = FALSE)
+    return(x)
+  }
+  dateformat <- format_datetime(dateformat)
+  timeformat <- format_datetime(timeformat)
+  for (i in seq_len(ncol(x))) {
+    col_data <- x[, i, drop = TRUE]
+    col_data_unique <- unique(col_data)
+    if (!inherits(col_data, c("list", "matrix")) &
+        # no faeces (F) or tips (T)
+        !all(unique(col_data) %in% c("T", "F"))) {
+      x[, i] <- parse_guess(x = col_data %>% as.character(),
+                            na = na,
+                            guess_integer = TRUE,
+                            trim_ws = TRUE,
+                            locale = locale(date_names = datenames,
+                                            date_format = dateformat,
+                                            time_format = timeformat,
+                                            decimal_mark = decimal.mark,
+                                            grouping_mark = big.mark,
+                                            encoding = "UTF-8",
+                                            tz = timezone,
+                                            asciify = FALSE))
+    }
+    
+    if (inherits(col_data, c("factor", "character"))) {
+      # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
+      x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
+                         error = function(e) {
+                           warning(e$message)
+                           return(col_data)})
+      # check for RSI
+      if (!all(col_data_unique[!is.na(col_data_unique)] == "")
+          & all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S"))) {
+        x[, i] <- as.rsi(col_data)
+      }
+    }
+    # set Minimum Inhibitory Concentration (MIC)
+    if (colnames(x)[i] %like% "_mic$") {
+      x[, i] <- as.mic(col_data)
+    }
+  }
+  if (timezone == "UTC") {
+    x <- as.UTC(x)
+  }
+  x
 }

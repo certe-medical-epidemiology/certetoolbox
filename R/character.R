@@ -17,19 +17,6 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-#' Paste Elements Together
-#'
-#' This function is identical to `paste(c(...), sep = "", collapse = "")`.
-#' @param ... elements to be pasted together, can also be vectors
-#' @export
-#' @examples 
-#' concat("a", "b", "c")
-#' 
-#' concat(c("a", "b"), "c")
-concat <- function(...) {
-  paste(c(...), collapse = "", sep = "")
-}
-
 #' Human-readable File Size
 #' 
 #' Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).
@@ -54,4 +41,24 @@ size_humanreadable <- function(bytes, decimals = 1, decimal.mark = ",") {
   out <- paste(sprintf(paste0("%.", decimals, "f"), bytes / (1024 ^ factor)), size[factor + 1])
   out <- trimws(gsub(".", decimal.mark, out, fixed = TRUE))
   out
+}
+
+#' Create Random Identifier
+#' 
+#' This function creates unique identifier (IDs) using [sample()].
+#' @param id_length character length of ID
+#' @param n number of IDs to generate
+#' @param chars characters to use for generation, defaults to hexadecimal characters (0-9 and a-f)
+#' @export
+#' @examples 
+#' generate_identifier(8)
+#' generate_identifier(6, 3)
+generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6])) {
+  vapply(FUN.VALUE = character(1), 
+         X = seq_len(n),
+         FUN = function(xx) {
+           concat(sample(x = chars,
+                         size = id_length,
+                         replace = TRUE))
+         })
 }
