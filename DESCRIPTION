@@ -38,7 +38,7 @@ Imports:
   tibble(>= 3.0.0),
   yaml (>= 2.2.0)
 Suggests: 
-  clipr (>= 1.7.1),
+  clipr (>= 0.7.1),
   ggplot2 (>= 3.1.0),
   haven (>= 2.4.0),
   rio (>= 0.5.27),
