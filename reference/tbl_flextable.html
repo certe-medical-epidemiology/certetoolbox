@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -428,17 +428,17 @@
 
 <span class='co'># default</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>      <span class='co'># dataset heeft geen rijnamen</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 14 Jul 2019
-#&gt; 2 B 1,55 9   17 Jan 2020
-#&gt; 3 C 5,08 3 X 18 Jul 2016
-#&gt; 4 D 0,86 6 X  1 Jul 2019
-#&gt; 5 E 5,03 8   15 Apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span>
+#&gt; 1 A 6,50 6 X 16 jul 2019
+#&gt; 2 B 1,55 9   19 jan 2020
+#&gt; 3 C 5,08 3 X 20 jul 2016
+#&gt; 4 D 0,86 6 X  3 jul 2019
+#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span>
 </div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` 
 #&gt; header has 1 row(s) 
@@ -459,17 +459,17 @@
               columns.italic <span class='op'>=</span> <span class='fl'>1</span>,
               format.dates <span class='op'>=</span> <span class='st'>"ddd dd-mm-yy"</span>,
               round.numbers <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
-#&gt;           A B     C D E            F
-#&gt; 1 S. aureus A 6,503 6 X Sun 14-07-19
-#&gt; 2 S. aureus B 1,553 9 - Fri 17-01-20
-#&gt; 3 S. aureus C 5,083 3 X Mon 18-07-16
-#&gt; 4 S. aureus D 0,859 6 X Mon 01-07-19
-#&gt; 5 S. aureus E 5,030 8 - Wed 15-04-20</div><div class='input'>
+#&gt;           A B     C D E           F
+#&gt; 1 S. aureus A 6,503 6 X di 16-07-19
+#&gt; 2 S. aureus B 1,553 9 - zo 19-01-20
+#&gt; 3 S. aureus C 5,083 3 X wo 20-07-16
+#&gt; 4 S. aureus D 0,859 6 X wo 03-07-19
+#&gt; 5 S. aureus E 5,030 8 - vr 17-04-20</div><div class='input'>
 <span class='co'># row totals</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               row.total <span class='op'>=</span> <span class='cn'>TRUE</span>,           <span class='co'># add row total</span>
@@ -477,45 +477,45 @@
               row.total.name <span class='op'>=</span> <span class='st'>"Maximum"</span>, <span class='co'># also works with dates</span>
               columns.percent <span class='op'>=</span> <span class='fl'>2</span>,        <span class='co'># 2nd column as percentages</span>
               round.percent <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>          <span class='co'># rounding percentages</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 650% 6 X 14 Jul 2019
-#&gt; 2 B 155% 9   17 Jan 2020
-#&gt; 3 C 508% 3 X 18 Jul 2016
-#&gt; 4 D  86% 6 X  1 Jul 2019
-#&gt; 5 E 503% 8   15 Apr 2020</div><div class='input'>
+#&gt; 1 A 650% 6 X 16 jul 2019
+#&gt; 2 B 155% 9   19 jan 2020
+#&gt; 3 C 508% 3 X 20 jul 2016
+#&gt; 4 D  86% 6 X  3 jul 2019
+#&gt; 5 E 503% 8   17 apr 2020</div><div class='input'>
 <span class='co'># column names</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               column.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Kolom 1"</span>,
                                <span class='st'>"2"</span> <span class='op'>=</span> <span class='st'>"Kolom 2"</span>,
                                dates <span class='op'>=</span> <span class='st'>"DATES!"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 14 Jul 2019
-#&gt; 2 B 1,55 9   17 Jan 2020
-#&gt; 3 C 5,08 3 X 18 Jul 2016
-#&gt; 4 D 0,86 6 X  1 Jul 2019
-#&gt; 5 E 5,03 8   15 Apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
+#&gt; 1 A 6,50 6 X 16 jul 2019
+#&gt; 2 B 1,55 9   19 jan 2020
+#&gt; 3 C 5,08 3 X 20 jul 2016
+#&gt; 4 D 0,86 6 X  3 jul 2019
+#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               column.names <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 items of column.names will be used</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 items of column.names will be used</span></div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 14 Jul 2019
-#&gt; 2 B 1,55 9   17 Jan 2020
-#&gt; 3 C 5,08 3 X 18 Jul 2016
-#&gt; 4 D 0,86 6 X  1 Jul 2019
-#&gt; 5 E 5,03 8   15 Apr 2020</div><div class='input'>
+#&gt; 1 A 6,50 6 X 16 jul 2019
+#&gt; 2 B 1,55 9   19 jan 2020
+#&gt; 3 C 5,08 3 X 20 jul 2016
+#&gt; 4 D 0,86 6 X  3 jul 2019
+#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'>
 <span class='co'># vertical lines, alignment and row names</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
               align <span class='op'>=</span> <span class='st'>"lrrcc"</span>, <span class='co'># also works: c("l", "r", "r", "c", "c")</span>
@@ -523,17 +523,17 @@
               vline <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>,
               vline.part <span class='op'>=</span> <span class='st'>"all"</span>,
               row.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Experiment"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: OS reports request to set locale to "nl_NL.UTF-8" cannot be honored</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 columns have set alignment - the remaining 1 will be centred</span></div><div class='output co'>#&gt; a flextable object.
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 columns have set alignment - the remaining 1 will be centred</span></div><div class='output co'>#&gt; a flextable object.
 #&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F` 
 #&gt; header has 1 row(s) 
 #&gt; body has 10 row(s) 
 #&gt; original dataset sample: 
 #&gt;              A B    C D E           F
-#&gt; 1 Experiment 1 A 6,50 6 X 14 Jul 2019
-#&gt; 2 Experiment 2 B 1,55 9   17 Jan 2020
-#&gt; 3 Experiment 3 C 5,08 3 X 18 Jul 2016
-#&gt; 4 Experiment 4 D 0,86 6 X  1 Jul 2019
-#&gt; 5 Experiment 5 E 5,03 8   15 Apr 2020</div><div class='input'>
+#&gt; 1 Experiment 1 A 6,50 6 X 16 jul 2019
+#&gt; 2 Experiment 2 B 1,55 9   19 jan 2020
+#&gt; 3 Experiment 3 C 5,08 3 X 20 jul 2016
+#&gt; 4 Experiment 4 D 0,86 6 X  3 jul 2019
+#&gt; 5 Experiment 5 E 5,03 8   17 apr 2020</div><div class='input'>
 <span class='co'># width of cells and table</span>
 <span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,
               vline <span class='op'>=</span> <span class='fl'>1</span>,
