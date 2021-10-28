@@ -27,7 +27,7 @@ The file will be read using \code{\link[yaml:read_yaml]{yaml::read_yaml()}}, whi
 my_secrets_file <- tempfile(fileext = ".yaml")
 Sys.setenv(secrets_file = my_secrets_file)
 writeLines(c("tenant_id: 8fb3c03060e02e89",
-             "default_users: user_1, user_2"),
+             "default_users: user_1"),
            my_secrets_file)
 
 read_secret("tenant_id")

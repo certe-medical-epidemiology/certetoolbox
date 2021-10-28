@@ -48,22 +48,16 @@
 #' a <- "This is a test"
 #' b <- "TEST"
 #' a %like% b
-#' #> TRUE
 #' b %like% a
-#' #> FALSE
 #' 
 #' # also supports multiple patterns
 #' a <- c("Test case", "Something different", "Yet another thing")
 #' b <- c(     "case",           "diff",      "yet")
 #' a %like% b
-#' #> TRUE TRUE TRUE
 #' a %unlike% b
-#' #> FALSE FALSE FALSE
 #' 
 #' a[1] %like% b
-#' #> TRUE FALSE FALSE
 #' a %like% b[1]
-#' #> TRUE FALSE FALSE
 like <- function(x, pattern, ignore.case = TRUE) {
   
   if (all(is.na(x))) {
@@ -175,7 +169,7 @@ concat <- function(...) {
 #' my_secrets_file <- tempfile(fileext = ".yaml")
 #' Sys.setenv(secrets_file = my_secrets_file)
 #' writeLines(c("tenant_id: 8fb3c03060e02e89",
-#'              "default_users: user_1, user_2"),
+#'              "default_users: user_1"),
 #'            my_secrets_file)
 #' 
 #' read_secret("tenant_id")

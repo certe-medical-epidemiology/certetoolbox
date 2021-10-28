@@ -49,22 +49,16 @@ Using RStudio? The \verb{\%like\%}/\verb{\%unlike\%} functions can also be direc
 a <- "This is a test"
 b <- "TEST"
 a \%like\% b
-#> TRUE
 b \%like\% a
-#> FALSE
 
 # also supports multiple patterns
 a <- c("Test case", "Something different", "Yet another thing")
 b <- c(     "case",           "diff",      "yet")
 a \%like\% b
-#> TRUE TRUE TRUE
 a \%unlike\% b
-#> FALSE FALSE FALSE
 
 a[1] \%like\% b
-#> TRUE FALSE FALSE
 a \%like\% b[1]
-#> TRUE FALSE FALSE
 }
 \seealso{
 \code{\link[=grepl]{grepl()}}
