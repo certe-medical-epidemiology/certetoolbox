@@ -266,7 +266,7 @@
     </tr>
     <tr>
       <th>column.names</th>
-      <td><p>column names to be displayed. Can also be a named vector where the names are existing columns, or indices of columns. When this vector is smaller than <code><a href='https://rdrr.io/r/base/nrow.html'>ncol(x)</a></code>, only the first <code><a href='https://rdrr.io/r/base/length.html'>length(column.names)</a></code> are replaced. When this vector is longer than <code><a href='https://rdrr.io/r/base/nrow.html'>ncol(x)</a></code>, all column names are replaced</p></td>
+      <td><p>column names to be displayed. Can also be a named vector where the names are existing columns, or indices of columns. When this vector is smaller than <code>ncol(x)</code>, only the first <code>length(column.names)</code> are replaced. When this vector is longer than <code>ncol(x)</code>, all column names are replaced</p></td>
     </tr>
     <tr>
       <th>column.names.bold</th>
@@ -418,145 +418,156 @@
     <div class='dont-index'><p><code>flextable()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># generate a data.frame</span>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,
-                 `decimal numbers` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span><span class='op'>)</span>,
-                 `whole numbers` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
-                 `logical values` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>as.logical</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-                 dates <span class='op'>=</span> <span class='fu'><a href='days_around_today.html'>today</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>200</span>, <span class='fl'>2000</span><span class='op'>)</span>,
-                 stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># default</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>      <span class='co'># dataset heeft geen rijnamen</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 16 jul 2019
-#&gt; 2 B 1,55 9   19 jan 2020
-#&gt; 3 C 5,08 3 X 20 jul 2016
-#&gt; 4 D 0,86 6 X  3 jul 2019
-#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` 
-#&gt; header has 1 row(s) 
-#&gt; body has 32 row(s) 
-#&gt; original dataset sample: 
-#&gt;                   A    B C     D   E    F    G     H I J K L
-#&gt; 1         Mazda RX4 21,0 6 160,0 110 3,90 2,62 16,46 0 1 4 4
-#&gt; 2     Mazda RX4 Wag 21,0 6 160,0 110 3,90 2,88 17,02 0 1 4 4
-#&gt; 3        Datsun 710 22,8 4 108,0  93 3,85 2,32 18,61 1 1 4 1
-#&gt; 4    Hornet 4 Drive 21,4 6 258,0 110 3,08 3,21 19,44 1 0 3 1
-#&gt; 5 Hornet Sportabout 18,7 8 360,0 175 3,15 3,44 17,02 0 0 3 2</div><div class='input'>
-<span class='co'># extra formatting</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
-              logicals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"X"</span>, <span class='st'>"-"</span><span class='op'>)</span>,     <span class='co'># replaces TRUE en FALSE</span>
-              values.colour <span class='op'>=</span> <span class='st'>"X"</span>,
-              values.fill <span class='op'>=</span> <span class='st'>"X"</span>,
-              row.names <span class='op'>=</span> <span class='st'>"S. aureus"</span>,
-              columns.italic <span class='op'>=</span> <span class='fl'>1</span>,
-              format.dates <span class='op'>=</span> <span class='st'>"ddd dd-mm-yy"</span>,
-              round.numbers <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;           A B     C D E           F
-#&gt; 1 S. aureus A 6,503 6 X di 16-07-19
-#&gt; 2 S. aureus B 1,553 9 - zo 19-01-20
-#&gt; 3 S. aureus C 5,083 3 X wo 20-07-16
-#&gt; 4 S. aureus D 0,859 6 X wo 03-07-19
-#&gt; 5 S. aureus E 5,030 8 - vr 17-04-20</div><div class='input'>
-<span class='co'># row totals</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
-              row.total <span class='op'>=</span> <span class='cn'>TRUE</span>,           <span class='co'># add row total</span>
-              row.total.function <span class='op'>=</span> <span class='va'>max</span>,   <span class='co'># instead of sum()</span>
-              row.total.name <span class='op'>=</span> <span class='st'>"Maximum"</span>, <span class='co'># also works with dates</span>
-              columns.percent <span class='op'>=</span> <span class='fl'>2</span>,        <span class='co'># 2nd column as percentages</span>
-              round.percent <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>          <span class='co'># rounding percentages</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A    B C D           E
-#&gt; 1 A 650% 6 X 16 jul 2019
-#&gt; 2 B 155% 9   19 jan 2020
-#&gt; 3 C 508% 3 X 20 jul 2016
-#&gt; 4 D  86% 6 X  3 jul 2019
-#&gt; 5 E 503% 8   17 apr 2020</div><div class='input'>
-<span class='co'># column names</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
-              column.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Kolom 1"</span>,
-                               <span class='st'>"2"</span> <span class='op'>=</span> <span class='st'>"Kolom 2"</span>,
-                               dates <span class='op'>=</span> <span class='st'>"DATES!"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 16 jul 2019
-#&gt; 2 B 1,55 9   19 jan 2020
-#&gt; 3 C 5,08 3 X 20 jul 2016
-#&gt; 4 D 0,86 6 X  3 jul 2019
-#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
-              column.names <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 items of column.names will be used</span></div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A    B C D           E
-#&gt; 1 A 6,50 6 X 16 jul 2019
-#&gt; 2 B 1,55 9   19 jan 2020
-#&gt; 3 C 5,08 3 X 20 jul 2016
-#&gt; 4 D 0,86 6 X  3 jul 2019
-#&gt; 5 E 5,03 8   17 apr 2020</div><div class='input'>
-<span class='co'># vertical lines, alignment and row names</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,
-              align <span class='op'>=</span> <span class='st'>"lrrcc"</span>, <span class='co'># also works: c("l", "r", "r", "c", "c")</span>
-              font.size <span class='op'>=</span> <span class='fl'>12</span>,
-              vline <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>,
-              vline.part <span class='op'>=</span> <span class='st'>"all"</span>,
-              row.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Experiment"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Only the first 5 columns have set alignment - the remaining 1 will be centred</span></div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B`, `C`, `D`, `E`, `F` 
-#&gt; header has 1 row(s) 
-#&gt; body has 10 row(s) 
-#&gt; original dataset sample: 
-#&gt;              A B    C D E           F
-#&gt; 1 Experiment 1 A 6,50 6 X 16 jul 2019
-#&gt; 2 Experiment 2 B 1,55 9   19 jan 2020
-#&gt; 3 Experiment 3 C 5,08 3 X 20 jul 2016
-#&gt; 4 Experiment 4 D 0,86 6 X  3 jul 2019
-#&gt; 5 Experiment 5 E 5,03 8   17 apr 2020</div><div class='input'>
-<span class='co'># width of cells and table</span>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,
-              vline <span class='op'>=</span> <span class='fl'>1</span>,
-              autofit.fullpage.width <span class='op'>=</span> <span class='fl'>16</span>, <span class='co'># default values in cm</span>
-              columns.width <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># ratio; cells become 4 and 12 cm</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B` 
-#&gt; header has 1 row(s) 
-#&gt; body has 1 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A B
-#&gt; 1 A B</div><div class='input'>
-<span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,
-              vline <span class='op'>=</span> <span class='fl'>1</span>,
-              autofit.fullpage <span class='op'>=</span> <span class='cn'>FALSE</span>,    <span class='co'># no fullpage autofit</span>
-              columns.width <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># cells become 1 and 3 cm</span>
-</div><div class='output co'>#&gt; a flextable object.
-#&gt; col_keys: `A`, `B` 
-#&gt; header has 1 row(s) 
-#&gt; body has 1 row(s) 
-#&gt; original dataset sample: 
-#&gt;   A B
-#&gt; 1 A B</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># generate a data.frame</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>,</span>
+<span class='r-in'>                 `decimal numbers` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 `whole numbers` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 `logical values` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/logical.html'>as.logical</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 dates <span class='op'>=</span> <span class='fu'><a href='days_around_today.html'>today</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>200</span>, <span class='fl'>2000</span><span class='op'>)</span>,</span>
+<span class='r-in'>                 stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># default</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>      <span class='co'># dataset heeft geen rijnamen</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 22 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   25 jan 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 26 jul 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X  9 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   23 apr 2020</span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 32 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   A    B C     D   E    F    G     H I J K L</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1         Mazda RX4 21,0 6 160,0 110 3,90 2,62 16,46 0 1 4 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     Mazda RX4 Wag 21,0 6 160,0 110 3,90 2,88 17,02 0 1 4 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        Datsun 710 22,8 4 108,0  93 3,85 2,32 18,61 1 1 4 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    Hornet 4 Drive 21,4 6 258,0 110 3,08 3,21 19,44 1 0 3 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Hornet Sportabout 18,7 8 360,0 175 3,15 3,44 17,02 0 0 3 2</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># extra formatting</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>              logicals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"X"</span>, <span class='st'>"-"</span><span class='op'>)</span>,     <span class='co'># replaces TRUE en FALSE</span></span>
+<span class='r-in'>              values.colour <span class='op'>=</span> <span class='st'>"X"</span>,</span>
+<span class='r-in'>              values.fill <span class='op'>=</span> <span class='st'>"X"</span>,</span>
+<span class='r-in'>              row.names <span class='op'>=</span> <span class='st'>"S. aureus"</span>,</span>
+<span class='r-in'>              columns.italic <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>              format.dates <span class='op'>=</span> <span class='st'>"ddd dd-mm-yy"</span>,</span>
+<span class='r-in'>              round.numbers <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           A B     C D E           F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 S. aureus A 6,503 6 X ma 22-07-19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 S. aureus B 1,553 9 - za 25-01-20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 S. aureus C 5,083 3 X di 26-07-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 S. aureus D 0,859 6 X di 09-07-19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 S. aureus E 5,030 8 - do 23-04-20</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># row totals</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>              row.total <span class='op'>=</span> <span class='cn'>TRUE</span>,           <span class='co'># add row total</span></span>
+<span class='r-in'>              row.total.function <span class='op'>=</span> <span class='va'>max</span>,   <span class='co'># instead of sum()</span></span>
+<span class='r-in'>              row.total.name <span class='op'>=</span> <span class='st'>"Maximum"</span>, <span class='co'># also works with dates</span></span>
+<span class='r-in'>              columns.percent <span class='op'>=</span> <span class='fl'>2</span>,        <span class='co'># 2nd column as percentages</span></span>
+<span class='r-in'>              round.percent <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>          <span class='co'># rounding percentages</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 650% 6 X 22 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 155% 9   25 jan 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 508% 3 X 26 jul 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D  86% 6 X  9 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 503% 8   23 apr 2020</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># column names</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>              column.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Kolom 1"</span>,</span>
+<span class='r-in'>                               <span class='st'>"2"</span> <span class='op'>=</span> <span class='st'>"Kolom 2"</span>,</span>
+<span class='r-in'>                               dates <span class='op'>=</span> <span class='st'>"DATES!"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 22 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   25 jan 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 26 jul 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X  9 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   23 apr 2020</span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>              column.names <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Only the first 5 items of column.names will be used</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 22 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   25 jan 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 26 jul 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X  9 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   23 apr 2020</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># vertical lines, alignment and row names</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
+<span class='r-in'>              align <span class='op'>=</span> <span class='st'>"lrrcc"</span>, <span class='co'># also works: c("l", "r", "r", "c", "c")</span></span>
+<span class='r-in'>              font.size <span class='op'>=</span> <span class='fl'>12</span>,</span>
+<span class='r-in'>              vline <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>,</span>
+<span class='r-in'>              vline.part <span class='op'>=</span> <span class='st'>"all"</span>,</span>
+<span class='r-in'>              row.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Experiment"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Only the first 5 columns have set alignment - the remaining 1 will be centred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              A B    C D E           F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Experiment 1 A 6,50 6 X 22 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 Experiment 2 B 1,55 9   25 jan 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 Experiment 3 C 5,08 3 X 26 jul 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 Experiment 4 D 0,86 6 X  9 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Experiment 5 E 5,03 8   23 apr 2020</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># width of cells and table</span></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,</span>
+<span class='r-in'>              vline <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>              autofit.fullpage.width <span class='op'>=</span> <span class='fl'>16</span>, <span class='co'># default values in cm</span></span>
+<span class='r-in'>              columns.width <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># ratio; cells become 4 and 12 cm</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A B</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,</span>
+<span class='r-in'>              vline <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>              autofit.fullpage <span class='op'>=</span> <span class='cn'>FALSE</span>,    <span class='co'># no fullpage autofit</span></span>
+<span class='r-in'>              columns.width <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>     <span class='co'># cells become 1 and 3 cm</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B` </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> header has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> body has 1 row(s) </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   A B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A B</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
