@@ -45,6 +45,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 
 <meta property="og:title" content="Format Table as Flextable — tbl_flextable" />
 <meta property="og:description" content="Format a data.frame as flextable() with Certe style, bold headers and Dutch number formats." />
@@ -441,11 +443,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 27 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   30 jan 2020</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 31 jul 2016</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 14 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   28 apr 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 13 aug 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   16 feb 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 17 aug 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 31 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   15 mei 2020</span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>  <span class='co'># dataset heeft wel rijnamen</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> a flextable object.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` </span>
@@ -474,11 +476,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>           A B     C D E           F</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 S. aureus A 6,503 6 X za 27-07-19</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 S. aureus B 1,553 9 - do 30-01-20</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 S. aureus C 5,083 3 X zo 31-07-16</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 S. aureus D 0,859 6 X zo 14-07-19</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 S. aureus E 5,030 8 - di 28-04-20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 S. aureus A 6,503 6 X di 13-08-19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 S. aureus B 1,553 9 - zo 16-02-20</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 S. aureus C 5,083 3 X wo 17-08-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 S. aureus D 0,859 6 X wo 31-07-19</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 S. aureus E 5,030 8 - vr 15-05-20</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># row totals</span></span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
@@ -493,11 +495,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 650% 6 X 27 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 155% 9   30 jan 2020</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 508% 3 X 31 jul 2016</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D  86% 6 X 14 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 503% 8   28 apr 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 650% 6 X 13 aug 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 155% 9   16 feb 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 508% 3 X 17 aug 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D  86% 6 X 31 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 503% 8   15 mei 2020</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># column names</span></span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
@@ -510,11 +512,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 27 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   30 jan 2020</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 31 jul 2016</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 14 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   28 apr 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 13 aug 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   16 feb 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 17 aug 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 31 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   15 mei 2020</span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
 <span class='r-in'>              column.names <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>)</span></span>
 <span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Only the first 5 items of column.names will be used</span>
@@ -524,11 +526,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   A    B C D           E</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 27 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   30 jan 2020</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 31 jul 2016</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 14 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   28 apr 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 A 6,50 6 X 13 aug 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 B 1,55 9   16 feb 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C 5,08 3 X 17 aug 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 D 0,86 6 X 31 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 E 5,03 8   15 mei 2020</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># vertical lines, alignment and row names</span></span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='va'>df</span>,</span>
@@ -544,11 +546,11 @@
 <span class='r-out co'><span class='r-pr'>#&gt;</span> body has 10 row(s) </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> original dataset sample: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>              A B    C D E           F</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Experiment 1 A 6,50 6 X 27 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 Experiment 2 B 1,55 9   30 jan 2020</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 Experiment 3 C 5,08 3 X 31 jul 2016</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 Experiment 4 D 0,86 6 X 14 jul 2019</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Experiment 5 E 5,03 8   28 apr 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Experiment 1 A 6,50 6 X 13 aug 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 Experiment 2 B 1,55 9   16 feb 2020</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 Experiment 3 C 5,08 3 X 17 aug 2016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 Experiment 4 D 0,86 6 X 31 jul 2019</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Experiment 5 E 5,03 8   15 mei 2020</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># width of cells and table</span></span>
 <span class='r-in'><span class='fu'>tbl_flextable</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>test1 <span class='op'>=</span> <span class='st'>"A"</span>, test2 <span class='op'>=</span> <span class='st'>"B"</span><span class='op'>)</span>,</span>
