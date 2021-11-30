@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 0.0.9
+Version: 0.0.10
 Authors@R: c(
   person(given = c("Matthijs", "S."), 
          family = "Berends",
@@ -24,8 +24,8 @@ Depends:
   R (>= 3.6.0)
 Imports:
   certestyle,
-  cleaner (>= 1.5.1),
   AMR (>= 1.7.1),
+  cleaner (>= 1.5.1),
   dplyr (>= 1.0.0),
   flextable (>= 0.6.8),
   lubridate (>= 1.7),

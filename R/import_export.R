@@ -146,12 +146,18 @@ export.excel <- function(object,
 }
 
 #' @rdname export
-#' @details For [export.csv()], [export.csv2()] and [export.tsv()], files will be saved in UTF-8 encoding and values `NA` will be exported as `""`. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
+#' @export
+export.xlsx <- export.excel
+
+#' @rdname export
+#' @param na replacement character for empty values (default: `""`)
+#' @details For [export.csv()], [export.csv2()] and [export.tsv()], files will be saved in UTF-8 encoding and values `NA` will be exported as `""` at default. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
 #' @export
 export.csv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        export_qry = TRUE,
+                       na = "",
                        ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
@@ -164,7 +170,7 @@ export.csv <- function(object,
               quote = TRUE,
               sep = ",",
               eol = "\n",
-              na = "",
+              na = na,
               dec = ".",
               row.names = FALSE,
               col.names = TRUE,
@@ -178,6 +184,7 @@ export.csv2 <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
                         export_qry = TRUE,
+                        na = "",
                         ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
@@ -190,7 +197,7 @@ export.csv2 <- function(object,
               quote = TRUE,
               sep = ";",
               eol = "\n",
-              na = "",
+              na = na,
               dec = ",",
               row.names = FALSE,
               col.names = TRUE,
@@ -204,6 +211,7 @@ export.tsv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        export_qry = TRUE,
+                       na = "",
                        ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
@@ -216,7 +224,7 @@ export.tsv <- function(object,
               quote = TRUE,
               sep = "\t",
               eol = "\n",
-              na = "",
+              na = na,
               dec = ".",
               row.names = FALSE,
               col.names = TRUE,
@@ -245,7 +253,7 @@ export.spss <- function(object,
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
-#' @details If the filename is left blank in [export.pdf()] or [export.png()], the title of `plot` will be used.
+#' @details If the filename is left blank in [export.pdf()] or [export.png()], the title of `plot` will be used if available (and a timestamp otherwise).
 #' @importFrom certestyle format2
 #' @export
 export.pdf <- function(plot,
@@ -386,7 +394,7 @@ export.png <- function(plot,
 
 #' @rdname export
 #' @param sep (for [export.clipboard()]) separator for values in a row (default: tab)
-#' @param na (for [export.clipboard()]) replacement character for empty values (default: `""`)
+#' @param na replacement character for empty values (default: `""`)
 #' @param header (for [export.clipboard()]) use column names as header (default: `TRUE`)
 #' @param quote (for [export.clipboard()]) use quotation marks (default: `FALSE`)
 #' @param decimal.mark (for [export.clipboard()]) character to use for decimal numbers
@@ -567,6 +575,10 @@ import.excel <- function(filename,
               timezone = timezone,
               na = na)
 }
+
+#' @rdname import
+#' @export
+import.xlsx <- import.excel
 
 #' @rdname import
 #' @importFrom cleaner format_datetime
