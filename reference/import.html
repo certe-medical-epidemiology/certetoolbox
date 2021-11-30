@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Import Data and Plots</h1>
-    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/read_write.R'><code>R/read_write.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/import_export.R'><code>R/import_export.R</code></a></small>
     <div class="hidden name"><code>import.Rd</code></div>
     </div>
 
@@ -157,6 +157,21 @@
 <span class='fu'>import.R</span><span class='op'>(</span><span class='va'>filename</span>, card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>import.excel</span><span class='op'>(</span>
+  <span class='va'>filename</span>,
+  card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+  sheet <span class='op'>=</span> <span class='fl'>1</span>,
+  auto_transform <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  datenames <span class='op'>=</span> <span class='st'>"nl"</span>,
+  dateformat <span class='op'>=</span> <span class='st'>"yyyy-mm-dd"</span>,
+  timeformat <span class='op'>=</span> <span class='st'>"HH:MM"</span>,
+  decimal.mark <span class='op'>=</span> <span class='st'>","</span>,
+  big.mark <span class='op'>=</span> <span class='st'>""</span>,
+  timezone <span class='op'>=</span> <span class='st'>"UTC"</span>,
+  na <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>""</span>, <span class='st'>"NULL"</span>, <span class='st'>"NA"</span>, <span class='st'>"&lt;NA&gt;"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>import.xlsx</span><span class='op'>(</span>
   <span class='va'>filename</span>,
   card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
   sheet <span class='op'>=</span> <span class='fl'>1</span>,

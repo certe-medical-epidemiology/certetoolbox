@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
       </span>
     </div>
 
@@ -139,7 +139,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Export Data and Plots</h1>
-    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/read_write.R'><code>R/read_write.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/certe-medical-epidemiology/certetoolbox/blob/master/R/import_export.R'><code>R/import_export.R</code></a></small>
     <div class="hidden name"><code>export.Rd</code></div>
     </div>
 
@@ -175,11 +175,24 @@
   <span class='va'>...</span>
 <span class='op'>)</span>
 
+<span class='fu'>export.xlsx</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  filename <span class='op'>=</span> <span class='cn'>NULL</span>,
+  card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+  export_qry <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  sheet_names <span class='op'>=</span> <span class='cn'>NULL</span>,
+  autofilter <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  rows_zebra <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  cols_zebra <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
 <span class='fu'>export.csv</span><span class='op'>(</span>
   <span class='va'>object</span>,
   filename <span class='op'>=</span> <span class='cn'>NULL</span>,
   card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
   export_qry <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  na <span class='op'>=</span> <span class='st'>""</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -188,6 +201,7 @@
   filename <span class='op'>=</span> <span class='cn'>NULL</span>,
   card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
   export_qry <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  na <span class='op'>=</span> <span class='st'>""</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -196,6 +210,7 @@
   filename <span class='op'>=</span> <span class='cn'>NULL</span>,
   card_number <span class='op'>=</span> <span class='fu'>project_get_current_id</span><span class='op'>(</span>ask <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
   export_qry <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  na <span class='op'>=</span> <span class='st'>""</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -280,6 +295,10 @@
       <td><p>create banded columns</p></td>
     </tr>
     <tr>
+      <th>na</th>
+      <td><p>replacement character for empty values (default: <code>""</code>)</p></td>
+    </tr>
+    <tr>
       <th>size</th>
       <td><p>paper size, defaults to A5. Can be A0 to A7.</p></td>
     </tr>
@@ -304,10 +323,6 @@
       <td><p>(for <code>export.clipboard()</code>) separator for values in a row (default: tab)</p></td>
     </tr>
     <tr>
-      <th>na</th>
-      <td><p>(for <code>export.clipboard()</code>) replacement character for empty values (default: <code>""</code>)</p></td>
-    </tr>
-    <tr>
       <th>header</th>
       <td><p>(for <code>export.clipboard()</code>) use column names as header (default: <code>TRUE</code>)</p></td>
     </tr>
@@ -328,7 +343,7 @@
 <p>The <code>export.excel()</code> uses <code><a href='as_excel.html'>as_excel()</a></code> internally.</p>
 <p>For <code>export.csv()</code>, <code>export.csv2()</code> and <code>export.tsv()</code>, files will be saved in UTF-8 encoding and values <code>NA</code> will be exported as <code>""</code>. Like other <code>*.csv</code> and <code>*.csv2</code> functions, csv is comma (<code>,</code>) separated and csv2 is semicolon (<code>;</code>) separated.</p>
 <p>Exporting as SPSS files with <code>export.spss()</code> requires the <code>haven</code> package to be installed.</p>
-<p>If the filename is left blank in <code>export.pdf()</code> or <code>export.png()</code>, the title of <code>plot</code> will be used.</p>
+<p>If the filename is left blank in <code>export.pdf()</code> or <code>export.png()</code>, the title of <code>plot</code> will be used if available (and a timestamp otherwise).</p>
 <p>The <code>export.clipboard()</code> function requires the <code>clipr</code> package to be installed. The function allows any object (also other than <a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a>s) and is only limited to the available amount of RAM memory.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
