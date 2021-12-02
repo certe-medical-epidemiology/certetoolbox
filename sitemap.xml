@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/404.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/authors.html</loc>
+  </url>
+  <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/index.html</loc>
   </url>
   <url>
@@ -11,6 +20,9 @@
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/auto_transform.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/certetoolbox-package.html</loc>
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/concat.html</loc>
@@ -26,6 +38,9 @@
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/import.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/index.html</loc>
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/like.html</loc>
