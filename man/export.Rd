@@ -169,7 +169,7 @@ RDS files as created by \code{\link[=export.R]{export.R()}} are compatible with 
 
 The \code{\link[=export.excel]{export.excel()}} uses \code{\link[=as_excel]{as_excel()}} internally.
 
-For \code{\link[=export.csv]{export.csv()}}, \code{\link[=export.csv2]{export.csv2()}} and \code{\link[=export.tsv]{export.tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""}. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
+For \code{\link[=export.csv]{export.csv()}}, \code{\link[=export.csv2]{export.csv2()}} and \code{\link[=export.tsv]{export.tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 
 Exporting as SPSS files with \code{\link[=export.spss]{export.spss()}} requires the \code{haven} package to be installed.
 

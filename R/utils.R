@@ -61,9 +61,48 @@ check_is_installed <- function(pkgs) {
   }
 }
 
-project_get_current_id <- get_external_function("project_get_current_id",
-                                                "certeprojects",
-                                                error_on_fail = FALSE)
-if (is.null(project_get_current_id)) {
-  project_get_current_id <- function(...) NULL
+#' @importFrom rstudioapi getSourceEditorContext showPrompt
+project_get_current_id <- function(ask = NULL) {
+
+  # this function is copied from certeprojects
+
+  # first try project number from full file location:
+  # /folder/p123 Name.Rmd
+  # /p123 folder/Name.Rmd
+  fix_id <- function(id) {
+    id <- gsub("[^0-9]", "", id)
+    if (all(is.na(id) | length(id) == 0) || identical(id, "")) {
+      NULL
+    } else {
+      id
+    }
+  }
+  asked <- FALSE
+  if (interactive()) {
+    path <- getSourceEditorContext()$path
+    if (is.null(path) && is.null(ask)) {
+      id <- showPrompt("Project Number", "Enter Project Number:")
+      return(fix_id(id))
+    }
+  } else {
+    # for markdown
+    path <- getwd()
+  }
+  parts <- tryCatch(unlist(strsplit(path, "[^a-zA-Z0-9]")), error = function(e) NULL)
+  if (is.null(parts)) {
+    return(NULL)
+  }
+  id <- parts[parts %like% "^p[0-9]+$"][1]
+  if (all(length(id) == 0 | is.na(id)) && interactive() && is.null(ask)) {
+    id <- showPrompt("Project Number", "Enter Project Number:")
+    asked <- TRUE
+  }
+  
+  if (identical(ask, TRUE) && asked == FALSE) {
+    id <- showPrompt("Project Number", "Enter Project Number:", ifelse(length(id) > 0, paste0("p", fix_id(id)), ""))
+    if (is.null(id) || all(is.na(id))) {
+      return(NULL)
+    }
+  }
+  fix_id(id)
 }
