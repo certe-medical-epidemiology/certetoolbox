@@ -1,3 +1,11 @@
 Name: Insert %like% or %unlike% 
 Binding: addin_insert_like
 Interactive: false
+
+Name: Insert %in%
+Binding: addin_insert_in
+Interactive: false
+
+Name: Insert section
+Binding: addin_insert_section
+Interactive: true

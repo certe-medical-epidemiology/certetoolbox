@@ -8,6 +8,7 @@
 \alias{today}
 \alias{now}
 \alias{tomorrow}
+\alias{year}
 \alias{last_week}
 \alias{this_week}
 \alias{next_week}
@@ -42,7 +43,6 @@
 \alias{end_of_this_year}
 \alias{start_of_next_year}
 \alias{end_of_next_year}
-\alias{week2date}
 \alias{nth_monday}
 \alias{nth_tuesday}
 \alias{nth_wednesday}
@@ -50,12 +50,15 @@
 \alias{nth_friday}
 \alias{nth_saturday}
 \alias{nth_sunday}
-\alias{year}
+\alias{week2date}
+\alias{week2resp_season}
 \title{Dates around Today}
 \usage{
 yesterday(ref = today())
 
 tomorrow(ref = today())
+
+year(ref = today())
 
 last_week(ref = today(), only_start_end = FALSE)
 
@@ -125,8 +128,6 @@ start_of_next_year(ref = today())
 
 end_of_next_year(ref = today())
 
-week2date(wk, yr = year(Sys.Date()), day = 1)
-
 nth_monday(ref = today(), n = 1)
 
 nth_tuesday(ref = today(), n = 1)
@@ -141,7 +142,9 @@ nth_saturday(ref = today(), n = 1)
 
 nth_sunday(ref = today(), n = 1)
 
-year(ref = today())
+week2date(wk, yr = year(today()), day = 1)
+
+week2resp_season(wk, remove_outside_season = FALSE)
 }
 \arguments{
 \item{ref}{reference date (defaults to today)}
@@ -150,11 +153,13 @@ year(ref = today())
 
 \item{day}{day to return (0 are 7 are Sunday, 1 is Monday, etc.)}
 
+\item{n}{relative number of weeks}
+
 \item{wk}{week to search for}
 
 \item{yr}{year to search for, defaults to current year}
 
-\item{n}{relative number of weeks}
+\item{remove_outside_season}{a \link{logical} to remove week numbers in the range 21-39}
 }
 \details{
 All functions return a vector of dates, except for \code{\link[=yesterday]{yesterday()}}, \code{\link[=today]{today()}}, \code{\link[=tomorrow]{tomorrow()}}, \code{\link[=week2date]{week2date()}}, and the \verb{start_of_*()}, \verb{end_of_*()} and \verb{nth_*()} functions; these return 1 date.
@@ -162,6 +167,8 @@ All functions return a vector of dates, except for \code{\link[=yesterday]{yeste
 Week ranges always start on Mondays and end on Sundays.
 
 \code{\link[=year]{year()}} always returns an \link{integer}.
+
+\code{\link[=week2resp_season]{week2resp_season()}} transforms week numbers to an ordered \link{factor}, in a range 40-53, 1:39 (or, if \code{remove_outside_season = TRUE}, 40-53, 1:20). This function is useful for plotting.
 }
 \examples{
 today() \%in\% this_month()

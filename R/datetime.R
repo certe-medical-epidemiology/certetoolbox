@@ -59,8 +59,6 @@ as.UTC.default <- function(x, ...) {
 #' @param ref reference date (defaults to today)
 #' @param only_start_end logical to indicate whether only the first and last value of the resulting vector should be returned
 #' @param day day to return (0 are 7 are Sunday, 1 is Monday, etc.)
-#' @param wk week to search for
-#' @param yr year to search for, defaults to current year
 #' @details All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
 #' 
 #' Week ranges always start on Mondays and end on Sundays.
@@ -69,7 +67,7 @@ as.UTC.default <- function(x, ...) {
 #' @rdname days_around_today
 #' @name days_around_today
 #' @importFrom dplyr `%>%` filter
-#' @importFrom lubridate as_date dweeks dmonths dyears floor_date ceiling_date
+#' @importFrom lubridate as_date dweeks dmonths dyears floor_date ceiling_date year
 #' @export
 #' @examples
 #' today() %in% this_month()
@@ -128,6 +126,12 @@ lubridate::now
 tomorrow <- function(ref = today()) {
   ref <- as_date(ref)
   ref + 1
+}
+
+#' @rdname days_around_today
+#' @export
+year <- function(ref = today()) {
+  as.integer(lubridate::year(ref))
 }
 
 #' @rdname days_around_today
@@ -451,49 +455,6 @@ end_of_next_year <- function(ref = today()) {
   out[length(out)]
 }
 
-#' @rdname days_around_today
-#' @importFrom stringr str_detect str_match
-#' @export
-week2date <- function(wk, yr = year(Sys.Date()), day = 1) {
-  if (day == 0) day <- 7
-  
-  # taken from ISOweek::ISOweek2date
-  fn <- function(weekdate) {
-    kPattern <- "^([0-9]{4})-W([0-9]{2})-([0-9]{1})$"
-    stopifnot(all(is.na(weekdate) | str_detect(weekdate, kPattern)))
-    wd_ywd <- str_match(weekdate, kPattern)
-    if (all(is.na(weekdate))) {
-      return(rep(as.Date(NA_character_), length.out = length(weekdate)))
-    }
-    stopifnot(ncol(wd_ywd) == 4)
-    year <- wd_ywd[, 2]
-    week <- as.integer(wd_ywd[, 3])
-    weekday <- as.integer(wd_ywd[, 4])
-    stopifnot(all(is.na(week) | (1 <= week & week <= 53)))
-    stopifnot(all(is.na(weekday) | (1 <= weekday & weekday <=
-                                      7)))
-    january04 <- as.Date(ifelse(is.na(year), NA, paste(year, "01", "04", sep = "-")))
-    
-    thursday0 <- function(date) {
-      date <- as.Date(date)
-      ISOweekday <- function (date) {
-        date <- as.Date(date)
-        return(as.integer((as.integer(format(date, "%w")) + 6)%%7 + 1))
-      }
-      weekday0 <- function(date) ISOweekday(date) - 1L
-      return(date - weekday0(date) + 3)
-    }
-    
-    first_thursday <- thursday0(january04)
-    nearest_thursday <- first_thursday + 7 * (week - 1)
-    return(nearest_thursday - 4 + weekday)
-  }
-  
-  # that function expects something like "2019-W10-1", so:
-  fn(paste0(yr, "-W", formatC(wk, width = 2, flag = 0), "-", day))
-  
-}
-
 nth_weekday <- function(ref = today(), n, weekday) {
   ref <- as_date(ref)
   out <- floor_date(ref[1], unit = "week", week_start = weekday)
@@ -547,7 +508,58 @@ nth_sunday <- function(ref = today(), n = 1) {
 }
 
 #' @rdname days_around_today
+#' @param wk week to search for
+#' @param yr year to search for, defaults to current year
+#' @importFrom stringr str_detect str_match
 #' @export
-year <- function(ref = today()) {
-  as.integer(lubridate::year(ref))
+week2date <- function(wk, yr = year(today()), day = 1) {
+  if (day == 0) day <- 7
+  
+  # taken from ISOweek::ISOweek2date
+  fn <- function(weekdate) {
+    kPattern <- "^([0-9]{4})-W([0-9]{2})-([0-9]{1})$"
+    stopifnot(all(is.na(weekdate) | str_detect(weekdate, kPattern)))
+    wd_ywd <- str_match(weekdate, kPattern)
+    if (all(is.na(weekdate))) {
+      return(rep(as.Date(NA_character_), length.out = length(weekdate)))
+    }
+    stopifnot(ncol(wd_ywd) == 4)
+    year <- wd_ywd[, 2]
+    week <- as.integer(wd_ywd[, 3])
+    weekday <- as.integer(wd_ywd[, 4])
+    stopifnot(all(is.na(week) | (1 <= week & week <= 53)))
+    stopifnot(all(is.na(weekday) | (1 <= weekday & weekday <=
+                                      7)))
+    january04 <- as.Date(ifelse(is.na(year), NA, paste(year, "01", "04", sep = "-")))
+    
+    thursday0 <- function(date) {
+      date <- as.Date(date)
+      ISOweekday <- function (date) {
+        date <- as.Date(date)
+        return(as.integer((as.integer(format(date, "%w")) + 6)%%7 + 1))
+      }
+      weekday0 <- function(date) ISOweekday(date) - 1L
+      return(date - weekday0(date) + 3)
+    }
+    
+    first_thursday <- thursday0(january04)
+    nearest_thursday <- first_thursday + 7 * (week - 1)
+    return(nearest_thursday - 4 + weekday)
+  }
+  
+  # that function expects something like "2019-W10-1", so:
+  fn(paste0(yr, "-W", formatC(wk, width = 2, flag = 0), "-", day))
+}
+
+#' @rdname days_around_today
+#' @param remove_outside_season a [logical] to remove week numbers in the range 21-39
+#' @details [week2resp_season()] transforms week numbers to an ordered [factor], in a range 40-53, 1:39 (or, if `remove_outside_season = TRUE`, 40-53, 1:20). This function is useful for plotting.
+#' @export
+week2resp_season <- function(wk, remove_outside_season = FALSE) {
+  if (isTRUE(remove_outside_season)) {
+    wk <- wk[!wk %in% c(21:39)]
+    factor(wk, levels = c(40:53, 1:20), ordered = TRUE)
+  } else {
+    factor(wk, levels = c(40:53, 1:39), ordered = TRUE)
+  }
 }

@@ -58,3 +58,24 @@ addin_insert_like <- function() {
     insertText(" %like% ")
   }
 }
+
+# No export, no Rd
+#' @importFrom rstudioapi insertText
+addin_insert_in <- function() {
+  insertText(" %in% ")
+}
+
+# No export, no Rd
+#' @importFrom rstudioapi showPrompt insertText
+addin_insert_section <- function() {
+  lbl <- showPrompt(title = "Label of section",
+                    message = "Section label:")
+  if (is.null(lbl)) {
+    return(invisible())
+  }
+  width <- min(options()$width, 100)
+  user <- paste("#" , format2(today(), "yyyy-mm-dd"), "/", Sys.info()[["user"]])
+  lbl <- trimws(lbl)
+  label <- paste("#", lbl, strrep("-", times = width - nchar(lbl) - 4))
+  insertText(paste0("\n", label, "\n", user, "\n\n"))
+}
