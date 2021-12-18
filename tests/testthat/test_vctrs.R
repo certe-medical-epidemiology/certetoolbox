@@ -17,7 +17,14 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-test_that("function_name works", {
-  expect_true(1 + 1 == 2)
-  expect_identical(1, 2 - 1)
+test_that("vctrs work", {
+  library(dplyr, warn.conflicts = FALSE)
+  df1 <- tibble(postcode = c(2,4,6))
+  df2 <- tibble(postcode = as.character(c(1:10)),
+                letter = letters[1:10])
+  expect_warning(df1 %>% left_join(df2))
+  expect_warning(df2 %>% left_join(df1))
+  df1$postcode <- as.integer(df1$postcode)
+  expect_warning(df1 %>% left_join(df2))
+  expect_warning(df2 %>% left_join(df1))
 })

@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/certe-medical-epidemiology/certetoolbox/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/certe-medical-epidemiology/certetoolbox/actions/workflows/R-CMD-check.yaml)
 [![CodeFactor](https://www.codefactor.io/repository/github/certe-medical-epidemiology/certetoolbox/badge/main)](https://www.codefactor.io/repository/github/certe-medical-epidemiology/certetoolbox/overview/main)
 
-This is a Certe R Package for miscellaneous functions that do not fit a dedicated package. This package is part of the 'certedata' universe.
+This is a Certe R Package for miscellaneous functions that do not fit a dedicated package. This package also mitigates the 'vctrs' package by allowing numeric-character coercions. This package is part of the 'certedata' universe.
 
 You can [read the manual with explanation about all functions](https://certe-medical-epidemiology.github.io/certetoolbox/reference), or install this particular R package using:
 
