@@ -1,19 +1,15 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 0.0.12
+Version: 0.0.13
 Authors@R: c(
-  person(given = c("Matthijs", "S."), 
-         family = "Berends",
-         role = c("aut", "cre"),
-         email = "m.berends@certe.nl"),
   person(given = c("Erwin", "E.", "A."),
-         family = "Hassing", 
-         role = c("aut"),
+         family = "Hassing",
+         role = c("aut", "cre"),
          email = "e.hassing@certe.nl"),
-  person(given = c("Erwin"),
-         family = "Dijkstra", 
+  person(given = c("Matthijs", "S."),
+         family = "Berends",
          role = c("aut"),
-         email = "e.dijkstra@certe.nl"),
+         email = "m.berends@certe.nl"),
   person(given = "Certe Medical Diagnostics & Advice Foundation",
          role = c("cph", "fnd")))
 Description: A Certe R Package for miscellaneous functions that do not fit
@@ -40,6 +36,7 @@ Imports:
   vctrs (>= 0.3.8),
   yaml (>= 2.2.0)
 Suggests: 
+  certeplot2,
   clipr (>= 0.7.1),
   ggplot2 (>= 3.1.0),
   haven (>= 2.4.0),

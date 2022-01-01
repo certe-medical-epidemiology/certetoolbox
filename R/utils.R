@@ -20,7 +20,7 @@
 get_external_function <- function(name, pkg, error_on_fail = TRUE) {
   # This function is a hacky way to NOT depend on another package, but DO use its functions.
   # For example, export.pdf() uses a 'certeplot2' function, but it's not possible to depend
-  # on it because that package already depend on this package. 
+  # on it because that package already depends on this package. 
   if (error_on_fail == TRUE) {
     check_is_installed(pkg)
   }

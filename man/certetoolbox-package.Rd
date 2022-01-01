@@ -6,7 +6,7 @@
 \alias{certetoolbox-package}
 \title{certetoolbox: A Certe R Package for Miscellaneous Functions}
 \description{
-A Certe R Package for miscellaneous functions that do not fit a dedicated package. This package is part of the 'certedata' universe.
+A Certe R Package for miscellaneous functions that do not fit a dedicated package. This package also mitigates the 'vctrs' package by allowing numeric-character coercions. This package is part of the 'certedata' universe.
 }
 \seealso{
 Useful links:
