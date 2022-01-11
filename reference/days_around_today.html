@@ -24,7 +24,7 @@ now, today
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.14</span>
       </span>
     </div>
 
@@ -212,10 +212,10 @@ below to see their documentation.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">next_week</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-01-03" "2022-01-04" "2022-01-05" "2022-01-06" "2022-01-07"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "2022-01-08" "2022-01-09"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-01-17" "2022-01-18" "2022-01-19" "2022-01-20" "2022-01-21"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "2022-01-22" "2022-01-23"</span>
 <span class="r-in"><span class="fu">next_week</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-01-03" "2022-01-09"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-01-17" "2022-01-23"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -234,17 +234,13 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu">start_of_last_week</span><span class="op">(</span><span class="op">)</span>,</span>
 <span class="r-in">                          <span class="fu">end_of_last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-12-25 2021-12-25 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-12-23 2021-12-23 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-12-20 2021-12-20 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-12-21 2021-12-21 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-01-07 2022-01-07 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-01-05 2022-01-05 12:00:00</span>
 <span class="r-in"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-12-25 2021-12-25 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-12-23 2021-12-23 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-12-20 2021-12-20 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-12-21 2021-12-21 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-01-07 2022-01-07 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-01-05 2022-01-05 12:00:00</span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># be sure to transform times to dates in certain filters</span></span>
@@ -252,17 +248,13 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu">start_of_last_week</span><span class="op">(</span><span class="op">)</span>,</span>
 <span class="r-in">                                   <span class="fu">end_of_last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-12-25 2021-12-25 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-12-23 2021-12-23 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-12-20 2021-12-20 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-12-21 2021-12-21 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-01-07 2022-01-07 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-01-05 2022-01-05 12:00:00</span>
 <span class="r-in"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2021-12-25 2021-12-25 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2021-12-23 2021-12-23 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2021-12-20 2021-12-20 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2021-12-21 2021-12-21 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-01-07 2022-01-07 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-01-05 2022-01-05 12:00:00</span>
 <span class="r-in">  </span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">certedb_getmmb</span><span class="op">(</span>dates <span class="op">=</span> <span class="fu">last_week</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
