@@ -45,7 +45,7 @@ parse_file_location <- function(filename, needed_extension, card_number) {
 
 # Export functions --------------------------------------------------------
 
-# export.query <- function(object, filename) {
+# export_query <- function(object, filename) {
 #   filename_qry <- gsub("[.][a-zA-Z0-9]+$", ".sql", filename)
 #   write(suppressMessages(qry(object)), file = filename_qry, ncolumns = 1, append = FALSE)
 #   message(paste0("Query exported as `", tools::file_path_as_absolute(filename_qry), "`."))
@@ -69,9 +69,9 @@ parse_file_location <- function(filename, needed_extension, card_number) {
 #' 
 #' # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 #' starwars %>%
-#'   export.R("whole_file") %>%
+#'   export_rds("whole_file") %>%
 #'   slice(1:10) %>%
-#'   export.excel("first_ten_rows")
+#'   export_excel("first_ten_rows")
 #' }
 export <- function(object,
                    fn,
@@ -97,14 +97,13 @@ export <- function(object,
 }
 
 #' @rdname export
-#' @inheritParams as_excel
-#' @details RDS files as created by [export.R()] are compatible with R3 and R4.
+#' @details RDS files as created with [export_rds()] are compatible with R3 and R4.
 #' @export
-export.R <- function(object,
-                     filename = NULL,
-                     card_number = project_get_current_id(ask = FALSE),
-                     export_qry = TRUE,
-                     ...) {
+export_rds <- function(object,
+                       filename = NULL,
+                       card_number = project_get_current_id(ask = FALSE),
+                       export_qry = TRUE,
+                       ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
   }
@@ -119,17 +118,17 @@ export.R <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export.excel()] uses [as_excel()] internally.
+#' @details The [export_xlsx()] uses [as_excel()] with `save = TRUE` internally.
 #' @export
-export.excel <- function(object,
-                         filename = NULL,
-                         card_number = project_get_current_id(ask = FALSE),
-                         export_qry = TRUE,
-                         sheet_names = NULL,
-                         autofilter = TRUE,
-                         rows_zebra = TRUE,
-                         cols_zebra = FALSE,
-                         ...) {
+export_xlsx <- function(object,
+                        filename = NULL,
+                        card_number = project_get_current_id(ask = FALSE),
+                        export_qry = TRUE,
+                        sheet_names = NULL,
+                        autofilter = TRUE,
+                        rows_zebra = TRUE,
+                        cols_zebra = FALSE,
+                        ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
   }
@@ -147,13 +146,13 @@ export.excel <- function(object,
 
 #' @rdname export
 #' @export
-export.xlsx <- export.excel
+export_excel <- export_xlsx
 
 #' @rdname export
 #' @param na replacement character for empty values (default: `""`)
-#' @details For [export.csv()], [export.csv2()] and [export.tsv()], files will be saved in UTF-8 encoding and values `NA` will be exported as `""` at default. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
+#' @details For [export_csv()], [export_csv2()] and [export_tsv()], files will be saved in UTF-8 encoding and values `NA` will be exported as `""` at default. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
 #' @export
-export.csv <- function(object,
+export_csv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        export_qry = TRUE,
@@ -180,7 +179,7 @@ export.csv <- function(object,
 
 #' @rdname export
 #' @export
-export.csv2 <- function(object,
+export_csv2 <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
                         export_qry = TRUE,
@@ -207,7 +206,7 @@ export.csv2 <- function(object,
 
 #' @rdname export
 #' @export
-export.tsv <- function(object,
+export_tsv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        export_qry = TRUE,
@@ -233,9 +232,9 @@ export.tsv <- function(object,
 }
 
 #' @rdname export
-#' @details Exporting as SPSS files with [export.spss()] requires the `haven` package to be installed.
+#' @details Exporting as SPSS files with [export_spss()] requires the `haven` package to be installed.
 #' @export
-export.spss <- function(object,
+export_spss <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
                         export_qry = TRUE,
@@ -253,10 +252,10 @@ export.spss <- function(object,
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
-#' @details If the filename is left blank in [export.pdf()] or [export.png()], the title of `plot` will be used if available (and a timestamp otherwise).
+#' @details If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if available (and a timestamp otherwise).
 #' @importFrom certestyle format2
 #' @export
-export.pdf <- function(plot,
+export_pdf <- function(plot,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        size = "A5",
@@ -348,7 +347,7 @@ export.pdf <- function(plot,
 #' @param height required height of the PNG file in pixels
 #' @param text.factor text factor for the exported plot. Defaults to `1.2`, which loosely equals a PDF file in A5 format when it comes to text sizes.
 #' @export
-export.png <- function(plot,
+export_png <- function(plot,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        width = 1000,
@@ -393,15 +392,15 @@ export.png <- function(plot,
 }
 
 #' @rdname export
-#' @param sep (for [export.clipboard()]) separator for values in a row (default: tab)
+#' @param sep (for [export_clipboard()]) separator for values in a row (default: tab)
 #' @param na replacement character for empty values (default: `""`)
-#' @param header (for [export.clipboard()]) use column names as header (default: `TRUE`)
-#' @param quote (for [export.clipboard()]) use quotation marks (default: `FALSE`)
-#' @param decimal.mark (for [export.clipboard()]) character to use for decimal numbers
-#' @details The [export.clipboard()] function requires the `clipr` package to be installed. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
+#' @param header (for [export_clipboard()]) use column names as header (default: `TRUE`)
+#' @param quote (for [export_clipboard()]) use quotation marks (default: `FALSE`)
+#' @param decimal.mark (for [export_clipboard()]) character to use for decimal numbers
+#' @details The [export_clipboard()] function requires the `clipr` package to be installed. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
 #' @importFrom certestyle format2
 #' @export
-export.clipboard <- function(object,
+export_clipboard <- function(object,
                              sep = "\t",
                              na = "",
                              header = TRUE,
@@ -493,7 +492,7 @@ export_exec <- function(object,
     stop("Error while saving `", filename, "`.", call. = FALSE)
   }
   # if (export_qry == TRUE && has_qry(object)) {
-  #   export.query(object, filename)
+  #   export_query(object, filename)
   # }
   invisible(object)
 }
@@ -530,9 +529,9 @@ import <- function(filename,
 
 #' @rdname import
 #' @export
-import.R <- function(filename,
-                     card_number = project_get_current_id(ask = FALSE),
-                     ...) {
+import_rds <- function(filename,
+                       card_number = project_get_current_id(ask = FALSE),
+                       ...) {
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -547,7 +546,7 @@ import.R <- function(filename,
 #' @inheritParams auto_transform
 #' @importFrom cleaner format_datetime
 #' @export
-import.excel <- function(filename,
+import_excel <- function(filename,
                          card_number = project_get_current_id(ask = FALSE),
                          sheet = 1,
                          auto_transform = TRUE,
@@ -578,12 +577,12 @@ import.excel <- function(filename,
 
 #' @rdname import
 #' @export
-import.xlsx <- import.excel
+import_xlsx <- import_excel
 
 #' @rdname import
 #' @importFrom cleaner format_datetime
 #' @export
-import.csv <- function(filename,
+import_csv <- function(filename,
                        card_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        datenames = "nl",
@@ -613,7 +612,7 @@ import.csv <- function(filename,
 #' @rdname import
 #' @importFrom cleaner format_datetime
 #' @export
-import.csv2 <- function(filename,
+import_csv2 <- function(filename,
                         card_number = project_get_current_id(ask = FALSE),
                         auto_transform = TRUE,
                         datenames = "nl",
@@ -643,7 +642,7 @@ import.csv2 <- function(filename,
 #' @rdname import
 #' @importFrom cleaner format_datetime
 #' @export
-import.tsv <- function(filename,
+import_tsv <- function(filename,
                        card_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        datenames = "nl",
@@ -672,7 +671,7 @@ import.tsv <- function(filename,
 
 #' @rdname import
 #' @export
-import.spss <- function(filename,
+import_spss <- function(filename,
                         card_number = project_get_current_id(ask = FALSE),
                         auto_transform = FALSE,
                         datenames = "en",
@@ -703,9 +702,9 @@ import.spss <- function(filename,
 #' @param sep character to separate values in a row
 #' @param header use first row as header
 #' @param startrow first row to start importing
-#' @details The [import.clipboard()] function requires the `clipr` package to be installed.
+#' @details The [import_clipboard()] function requires the `clipr` package to be installed.
 #' @export
-import.clipboard <- function(sep = "\t",
+import_clipboard <- function(sep = "\t",
                              header = TRUE,
                              startrow = 1,
                              auto_transform = TRUE,
@@ -846,7 +845,7 @@ import_exec <- function(filename,
 #' @param autowidth automatically adjust columns widths
 #' @param rows_zebra create banded rows
 #' @param cols_zebra create banded columns
-#' @param save save the file directly, defaults to `TRUE` if used after a pipe (`%>%`)
+#' @param save save the file directly, defaults to `FALSE`
 #' @param file file location to save Excel document to, defaults to a random filename
 #' @param freeze_top_row freeze the first row of the sheet
 #' @param overwrite overwrite existing file
@@ -855,29 +854,20 @@ import_exec <- function(filename,
 #' @importFrom tibble rownames_to_column
 #' @export
 #' @examples
-#' # does not save immediately, but returns the workbook object
+#' # does not save, but returns the workbook object
 #' xl <- as_excel("this is a sheet" = mtcars,
 #'                "another sheet" = anscombe)
 #' xl
 #' 
-#' 
-#' # save with save_excel() or export.excel()
-#' export.excel(xl)
-#'          
-#' \dontrun{
-#' # saves immediately
-#' if (require("dplyr")) {
-#'   mtcars %>%
-#'     as_excel()
-#' }
-#' }
+#' # save with save_excel() or export_excel()
+#' export_excel(xl)
 as_excel <- function(...,
                      sheet_names = NULL,
                      autofilter = TRUE,
                      autowidth = TRUE,
                      rows_zebra = TRUE,
                      cols_zebra = FALSE,
-                     save = identical(deparse(substitute(...)), "."),
+                     save = FALSE,
                      file = NULL,
                      freeze_top_row = TRUE,
                      overwrite = FALSE) {

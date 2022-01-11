@@ -2,16 +2,16 @@
 % Please edit documentation in R/import_export.R
 \name{export}
 \alias{export}
-\alias{export.R}
-\alias{export.excel}
-\alias{export.xlsx}
-\alias{export.csv}
-\alias{export.csv2}
-\alias{export.tsv}
-\alias{export.spss}
-\alias{export.pdf}
-\alias{export.png}
-\alias{export.clipboard}
+\alias{export_rds}
+\alias{export_xlsx}
+\alias{export_excel}
+\alias{export_csv}
+\alias{export_csv2}
+\alias{export_tsv}
+\alias{export_spss}
+\alias{export_pdf}
+\alias{export_png}
+\alias{export_clipboard}
 \title{Export Data and Plots}
 \usage{
 export(
@@ -22,7 +22,7 @@ export(
   ...
 )
 
-export.R(
+export_rds(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -30,19 +30,7 @@ export.R(
   ...
 )
 
-export.excel(
-  object,
-  filename = NULL,
-  card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
-  sheet_names = NULL,
-  autofilter = TRUE,
-  rows_zebra = TRUE,
-  cols_zebra = FALSE,
-  ...
-)
-
-export.xlsx(
+export_xlsx(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -54,7 +42,19 @@ export.xlsx(
   ...
 )
 
-export.csv(
+export_excel(
+  object,
+  filename = NULL,
+  card_number = project_get_current_id(ask = FALSE),
+  export_qry = TRUE,
+  sheet_names = NULL,
+  autofilter = TRUE,
+  rows_zebra = TRUE,
+  cols_zebra = FALSE,
+  ...
+)
+
+export_csv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -63,7 +63,7 @@ export.csv(
   ...
 )
 
-export.csv2(
+export_csv2(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -72,7 +72,7 @@ export.csv2(
   ...
 )
 
-export.tsv(
+export_tsv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -81,7 +81,7 @@ export.tsv(
   ...
 )
 
-export.spss(
+export_spss(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -89,7 +89,7 @@ export.spss(
   ...
 )
 
-export.pdf(
+export_pdf(
   plot,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -98,7 +98,7 @@ export.pdf(
   ...
 )
 
-export.png(
+export_png(
   plot,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
@@ -108,7 +108,7 @@ export.png(
   ...
 )
 
-export.clipboard(
+export_clipboard(
   object,
   sep = "\\t",
   na = "",
@@ -151,13 +151,13 @@ export.clipboard(
 
 \item{text.factor}{text factor for the exported plot. Defaults to \code{1.2}, which loosely equals a PDF file in A5 format when it comes to text sizes.}
 
-\item{sep}{(for \code{\link[=export.clipboard]{export.clipboard()}}) separator for values in a row (default: tab)}
+\item{sep}{(for \code{\link[=export_clipboard]{export_clipboard()}}) separator for values in a row (default: tab)}
 
-\item{header}{(for \code{\link[=export.clipboard]{export.clipboard()}}) use column names as header (default: \code{TRUE})}
+\item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 
-\item{quote}{(for \code{\link[=export.clipboard]{export.clipboard()}}) use quotation marks (default: \code{FALSE})}
+\item{quote}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use quotation marks (default: \code{FALSE})}
 
-\item{decimal.mark}{(for \code{\link[=export.clipboard]{export.clipboard()}}) character to use for decimal numbers}
+\item{decimal.mark}{(for \code{\link[=export_clipboard]{export_clipboard()}}) character to use for decimal numbers}
 }
 \description{
 These functions can be used to export data and plots. They invisibly return the object itself again, allowing for usage in pipes. The functions work closely with the \code{certeprojects} package and support Trello card numbers.
@@ -165,17 +165,17 @@ These functions can be used to export data and plots. They invisibly return the 
 \details{
 The \code{\link[=export]{export()}} function can export to any file format, as long as the export function is passed on to the \code{fn} argument. This function has to have the object as first argument and the future file location as second argument.
 
-RDS files as created by \code{\link[=export.R]{export.R()}} are compatible with R3 and R4.
+RDS files as created with \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
 
-The \code{\link[=export.excel]{export.excel()}} uses \code{\link[=as_excel]{as_excel()}} internally.
+The \code{\link[=export_xlsx]{export_xlsx()}} uses \code{\link[=as_excel]{as_excel()}} with \code{save = TRUE} internally.
 
-For \code{\link[=export.csv]{export.csv()}}, \code{\link[=export.csv2]{export.csv2()}} and \code{\link[=export.tsv]{export.tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
+For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 
-Exporting as SPSS files with \code{\link[=export.spss]{export.spss()}} requires the \code{haven} package to be installed.
+Exporting as SPSS files with \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-If the filename is left blank in \code{\link[=export.pdf]{export.pdf()}} or \code{\link[=export.png]{export.png()}}, the title of \code{plot} will be used if available (and a timestamp otherwise).
+If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if available (and a timestamp otherwise).
 
-The \code{\link[=export.clipboard]{export.clipboard()}} function requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
+The \code{\link[=export_clipboard]{export_clipboard()}} function requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
 }
 \examples{
 \dontrun{
@@ -183,8 +183,8 @@ library(dplyr)
 
 # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 starwars \%>\%
-  export.R("whole_file") \%>\%
+  export_rds("whole_file") \%>\%
   slice(1:10) \%>\%
-  export.excel("first_ten_rows")
+  export_excel("first_ten_rows")
 }
 }

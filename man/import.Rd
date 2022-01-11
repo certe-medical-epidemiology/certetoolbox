@@ -2,14 +2,14 @@
 % Please edit documentation in R/import_export.R
 \name{import}
 \alias{import}
-\alias{import.R}
-\alias{import.excel}
-\alias{import.xlsx}
-\alias{import.csv}
-\alias{import.csv2}
-\alias{import.tsv}
-\alias{import.spss}
-\alias{import.clipboard}
+\alias{import_rds}
+\alias{import_excel}
+\alias{import_xlsx}
+\alias{import_csv}
+\alias{import_csv2}
+\alias{import_tsv}
+\alias{import_spss}
+\alias{import_clipboard}
 \title{Import Data and Plots}
 \usage{
 import(
@@ -19,9 +19,9 @@ import(
   ...
 )
 
-import.R(filename, card_number = project_get_current_id(ask = FALSE), ...)
+import_rds(filename, card_number = project_get_current_id(ask = FALSE), ...)
 
-import.excel(
+import_excel(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   sheet = 1,
@@ -36,7 +36,7 @@ import.excel(
   ...
 )
 
-import.xlsx(
+import_xlsx(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   sheet = 1,
@@ -51,7 +51,7 @@ import.xlsx(
   ...
 )
 
-import.csv(
+import_csv(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
@@ -65,7 +65,7 @@ import.csv(
   ...
 )
 
-import.csv2(
+import_csv2(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
@@ -79,7 +79,7 @@ import.csv2(
   ...
 )
 
-import.tsv(
+import_tsv(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
@@ -93,7 +93,7 @@ import.tsv(
   ...
 )
 
-import.spss(
+import_spss(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   auto_transform = FALSE,
@@ -107,7 +107,7 @@ import.spss(
   ...
 )
 
-import.clipboard(
+import_clipboard(
   sep = "\\t",
   header = TRUE,
   startrow = 1,
@@ -159,7 +159,7 @@ These functions can be used to import data. They work closely with the \code{cer
 \details{
 The \code{\link[=import]{import()}} function uses the \code{rio} package to guess the required import function.
 
-The \code{\link[=import.clipboard]{import.clipboard()}} function requires the \code{clipr} package to be installed.
+The \code{\link[=import_clipboard]{import_clipboard()}} function requires the \code{clipr} package to be installed.
 }
 \examples{
 #

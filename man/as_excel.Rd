@@ -12,7 +12,7 @@ as_excel(
   autowidth = TRUE,
   rows_zebra = TRUE,
   cols_zebra = FALSE,
-  save = identical(deparse(substitute(...)), "."),
+  save = FALSE,
   file = NULL,
   freeze_top_row = TRUE,
   overwrite = FALSE
@@ -33,7 +33,7 @@ save_excel(xl, file = NULL, overwrite = FALSE, ...)
 
 \item{cols_zebra}{create banded columns}
 
-\item{save}{save the file directly, defaults to \code{TRUE} if used after a pipe (\verb{\%>\%})}
+\item{save}{save the file directly, defaults to \code{FALSE}}
 
 \item{file}{file location to save Excel document to, defaults to a random filename}
 
@@ -47,20 +47,11 @@ save_excel(xl, file = NULL, overwrite = FALSE, ...)
 This function relies on the \code{openxlsx} package for creating Excel documents.
 }
 \examples{
-# does not save immediately, but returns the workbook object
+# does not save, but returns the workbook object
 xl <- as_excel("this is a sheet" = mtcars,
                "another sheet" = anscombe)
 xl
 
-
-# save with save_excel() or export.excel()
-export.excel(xl)
-         
-\dontrun{
-# saves immediately
-if (require("dplyr")) {
-  mtcars \%>\%
-    as_excel()
-}
-}
+# save with save_excel() or export_excel()
+export_excel(xl)
 }
