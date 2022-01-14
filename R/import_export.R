@@ -97,7 +97,7 @@ export <- function(object,
 }
 
 #' @rdname export
-#' @details RDS files as created with [export_rds()] are compatible with R3 and R4.
+#' @details RDS files as created using [export_rds()] are compatible with R3 and R4.
 #' @export
 export_rds <- function(object,
                        filename = NULL,
@@ -118,7 +118,7 @@ export_rds <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export_xlsx()] uses [as_excel()] with `save = TRUE` internally.
+#' @details The [export_xlsx()] and [export_excel()] functions uses [as_excel()] with `save = TRUE` internally.
 #' @export
 export_xlsx <- function(object,
                         filename = NULL,
@@ -232,13 +232,13 @@ export_tsv <- function(object,
 }
 
 #' @rdname export
-#' @details Exporting as SPSS files with [export_spss()] requires the `haven` package to be installed.
+#' @details Exporting as SPSS files using [export_sav()] or [export_spss()] requires the `haven` package to be installed.
 #' @export
-export_spss <- function(object,
-                        filename = NULL,
-                        card_number = project_get_current_id(ask = FALSE),
-                        export_qry = TRUE,
-                        ...) {
+export_sav <- function(object,
+                       filename = NULL,
+                       card_number = project_get_current_id(ask = FALSE),
+                       export_qry = TRUE,
+                       ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
   }
@@ -248,6 +248,10 @@ export_spss <- function(object,
               export_qry = export_qry,
               compress = FALSE)
 }
+
+#' @rdname export
+#' @export
+export_spss <- export_sav 
 
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
@@ -509,8 +513,6 @@ export_exec <- function(object,
 #' @details The [import()] function uses the `rio` package to guess the required import function.
 #' @rdname import
 #' @export
-#' @examples 
-#' #
 import <- function(filename,
                    card_number = project_get_current_id(ask = FALSE),
                    auto_transform = FALSE,
@@ -518,13 +520,34 @@ import <- function(filename,
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
-  # uses rio::import which pretty much understands any file type
-  check_is_installed("rio")
-  import_exec(filename,
-              extension = "",
-              card_number = card_number,
-              auto_transform = auto_transform,
-              ...)
+  if (filename %like% "[.]rds$") {
+    import_rds(filename = filename, 
+               card_number = card_number,
+               ...)
+  } else if (filename %like% "[.]tsv$") {
+    import_tsv(filename = filename,
+               card_number = card_number,
+               auto_transform = auto_transform,
+               ...)
+  } else if (filename %like% "[.]xlsx?$") {
+    import_xlsx(filename = filename,
+                card_number = card_number,
+                auto_transform = auto_transform,
+                ...)
+  } else if (filename %like% "[.]sav$") {
+    import_sav(filename = filename,
+               card_number = card_number,
+               auto_transform = auto_transform,
+               ...)
+  } else {
+    # uses rio::import which pretty much understands any file type
+    check_is_installed("rio")
+    import_exec(filename,
+                extension = "",
+                card_number = card_number,
+                auto_transform = auto_transform,
+                ...)
+  }
 }
 
 #' @rdname import
@@ -544,20 +567,22 @@ import_rds <- function(filename,
 #' @rdname import
 #' @param sheet Excel sheet to import, defaults to first sheet
 #' @inheritParams auto_transform
+#' @details Importing Excel files using [import_xlsx()] or [import_excel()] requires the `readxl` package to be installed.
 #' @importFrom cleaner format_datetime
 #' @export
-import_excel <- function(filename,
-                         card_number = project_get_current_id(ask = FALSE),
-                         sheet = 1,
-                         auto_transform = TRUE,
-                         datenames = "nl",
-                         dateformat = "yyyy-mm-dd",
-                         timeformat = "HH:MM",
-                         decimal.mark = ",",
-                         big.mark = "",
-                         timezone = "UTC",
-                         na = c("", "NULL", "NA", "<NA>"),
-                         ...) {
+import_xlsx <- function(filename,
+                        card_number = project_get_current_id(ask = FALSE),
+                        sheet = 1,
+                        auto_transform = TRUE,
+                        datenames = "nl",
+                        dateformat = "yyyy-mm-dd",
+                        timeformat = "HH:MM",
+                        decimal.mark = ",",
+                        big.mark = "",
+                        timezone = "UTC",
+                        na = c("", "NULL", "NA", "<NA>"),
+                        ...) {
+  check_is_installed("readxl")
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -577,7 +602,7 @@ import_excel <- function(filename,
 
 #' @rdname import
 #' @export
-import_xlsx <- import_excel
+import_excel <- import_xlsx
 
 #' @rdname import
 #' @importFrom cleaner format_datetime
@@ -670,18 +695,20 @@ import_tsv <- function(filename,
 }
 
 #' @rdname import
+#' @details Importing SPSS files using [import_sav()] or [import_spss()] requires the `haven` package to be installed.
 #' @export
-import_spss <- function(filename,
-                        card_number = project_get_current_id(ask = FALSE),
-                        auto_transform = FALSE,
-                        datenames = "en",
-                        dateformat = "yyyy-mm-dd",
-                        timeformat = "HH:MM",
-                        decimal.mark = ".",
-                        big.mark = "",
-                        timezone = "UTC",
-                        na = c("", "NULL", "NA", "<NA>"),
-                        ...) {
+import_sav <- function(filename,
+                       card_number = project_get_current_id(ask = FALSE),
+                       auto_transform = FALSE,
+                       datenames = "en",
+                       dateformat = "yyyy-mm-dd",
+                       timeformat = "HH:MM",
+                       decimal.mark = ".",
+                       big.mark = "",
+                       timezone = "UTC",
+                       na = c("", "NULL", "NA", "<NA>"),
+                       ...) {
+  check_is_installed("haven")
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -697,6 +724,10 @@ import_spss <- function(filename,
               timezone = timezone,
               na = na)
 }
+
+#' @rdname import
+#' @export
+import_spss <- import_sav
 
 #' @rdname import
 #' @param sep character to separate values in a row
@@ -740,6 +771,48 @@ import_clipboard <- function(sep = "\t",
     df <-  auto_transform(df, ...)
   }
   df
+}
+
+#' @rdname import
+#' @details The [import_mail_attachment()] function requires the `certemail` package to be installed. It calls [`download_mail_attachment()`][certemail::download_mail_attachment()] internally and saves the attachment to a temporary folder.
+#' @param search see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_subject see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_from see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_when see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_attachment see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param n see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param sort see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param account see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @export
+import_mail_attachment <- function(search = "hasattachment:yes",
+                                   search_subject = NULL,
+                                   search_from = NULL,
+                                   search_when = NULL,
+                                   search_attachment = NULL,
+                                   n = 5,
+                                   sort = "received desc",
+                                   account = connect_outlook365(),
+                                   ...) {
+  check_is_installed("certemail")
+  
+  download_mail_attachment <- get_external_function("download_mail_attachment", "certemail")
+  path <- suppressMessages(download_mail_attachment(
+    path = tempdir(),
+    filename = "{original}",
+    search = search,
+    search_subject = search_subject,
+    search_from = search_from,
+    search_when = search_when,
+    n = n,
+    sort = sort,
+    overwrite = TRUE,
+    account = account))
+  
+  if (file.exists(path)) {
+    import(path, ...)
+  } else {
+    stop("Importing attachment failed")
+  }
 }
 
 #' @importFrom readr read_delim locale
@@ -818,7 +891,7 @@ import_exec <- function(filename,
     message("Row names restored from first column.", call. = FALSE)
   }
   
-  if (auto_transform == TRUE) {
+  if (isTRUE(auto_transform)) {
     df <- auto_transform(df, ...)
   }
   

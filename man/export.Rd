@@ -8,6 +8,7 @@
 \alias{export_csv}
 \alias{export_csv2}
 \alias{export_tsv}
+\alias{export_sav}
 \alias{export_spss}
 \alias{export_pdf}
 \alias{export_png}
@@ -78,6 +79,14 @@ export_tsv(
   card_number = project_get_current_id(ask = FALSE),
   export_qry = TRUE,
   na = "",
+  ...
+)
+
+export_sav(
+  object,
+  filename = NULL,
+  card_number = project_get_current_id(ask = FALSE),
+  export_qry = TRUE,
   ...
 )
 
@@ -165,13 +174,13 @@ These functions can be used to export data and plots. They invisibly return the 
 \details{
 The \code{\link[=export]{export()}} function can export to any file format, as long as the export function is passed on to the \code{fn} argument. This function has to have the object as first argument and the future file location as second argument.
 
-RDS files as created with \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
+RDS files as created using \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
 
-The \code{\link[=export_xlsx]{export_xlsx()}} uses \code{\link[=as_excel]{as_excel()}} with \code{save = TRUE} internally.
+The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions uses \code{\link[=as_excel]{as_excel()}} with \code{save = TRUE} internally.
 
 For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 
-Exporting as SPSS files with \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
+Exporting as SPSS files using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
 If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if available (and a timestamp otherwise).
 

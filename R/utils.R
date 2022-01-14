@@ -48,7 +48,9 @@ check_is_installed <- function(pkgs) {
                                      paste0("'", to_install, "'", collapse = ", "), ". ",
                                      "Install now?"))
     if (isTRUE(choice)) {
-      utils::install.packages(to_install)
+      utils::install.packages(to_install,
+                              repos = c(options()$repos,
+                                        "https://certe-medical-epidemiology.r-universe.dev"))
       # try again:
       is_installed(pkgs)
     } else {
