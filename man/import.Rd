@@ -146,7 +146,8 @@ import_mail_attachment(
   search_attachment = NULL,
   n = 5,
   sort = "received desc",
-  account = connect_outlook365(),
+  account = NULL,
+  auto_transform = TRUE,
   ...
 )
 }

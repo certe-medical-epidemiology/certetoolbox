@@ -791,10 +791,14 @@ import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_attachment = NULL,
                                    n = 5,
                                    sort = "received desc",
-                                   account = connect_outlook365(),
+                                   account = NULL,
+                                   auto_transform = TRUE,
                                    ...) {
   check_is_installed("certemail")
-  
+  if (missing(account)) {
+    connect_outlook365 <- get_external_function("connect_outlook365", "certemail")
+    account <- connect_outlook365()
+  }
   download_mail_attachment <- get_external_function("download_mail_attachment", "certemail")
   path <- suppressMessages(download_mail_attachment(
     path = tempdir(),
@@ -809,7 +813,7 @@ import_mail_attachment <- function(search = "hasattachment:yes",
     account = account))
   
   if (file.exists(path)) {
-    import(path, ...)
+    import(path, auto_transform = auto_transform, ...)
   } else {
     stop("Importing attachment failed")
   }

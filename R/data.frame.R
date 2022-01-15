@@ -714,7 +714,7 @@ tbl_markdown <- function(x,
 #' @param timezone expected time zone
 #' @param na values to interpret as `NA`
 #' @param ... not used as the time, allows for future extension
-#' @importFrom cleaner format_datetime
+#' @importFrom cleaner format_datetime clean_Date
 #' @importFrom readr parse_guess locale
 #' @importFrom dplyr `%>%`
 #' @importFrom AMR as.rsi as.mic
@@ -742,7 +742,7 @@ auto_transform <- function(x,
     if (!inherits(col_data, c("list", "matrix")) &
         # no faeces (F) or tips (T)
         !all(unique(col_data) %in% c("T", "F"))) {
-      x[, i] <- parse_guess(x = col_data %>% as.character(),
+      x[, i] <- parse_guess(x = as.character(col_data),
                             na = na,
                             guess_integer = TRUE,
                             trim_ws = TRUE,
@@ -754,9 +754,12 @@ auto_transform <- function(x,
                                             encoding = "UTF-8",
                                             tz = timezone,
                                             asciify = FALSE))
+      if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
+        x[, i] <- clean_Date(col_data, format = "dd-mm-yyyy")
+      }
     }
     
-    if (inherits(col_data, c("factor", "character"))) {
+    if (inherits(x[, i, drop = TRUE], c("factor", "character"))) {
       # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
       x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {
