@@ -17,6 +17,10 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+#' @importFrom dplyr `%>%`
+#' @export
+dplyr::`%>%`
+
 get_external_function <- function(name, pkg, error_on_fail = TRUE) {
   # This function is a hacky way to NOT depend on another package, but DO use its functions.
   # For example, export.pdf() uses a 'certeplot2' function, but it's not possible to depend

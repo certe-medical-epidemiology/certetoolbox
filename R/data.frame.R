@@ -171,7 +171,7 @@ tbl_flextable <- function(x,
                           align = "c",
                           align.part = "all",
                           caption = "",
-                          na = '',
+                          na = "",
                           logicals = c("X", ""),
                           round.numbers = 2,
                           round.percent = 1,
@@ -196,7 +196,14 @@ tbl_flextable <- function(x,
                           print = FALSE,
                           ...) {
   
-  # beetje lief zijn voor typefouten
+  if (NROW(x) == 0) {
+    warning("`x` has no rows")
+  }
+  if (NCOL(x) == 0) {
+    warning("`x` has no columns")
+  }
+  
+  # be nice in case of typing errors
   dots <- list(...)
   if (is.null(vline) & missing(vline)) {
     vline <- dots$vline.columns
@@ -222,7 +229,7 @@ tbl_flextable <- function(x,
   }
   
   if (identical(row.names, as.character(c(1:nrow(x)))) & missing(row.names)) {
-    # rijnamen zijn niet ingesteld en zijn dus 1:nrow(x)
+    # rownames not set, are thus 1:nrow(x)
     row.names <- FALSE
   }
   
@@ -267,20 +274,21 @@ tbl_flextable <- function(x,
   if (is.null(columns.percent)) {
     columns.percent <- integer(0)
   }
-  for (i in 1:col_count) {
-    if (class(x[1, i])[1] %in% c('Date', 'POSIXct', 'POSIXlt')) {
+  for (i in seq_len(col_count)) {
+    if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
       x[, i] <- x %>%
         pull(i) %>% 
+        as.Date() %>% 
         format2(format = format.dates)
     }
-    if (class(x[1, i])[1] %in% "logical") {
+    if (is.logical(x[1, i, drop = TRUE])) {
       x[, i] <- x %>%
         pull(i) %>% 
         as.character() %>% 
         gsub("TRUE", logicals[1], .) %>%
         gsub("FALSE", logicals[2], .)
     }
-    if (class(x[1, i])[1] %in% c('double', 'integer', 'numeric', 'single') &
+    if (inherits(x[1, i, drop = TRUE], c("double", "integer", "numeric", "single")) &
         !i %in% columns.percent) {
       x[, i] <- x %>%
         pull(i) %>% 
@@ -294,26 +302,27 @@ tbl_flextable <- function(x,
     }
   }
   
-  # NA vervangen
+  # replace NAs
   colnames.bak <- colnames(x)
-  x <- as.data.frame(sapply(x,
+  x <- as.data.frame(vapply(FUN.VALUE = character(nrow(x)),
+                            x,
                             function(x, na_val = na) {
                               x <- as.character(x)
                               x[is.na(x)] <- na_val
                               x
-                            }, simplify = FALSE),
+                            }),
                      stringsAsFactors = FALSE)
   colnames(x) <- colnames.bak
   
-  # kolomnamen VOOR de flextable (set_header_labels is niet zo makkelijk...)
+  # colnames BEFORE the flextable (set_header_labels is hard...)
   colnames_bak <- NULL
   if (length(column.names) > 0) {
     if (!is.null(names(column.names))) {
-      for (i in 1:length(column.names)) {
+      for (i in seq_len(length(column.names))) {
         col.name <- names(column.names)[i]
         if (col.name != "") {
           if (as.character(col.name) %in% as.character(c(1:ncol(x)))) {
-            # is een index van een kolom
+            # is an index of a column
             colnames(x)[as.integer(col.name)] <- column.names[i]
           } else {
             colnames(x)[colnames(x) == col.name] <- column.names[i]
@@ -336,19 +345,19 @@ tbl_flextable <- function(x,
         colnames(x)[1] <- " "
       }
     }
-    # meerdere dezelfde kolomnamen ondersteunen, zodat dit werkt:
+    # support duplicate colnames, so this will work:
     # data.frame(col1 = 1, col2 = 2) %>%
     #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
     colnames_bak <- colnames(x)
-    # A t/m Z, daarna AA t/m ZZ (totaal 26 + 26 * 26 = 702)
+    # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
     letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
     colnames(x) <- letter_vector[1:ncol(x)]
-    names(colnames_bak) <- colnames(x) # hierdoor werkt set_header_labels, verderop
+    names(colnames_bak) <- colnames(x) # this will make set_header_labels work, furter down
   }
   
   ft <- flextable(x)
   
-  # Rij- en kolomtotalen
+  # row and column names
   if (row.total == TRUE) {
     ind <- 0
     row.total.values <- sapply(x.bak, function(x,
@@ -377,7 +386,7 @@ tbl_flextable <- function(x,
       }
     })
     if (!all(row.total.values == "")) {
-      # naam toevoegen op eerste kolomplek
+      # add name to first col
       row.total.values[1] <- row.total.name
       if (is.null(row.total.widths)) {
         row.total.widths <- 1
@@ -413,53 +422,53 @@ tbl_flextable <- function(x,
     }
   }
   
-  # specifieke waarden opmaken
+  # format specific values
   if (!is.null(values.colour)) {
     ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
-    for (row in 1:nrow(ind)) {
-      ft <- ft %>% color(i = ind[row, 'row'],
-                         j = ind[row, 'col'],
+    for (row in seq_len(nrow(ind))) {
+      ft <- ft %>% color(i = ind[row, "row"],
+                         j = ind[row, "col"],
                          color = colourpicker(values.colour.picker))
     }
   }
   if (!is.null(values.fill)) {
     ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
-    for (row in 1:nrow(ind)) {
-      ft <- ft %>% bg(i = ind[row, 'row'],
-                      j = ind[row, 'col'],
+    for (row in seq_len(nrow(ind))) {
+      ft <- ft %>% bg(i = ind[row, "row"],
+                      j = ind[row, "col"],
                       bg = colourpicker(values.fill.picker))
     }
   }
   if (!is.null(values.bold)) {
     ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
-    for (row in 1:nrow(ind)) {
-      ft <- ft %>% bold(i = ind[row, 'row'],
-                        j = ind[row, 'col'])
+    for (row in seq_len(nrow(ind))) {
+      ft <- ft %>% bold(i = ind[row, "row"],
+                        j = ind[row, "col"])
     }
   }
   if (!is.null(values.italic)) {
     ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
-    for (row in 1:nrow(ind)) {
-      ft <- ft %>% italic(i = ind[row, 'row'],
-                          j = ind[row, 'col'])
+    for (row in seq_len(nrow(ind))) {
+      ft <- ft %>% italic(i = ind[row, "row"],
+                          j = ind[row, "col"])
     }
   }
   
-  # kolomtotaal nog opmaken
+  # format column total
   if (column.total == TRUE & column.total.bold == TRUE) {
     ft <- ft %>% bold(j = ncol(x.bak), part = "all")
   }
   
-  # verticale lijnen
+  # vertical lines
   if (!is.null(vline)) {
-    for (i in 1:length(vline.part)) {
+    for (i in seq_len(length(vline.part))) {
       ft <- ft %>% vline(border = vline.border,
                          j = vline,
                          part = vline.part[i])
     }
   }
   
-  # zebra printjes
+  # zebra print
   if (isTRUE(rows.zebra)) {
     rows.fill <- seq(2, nrow(x), 2)
   }
@@ -471,10 +480,10 @@ tbl_flextable <- function(x,
   ft <- ft %>%
     addif(caption != "",
           set_caption(., caption)) %>%
-    # koppen vet
+    # bold headers
     addif(column.names.bold == TRUE,
           bold(., part = "header")) %>%
-    # rijnamen vet
+    # bold row names
     addif(!isFALSE(row.names) & row.names.bold == TRUE,
           bold(., j = 1)) %>%
     font(fontname = font.family, part = "all") %>%
@@ -500,45 +509,44 @@ tbl_flextable <- function(x,
              bg = colourpicker(columns.fill.picker),
              part = "body"))
   
-  # breedtes instellen
+  # set width
   if (!is.null(columns.width)) {
     if (length(columns.width) == 1) {
       columns.width <- rep(columns.width, ncol(x))
     }
     if (autofit.fullpage.width == TRUE) {
-      # als autofit.fullpage = TRUE, dan moeten de breedtes geen inches zijn,
-      # maar verhoudingen van autofit.fullpage.width
+      # if autofit.fullpage = TRUE, then widths must not be centimetres,
+      # maar ratios of autofit.fullpage.width
       columns.width <- (columns.width / sum(columns.width)) * autofit.fullpage.width
     } else {
-      # anders zijn het centimeters, maar flextable() werkt met inches, dus:
+      # otherwise it's centimetres, but flextable() works with inches, so:
       columns.width <- columns.width / 2.54
     }
-    for (j in 1:ncol(x)) {
+    for (j in seq_len(ncol(x))) {
       ft <- ft %>% width(j = j, width = columns.width[j])
     }
   }
-  # hoogtes instellen
+  # set height
   if (!is.null(rows.height)) {
     if (length(rows.height) == 1) {
       rows.height <- rep(rows.height, nrow(x))
     }
     rows.height <- rows.height / 2.54
-    for (i in 1:nrow(x)) {
+    for (i in seq_len(nrow(x))) {
       ft <- ft %>% height(i = i, height = rows.height[i])
     }
   }
   
-  # tabel over ingestelde breedte maken
   ft <- ft %>%
     addif(autofit == TRUE,
           autofit(.)) %>%
     addif(autofit.fullpage == TRUE,
-          # breedte als inch opgeven (delen door 2.54)
+          # width as inch
           width(., width = dim(.)$widths * (autofit.fullpage.width / 2.54) / (flextable_dim(.)$widths)))
   
   # alignment
   if (!is.null(align)) {
-    align_setting <- substr(unlist(strsplit(align, "")), 1, 1) # nu een vector met "c", "l", "r" enzo
+    align_setting <- substr(unlist(strsplit(align, "")), 1, 1) # now a vector with "c", "l", "r" etc.
     if (length(align_setting) == 1) {
       align_setting <- rep(align_setting, ncol(x))
     }
@@ -553,10 +561,10 @@ tbl_flextable <- function(x,
       }
     }
     if (!isFALSE(row.names)) {
-      # eerste kolom zijn rijnamen; altijd links uitlijnen
+      # first column are rownames, always left aligned
       align_setting[1] <- "l"
     }
-    align_setting[align_setting == "j"] <- "u" # uitlijnen
+    align_setting[align_setting == "u"] <- "j" # 'justify' instead of 'uitlijnen'
     if (any(align_setting == "l")) {
       ft <- ft %>% align(align = "left", j = which(align_setting == "l"), part = align.part)
     }
@@ -654,7 +662,7 @@ tbl_markdown <- function(x,
     col_count <- ncol(x)
   }
   
-  for (i in 1:col_count) {
+  for (i in seq_len(col_count)) {
     if (class(x[1, i])[1] %in% c("Date", "POSIXct", "POSIXlt")) {
       x[, i] <- x %>% 
         pull(i) %>%

@@ -342,7 +342,7 @@ export_pdf <- function(plot,
                     device = grDevices::cairo_pdf,
                     width = width,
                     height = height,
-                    units = 'mm',
+                    units = "mm",
                     plot = plot,
                     ...)
   )
