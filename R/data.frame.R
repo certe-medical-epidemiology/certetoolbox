@@ -252,7 +252,7 @@ tbl_flextable <- function(x,
   }
   
   if (column.total == TRUE) {
-    column.total.df <- x[, sapply(x, is.numeric), drop = FALSE]
+    column.total.df <- x[, vapply(FUN.VALUE = logical(1), x, is.numeric), drop = FALSE]
     column.total.values <- apply(column.total.df,
                                  1,
                                  function(x,
@@ -304,8 +304,7 @@ tbl_flextable <- function(x,
   
   # replace NAs
   colnames.bak <- colnames(x)
-  x <- as.data.frame(vapply(FUN.VALUE = character(nrow(x)),
-                            x,
+  x <- as.data.frame(lapply(x,
                             function(x, na_val = na) {
                               x <- as.character(x)
                               x[is.na(x)] <- na_val
@@ -360,31 +359,33 @@ tbl_flextable <- function(x,
   # row and column names
   if (row.total == TRUE) {
     ind <- 0
-    row.total.values <- sapply(x.bak, function(x,
-                                               FUN = row.total.function,
-                                               dec = decimal.mark,
-                                               big = big.mark,
-                                               date_format = format.dates,
-                                               round = round.numbers,
-                                               round_pct = round.percent) {
-      ind <<- ind + 1
-      if (ind %in% columns.percent) {
-        x %>% 
-          FUN() %>%
-          as.percentage() %>%
-          format2(round = round.percent, decimal.mark = dec, big.mark = big)
-      } else if (!identical(FUN, sum) & inherits(x, c("Date", "POSIXt"))) {
-        x %>%
-          FUN() %>%
-          format2(format = date_format)
-      } else if (is.numeric(x)) {
-        x %>% 
-          FUN() %>%
-          format2(round = round, decimal.mark = dec, big.mark = big)
-      } else {
-        ""
-      }
-    })
+    row.total.values <- vapply(FUN.VALUE = character(1),
+                               x.bak,
+                               function(x,
+                                        FUN = row.total.function,
+                                        dec = decimal.mark,
+                                        big = big.mark,
+                                        date_format = format.dates,
+                                        round = round.numbers,
+                                        round_pct = round.percent) {
+                                 ind <<- ind + 1
+                                 if (ind %in% columns.percent) {
+                                   x %>% 
+                                     FUN() %>%
+                                     as.percentage() %>%
+                                     format2(round = round.percent, decimal.mark = dec, big.mark = big)
+                                 } else if (!identical(FUN, sum) & inherits(x, c("Date", "POSIXt"))) {
+                                   x %>%
+                                     FUN() %>%
+                                     format2(format = date_format)
+                                 } else if (is.numeric(x)) {
+                                   x %>% 
+                                     FUN() %>%
+                                     format2(round = round, decimal.mark = dec, big.mark = big)
+                                 } else {
+                                   ""
+                                 }
+                               })
     if (!all(row.total.values == "")) {
       # add name to first col
       row.total.values[1] <- row.total.name
@@ -516,7 +517,7 @@ tbl_flextable <- function(x,
     }
     if (autofit.fullpage.width == TRUE) {
       # if autofit.fullpage = TRUE, then widths must not be centimetres,
-      # maar ratios of autofit.fullpage.width
+      # but ratios of autofit.fullpage.width
       columns.width <- (columns.width / sum(columns.width)) * autofit.fullpage.width
     } else {
       # otherwise it's centimetres, but flextable() works with inches, so:
@@ -549,6 +550,9 @@ tbl_flextable <- function(x,
     align_setting <- substr(unlist(strsplit(align, "")), 1, 1) # now a vector with "c", "l", "r" etc.
     if (length(align_setting) == 1) {
       align_setting <- rep(align_setting, ncol(x))
+    }
+    if (!isFALSE(row.names) && length(align_setting) == ncol(x) - 1) {
+      align_setting <- c("l", align_setting)
     }
     if (length(align_setting) != ncol(x)) {
       if (length(align_setting) < ncol(x)) {

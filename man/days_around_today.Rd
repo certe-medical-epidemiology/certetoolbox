@@ -4,7 +4,6 @@
 \name{days_around_today}
 \alias{days_around_today}
 \alias{yesterday}
-\alias{reexports}
 \alias{today}
 \alias{now}
 \alias{tomorrow}

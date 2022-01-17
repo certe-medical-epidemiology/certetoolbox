@@ -67,6 +67,12 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
+      - name: Generate Dutch locale for examples
+        run: |
+          sudo locale-gen nl_NL
+          sudo locale-gen nl_NL.UTF-8
+          sudo update-locale
+
       - uses: r-lib/actions/check-r-package@v2
 
       - name: Show testthat output
