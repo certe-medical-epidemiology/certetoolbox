@@ -176,15 +176,17 @@ The \code{\link[=export]{export()}} function can export to any file format, as l
 
 RDS files as created using \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
 
-The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions uses \code{\link[=as_excel]{as_excel()}} with \code{save = TRUE} internally.
+The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions use \code{\link[=as_excel]{as_excel(..., save = TRUE)}} internally.
 
-For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and values \code{NA} will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
+For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and \code{NA} values will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 
-Exporting as SPSS files using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
+Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if available (and a timestamp otherwise).
+Exporting to a PDF file using \code{\link[=export_pdf]{export_pdf()}} requires the \code{ggplot2} package to be installed. If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if it's available and the \code{certeplot2} package is installed, and a timestamp otherwise.
 
-The \code{\link[=export_clipboard]{export_clipboard()}} function requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
+Exporting to a PNG file using \code{\link[=export_png]{export_png()}} requires the \code{ggplot2} package to be installed.
+
+Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard()}} requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
 }
 \examples{
 \dontrun{
@@ -194,6 +196,9 @@ library(dplyr)
 starwars \%>\%
   export_rds("whole_file") \%>\%
   slice(1:10) \%>\%
-  export_excel("first_ten_rows")
+  export_xlsx("first_ten_rows")
 }
+}
+\seealso{
+\code{\link[=import]{import()}}
 }

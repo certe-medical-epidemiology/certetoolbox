@@ -206,13 +206,16 @@ import_mail_attachment(
 These functions can be used to import data. They work closely with the \code{certeprojects} package and support Trello card numbers.
 }
 \details{
-The \code{\link[=import]{import()}} function uses the \code{rio} package to guess the required import function.
+Importing from any unlisted filetype using \code{\link[=import]{import()}} requires the \code{rio} package to be installed.
 
-Importing Excel files using \code{\link[=import_xlsx]{import_xlsx()}} or \code{\link[=import_excel]{import_excel()}} requires the \code{readxl} package to be installed.
+Importing from an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code{\link[=import_excel]{import_excel()}} requires the \code{readxl} package to be installed.
 
-Importing SPSS files using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
+Importing from an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
 
-The \code{\link[=import_clipboard]{import_clipboard()}} function requires the \code{clipr} package to be installed.
+Importing from the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
-The \code{\link[=import_mail_attachment]{import_mail_attachment()}} function requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
+Importing from mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
+}
+\seealso{
+\code{\link[=export]{export()}}
 }
