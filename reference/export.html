@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.15</span>
       </span>
     </div>
 
@@ -143,6 +143,14 @@
   <span class="va">...</span>
 <span class="op">)</span>
 
+<span class="fu">export_sav</span><span class="op">(</span>
+  <span class="va">object</span>,
+  filename <span class="op">=</span> <span class="cn">NULL</span>,
+  card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+  export_qry <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
 <span class="fu">export_spss</span><span class="op">(</span>
   <span class="va">object</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
@@ -227,12 +235,17 @@
     <div id="details">
     <h2>Details</h2>
     <p>The <code>export()</code> function can export to any file format, as long as the export function is passed on to the <code>fn</code> argument. This function has to have the object as first argument and the future file location as second argument.</p>
-<p>RDS files as created with <code>export_rds()</code> are compatible with R3 and R4.</p>
-<p>The <code>export_xlsx()</code> uses <code><a href="as_excel.html">as_excel()</a></code> with <code>save = TRUE</code> internally.</p>
-<p>For <code>export_csv()</code>, <code>export_csv2()</code> and <code>export_tsv()</code>, files will be saved in UTF-8 encoding and values <code>NA</code> will be exported as <code>""</code> at default. Like other <code>*.csv</code> and <code>*.csv2</code> functions, csv is comma (<code>,</code>) separated and csv2 is semicolon (<code>;</code>) separated.</p>
-<p>Exporting as SPSS files with <code>export_spss()</code> requires the <code>haven</code> package to be installed.</p>
-<p>If the filename is left blank in <code>export_pdf()</code> or <code>export_png()</code>, the title of <code>plot</code> will be used if available (and a timestamp otherwise).</p>
-<p>The <code>export_clipboard()</code> function requires the <code>clipr</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) and is only limited to the available amount of RAM memory.</p>
+<p>RDS files as created using <code>export_rds()</code> are compatible with R3 and R4.</p>
+<p>The <code>export_xlsx()</code> and <code>export_excel()</code> functions use <code><a href="as_excel.html">as_excel(..., save = TRUE)</a></code> internally.</p>
+<p>For <code>export_csv()</code>, <code>export_csv2()</code> and <code>export_tsv()</code>, files will be saved in UTF-8 encoding and <code>NA</code> values will be exported as <code>""</code> at default. Like other <code>*.csv</code> and <code>*.csv2</code> functions, csv is comma (<code>,</code>) separated and csv2 is semicolon (<code>;</code>) separated.</p>
+<p>Exporting to an SPSS file using <code>export_sav()</code> or <code>export_spss()</code> requires the <code>haven</code> package to be installed.</p>
+<p>Exporting to a PDF file using <code>export_pdf()</code> requires the <code>ggplot2</code> package to be installed. If the filename is left blank in <code>export_pdf()</code> or <code>export_png()</code>, the title of <code>plot</code> will be used if it's available and the <code>certeplot2</code> package is installed, and a timestamp otherwise.</p>
+<p>Exporting to a PNG file using <code>export_png()</code> requires the <code>ggplot2</code> package to be installed.</p>
+<p>Exporting to the clipboard using <code>export_clipboard()</code> requires the <code>clipr</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) and is only limited to the available amount of RAM memory.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="import.html">import()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
@@ -244,7 +257,7 @@
 <span class="r-in"><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">export_excel</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
@@ -260,7 +273,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

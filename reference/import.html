@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.15</span>
       </span>
     </div>
 
@@ -85,10 +85,11 @@
 
 <span class="fu">import_rds</span><span class="op">(</span><span class="va">filename</span>, card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">import_excel</span><span class="op">(</span>
+<span class="fu">import_xlsx</span><span class="op">(</span>
   <span class="va">filename</span>,
   card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   sheet <span class="op">=</span> <span class="fl">1</span>,
+  range <span class="op">=</span> <span class="cn">NULL</span>,
   auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
   datenames <span class="op">=</span> <span class="st">"nl"</span>,
   dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
@@ -100,10 +101,11 @@
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu">import_xlsx</span><span class="op">(</span>
+<span class="fu">import_excel</span><span class="op">(</span>
   <span class="va">filename</span>,
   card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   sheet <span class="op">=</span> <span class="fl">1</span>,
+  range <span class="op">=</span> <span class="cn">NULL</span>,
   auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
   datenames <span class="op">=</span> <span class="st">"nl"</span>,
   dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
@@ -157,6 +159,20 @@
   <span class="va">...</span>
 <span class="op">)</span>
 
+<span class="fu">import_sav</span><span class="op">(</span>
+  <span class="va">filename</span>,
+  card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+  auto_transform <span class="op">=</span> <span class="cn">FALSE</span>,
+  datenames <span class="op">=</span> <span class="st">"en"</span>,
+  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
+  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
+  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
+  big.mark <span class="op">=</span> <span class="st">""</span>,
+  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
+  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
 <span class="fu">import_spss</span><span class="op">(</span>
   <span class="va">filename</span>,
   card_number <span class="op">=</span> <span class="fu">project_get_current_id</span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
@@ -184,6 +200,19 @@
   timezone <span class="op">=</span> <span class="st">"UTC"</span>,
   na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
   <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="fu">import_mail_attachment</span><span class="op">(</span>
+  search <span class="op">=</span> <span class="st">"hasattachment:yes"</span>,
+  search_subject <span class="op">=</span> <span class="cn">NULL</span>,
+  search_from <span class="op">=</span> <span class="cn">NULL</span>,
+  search_when <span class="op">=</span> <span class="cn">NULL</span>,
+  search_attachment <span class="op">=</span> <span class="cn">NULL</span>,
+  n <span class="op">=</span> <span class="fl">5</span>,
+  sort <span class="op">=</span> <span class="st">"received desc"</span>,
+  account <span class="op">=</span> <span class="cn">NULL</span>,
+  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -199,12 +228,14 @@
 <dd><p>arguments passed on to methods</p></dd>
 <dt>sheet</dt>
 <dd><p>Excel sheet to import, defaults to first sheet</p></dd>
+<dt>range</dt>
+<dd><p>a cell range to read from, allows typical Excel ranges such as "B3:D87" and "Budget!B2:G14"</p></dd>
 <dt>datenames</dt>
 <dd><p>language of the date names, such as weekdays and months</p></dd>
 <dt>dateformat</dt>
-<dd><p>expected date format, will be coerced with <code><a href="https://rdrr.io/pkg/cleaner/man/format_datetime.html" class="external-link">cleaner::format_datetime()</a></code></p></dd>
+<dd><p>expected date format, will be coerced with <code><a href="https://rdrr.io/pkg/cleaner/man/format_datetime.html" class="external-link">format_datetime()</a></code></p></dd>
 <dt>timeformat</dt>
-<dd><p>expected time format, will be coerced with <code><a href="https://rdrr.io/pkg/cleaner/man/format_datetime.html" class="external-link">cleaner::format_datetime()</a></code></p></dd>
+<dd><p>expected time format, will be coerced with <code><a href="https://rdrr.io/pkg/cleaner/man/format_datetime.html" class="external-link">format_datetime()</a></code></p></dd>
 <dt>decimal.mark</dt>
 <dd><p>separator for decimal numbers</p></dd>
 <dt>big.mark</dt>
@@ -219,19 +250,36 @@
 <dd><p>use first row as header</p></dd>
 <dt>startrow</dt>
 <dd><p>first row to start importing</p></dd>
+<dt>search</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>search_subject</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>search_from</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>search_when</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>search_attachment</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>n</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>sort</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dt>account</dt>
+<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>The <code>import()</code> function uses the <code>rio</code> package to guess the required import function.</p>
-<p>The <code>import_clipboard()</code> function requires the <code>clipr</code> package to be installed.</p>
+    <p>Importing from any unlisted filetype using <code>import()</code> requires the <code>rio</code> package to be installed.</p>
+<p>Importing from an Excel file using <code>import_xlsx()</code> or <code>import_excel()</code> requires the <code>readxl</code> package to be installed.</p>
+<p>Importing from an SPSS file using <code>import_sav()</code> or <code>import_spss()</code> requires the <code>haven</code> package to be installed.</p>
+<p>Importing from the clipboard using <code>import_clipboard()</code> requires the <code>clipr</code> package to be installed.</p>
+<p>Importing from mail attachments using <code>import_mail_attachment()</code> requires the <code>certemail</code> package to be installed. It calls <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code> internally and saves the attachment to a temporary folder.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="export.html">export()</a></code></p></div>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">#</span></span>
-<span class="r-in"></span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -244,7 +292,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
