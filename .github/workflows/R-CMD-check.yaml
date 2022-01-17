@@ -68,6 +68,7 @@ jobs:
           extra-packages: rcmdcheck
 
       - name: Generate Dutch locale for examples
+        if: runner.os == 'Linux'
         run: |
           sudo locale-gen nl_NL
           sudo locale-gen nl_NL.UTF-8

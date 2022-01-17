@@ -17,8 +17,6 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-globalVariables(c("."))
-
 #' Format Table as Flextable
 #'
 #' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats.

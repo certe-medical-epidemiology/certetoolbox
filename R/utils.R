@@ -17,6 +17,9 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+
+globalVariables(c("."))
+
 #' @importFrom dplyr `%>%`
 #' @export
 dplyr::`%>%`
@@ -70,7 +73,11 @@ check_is_installed <- function(pkgs) {
 #' @importFrom rstudioapi getSourceEditorContext showPrompt
 project_get_current_id <- function(ask = NULL) {
 
-  # this function is copied from certeprojects
+  # this function was copied from certeprojects, but try the installed certeprojects first
+  from_certeprojects <- get_external_function("project_get_current_id", "certeprojects", error_on_fail = FALSE)
+  if (!is.null(from_certeprojects)) {
+    return(from_certeprojects(ask = ask))
+  }
 
   # first try project number from full file location:
   # /folder/p123 Name.Rmd
