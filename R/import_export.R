@@ -566,6 +566,7 @@ import_rds <- function(filename,
 
 #' @rdname import
 #' @param sheet Excel sheet to import, defaults to first sheet
+#' @param range a cell range to read from, allows typical Excel ranges such as "B3:D87" and "Budget!B2:G14"
 #' @inheritParams auto_transform
 #' @details Importing Excel files using [import_xlsx()] or [import_excel()] requires the `readxl` package to be installed.
 #' @importFrom cleaner format_datetime
@@ -573,6 +574,7 @@ import_rds <- function(filename,
 import_xlsx <- function(filename,
                         card_number = project_get_current_id(ask = FALSE),
                         sheet = 1,
+                        range = NULL,
                         auto_transform = TRUE,
                         datenames = "nl",
                         dateformat = "yyyy-mm-dd",
@@ -590,6 +592,7 @@ import_xlsx <- function(filename,
               extension = "xlsx",
               card_number = card_number,
               sheet = sheet,
+              range = range,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -824,7 +827,8 @@ import_mail_attachment <- function(search = "hasattachment:yes",
 import_exec <- function(filename,
                         extension,
                         card_number,
-                        auto_transform, ...) {
+                        auto_transform,
+                        ...) {
   extension <- extension[1L]
   csv_delim <- ","
   if (extension == "csv2") {
@@ -866,7 +870,11 @@ import_exec <- function(filename,
   } else if (extension == "xlsx") {
     read_excel <- get_external_function("read_excel", "readxl", error_on_fail = TRUE)
     # Excel format
-    df <- read_excel(path = filename, progress = interactive())
+    df <- read_excel(path = filename,
+                     sheet = list(...)$sheet,
+                     range = list(...)$range,
+                     na = list(...)$na)
+    
   } else if (extension %in% c("csv", "tsv")) {
     # flat files
     df <- read_delim(file = filename,
