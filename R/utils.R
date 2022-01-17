@@ -17,6 +17,13 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+
+globalVariables(c("."))
+
+#' @importFrom dplyr `%>%`
+#' @export
+dplyr::`%>%`
+
 get_external_function <- function(name, pkg, error_on_fail = TRUE) {
   # This function is a hacky way to NOT depend on another package, but DO use its functions.
   # For example, export.pdf() uses a 'certeplot2' function, but it's not possible to depend
@@ -48,7 +55,9 @@ check_is_installed <- function(pkgs) {
                                      paste0("'", to_install, "'", collapse = ", "), ". ",
                                      "Install now?"))
     if (isTRUE(choice)) {
-      utils::install.packages(to_install)
+      utils::install.packages(to_install,
+                              repos = c(options()$repos,
+                                        "https://certe-medical-epidemiology.r-universe.dev"))
       # try again:
       is_installed(pkgs)
     } else {
@@ -64,7 +73,11 @@ check_is_installed <- function(pkgs) {
 #' @importFrom rstudioapi getSourceEditorContext showPrompt
 project_get_current_id <- function(ask = NULL) {
 
-  # this function is copied from certeprojects
+  # this function was copied from certeprojects, but try the installed certeprojects first
+  from_certeprojects <- get_external_function("project_get_current_id", "certeprojects", error_on_fail = FALSE)
+  if (!is.null(from_certeprojects)) {
+    return(from_certeprojects(ask = ask))
+  }
 
   # first try project number from full file location:
   # /folder/p123 Name.Rmd

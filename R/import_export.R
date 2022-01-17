@@ -43,6 +43,16 @@ parse_file_location <- function(filename, needed_extension, card_number) {
   filename
 }
 
+doc_requirement <- function(filetype, fn, pkg) {
+  if (deparse(substitute(fn)) %like% "import") {
+    import_export <- "Importing from"
+  } else {
+    import_export <- "Exporting to"
+  }
+  fn <- paste0("[", fn, "()]", collapse = " or ")
+  paste0(import_export, " ", filetype, " using ", fn, " requires the `", pkg, "` package to be installed")
+}
+
 # Export functions --------------------------------------------------------
 
 # export_query <- function(object, filename) {
@@ -60,8 +70,9 @@ parse_file_location <- function(filename, needed_extension, card_number) {
 #' @param card_number a Trello card number
 #' @param export_qry export the underlying SQL query as well
 #' @param ... arguments passed on to methods
-#' @rdname export
 #' @details The [export()] function can export to any file format, as long as the export function is passed on to the `fn` argument. This function has to have the object as first argument and the future file location as second argument.
+#' @rdname export
+#' @seealso [import()]
 #' @export
 #' @examples 
 #' \dontrun{
@@ -71,7 +82,7 @@ parse_file_location <- function(filename, needed_extension, card_number) {
 #' starwars %>%
 #'   export_rds("whole_file") %>%
 #'   slice(1:10) %>%
-#'   export_excel("first_ten_rows")
+#'   export_xlsx("first_ten_rows")
 #' }
 export <- function(object,
                    fn,
@@ -97,7 +108,7 @@ export <- function(object,
 }
 
 #' @rdname export
-#' @details RDS files as created with [export_rds()] are compatible with R3 and R4.
+#' @details RDS files as created using [export_rds()] are compatible with R3 and R4.
 #' @export
 export_rds <- function(object,
                        filename = NULL,
@@ -118,7 +129,7 @@ export_rds <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export_xlsx()] uses [as_excel()] with `save = TRUE` internally.
+#' @details The [export_xlsx()] and [export_excel()] functions use [`as_excel(..., save = TRUE)`][as_excel()] internally.
 #' @export
 export_xlsx <- function(object,
                         filename = NULL,
@@ -150,7 +161,7 @@ export_excel <- export_xlsx
 
 #' @rdname export
 #' @param na replacement character for empty values (default: `""`)
-#' @details For [export_csv()], [export_csv2()] and [export_tsv()], files will be saved in UTF-8 encoding and values `NA` will be exported as `""` at default. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
+#' @details For [export_csv()], [export_csv2()] and [export_tsv()], files will be saved in UTF-8 encoding and `NA` values will be exported as `""` at default. Like other `*.csv` and `*.csv2` functions, csv is comma (`,`) separated and csv2 is semicolon (`;`) separated.
 #' @export
 export_csv <- function(object,
                        filename = NULL,
@@ -232,13 +243,13 @@ export_tsv <- function(object,
 }
 
 #' @rdname export
-#' @details Exporting as SPSS files with [export_spss()] requires the `haven` package to be installed.
+#' @details `r doc_requirement("an SPSS file", c("export_sav", "export_spss"), "haven")`.
 #' @export
-export_spss <- function(object,
-                        filename = NULL,
-                        card_number = project_get_current_id(ask = FALSE),
-                        export_qry = TRUE,
-                        ...) {
+export_sav <- function(object,
+                       filename = NULL,
+                       card_number = project_get_current_id(ask = FALSE),
+                       export_qry = TRUE,
+                       ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
   }
@@ -250,9 +261,13 @@ export_spss <- function(object,
 }
 
 #' @rdname export
+#' @export
+export_spss <- export_sav 
+
+#' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
-#' @details If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if available (and a timestamp otherwise).
+#' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise.
 #' @importFrom certestyle format2
 #' @export
 export_pdf <- function(plot,
@@ -261,8 +276,8 @@ export_pdf <- function(plot,
                        size = "A5",
                        portrait = FALSE,
                        ...) {
+  check_is_installed("ggplot2")
   
-  ggsave <- get_external_function("ggsave", "ggplot2")
   get_plot_title <- get_external_function("get_plot_title", "certeplot2", error_on_fail = FALSE)
   
   if (is.null(filename) && !is.null(get_plot_title)) {
@@ -323,13 +338,13 @@ export_pdf <- function(plot,
   }
   
   suppressWarnings(
-    ggsave(filename = filename,
-           device = grDevices::cairo_pdf,
-           width = width,
-           height = height,
-           units = 'mm',
-           plot = plot,
-           ...)
+    ggplot2::ggsave(filename = filename,
+                    device = grDevices::cairo_pdf,
+                    width = width,
+                    height = height,
+                    units = "mm",
+                    plot = plot,
+                    ...)
   )
   
   if (file.exists(filename)) {
@@ -346,6 +361,7 @@ export_pdf <- function(plot,
 #' @param width required width of the PNG file in pixels
 #' @param height required height of the PNG file in pixels
 #' @param text.factor text factor for the exported plot. Defaults to `1.2`, which loosely equals a PDF file in A5 format when it comes to text sizes.
+#' @details `r doc_requirement("a PNG file", "export_png", "ggplot2")`.
 #' @export
 export_png <- function(plot,
                        filename = NULL,
@@ -354,8 +370,7 @@ export_png <- function(plot,
                        height = 800,
                        text.factor = 1.2,
                        ...) {
-  
-  ggsave <- get_external_function("ggsave", "ggplot2")
+  check_is_installed("ggplot2")
   get_plot_title <- get_external_function("get_plot_title", "certeplot2", error_on_fail = FALSE)
   
   if (is.null(filename) && !is.null(get_plot_title)) {
@@ -372,13 +387,13 @@ export_png <- function(plot,
                                   card_number = card_number)
   
   suppressWarnings(
-    ggsave(filename = filename,
-           dpi =  text.factor * 100,
-           width = width / (text.factor * 100),
-           height = height / (text.factor * 100),
-           units = "in",
-           plot = plot,
-           ...)
+    ggplot2::ggsave(filename = filename,
+                    dpi =  text.factor * 100,
+                    width = width / (text.factor * 100),
+                    height = height / (text.factor * 100),
+                    units = "in",
+                    plot = plot,
+                    ...)
   )
   
   if (file.exists(filename)) {
@@ -397,7 +412,7 @@ export_png <- function(plot,
 #' @param header (for [export_clipboard()]) use column names as header (default: `TRUE`)
 #' @param quote (for [export_clipboard()]) use quotation marks (default: `FALSE`)
 #' @param decimal.mark (for [export_clipboard()]) character to use for decimal numbers
-#' @details The [export_clipboard()] function requires the `clipr` package to be installed. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
+#' @details `r doc_requirement("the clipboard", "export_clipboard", "clipr")`. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
 #' @importFrom certestyle format2
 #' @export
 export_clipboard <- function(object,
@@ -407,23 +422,21 @@ export_clipboard <- function(object,
                              quote = FALSE,
                              decimal.mark = ",",
                              ...) {
-  
-  # this will check for installation of 'clipr'
-  write_clip <- get_external_function("write_clip", "clipr")
-  write_clip(content = object,
-             object_type = ifelse(inherits(object, c("data.frame", "matrix")),
-                                  "table",
-                                  "character"),
-             eos = ifelse(inherits(object, c("data.frame", "matrix")),
-                          "\n",
-                          NULL),
-             sep = sep,
-             na = as.character(na),
-             row.names = FALSE,
-             col.names = isTRUE(header),
-             dec = decimal.mark,
-             allow_non_interactive = TRUE,
-             quote = isTRUE(quote))
+  check_is_installed("clipr")
+  clipr::write_clip(content = object,
+                    object_type = ifelse(inherits(object, c("data.frame", "matrix")),
+                                         "table",
+                                         "character"),
+                    eos = ifelse(inherits(object, c("data.frame", "matrix")),
+                                 "\n",
+                                 NULL),
+                    sep = sep,
+                    na = as.character(na),
+                    row.names = FALSE,
+                    col.names = isTRUE(header),
+                    dec = decimal.mark,
+                    allow_non_interactive = TRUE,
+                    quote = isTRUE(quote))
   message(
     paste0(
       "Object exported to clipboard: ",
@@ -460,7 +473,6 @@ export_exec <- function(object,
     base::saveRDS(object, file = filename, ...)
   } else if (needed_extension == "sav") {
     # SPSS format
-    check_is_installed("haven")
     haven::write_sav(object, path = filename, ...)
   } else if (needed_extension == "xlsx") {
     # Excel format
@@ -506,11 +518,10 @@ export_exec <- function(object,
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param card_number a Trello card number
 #' @param ... arguments passed on to methods
-#' @details The [import()] function uses the `rio` package to guess the required import function.
+#' @details `r doc_requirement("any unlisted filetype", "import", "rio")`.
 #' @rdname import
+#' @seealso [export()]
 #' @export
-#' @examples 
-#' #
 import <- function(filename,
                    card_number = project_get_current_id(ask = FALSE),
                    auto_transform = FALSE,
@@ -518,13 +529,34 @@ import <- function(filename,
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
-  # uses rio::import which pretty much understands any file type
-  check_is_installed("rio")
-  import_exec(filename,
-              extension = "",
-              card_number = card_number,
-              auto_transform = auto_transform,
-              ...)
+  if (filename %like% "[.]rds$") {
+    import_rds(filename = filename, 
+               card_number = card_number,
+               ...)
+  } else if (filename %like% "[.]tsv$") {
+    import_tsv(filename = filename,
+               card_number = card_number,
+               auto_transform = auto_transform,
+               ...)
+  } else if (filename %like% "[.]xlsx?$") {
+    import_xlsx(filename = filename,
+                card_number = card_number,
+                auto_transform = auto_transform,
+                ...)
+  } else if (filename %like% "[.]sav$") {
+    import_sav(filename = filename,
+               card_number = card_number,
+               auto_transform = auto_transform,
+               ...)
+  } else {
+    # uses rio::import which pretty much understands any file type
+    check_is_installed("rio")
+    import_exec(filename,
+                extension = "",
+                card_number = card_number,
+                auto_transform = auto_transform,
+                ...)
+  }
 }
 
 #' @rdname import
@@ -543,21 +575,25 @@ import_rds <- function(filename,
 
 #' @rdname import
 #' @param sheet Excel sheet to import, defaults to first sheet
+#' @param range a cell range to read from, allows typical Excel ranges such as "B3:D87" and "Budget!B2:G14"
 #' @inheritParams auto_transform
+#' @details `r doc_requirement("an Excel file", c("import_xlsx", "import_excel"), "readxl")`.
 #' @importFrom cleaner format_datetime
 #' @export
-import_excel <- function(filename,
-                         card_number = project_get_current_id(ask = FALSE),
-                         sheet = 1,
-                         auto_transform = TRUE,
-                         datenames = "nl",
-                         dateformat = "yyyy-mm-dd",
-                         timeformat = "HH:MM",
-                         decimal.mark = ",",
-                         big.mark = "",
-                         timezone = "UTC",
-                         na = c("", "NULL", "NA", "<NA>"),
-                         ...) {
+import_xlsx <- function(filename,
+                        card_number = project_get_current_id(ask = FALSE),
+                        sheet = 1,
+                        range = NULL,
+                        auto_transform = TRUE,
+                        datenames = "nl",
+                        dateformat = "yyyy-mm-dd",
+                        timeformat = "HH:MM",
+                        decimal.mark = ",",
+                        big.mark = "",
+                        timezone = "UTC",
+                        na = c("", "NULL", "NA", "<NA>"),
+                        ...) {
+  check_is_installed("readxl")
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -565,6 +601,7 @@ import_excel <- function(filename,
               extension = "xlsx",
               card_number = card_number,
               sheet = sheet,
+              range = range,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -577,7 +614,7 @@ import_excel <- function(filename,
 
 #' @rdname import
 #' @export
-import_xlsx <- import_excel
+import_excel <- import_xlsx
 
 #' @rdname import
 #' @importFrom cleaner format_datetime
@@ -670,18 +707,20 @@ import_tsv <- function(filename,
 }
 
 #' @rdname import
+#' @details `r doc_requirement("an SPSS file", c("import_sav", "import_spss"), "haven")`.
 #' @export
-import_spss <- function(filename,
-                        card_number = project_get_current_id(ask = FALSE),
-                        auto_transform = FALSE,
-                        datenames = "en",
-                        dateformat = "yyyy-mm-dd",
-                        timeformat = "HH:MM",
-                        decimal.mark = ".",
-                        big.mark = "",
-                        timezone = "UTC",
-                        na = c("", "NULL", "NA", "<NA>"),
-                        ...) {
+import_sav <- function(filename,
+                       card_number = project_get_current_id(ask = FALSE),
+                       auto_transform = FALSE,
+                       datenames = "en",
+                       dateformat = "yyyy-mm-dd",
+                       timeformat = "HH:MM",
+                       decimal.mark = ".",
+                       big.mark = "",
+                       timezone = "UTC",
+                       na = c("", "NULL", "NA", "<NA>"),
+                       ...) {
+  check_is_installed("haven")
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -699,10 +738,14 @@ import_spss <- function(filename,
 }
 
 #' @rdname import
+#' @export
+import_spss <- import_sav
+
+#' @rdname import
 #' @param sep character to separate values in a row
 #' @param header use first row as header
 #' @param startrow first row to start importing
-#' @details The [import_clipboard()] function requires the `clipr` package to be installed.
+#' @details `r doc_requirement("the clipboard", "import_clipboard", "clipr")`.
 #' @export
 import_clipboard <- function(sep = "\t",
                              header = TRUE,
@@ -716,21 +759,19 @@ import_clipboard <- function(sep = "\t",
                              timezone = "UTC",
                              na = c("", "NULL", "NA", "<NA>"),
                              ...) {
-  
-  # this will check for installation of 'clipr'
-  read_clip_tbl <- get_external_function("read_clip_tbl", "clipr")
-  df <- read_clip_tbl(sep = sep,
-                      header = header,
-                      row.names = NULL,
-                      quote = '"',
-                      fill = TRUE,
-                      comment.char = "",
-                      strip.white = TRUE,
-                      dec = decimal.mark,
-                      na.strings = na,
-                      # fileEncoding = 'UTF-8',
-                      encoding = "UTF-8",
-                      stringsAsFactors = FALSE)
+  check_is_installed("clipr")
+  df <- clipr::read_clip_tbl(sep = sep,
+                             header = header,
+                             row.names = NULL,
+                             quote = '"',
+                             fill = TRUE,
+                             comment.char = "",
+                             strip.white = TRUE,
+                             dec = decimal.mark,
+                             na.strings = na,
+                             # fileEncoding = 'UTF-8',
+                             encoding = "UTF-8",
+                             stringsAsFactors = FALSE)
   if (startrow > 1) {
     # otherwise column headers will be lost
     df <- df[c(startrow:nrow(df)), , drop = FALSE]
@@ -742,12 +783,58 @@ import_clipboard <- function(sep = "\t",
   df
 }
 
+#' @rdname import
+#' @details `r doc_requirement("mail attachments", "import_mail_attachment", "certemail")`. It calls [`download_mail_attachment()`][certemail::download_mail_attachment()] internally and saves the attachment to a temporary folder.
+#' @param search see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_subject see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_from see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_when see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param search_attachment see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param n see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param sort see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @param account see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @export
+import_mail_attachment <- function(search = "hasattachment:yes",
+                                   search_subject = NULL,
+                                   search_from = NULL,
+                                   search_when = NULL,
+                                   search_attachment = NULL,
+                                   n = 5,
+                                   sort = "received desc",
+                                   account = NULL,
+                                   auto_transform = TRUE,
+                                   ...) {
+  check_is_installed("certemail")
+  if (missing(account)) {
+    account <- certemail::connect_outlook365()
+  }
+  path <- suppressMessages(certemail::download_mail_attachment(
+    path = tempdir(),
+    filename = "{original}",
+    search = search,
+    search_subject = search_subject,
+    search_from = search_from,
+    search_when = search_when,
+    search_attachment = search_attachment,
+    n = n,
+    sort = sort,
+    overwrite = TRUE,
+    account = account))
+  
+  if (file.exists(path)) {
+    import(path, auto_transform = auto_transform, ...)
+  } else {
+    stop("Importing attachment failed")
+  }
+}
+
 #' @importFrom readr read_delim locale
 #' @importFrom dplyr select
 import_exec <- function(filename,
                         extension,
                         card_number,
-                        auto_transform, ...) {
+                        auto_transform,
+                        ...) {
   extension <- extension[1L]
   csv_delim <- ","
   if (extension == "csv2") {
@@ -783,13 +870,14 @@ import_exec <- function(filename,
     df <- base::readRDS(file = filename)
   } else if (extension == "sav") {
     # SPSS format
-    read_sav <- get_external_function("read_sav", "haven", error_on_fail = TRUE)
-    as_factor <- get_external_function("as_factor", "haven", error_on_fail = TRUE)
-    df <- as_factor(read_sav(file = filename))
+    df <- haven::as_factor(haven::read_sav(file = filename))
   } else if (extension == "xlsx") {
-    read_excel <- get_external_function("read_excel", "readxl", error_on_fail = TRUE)
     # Excel format
-    df <- read_excel(path = filename, progress = interactive())
+    df <- readxl::read_excel(path = filename,
+                             sheet = list(...)$sheet,
+                             range = list(...)$range,
+                             na = list(...)$na)
+    
   } else if (extension %in% c("csv", "tsv")) {
     # flat files
     df <- read_delim(file = filename,
@@ -805,8 +893,7 @@ import_exec <- function(filename,
                                      grouping_mark = list(...)$big.mark,
                                      encoding = "UTF-8"))
   } else {
-    import <- get_external_function("import", "rio", error_on_fail = TRUE)
-    df <- import(file = filename, ...)
+    df <- rio::import(file = filename, ...)
   }
   
   # force data.frame
@@ -818,7 +905,7 @@ import_exec <- function(filename,
     message("Row names restored from first column.", call. = FALSE)
   }
   
-  if (auto_transform == TRUE) {
+  if (isTRUE(auto_transform)) {
     df <- auto_transform(df, ...)
   }
   

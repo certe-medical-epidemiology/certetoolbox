@@ -20,7 +20,7 @@ In the secrets file, the property name and value have to be separated with a col
 
 The default value for \code{file} is the environmental variable \code{"secrets_file"}.
 
-The file will be read using \code{\link[yaml:read_yaml]{yaml::read_yaml()}}, which allows almost any path or remote connection (such as websites).
+The file will be read using \code{\link[yaml:read_yaml]{read_yaml()}}, which allows almost any local path or remote connection (such as websites).
 }
 \examples{
 # for this example, create a temporary 'secrets' file

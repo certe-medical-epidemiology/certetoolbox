@@ -21,9 +21,9 @@ auto_transform(
 
 \item{datenames}{language of the date names, such as weekdays and months}
 
-\item{dateformat}{expected date format, will be coerced with \code{\link[cleaner:format_datetime]{cleaner::format_datetime()}}}
+\item{dateformat}{expected date format, will be coerced with \code{\link[cleaner:format_datetime]{format_datetime()}}}
 
-\item{timeformat}{expected time format, will be coerced with \code{\link[cleaner:format_datetime]{cleaner::format_datetime()}}}
+\item{timeformat}{expected time format, will be coerced with \code{\link[cleaner:format_datetime]{format_datetime()}}}
 
 \item{decimal.mark}{separator for decimal numbers}
 

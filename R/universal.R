@@ -161,7 +161,7 @@ concat <- function(...) {
 #' 
 #' The default value for `file` is the environmental variable `"secrets_file"`.
 #' 
-#' The file will be read using [yaml::read_yaml()], which allows almost any path or remote connection (such as websites).
+#' The file will be read using [`read_yaml()`][yaml::read_yaml()], which allows almost any local path or remote connection (such as websites).
 #' @importFrom yaml read_yaml
 #' @export
 #' @examples 

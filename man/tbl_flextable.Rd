@@ -78,7 +78,7 @@ tbl_flextable(
 
 \item{rows.fill}{the column indices of rows to be shaded}
 
-\item{rows.fill.picker}{the colour for values in \code{rows.fill}, is evaluated with \code{\link[certestyle:colourpicker]{certestyle::colourpicker()}}}
+\item{rows.fill.picker}{the colour for values in \code{rows.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
 
 \item{rows.zebra}{banded rows in the body - equivalent to \code{rows.fill = seq(2, nrow(x), 2)}}
 
@@ -102,7 +102,7 @@ tbl_flextable(
 
 \item{columns.width}{width of columns. For \code{autofit.fullpage = TRUE}, these are proportions to \code{autofit.fullpage.width}. For \code{autofit.fullpage = FALSE}, these are centimeters}
 
-\item{columns.percent}{display the column indices as percentages using \code{\link[certestyle:format2]{certestyle::format2()}} - example: \code{columns.percent = c(2, 3)}}
+\item{columns.percent}{display the column indices as percentages using \code{\link[certestyle:format2]{format2()}} - example: \code{columns.percent = c(2, 3)}}
 
 \item{columns.italic}{column indices of columns to be displayed in italics}
 
@@ -110,7 +110,7 @@ tbl_flextable(
 
 \item{columns.fill}{the column indices of rows to be shaded}
 
-\item{columns.fill.picker}{the colour for values in \code{columns.fill}, is evaluated with \code{\link[certestyle:colourpicker]{certestyle::colourpicker()}}}
+\item{columns.fill.picker}{the colour for values in \code{columns.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
 
 \item{columns.zebra}{banded columns - equivalent to \code{columns.fill = seq(2, ncol(x), 2)}}
 
@@ -136,7 +136,7 @@ tbl_flextable(
 
 \item{round.percent}{number of decimal places to round to when using \code{columns.percent}}
 
-\item{format.dates}{see \code{\link[certestyle:format2]{certestyle::format2()}}}
+\item{format.dates}{see \code{\link[certestyle:format2]{format2()}}}
 
 \item{decimal.mark}{decimal separator}
 
@@ -150,7 +150,7 @@ tbl_flextable(
 
 \item{values.colour, values.fill, values.bold, values.italic}{values to be formatted}
 
-\item{values.colour.picker, values.fill.picker}{the colour for values in \code{values.colour} or \code{values.fill}, is evaluated with \code{\link[certestyle:colourpicker]{certestyle::colourpicker()}}}
+\item{values.colour.picker, values.fill.picker}{the colour for values in \code{values.colour} or \code{values.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
 
 \item{autofit}{format table in width automatically}
 
