@@ -42,7 +42,7 @@ tbl_markdown(
 
 \item{type}{type of formatting the table - valid options are \code{"latex"}, \code{"html"}, \code{"markdown"}, \code{"pandoc"} and \code{"rst"}}
 
-\item{format.dates}{formatting of dates, will be evaluated with \code{\link[certestyle:format2]{certestyle::format2()}}}
+\item{format.dates}{formatting of dates, will be evaluated with \code{\link[certestyle:format2]{format2()}}}
 
 \item{decimal.mark}{decimal separator}
 
@@ -50,7 +50,7 @@ tbl_markdown(
 
 \item{logicals}{vector with two values that replace \code{TRUE} and \code{FALSE}}
 
-\item{columns.percent}{display the column indices as percentages using \code{\link[certestyle:format2]{certestyle::format2()}} - example: \code{columns.percent = c(2, 3)}}
+\item{columns.percent}{display the column indices as percentages using \code{\link[certestyle:format2]{format2()}} - example: \code{columns.percent = c(2, 3)}}
 
 \item{column.names.bold}{display column names in bold}
 

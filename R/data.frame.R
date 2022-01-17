@@ -28,7 +28,7 @@ globalVariables(c("."))
 #' @param rows.italic column indexes of rows in italics
 #' @param rows.bold column indexes of rows in bold
 #' @param rows.fill the column indices of rows to be shaded
-#' @param rows.fill.picker the colour for values in `rows.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param rows.fill.picker the colour for values in `rows.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
 #' @param rows.zebra banded rows in the body - equivalent to `rows.fill = seq(2, nrow(x), 2)`
 #' @param row.total add a row total (at the bottom of the table)
 #' @param row.total.name name of the row total
@@ -42,7 +42,7 @@ globalVariables(c("."))
 #' @param columns.italic column indices of columns to be displayed in italics
 #' @param columns.bold column indices of columns in bold
 #' @param columns.fill the column indices of rows to be shaded
-#' @param columns.fill.picker the colour for values in `columns.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param columns.fill.picker the colour for values in `columns.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
 #' @param columns.zebra banded columns - equivalent to `columns.fill = seq(2, ncol(x), 2)`
 #' @param column.total adding a column total (to the right of the table)
 #' @param column.total.name name of the column total
@@ -54,7 +54,7 @@ globalVariables(c("."))
 #' @param font.size table font size
 #' @param font.size.header font size of header
 #' @param values.colour,values.fill,values.bold,values.italic values to be formatted
-#' @param values.colour.picker,values.fill.picker the colour for values in `values.colour` or `values.fill`, is evaluated with [certestyle::colourpicker()]
+#' @param values.colour.picker,values.fill.picker the colour for values in `values.colour` or `values.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
 #' @param autofit format table in width automatically
 #' @param autofit.fullpage display table across width of page
 #' @param autofit.fullpage.width set number of centimetres to width of table
@@ -68,9 +68,9 @@ globalVariables(c("."))
 #' @param align.part part of the table where the alignment should take place ("all", "header", "body", "footer")
 #' @param caption table caption
 #' @param na text for missing values
-#' @param format.dates see [certestyle::format2()]
+#' @param format.dates see [`format2()`][certestyle::format2()]
 #' @param logicals vector with two values that replace `TRUE` and `FALSE`
-#' @param columns.percent display the column indices as percentages using [certestyle::format2()] - example: `columns.percent = c(2, 3)`
+#' @param columns.percent display the column indices as percentages using [`format2()`][certestyle::format2()] - example: `columns.percent = c(2, 3)`
 #' @param round.numbers number of decimal places to round up for numbers
 #' @param round.percent number of decimal places to round to when using `columns.percent`
 #' @param print forced printing (required in a `for`` loop)
@@ -594,7 +594,7 @@ tbl_flextable <- function(x,
 #' @param caption caption of table
 #' @param na text for missing values (default: `""`)
 #' @param type type of formatting the table - valid options are `"latex"`, `"html"`, `"markdown"`, `"pandoc"` and `"rst"`
-#' @param format.dates formatting of dates, will be evaluated with [certestyle::format2()]
+#' @param format.dates formatting of dates, will be evaluated with [`format2()`][certestyle::format2()]
 #' @param newlines.leading number of white lines to print before the table
 #' @param newlines.trailing number of white lines to print after the table
 #' @inheritParams tbl_flextable
@@ -707,8 +707,8 @@ tbl_markdown <- function(x,
 #' This function transforms a [data.frame] by guessing the right data classes and applying them.
 #' @param x a [data.frame]
 #' @param datenames language of the date names, such as weekdays and months
-#' @param dateformat expected date format, will be coerced with [cleaner::format_datetime()]
-#' @param timeformat expected time format, will be coerced with [cleaner::format_datetime()]
+#' @param dateformat expected date format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]
+#' @param timeformat expected time format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]
 #' @param decimal.mark separator for decimal numbers
 #' @param big.mark separator for thousands
 #' @param timezone expected time zone

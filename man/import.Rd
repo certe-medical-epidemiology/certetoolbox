@@ -27,6 +27,7 @@ import_xlsx(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   sheet = 1,
+  range = NULL,
   auto_transform = TRUE,
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
@@ -42,6 +43,7 @@ import_excel(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   sheet = 1,
+  range = NULL,
   auto_transform = TRUE,
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
@@ -162,11 +164,13 @@ import_mail_attachment(
 
 \item{sheet}{Excel sheet to import, defaults to first sheet}
 
+\item{range}{a cell range to read from, allows typical Excel ranges such as "B3:D87" and "Budget!B2:G14"}
+
 \item{datenames}{language of the date names, such as weekdays and months}
 
-\item{dateformat}{expected date format, will be coerced with \code{\link[cleaner:format_datetime]{cleaner::format_datetime()}}}
+\item{dateformat}{expected date format, will be coerced with \code{\link[cleaner:format_datetime]{format_datetime()}}}
 
-\item{timeformat}{expected time format, will be coerced with \code{\link[cleaner:format_datetime]{cleaner::format_datetime()}}}
+\item{timeformat}{expected time format, will be coerced with \code{\link[cleaner:format_datetime]{format_datetime()}}}
 
 \item{decimal.mark}{separator for decimal numbers}
 
