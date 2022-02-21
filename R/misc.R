@@ -17,141 +17,253 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===========================================================
 
-#' Refmap for certetoolbox
-#' @export
-.R_REFMAP <- function(sub = "") {
-  if (Sys.info()['sysname'] %in% c("Linux", "Darwin")) {
-    r <- Sys.getenv("R_REFMAP")
-  } else {
-    r <- gsub('\\', '/', Sys.getenv("R_REFMAP"), fixed = TRUE)
-  }
-  
-  if (r == "") {
-    stop("Environmental user variable `R_REFMAP` not set.", call. = FALSE)
-  }
-  if (r %unlike% '[/]$') {
-    r <- paste0(r, '/')
-  }
-  sub <- trimws(sub, "both")
-  r <- paste0(r, sub)
-  if (r %like% '[/]$') {
-    r <- substr(r, 1, nchar(r) - 1)
-  }
-  if (tools::file_ext(r) == "" & !dir.exists(r)) {
-    dir.create(r, recursive = TRUE)
-  }
-  tools::file_path_as_absolute(r)
-}
 
-#' Name of antibiotic
+
+#' Temporarily save value in Global Environment
 #'
-#' Transforms a code to a antibiotic name or ATC-code.
-#' @param abcode antibiotic code or name.
-#' @param from type to transform. Valid options are all variables of \code{\link[AMR]{antibiotics}}.
-#' @param to type to transform to. Valid options are all variables of \code{\link[AMR]{antibiotics}}.
-#' @param textbetween text between two or more antibiotics.
-#' @param tolower result in lower case.
-#' @keywords ab antibiotics
+#' Can be used in dplyr-syntax to remember for later use. Values are temporarily saved in the Global Environment.
+#' @rdname remember_recall
+#' @param .data table to be passes through unchanged. 
+#' @param ... value(s) to be remembered.
+#' @param x value to be recalled.
+#' @param delete delete value after.
+#' @param envir default is Global Environment. The \link{environment} where values are saved.
+#' @details values can be saved with \strong{\code{remember()}} and recalled (and deleted) with \strong{\code{recall()}}.
 #' @export
 #' @examples
-#' abname_molis("amcl")
-#' # "Amoxicilline/clavulaanzuur"
-#'
-#' abname_molis("amcl+gent")
-#' # "Amoxicilline/clavulaanzuur + gentamicine"
-#'
-#' abname_molis(c("amox", "amcl"))
-#' # "Amoxicilline" "Amoxicilline/clavulaanzuur"
-#' @source \code{\link[AMR]{antibiotics}}
-abname_molis <- function(abcode, textbetween = " + ", tolower = FALSE, ...) {
-  codes <- suppressWarnings(AMR::ab_name(abcode, language = "nl", tolower = tolower))
-  if (sum(abcode %like% "[+]") > 0) {
-    for (i in 1:length(abcode)) {
-      if (abcode[i] %like% "[+]") {
-        codes[i] <- paste0(AMR::ab_name(strsplit.select(abcode[i], 1, "[+]"),
-                                        language = "nl",
-                                        tolower = tolower),
-                           textbetween,
-                           AMR::ab_name(strsplit.select(abcode[i], 2, "[+]"),
-                                        language = "nl",
-                                        tolower = TRUE))
-      }
+#' \dontrun{
+#'  tbl %>%
+#'    filter(...) %>%
+#'    remember(rows = nrow(.)) %>%
+#'    group_by(...) %>%
+#'    summarise(...) %>%
+#'    plot2(title = "Test",
+#'          subtitle = paste("n =", recall(rows)))
+#' }
+remember <- function(.data, ..., envir = globalenv()) {
+  dots <- list(...)
+  for (i in seq_len(length(dots))) {
+    if (is.null(names(dots)[i])) {
+      name <- "tmp_"
+    } else {
+      name <- names(dots)[i]
     }
+    assign(x = name,
+           value = dots[[i]],
+           envir = envir)
   }
-  codes
+  .data
 }
 
 
-#' Check micro-organism from early warning mail
-#'
-#' Use this function to check results and resistance pattern of a strain using the ID provided in the early warning mail.
-#' @param ordernr_testcode_mtrlcode_stam strain ID
-#' @param view direct view in RStudio viewer.
-#' @param info show query information.
-#' @param ... arguments passed on to \code{\link{certedb_query}}.
+#' @rdname remember_recall
 #' @export
-check_mo <- function(ordernr_testcode_mtrlcode_stam, view = TRUE, info = FALSE, ...) {
-  if (length(ordernr_testcode_mtrlcode_stam) > 1) {
-    stop("Only 1 ordernr_testcode_mtrlcode_stam allowed")
-  }
-  
-  ordernr_testcode_mtrlcode_stam <- unlist(strsplit(ordernr_testcode_mtrlcode_stam, "_"))
-  ordernr <- ordernr_testcode_mtrlcode_stam[1]
-  testcode <- ordernr_testcode_mtrlcode_stam[2]
-  mtrlcode <- ordernr_testcode_mtrlcode_stam[3]
-  stam <- ordernr_testcode_mtrlcode_stam[4]
-  
-  res <- certedb_query(info = info,
-                       query =
-                         paste0(
-                           "SELECT
-    CONCAT(ordernr,
-            '_',
-            anamc,
-            '_',
-            mtrlcode,
-            '_',
-            stamteller) AS ordernr_testcode_mtrlcode_stam,
-    ordernr,
-    ontvangstdatum,
-    mtrlcode,
-    anamc AS testcode,
-    stamteller AS stam,
-    b.volledigenaam AS mo,
-    abmc AS ab,
-    res_rsi,
-    res_diam,
-    res_num,
-    protect_typ
-FROM
-    certemm_abres AS ab
-        LEFT JOIN
-    temporary_certemm_bacterienlijst AS b ON CONCAT(ab.famnb,
-            '_',
-            ab.genrnb,
-            '_',
-            ab.espnb,
-            '_',
-            ab.sespnb) = b.bacteriecode_oud
-WHERE
-    ordernr = '", ordernr,
-                           "' AND anamc = '",
-                           testcode, "' AND mtrlcode = '",
-                           mtrlcode, "' AND stamteller = '",
-                           stam, "'"), ...)
-  ordernr <- paste0("00-", substr(ordernr, 3, 6), "-", substr(ordernr, 7, 10))
-  message("Ordernr ", ordernr, ", mtrlcode ", mtrlcode, ", testcode ", testcode, ", stam ", stam, ": ", crayon::italic(res$mo[1]))
-  check_mo_result <- res %>%
-    select(ab, starts_with("res_"), protect_typ) %>%
-    mutate_all(as.character) %>%
-    # E en X niet op rapport
-    mutate(op_rapport = ifelse(protect_typ == "I", "X", "-")) %>%
-    pivot_longer(-ab) %>%
-    pivot_wider(names_from = ab, values_from = value) %>%
-    slice(1, 5, 3, 2, 4)
-  if (view == TRUE) {
-    View(check_mo_result)
+recall <- function(x = NULL, delete = TRUE, envir = globalenv()) {
+  if (is.null(x)) {
+    x_name <- "tmp_"
   } else {
-    check_mo_result
+    x_name <- gsub('(^"|"$)', "", deparse(substitute(x)))
   }
+  tryCatch(
+    x_val <- eval(parse(text = x_name), envir = envir),
+    error = function(e) {
+      if (x_name == "tmp_") {
+        stop("Temporary value for recall() not found in global environment. Did you name the value in remember()?", call. = FALSE)
+      } else {
+        stop("Value '", x_name, "' for recall() not found in global environment", call. = FALSE)
+      }
+    })
+  
+  if (delete == TRUE) {
+    rm(list = x_name, envir = envir)
+  }
+  x_val
+}
+
+#' Convert Word-document to PDF
+#' @param file file to be converted
+#' @param output_dir target directory for PDF-file. Default is directory of Word-file.
+#' @param overwrite overwrite existing PDF-file.
+#' @param teams_notice send an update to this teams channel when conversion is complete. Use \code{NULL}, \code{NA} or \code{FALSE} to not send an update.
+#' @details this function returns the location of the PDF-file when conversion was succesful.
+#' @export
+word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = FALSE) {
+  
+  check_is_installed("RDCOMClient")
+  
+  require(RDCOMClient)
+  
+  supp <- function(...) {
+    suppressWarnings(suppressMessages(...))
+  }
+  
+  if (!file.exists(file)) {
+    stop("File does not exist: ", file)
+  }
+  file <- gsub("/", "\\\\", file)
+  
+  wordApp <- COMCreate("Word.Application", existing = FALSE, silent = TRUE)
+  on.exit(tryCatch(wordApp$Quit(SaveChanges = FALSE, RouteDocument = FALSE),
+                   error = function(e) invisible()))
+  
+  wordApp[["Visible"]] <- FALSE
+  
+  tryCatch(supp(wordApp[["Documents"]]$Open(FileName = file)),
+           error = function(e) {
+             # try again with OpenAndRepair
+             tryCatch(supp(wordApp[["Documents"]]$Open(FileName = file,
+                                                       OpenAndRepair = TRUE)),
+                      error = function(e) invisible())
+           })
+  
+  new_file <- gsub("[.]docx?$", ".pdf", file)
+  
+  if (!is.null(output_dir)) {
+    output_dir <- gsub("/", "\\\\", output_dir)
+    output_dir <- gsub("\\\\\\\\", "\\\\", paste0(output_dir, "\\\\"))
+    new_file <- paste0(output_dir, basename(new_file))
+  }
+  
+  if (file.exists(new_file)) {
+    if (overwrite == TRUE) {
+      unlink(new_file)
+    } else {
+      stop("File already exists (use overwrite = TRUE to force overwriting): ", new_file)
+    }
+  }
+  
+  tryCatch(supp(wordApp[["ActiveDocument"]]$ExportAsFixedFormat(OutputFileName = new_file, ExportFormat = 17)),
+           error = function(e) invisible())
+  # wordApp[["ActiveDocument"]]$SaveAs(new_file, FileFormat = 17) # is PDF
+  
+  tryCatch({
+    supp(wordApp[["ActiveDocument"]]$Close(0))
+    supp(wordApp$Quit(SaveChanges = FALSE, RouteDocument = FALSE))
+  }, error = function(e) warning("An invisble instance of Word is still running."))
+  
+  if (!file.exists(new_file)) {
+    msg <- paste0("Failed to convert to PDF: '", normalizePath(new_file), "'")
+    if (!is.null(teams_notice) && !teams_notice %in% c(NA, FALSE)) {
+      tryCatch(teams(msg, teams_notice),
+               error = function(e) message("Error in Teams: ", e$message))
+    }
+    stop(msg)
+    
+  } else {
+    msg <- paste0("Successfully converted to PDF: '", normalizePath(new_file), "'")
+    if (!is.null(teams_notice) && !teams_notice %in% c(NA, FALSE)) {
+      teams(title = "PDF gemaakt", items = c("Map" = normalizePath(new_file)), channel = teams_notice)
+    }
+    message(msg)
+  }
+  
+  invisible(new_file)
+}
+
+#' Susceptibility table between hospitals
+#'
+#' Creates a susceptibility comparison table between hospitals. Runs a G-test at >1000 observations or an Exact-test when less.
+#' @param ab_list list of antibiotics. See \code{\link[AMR]{antibiotics}}.
+#' @param hospitalname name of the hospital to be compared to other hospitals.
+#' @param df_all \code{data.frame} with all data.
+#' @param df_thishospital \code{data.frame} with all data of the to be tested hospital.
+#' @param df_otherhospitals  \code{data.frame} with all data of the other hospitals.
+#' @seealso \code{\link{g.test}} runs at > 1000 observations; \code{\link{exact.test}} runs at <= 1000 observations
+#' @export
+#' @examples
+#' \dontrun{
+#' rsi_table(ab_list, 'MZ', df)
+#'
+#' septic_patients %>%
+#'   mutate(zkhgroep = hospital_id) %>%
+#'   rsi_table(ab_list = c("amox", "amcl"),
+#'             hospitalname = "A",
+#'             df_all = .)
+#' }
+rsi_table <- function(ab_list, hospitalname, df_all, df_thishospital = NULL, df_otherhospitals = NULL) {
+  
+  tbl.rsi <- tibble(antibioticum = character(0),
+                    rsi.dit = double(0),
+                    rsi.rest = double(0),
+                    p = double(0),
+                    psym = character(0),
+                    size = double(0),
+                    meth = character(0))
+  
+  if (is.null(df_thishospital)) {
+    if (!"zkhgroep" %in% colnames(df_all)) {
+      stop("Variable 'zkhgroep' is missing from `df_all`.", call. = FALSE)
+    }
+    df_thishospital <- df_all %>% filter(zkhgroep == hospitalname)
+  }
+  if (is.null(df_otherhospitals)) {
+    if (!"zkhgroep" %in% colnames(df_all)) {
+      stop("Variable 'zkhgroep' is missing from `df_all`.", call. = FALSE)
+    }
+    if (!"zkhgroep_code" %in% colnames(df_all)) {
+      warning("Variable 'zkhgroep_code' is missing from `df_all`. Are these all isolates from hospitals?")
+      df_all <- df_all %>% mutate(zkhgroep_code = 1)
+    }
+    df_otherhospitals <- df_all %>% filter(zkhgroep != hospitalname, zkhgroep_code != 0)
+  }
+  
+  for (i in 1:length(ab_list)) {
+    ab <- ab_list[i]
+    abnaam <- ab %>% abname_molis()
+    
+    susceptibility_hospitalname <- AMR::proportion_S(df_thishospital %>% pull(ab))
+    susceptibility_rest <- AMR::proportion_S(df_otherhospitals %>% pull(ab))
+    
+    cont.tbl <- crosstab(data = df_all,
+                         column1 = ab,
+                         condition1 = 'S',
+                         column2 = 'zkhgroep',
+                         condition2 = hospitalname)
+    
+    # source for using 1000: http://www.biostathandbook.com/gtestind.html
+    if (sum(cont.tbl) >= 1000) {
+      susceptibility_pwaarde <- g.test(cont.tbl)$p.value
+      method <- 'Onafh. G-toets'
+    } else {
+      susceptibility_pwaarde <- fisher.test(cont.tbl)$p.value
+      method <- "Fisher's Exact-toets"
+    }
+    
+    tbl.rsi <- tbl.rsi %>%
+      tibble::add_row(antibioticum = abnaam,
+                      rsi.dit = susceptibility_hospitalname,
+                      rsi.rest = susceptibility_rest,
+                      p = susceptibility_pwaarde,
+                      psym = p_symbol(susceptibility_pwaarde),
+                      size = sum(cont.tbl),
+                      meth = method)
+    
+  }
+  
+  colnames(tbl.rsi) <- c('Antibioticum', hospitalname, 'Rest', 'p-waarde',
+                         'Significantie', 'Grootte', 'Methode')
+  
+  tbl.rsi
+}
+
+#' Splits text and select element
+#' @inheritParams base::strsplit
+#' @param element The nth element that should be returned.
+#' @seealso \code{\link[base]{strsplit}}
+#' @export strsplit.select
+#' @examples
+#' \dontrun{
+#' tbl %>%
+#'   mutate(genus = strsplit.select(microorganisme, 1),
+#'          species = strsplit.select(microorganisme, 2))
+#' }
+strsplit.select <- function(x, element, split = " ", fixed = FALSE, perl = FALSE, useBytes = FALSE) {
+  sapply(strsplit(x,
+                  split,
+                  fixed = fixed,
+                  perl = perl,
+                  useBytes = useBytes
+  ),
+  "[",
+  element)
 }

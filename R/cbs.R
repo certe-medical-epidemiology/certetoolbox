@@ -50,14 +50,14 @@
 #'   pivot_longer(-perioden) %>%
 #'   plot2.line(x = perioden, x.category = name, y = value, sort.x = NULL)
 cbs_topics <- function() {
-  stopifnot_installed_package("cbsodataR")
+  check_is_installed("cbsodataR")
   cbsodataR::cbs_get_toc(Language = "nl")
 }
 
 #' @rdname cbs
 #' @export
 cbs_search <- function(topic, max_print = 25) {
-  stopifnot_installed_package("cbsodataR")
+  check_is_installed("cbsodataR")
   
   topics <- cbs_topics() %>%
     filter(Title %like% topic | Summary %like% topic) %>%
@@ -87,7 +87,7 @@ cbs_search <- function(topic, max_print = 25) {
 #' @rdname cbs
 #' @export
 cbs_download <- function(identifier, clean_cols = TRUE) {
-  stopifnot_installed_package("cbsodataR")
+  check_is_installed("cbsodataR")
   if (is.data.frame(identifier)) {
     if ("Identifier" %in% colnames(identifier)) {
       identifier <- identifier$Identifier[1L]
@@ -123,7 +123,7 @@ cbs_download <- function(identifier, clean_cols = TRUE) {
 #' @rdname cbs
 #' @export
 cbs_moreinfo <- function(identifier) {
-  stopifnot_installed_package("cbsodataR")
+  check_is_installed("cbsodataR")
   
   if (is.data.frame(identifier)) {
     identifier <- attributes(identifier)$identifier

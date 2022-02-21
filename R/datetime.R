@@ -565,3 +565,11 @@ week2resp_season <- function(wk, remove_outside_season = FALSE) {
     factor(wk, levels = c(40:53, 1:39), ordered = TRUE)
   }
 }
+
+#' Determine week based on ISO 8601
+#' @importFrom lubridate week
+#' @source \code{\link[lubridate]{week}} from package \code{lubridate}.
+#' @export
+week <- function(x) {
+  isoweek(x)
+}
