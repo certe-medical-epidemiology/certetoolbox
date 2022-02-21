@@ -20,17 +20,17 @@
 #' Downloading CBS-data
 #'
 #' Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data}.
-#' @param identifier Zoals opgegeven in \code{cbs_topics()}, of een volgnummer (1 t/m \code{max_print}) in \code{cbs_search()}.
-#' @param clean_cols Standaard is \code{TRUE}. Kolomnamen opschonen. Standaard hebben kolomnamen hoofdletters en eindigen ze op het indexcijfer van de kolommen (zoals TotaalCollecties_1, TotaalBoeken_2, TotaalBoekenVolwassenen_3). Met \code{clean_cols} worden alle kolomnamen snakecase, zonder op kolomindex te eindigen.
+#' @param identifier As provided in \code{cbs_topics()}, or a tracking number (1 to \code{max_print}) in \code{cbs_search()}.
+#' @param clean_cols Clean column names. 
 #' @param topic Subject to search for.
-#' @param max_print Standaard is 25. Maximaal aantal te printen onderwerpen. Alle onderwerpen worden altijd onzichtbaar geretourneerd.
-#' @details Met \code{cbs_topics()} worden alle onderwerpen opgehaald.
+#' @param max_print Maximum number of subjects to print. 
+#' @details \code{cbs_topics()} Retrieves all subjects.
 #'
-#' Met \code{cbs_search()} kan gezocht worden naar een specifiek onderwerp. Alle onderwerpen worden onzichtbaar geretourneerd en alleen de eerste \code{max_print} worden geprint. De volgnummers die geprint worden kunnen gebruiken worden om te downloaden.
+#' \code{cbs_search()} searches for a specific subject.  
 #'
-#' Met \code{cbs_download()} kunnen tabellen gedownload worden. De input moet een CBS Identifier zijn (rood geprint in \code{cbs_search()}), of een volgnummer van \code{cbs_search()}, of het resultaat van \code{cbs_search()} zelf..
+#' \code{cbs_download()} downloads tables. Input has to be a CBS Identifier (printed in red in \code{cbs_search()}), or a tracking number of \code{cbs_search()}, or the result of \code{cbs_search()}.
 #'
-#' \code{cbs_moreinfo()} geeft een uitgebreidere toelichting op de tabel. De input kan ook een dataset zijn die gedownload is met \code{cbs_download()}.
+#' \code{cbs_moreinfo()} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{cbs_download()}.
 #' @rdname cbs
 #' @export
 #' @examples
