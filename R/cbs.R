@@ -32,6 +32,7 @@
 #'
 #' \code{cbs_moreinfo()} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{cbs_download()}.
 #' @rdname cbs
+#' @importFrom dplyr `%>%` filter arrange
 #' @export
 #' @examples
 #' cbs_search("Inwoners")
