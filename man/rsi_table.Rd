@@ -38,5 +38,5 @@ septic_patients \%>\%
 }
 }
 \seealso{
-\code{\link{g.test}} runs at > 1000 observations; \code{\link{exact.test}} runs at <= 1000 observations
+\code{\link{g.test}} runs at > 1000 observations; \code{\link{fisher.test}} runs at <= 1000 observations
 }

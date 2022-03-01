@@ -16,9 +16,7 @@ abname_molis(abcode, textbetween = " + ", tolower = FALSE, ...)
 
 \item{tolower}{result in lower case.}
 
-\item{from}{type to transform. Valid options are all variables of \code{\link[AMR]{antibiotics}}.}
-
-\item{to}{type to transform to. Valid options are all variables of \code{\link[AMR]{antibiotics}}.}
+\item{...}{arguments for \code{\link[=abname_molis]{abname_molis()}}}
 }
 \description{
 Transforms a code to a antibiotic name or ATC-code.
@@ -31,7 +29,7 @@ abname_molis("amcl+gent")
 # "Amoxicilline/clavulaanzuur + gentamicine"
 
 abname_molis(c("amox", "amcl"))
-# "Amoxicilline" "Amoxicilline/clavulaanzuur"
+# "Amoxicilline" "F"
 }
 \keyword{ab}
 \keyword{antibiotics}

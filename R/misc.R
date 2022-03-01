@@ -91,7 +91,7 @@ word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = 
   
   check_is_installed("RDCOMClient")
   
-  require(RDCOMClient)
+  requireNamespace("RDCOMClient")
   
   supp <- function(...) {
     suppressWarnings(suppressMessages(...))
@@ -102,7 +102,7 @@ word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = 
   }
   file <- gsub("/", "\\\\", file)
   
-  wordApp <- COMCreate("Word.Application", existing = FALSE, silent = TRUE)
+  wordApp <- RDCOMClient::COMCreate("Word.Application", existing = FALSE, silent = TRUE)
   on.exit(tryCatch(wordApp$Quit(SaveChanges = FALSE, RouteDocument = FALSE),
                    error = function(e) invisible()))
   
@@ -144,7 +144,7 @@ word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = 
   if (!file.exists(new_file)) {
     msg <- paste0("Failed to convert to PDF: '", normalizePath(new_file), "'")
     if (!is.null(teams_notice) && !teams_notice %in% c(NA, FALSE)) {
-      tryCatch(teams(msg, teams_notice),
+      tryCatch(certeprojects::teams(msg, teams_notice),
                error = function(e) message("Error in Teams: ", e$message))
     }
     stop(msg)
@@ -152,12 +152,93 @@ word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = 
   } else {
     msg <- paste0("Successfully converted to PDF: '", normalizePath(new_file), "'")
     if (!is.null(teams_notice) && !teams_notice %in% c(NA, FALSE)) {
-      teams(title = "PDF gemaakt", items = c("Map" = normalizePath(new_file)), channel = teams_notice)
+      certeprojects::teams(title = "PDF gemaakt", items = c("Map" = normalizePath(new_file)), channel = teams_notice)
     }
     message(msg)
   }
   
   invisible(new_file)
+}
+
+#' Create contingency table of \code{data.frame}
+#'
+#' Creates a contingency table. Output is a \code{\link{matrix}}.
+#' @param data \code{data.frame} or \code{tibble} containing data, where columns \code{column1} and \code{column2} occur.
+#' @param column1 Column with values.
+#' @param column2 Column with values.
+#' @param condition1 Condition to seperate \code{column1} from "Rest".
+#' @param condition2 Condition to seperate \code{column2} from "Rest".
+#' @param expected Default is \code{FALSE}. Return expected instead of observed (\code{E_i = N / n}, where discrete uniforme distribution is to be expected).
+#' @param totals Default is \code{FALSE}. Adds row- and columntotals.
+#' @keywords contingency table chi squared
+#' @export
+#' @return \code{matrix}
+crosstab <- function(data, column1, condition1, column2, condition2, expected = FALSE, totals = FALSE) {
+  
+  # voor later
+  # a1 <- data %>% filter(any(condition1 %in% data[, column1]) & any(condition2 %in% data[, column2])) %>% as.data.frame()
+  # a2 <- data %>% filter(any(condition1 %in% data[, column1]) & !(condition2 %in% data[, column2])) %>% as.data.frame()
+  # b1 <- data %>% filter(!(condition1 %in% data[, column1]) & any(condition2 %in% data[, column2])) %>% as.data.frame()
+  # b2 <- data %>% filter(!(condition1 %in% data[, column1]) & !(condition2 %in% data[, column2])) %>% as.data.frame()
+  
+  # ondersteuning voor maar 1 voorwaarde per kolom:
+  a1 <- data %>% filter(data[, column1] == condition1 & data[, column2] == condition2) %>% as.data.frame()
+  a2 <- data %>% filter(data[, column1] == condition1 & data[, column2] != condition2) %>% as.data.frame()
+  b1 <- data %>% filter(data[, column1] != condition1 & data[, column2] == condition2) %>% as.data.frame()
+  b2 <- data %>% filter(data[, column1] != condition1 & data[, column2] != condition2) %>% as.data.frame()
+  
+  column1.rest <- sort(unique(b2[, column1]))
+  condition1.rest <- 'Rest'
+  if (length(column1.rest) < 3) {
+    condition1.rest <- concat(column1.rest, "/")
+  }
+  column2.rest <- sort(unique(b2[, column2]))
+  condition2.rest <- 'Rest'
+  if (length(column2.rest) < 3) {
+    condition2.rest <- concat(column2.rest, "/")
+  }
+  
+  x <- matrix(data = c(nrow(a1),
+                       nrow(a2),
+                       nrow(b1),
+                       nrow(b2)),
+              nrow = 2,
+              ncol = 2,
+              byrow = TRUE,
+              dimnames = list(c(concat(condition1, "/"), condition1.rest),
+                              c(concat(condition2, "/"), condition2.rest)))
+  
+  if (expected == TRUE) {
+    sr <- rowSums(x)
+    sc <- colSums(x)
+    E <- outer(sr, sc, "*") / sum(x)
+    x <- E
+  }
+  
+  if (totals == TRUE) {
+    x <- rbind(cbind(x, rowSums(x)), colSums(cbind(x, rowSums(x))))
+  }
+  
+  x
+  
+}
+
+#' P-symbol format as asterisk
+#' @param p numeric value between 0 and 1
+#' @param emptychar sign to be displayed for 0.1 < p < 1.0
+#' @export
+p_symbol <- function(p, emptychar = " ") {
+  
+  p <- as.double(p)
+  s <- rep(NA_character_, length(p))
+  
+  s[p <= 1] <- emptychar
+  s[p <= 0.100] <- "."
+  s[p <= 0.050] <- "*"
+  s[p <= 0.010] <- "**"
+  s[p <= 0.001] <- "***"
+  
+  s
 }
 
 #' Susceptibility table between hospitals
@@ -168,7 +249,11 @@ word2pdf <- function(file, output_dir = NULL, overwrite = FALSE, teams_notice = 
 #' @param df_all \code{data.frame} with all data.
 #' @param df_thishospital \code{data.frame} with all data of the to be tested hospital.
 #' @param df_otherhospitals  \code{data.frame} with all data of the other hospitals.
-#' @seealso \code{\link{g.test}} runs at > 1000 observations; \code{\link{exact.test}} runs at <= 1000 observations
+#' @seealso \code{\link{g.test}} runs at > 1000 observations; \code{\link{fisher.test}} runs at <= 1000 observations
+#' @importFrom tidyr tibble
+#' @importFrom dplyr mutate
+#' @importFrom AMR g.test 
+#' @importFrom stats fisher.test
 #' @export
 #' @examples
 #' \dontrun{
@@ -194,7 +279,7 @@ rsi_table <- function(ab_list, hospitalname, df_all, df_thishospital = NULL, df_
     if (!"zkhgroep" %in% colnames(df_all)) {
       stop("Variable 'zkhgroep' is missing from `df_all`.", call. = FALSE)
     }
-    df_thishospital <- df_all %>% filter(zkhgroep == hospitalname)
+    df_thishospital <- df_all %>% filter(.$zkhgroep == hospitalname)
   }
   if (is.null(df_otherhospitals)) {
     if (!"zkhgroep" %in% colnames(df_all)) {
@@ -204,7 +289,7 @@ rsi_table <- function(ab_list, hospitalname, df_all, df_thishospital = NULL, df_
       warning("Variable 'zkhgroep_code' is missing from `df_all`. Are these all isolates from hospitals?")
       df_all <- df_all %>% mutate(zkhgroep_code = 1)
     }
-    df_otherhospitals <- df_all %>% filter(zkhgroep != hospitalname, zkhgroep_code != 0)
+    df_otherhospitals <- df_all %>% filter(.$zkhgroep != hospitalname, .$zkhgroep_code != 0)
   }
   
   for (i in 1:length(ab_list)) {

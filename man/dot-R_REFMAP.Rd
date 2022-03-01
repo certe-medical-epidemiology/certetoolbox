@@ -6,6 +6,9 @@
 \usage{
 .R_REFMAP(sub = "")
 }
+\arguments{
+\item{sub}{refmap name}
+}
 \description{
 Refmap for certetoolbox
 }

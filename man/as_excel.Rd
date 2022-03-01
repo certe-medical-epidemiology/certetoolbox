@@ -53,5 +53,4 @@ xl <- as_excel("this is a sheet" = mtcars,
 xl
 
 # save with save_excel() or export_excel()
-export_excel(xl)
 }

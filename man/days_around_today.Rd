@@ -7,6 +7,7 @@
 \alias{today}
 \alias{now}
 \alias{tomorrow}
+\alias{week}
 \alias{year}
 \alias{last_week}
 \alias{this_week}
@@ -56,6 +57,8 @@
 yesterday(ref = today())
 
 tomorrow(ref = today())
+
+week(ref = today())
 
 year(ref = today())
 

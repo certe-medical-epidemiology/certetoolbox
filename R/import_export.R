@@ -947,7 +947,6 @@ import_exec <- function(filename,
 #' xl
 #' 
 #' # save with save_excel() or export_excel()
-#' export_excel(xl)
 as_excel <- function(...,
                      sheet_names = NULL,
                      autofilter = TRUE,

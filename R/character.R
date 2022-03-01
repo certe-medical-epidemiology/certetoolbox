@@ -64,6 +64,7 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
 }
 
 #' Refmap for certetoolbox
+#' @param sub refmap name
 #' @export
 .R_REFMAP <- function(sub = "") {
   if (Sys.info()['sysname'] %in% c("Linux", "Darwin")) {
@@ -93,10 +94,9 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
 #'
 #' Transforms a code to a antibiotic name or ATC-code.
 #' @param abcode antibiotic code or name.
-#' @param from type to transform. Valid options are all variables of \code{\link[AMR]{antibiotics}}.
-#' @param to type to transform to. Valid options are all variables of \code{\link[AMR]{antibiotics}}.
 #' @param textbetween text between two or more antibiotics.
 #' @param tolower result in lower case.
+#' @param ... arguments for [abname_molis()]
 #' @keywords ab antibiotics
 #' @export
 #' @examples
@@ -107,7 +107,7 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
 #' # "Amoxicilline/clavulaanzuur + gentamicine"
 #'
 #' abname_molis(c("amox", "amcl"))
-#' # "Amoxicilline" "Amoxicilline/clavulaanzuur"
+#' # "Amoxicilline" "F"
 #' @source \code{\link[AMR]{antibiotics}}
 abname_molis <- function(abcode, textbetween = " + ", tolower = FALSE, ...) {
   codes <- suppressWarnings(AMR::ab_name(abcode, language = "nl", tolower = tolower))
@@ -129,9 +129,10 @@ abname_molis <- function(abcode, textbetween = " + ", tolower = FALSE, ...) {
 
 #' Hospitalname
 #'
-#' Hospitalname and/or location, with support for all hopsitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
+#' Hospitalname and/or location, with support for all hospitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
 #' @param x text to be transformed.
 #' @param format default is \code{"{naamkort}, {plaats}"}. Attributes like \code{x} to be returned in '\code{glue}'-format (in curly brackets).
+#' @importFrom glue glue
 #' @export
 #' @examples
 #' hospital_name(c("MCL", "MCL", "Martini"))
@@ -157,9 +158,9 @@ hospital_name <- function(x, format = "{naamkort}, {plaats}") {
   x_trans[x %like% "MCL|Leeuwarden"] <- glue(format, naam = "Medisch Centrum Leeuwarden", naamkort = "MCL", plaats = "Leeuwarden")
   x_trans[x %like% "Isala|Zwolle"] <- glue(format, naam = "Isala Zwolle", naamkort = "Isala", plaats = "Zwolle")
   x_trans[x %like% "Dia[ck]on|Meppel"] <- glue(format, naam = "Isala Diaconessenhuis Meppel", naamkort = "Isala", plaats = "Meppel")
-  x_trans[x %like% "R.p[ck]+e|Harde.?berg"] <- glue(format, naam = "Röpcke-Zweers Ziekenhuis", naamkort = "RZH", plaats = "Hardenberg")
+  x_trans[x %like% "R.p[ck]+e|Harde.?berg"] <- glue(format, naam = "R\\u00f6pcke-Zweers Ziekenhuis", naamkort = "RZH", plaats = "Hardenberg")
   # modification for GGD, location is province
-  x_trans[x %like% "GGD.*fr.*sl.*n"] <- glue(format, naam = "GGD Fryslân", naamkort = "GGD", plaats = "Fryslân")
+  x_trans[x %like% "GGD.*fr.*sl.*n"] <- glue(format, naam = "GGD Frysl\\u00e2n", naamkort = "GGD", plaats = "Frysl\\u00e2n")
   x_trans[x %like% "GGD.*gronin"] <- glue(format, naam = "GGD Groningen", naamkort = "GGD", plaats = "Groningen")
   x_trans[x %like% "GGD.*drent"] <- glue(format, naam = "GGD Drenthe", naamkort = "GGD", plaats = "Drenthe")
   x_trans
@@ -183,6 +184,7 @@ hospital_name <- function(x, format = "{naamkort}, {plaats}") {
 #'
 #' usethis::use_data(bacterien, internal = TRUE, overwrite = TRUE)
 #' }
+#' @importFrom dplyr left_join
 #' @export
 mo_certe <- function(x, ...) {
   if (all(x %in% AMR::microorganisms.codes$code)) {
@@ -190,9 +192,9 @@ mo_certe <- function(x, ...) {
   } else {
     data.frame(fullname = AMR::mo_fullname(x, ...),
                stringsAsFactors = FALSE) %>%
-      left_join(bacterien, # is interne data in dit pakket
+      left_join(.$bacterien, # is interne data in dit pakket
                 by = "fullname") %>%
-      pull(bacteriecode) %>%
+      pull(.$bacteriecode) %>%
       .[1]
   }
 }

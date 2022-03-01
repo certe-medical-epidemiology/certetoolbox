@@ -37,6 +37,7 @@ Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onz
 \code{cbs_moreinfo()} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{cbs_download()}.
 }
 \examples{
+\dontrun{
 cbs_search("Inwoners")
 
 x <- cbs_download(2) # 2e hit van cbs_search()
@@ -52,4 +53,5 @@ cbs_search("Overledenen; doodsoorzaak, kwartaal en jaar overlijden") \%>\%
   set_names(label(.)) \%>\% # CBS-kolommen hebben labels met netjes opgemaakte tekst
   pivot_longer(-perioden) \%>\%
   plot2.line(x = perioden, x.category = name, y = value, sort.x = NULL)
+}
 }

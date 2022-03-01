@@ -130,6 +130,14 @@ tomorrow <- function(ref = today()) {
   ref + 1
 }
 
+#' Determine week based on ISO 8601
+#' @rdname days_around_today
+#' @importFrom lubridate isoweek
+#' @export
+week <- function(ref = today()) {
+  isoweek(ref)
+}
+
 #' @rdname days_around_today
 #' @export
 year <- function(ref = today()) {
@@ -566,10 +574,4 @@ week2resp_season <- function(wk, remove_outside_season = FALSE) {
   }
 }
 
-#' Determine week based on ISO 8601
-#' @importFrom lubridate week
-#' @source \code{\link[lubridate]{week}} from package \code{lubridate}.
-#' @export
-week <- function(x) {
-  isoweek(x)
-}
+

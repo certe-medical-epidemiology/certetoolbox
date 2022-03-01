@@ -12,7 +12,7 @@ hospital_name(x, format = "{naamkort}, {plaats}")
 \item{format}{default is \code{"{naamkort}, {plaats}"}. Attributes like \code{x} to be returned in '\code{glue}'-format (in curly brackets).}
 }
 \description{
-Hospitalname and/or location, with support for all hopsitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
+Hospitalname and/or location, with support for all hospitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
 }
 \examples{
 hospital_name(c("MCL", "MCL", "Martini"))

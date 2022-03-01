@@ -35,6 +35,7 @@
 #' @importFrom dplyr `%>%` filter arrange
 #' @export
 #' @examples
+#' \dontrun{
 #' cbs_search("Inwoners")
 #'
 #' x <- cbs_download(2) # 2e hit van cbs_search()
@@ -50,6 +51,7 @@
 #'   set_names(label(.)) %>% # CBS-kolommen hebben labels met netjes opgemaakte tekst
 #'   pivot_longer(-perioden) %>%
 #'   plot2.line(x = perioden, x.category = name, y = value, sort.x = NULL)
+#' }
 cbs_topics <- function() {
   check_is_installed("cbsodataR")
   cbsodataR::cbs_get_toc(Language = "nl")
@@ -61,8 +63,8 @@ cbs_search <- function(topic, max_print = 25) {
   check_is_installed("cbsodataR")
   
   topics <- cbs_topics() %>%
-    filter(Title %like% topic | Summary %like% topic) %>%
-    arrange(SearchPriority, ShortTitle)
+    filter(.$Title %like% topic | .$Summary %like% topic) %>%
+    arrange(.$SearchPriority, .$ShortTitle)
   
   if (nrow(topics) == 0) {
     message("No topics found")
@@ -140,7 +142,7 @@ cbs_moreinfo <- function(identifier) {
     }
   }
   topic <- cbs_topics() %>%
-    filter(Identifier == identifier)
+    filter(.$Identifier == identifier)
   
   descr <- topic$ShortDescription
   descr <- gsub("Status van de cijfers.*?(\n| )", crayon::underline("Status van de cijfers:\n"), descr)
