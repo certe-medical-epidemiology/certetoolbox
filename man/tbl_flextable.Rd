@@ -184,8 +184,13 @@ df <- data.frame(text = LETTERS[1:10],
                  stringsAsFactors = FALSE)
 
 # default
-tbl_flextable(df)      # dataset heeft geen rijnamen
-tbl_flextable(mtcars)  # dataset heeft wel rijnamen
+tbl_flextable(df)      # dataset has no row names
+tbl_flextable(mtcars)  # dataset has row names
+
+# print in markdown
+df \%>\% 
+  tbl_flextable() \%>\% 
+  tbl_markdown()
 
 # extra formatting
 tbl_flextable(df,

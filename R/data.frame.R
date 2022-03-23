@@ -90,8 +90,13 @@
 #'                  stringsAsFactors = FALSE)
 #'
 #' # default
-#' tbl_flextable(df)      # dataset heeft geen rijnamen
-#' tbl_flextable(mtcars)  # dataset heeft wel rijnamen
+#' tbl_flextable(df)      # dataset has no row names
+#' tbl_flextable(mtcars)  # dataset has row names
+#' 
+#' # print in markdown
+#' df %>% 
+#'   tbl_flextable() %>% 
+#'   tbl_markdown()
 #'
 #' # extra formatting
 #' tbl_flextable(df,
@@ -586,7 +591,7 @@ tbl_flextable <- function(x,
       print(ft)
     } else {
       # not interactive like in R Markdown - print as markdown table
-      flextable_to_rmd(ft)
+      flextable_to_rmd(ft, print = TRUE)
     }
   } else {
     ft
@@ -607,6 +612,7 @@ tbl_flextable <- function(x,
 #' @param format.dates formatting of dates, will be evaluated with [`format2()`][certestyle::format2()]
 #' @param newlines.leading number of white lines to print before the table
 #' @param newlines.trailing number of white lines to print after the table
+#' @param print only useful when input is a Flextable: force printing
 #' @inheritParams tbl_flextable
 #' @details When in an R Markdown rapport a table is printed using this function, column headers only print well if `newlines.leading` >= 2, or by manually using `cat("\\n\\n")` before printing the table.
 #' @seealso [knitr::kable()]
@@ -634,17 +640,11 @@ tbl_markdown <- function(x,
                          round.numbers = 2,
                          round.percent = 1,
                          newlines.leading = 0,
-                         newlines.trailing = 2) {
+                         newlines.trailing = 2,
+                         print = TRUE) {
   
   if (inherits(x, "flextable")) {
-    for (i in seq_len(newlines.leading)) {
-      cat("\n\\ ")
-    }
-    flextable_to_rmd(x)
-    for (i in seq_len(newlines.trailing)) {
-      cat("\n\\ ")
-    }
-    return(invisible())
+    return(invisible(flextable_to_rmd(x, print = print)))
   }
   
   x <- as.data.frame(x)

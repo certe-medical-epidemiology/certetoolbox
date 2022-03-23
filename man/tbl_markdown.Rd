@@ -22,7 +22,8 @@ tbl_markdown(
   round.numbers = 2,
   round.percent = 1,
   newlines.leading = 0,
-  newlines.trailing = 2
+  newlines.trailing = 2,
+  print = TRUE
 )
 }
 \arguments{
@@ -61,6 +62,8 @@ tbl_markdown(
 \item{newlines.leading}{number of white lines to print before the table}
 
 \item{newlines.trailing}{number of white lines to print after the table}
+
+\item{print}{only useful when input is a Flextable: force printing}
 }
 \value{
 character

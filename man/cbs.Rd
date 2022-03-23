@@ -5,7 +5,7 @@
 \alias{cbs_search}
 \alias{cbs_download}
 \alias{cbs_moreinfo}
-\title{Downloading CBS-data}
+\title{Download CBS-data}
 \usage{
 cbs_topics()
 
@@ -16,11 +16,11 @@ cbs_download(identifier, clean_cols = TRUE)
 cbs_moreinfo(identifier)
 }
 \arguments{
-\item{topic}{Subject to search for.}
+\item{topic}{topics to search for}
 
-\item{max_print}{Maximum number of subjects to print.}
+\item{max_print}{maximum number of subjects to print}
 
-\item{identifier}{As provided in \code{cbs_topics()}, or a tracking number (1 to \code{max_print}) in \code{cbs_search()}.}
+\item{identifier}{tracking number (1 to \code{max_print}) in \code{\link[=cbs_search]{cbs_search()}}}
 
 \item{clean_cols}{Clean column names.}
 }
@@ -28,19 +28,19 @@ cbs_moreinfo(identifier)
 Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data}.
 }
 \details{
-\code{cbs_topics()} Retrieves all subjects.
+\code{\link[=cbs_topics]{cbs_topics()}} Retrieves all topics
 
-\code{cbs_search()} searches for a specific subject.
+\code{\link[=cbs_search]{cbs_search()}} searches for a specific subject.
 
-\code{cbs_download()} downloads tables. Input has to be a CBS Identifier (printed in red in \code{cbs_search()}), or a tracking number of \code{cbs_search()}, or the result of \code{cbs_search()}.
+\code{\link[=cbs_download]{cbs_download()}} downloads tables. Input has to be a CBS Identifier (printed in red in \code{\link[=cbs_search]{cbs_search()}}), or a tracking number of \code{\link[=cbs_search]{cbs_search()}}, or the result of \code{\link[=cbs_search]{cbs_search()}}.
 
-\code{cbs_moreinfo()} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{cbs_download()}.
+\code{\link[=cbs_moreinfo]{cbs_moreinfo()}} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{\link[=cbs_download]{cbs_download()}}.
 }
 \examples{
 \dontrun{
 cbs_search("Inwoners")
 
-x <- cbs_download(2) # 2e hit van cbs_search()
+x <- cbs_download(2) # 2nd hit of cbs_search()
 
 cbs_moreinfo(x)
 cbs_moreinfo(2)

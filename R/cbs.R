@@ -17,20 +17,20 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===========================================================
 
-#' Downloading CBS-data
+#' Download CBS-data
 #'
-#' Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data}.
-#' @param identifier As provided in \code{cbs_topics()}, or a tracking number (1 to \code{max_print}) in \code{cbs_search()}.
-#' @param clean_cols Clean column names. 
-#' @param topic Subject to search for.
-#' @param max_print Maximum number of subjects to print. 
-#' @details \code{cbs_topics()} Retrieves all subjects.
+#' Download data from CBS Open data Statline. See <https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data>.
+#' @param identifier tracking number (1 to `max_print`) in [cbs_search()]
+#' @param clean_cols Clean column names.
+#' @param topic topics to search for
+#' @param max_print maximum number of subjects to print
+#' @details [cbs_topics()] Retrieves all topics
 #'
-#' \code{cbs_search()} searches for a specific subject.  
+#' [cbs_search()] searches for a specific subject.  
 #'
-#' \code{cbs_download()} downloads tables. Input has to be a CBS Identifier (printed in red in \code{cbs_search()}), or a tracking number of \code{cbs_search()}, or the result of \code{cbs_search()}.
+#' [cbs_download()] downloads tables. Input has to be a CBS Identifier (printed in red in [cbs_search()]), or a tracking number of [cbs_search()], or the result of [cbs_search()].
 #'
-#' \code{cbs_moreinfo()} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{cbs_download()}.
+#' [cbs_moreinfo()] gives a detailed explanation for the table. Input can also be a dataset downloaded with [cbs_download()].
 #' @rdname cbs
 #' @importFrom dplyr `%>%` filter arrange
 #' @export
@@ -38,7 +38,7 @@
 #' \dontrun{
 #' cbs_search("Inwoners")
 #'
-#' x <- cbs_download(2) # 2e hit van cbs_search()
+#' x <- cbs_download(2) # 2nd hit of cbs_search()
 #'
 #' cbs_moreinfo(x)
 #' cbs_moreinfo(2)
@@ -71,7 +71,7 @@ cbs_search <- function(topic, max_print = 25) {
     return(invisible())
   }
   
-  for (i in 1:min(max_print, nrow(topics))) {
+  for (i in seq_len(min(max_print, nrow(topics)))) {
     cat(paste0(i, ". ", crayon::bold(topics[i, ]$Title), " (", crayon::red(topics[i, ]$Identifier), ")\n",
                "Periode: ", topics[i, ]$Period, "\n",
                "Grootte: ", format2(topics[i, ]$RecordCount), " x ", topics[i, ]$ColumnCount, "\n",

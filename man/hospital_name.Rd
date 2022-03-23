@@ -18,7 +18,7 @@ Hospitalname and/or location, with support for all hospitals in Northern Netherl
 hospital_name(c("MCL", "MCL", "Martini"))
 hospital_name(c("Antonius", "WZA", "Martini"), format = "{naam} te {plaats}")
 
-# speciaal geval voor GGD-en
+# special case for GGD
 hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naam}")
 hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naamkort}")
 hospital_name("ggd friesland", "{naam}")
