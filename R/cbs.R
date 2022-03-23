@@ -60,7 +60,7 @@ cbs_topics <- function() {
 #' @rdname cbs
 #' @export
 cbs_search <- function(topic, max_print = 25) {
-  check_is_installed("cbsodataR")
+  check_is_installed(c("cbsodataR", "crayon"))
   
   topics <- cbs_topics() %>%
     filter(.$Title %like% topic | .$Summary %like% topic) %>%
@@ -91,6 +91,7 @@ cbs_search <- function(topic, max_print = 25) {
 #' @export
 cbs_download <- function(identifier, clean_cols = TRUE) {
   check_is_installed("cbsodataR")
+  
   if (is.data.frame(identifier)) {
     if ("Identifier" %in% colnames(identifier)) {
       identifier <- identifier$Identifier[1L]
@@ -108,9 +109,9 @@ cbs_download <- function(identifier, clean_cols = TRUE) {
   df <- cbsodataR::cbs_get_data(identifier)
   if (clean_cols == TRUE) {
     cols <- colnames(df)
-    # laatste _47 verwijderen
+    # remove last _47
     cols <- gsub("_[0-9]+$", "", cols)
-    # snake case van maken
+    # make it snake case
     cols <- gsub("[^a-zA-Z0-9]+", "_", cols)
     cols <- gsub("([a-z0-9])([A-Z])", "\\1_\\2", cols)
     cols <- gsub("([a-zA-Z])([0-9])", "\\1_\\2", cols)
@@ -126,7 +127,7 @@ cbs_download <- function(identifier, clean_cols = TRUE) {
 #' @rdname cbs
 #' @export
 cbs_moreinfo <- function(identifier) {
-  check_is_installed("cbsodataR")
+  check_is_installed(c("cbsodataR", "crayon"))
   
   if (is.data.frame(identifier)) {
     identifier <- attributes(identifier)$identifier

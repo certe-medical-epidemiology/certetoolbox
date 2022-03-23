@@ -7,7 +7,7 @@
 hospital_name(x, format = "{naamkort}, {plaats}")
 }
 \arguments{
-\item{x}{text to be transformed.}
+\item{x}{text to be transformed}
 
 \item{format}{default is \code{"{naamkort}, {plaats}"}. Attributes like \code{x} to be returned in '\code{glue}'-format (in curly brackets).}
 }
@@ -21,5 +21,5 @@ hospital_name(c("Antonius", "WZA", "Martini"), format = "{naam} te {plaats}")
 # speciaal geval voor GGD-en
 hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naam}")
 hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naamkort}")
-hospital_name("ggd friesland", "{naam}") # geeft officiele naam
+hospital_name("ggd friesland", "{naam}")
 }

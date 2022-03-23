@@ -19,16 +19,15 @@
 
 
 
-#' Temporarily save value in Global Environment
+#' Temporarily Remember Object
 #'
-#' Can be used in dplyr-syntax to remember for later use. Values are temporarily saved in the Global Environment.
+#' Can be used in dplyr-syntax to remember values and objects for later use. Objects are (temporarily) stored in the `certetoolbox` package environment.
 #' @rdname remember_recall
-#' @param .data table to be passes through unchanged. 
-#' @param ... value(s) to be remembered.
-#' @param x value to be recalled.
-#' @param delete delete value after.
-#' @param envir default is Global Environment. The \link{environment} where values are saved.
-#' @details values can be saved with \strong{\code{remember()}} and recalled (and deleted) with \strong{\code{recall()}}.
+#' @param .data [data.frame]
+#' @param ... value(s) to be remembered
+#' @param x value to be recalled
+#' @param delete a [logical] to indicate whether the delete value after recalling
+#' @details values can be saved with **[remember()]** and recalled (and deleted) with **[recall()]**.
 #' @export
 #' @examples
 #' \dontrun{
@@ -40,50 +39,34 @@
 #'    plot2(title = "Test",
 #'          subtitle = paste("n =", recall(rows)))
 #' }
-remember <- function(.data, ..., envir = globalenv()) {
-  dots <- list(...)
-  for (i in seq_len(length(dots))) {
-    if (is.null(names(dots)[i])) {
-      name <- "tmp_"
-    } else {
-      name <- names(dots)[i]
-    }
-    assign(x = name,
-           value = dots[[i]],
-           envir = envir)
+remember <- function(.data, ...) {
+  if (!is.data.frame(.data)) {
+    stop("remember() must start with a data set (e.g., after a pipe)")
   }
+  dots <- list(...)
+  dots_names <- names(dots)
+  if (is.null(dots_names) || any(dots_names == "")) {
+    stop("Values must be named in remember()")
+  }
+  pkg_env$temp <- c(pkg_env$temp, dots)
   .data
 }
 
-
 #' @rdname remember_recall
 #' @export
-recall <- function(x = NULL, delete = TRUE, envir = globalenv()) {
-  if (is.null(x)) {
-    x_name <- "tmp_"
-  } else {
-    x_name <- gsub('(^"|"$)', "", deparse(substitute(x)))
-  }
-  tryCatch(
-    x_val <- eval(parse(text = x_name), envir = envir),
-    error = function(e) {
-      if (x_name == "tmp_") {
-        stop("Temporary value for recall() not found in global environment. Did you name the value in remember()?", call. = FALSE)
-      } else {
-        stop("Value '", x_name, "' for recall() not found in global environment", call. = FALSE)
-      }
-    })
-  
-  if (delete == TRUE) {
-    rm(list = x_name, envir = envir)
+recall <- function(x, delete = TRUE) {
+  x_name <- deparse(substitute(x))
+  x_val <- pkg_env$temp[[x_name]]
+  if (isTRUE(delete)) {
+    pkg_env$temp <- pkg_env$temp[which(names(pkg_env$temp) != x_name)]
   }
   x_val
 }
 
-#' Create contingency table of \code{data.frame}
+#' Create contingency table of [data.frame]
 #'
-#' Creates a contingency table. Output is a \code{\link{matrix}}.
-#' @param data \code{data.frame} or \code{tibble} containing data, where columns \code{column1} and \code{column2} occur.
+#' Creates a contingency table. Output is a [matrix].
+#' @param data [data.frame] or \code{tibble} containing data, where columns \code{column1} and \code{column2} occur.
 #' @param column1 Column with values.
 #' @param column2 Column with values.
 #' @param condition1 Condition to seperate \code{column1} from "Rest".
@@ -164,12 +147,12 @@ p_symbol <- function(p, emptychar = " ") {
 #' Susceptibility table between hospitals
 #'
 #' Creates a susceptibility comparison table between hospitals. Runs a G-test at >1000 observations or an Exact-test when less.
-#' @param ab_list list of antibiotics. See \code{\link[AMR]{antibiotics}}.
+#' @param ab_list list of antibiotics. See [AMR::antibiotics].
 #' @param hospitalname name of the hospital to be compared to other hospitals.
-#' @param df_all \code{data.frame} with all data.
-#' @param df_thishospital \code{data.frame} with all data of the to be tested hospital.
-#' @param df_otherhospitals  \code{data.frame} with all data of the other hospitals.
-#' @seealso \code{\link{g.test}} runs at > 1000 observations; \code{\link{fisher.test}} runs at <= 1000 observations
+#' @param df_all [data.frame] with all data.
+#' @param df_thishospital [data.frame] with all data of the to be tested hospital.
+#' @param df_otherhospitals  [data.frame] with all data of the other hospitals.
+#' @seealso [AMR::g.test()] runs at > 1000 observations; [fisher.test()] runs at <= 1000 observations
 #' @importFrom tidyr tibble
 #' @importFrom dplyr mutate
 #' @importFrom AMR g.test 

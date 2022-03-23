@@ -2,7 +2,7 @@
 % Please edit documentation in R/misc.R
 \name{crosstab}
 \alias{crosstab}
-\title{Create contingency table of \code{data.frame}}
+\title{Create contingency table of \link{data.frame}}
 \usage{
 crosstab(
   data,
@@ -15,7 +15,7 @@ crosstab(
 )
 }
 \arguments{
-\item{data}{\code{data.frame} or \code{tibble} containing data, where columns \code{column1} and \code{column2} occur.}
+\item{data}{\link{data.frame} or \code{tibble} containing data, where columns \code{column1} and \code{column2} occur.}
 
 \item{column1}{Column with values.}
 
@@ -33,7 +33,7 @@ crosstab(
 \code{matrix}
 }
 \description{
-Creates a contingency table. Output is a \code{\link{matrix}}.
+Creates a contingency table. Output is a \link{matrix}.
 }
 \keyword{chi}
 \keyword{contingency}

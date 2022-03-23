@@ -13,15 +13,15 @@ rsi_table(
 )
 }
 \arguments{
-\item{ab_list}{list of antibiotics. See \code{\link[AMR]{antibiotics}}.}
+\item{ab_list}{list of antibiotics. See \link[AMR:antibiotics]{AMR::antibiotics}.}
 
 \item{hospitalname}{name of the hospital to be compared to other hospitals.}
 
-\item{df_all}{\code{data.frame} with all data.}
+\item{df_all}{\link{data.frame} with all data.}
 
-\item{df_thishospital}{\code{data.frame} with all data of the to be tested hospital.}
+\item{df_thishospital}{\link{data.frame} with all data of the to be tested hospital.}
 
-\item{df_otherhospitals}{\code{data.frame} with all data of the other hospitals.}
+\item{df_otherhospitals}{\link{data.frame} with all data of the other hospitals.}
 }
 \description{
 Creates a susceptibility comparison table between hospitals. Runs a G-test at >1000 observations or an Exact-test when less.
@@ -38,5 +38,5 @@ septic_patients \%>\%
 }
 }
 \seealso{
-\code{\link{g.test}} runs at > 1000 observations; \code{\link{fisher.test}} runs at <= 1000 observations
+\code{\link[AMR:g.test]{AMR::g.test()}} runs at > 1000 observations; \code{\link[=fisher.test]{fisher.test()}} runs at <= 1000 observations
 }

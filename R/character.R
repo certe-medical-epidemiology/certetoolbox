@@ -63,18 +63,21 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
          })
 }
 
-#' Refmap for certetoolbox
-#' @param sub refmap name
+#' Return Reference Directory
+#' 
+#' Returns the relative reference directory for non-projects.
+#' @param sub relative subfolder or file
+#' @details This function returns the absolute path using [tools::file_path_as_absolute()].
 #' @export
-.R_REFMAP <- function(sub = "") {
+ref_dir <- function(sub = "") {
   if (Sys.info()['sysname'] %in% c("Linux", "Darwin")) {
-    r <- Sys.getenv("R_REFMAP")
+    r <- read_secret("path.refmap")
   } else {
-    r <- gsub('\\', '/', Sys.getenv("R_REFMAP"), fixed = TRUE)
+    r <- gsub('\\', '/', read_secret("path.refmap"), fixed = TRUE)
   }
   
   if (r == "") {
-    stop("Environmental user variable `R_REFMAP` not set.", call. = FALSE)
+    stop("Secret 'path.refmap' not set.", call. = FALSE)
   }
   if (r %unlike% '[/]$') {
     r <- paste0(r, '/')
@@ -84,53 +87,16 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
   if (r %like% '[/]$') {
     r <- substr(r, 1, nchar(r) - 1)
   }
-  if (tools::file_ext(r) == "" & !dir.exists(r)) {
+  if (tools::file_ext(r) == "" && !dir.exists(r)) {
     dir.create(r, recursive = TRUE)
   }
   tools::file_path_as_absolute(r)
 }
 
-#' Name of antibiotic
-#'
-#' Transforms a code to a antibiotic name or ATC-code.
-#' @param abcode antibiotic code or name.
-#' @param textbetween text between two or more antibiotics.
-#' @param tolower result in lower case.
-#' @param ... arguments for [abname_molis()]
-#' @keywords ab antibiotics
-#' @export
-#' @examples
-#' abname_molis("amcl")
-#' # "Amoxicilline/clavulaanzuur"
-#'
-#' abname_molis("amcl+gent")
-#' # "Amoxicilline/clavulaanzuur + gentamicine"
-#'
-#' abname_molis(c("amox", "amcl"))
-#' # "Amoxicilline" "F"
-#' @source \code{\link[AMR]{antibiotics}}
-abname_molis <- function(abcode, textbetween = " + ", tolower = FALSE, ...) {
-  codes <- suppressWarnings(AMR::ab_name(abcode, language = "nl", tolower = tolower))
-  if (sum(abcode %like% "[+]") > 0) {
-    for (i in 1:length(abcode)) {
-      if (abcode[i] %like% "[+]") {
-        codes[i] <- paste0(AMR::ab_name(strsplit.select(abcode[i], 1, "[+]"),
-                                        language = "nl",
-                                        tolower = tolower),
-                           textbetween,
-                           AMR::ab_name(strsplit.select(abcode[i], 2, "[+]"),
-                                        language = "nl",
-                                        tolower = TRUE))
-      }
-    }
-  }
-  codes
-}
-
 #' Hospitalname
 #'
 #' Hospitalname and/or location, with support for all hospitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
-#' @param x text to be transformed.
+#' @param x text to be transformed
 #' @param format default is \code{"{naamkort}, {plaats}"}. Attributes like \code{x} to be returned in '\code{glue}'-format (in curly brackets).
 #' @importFrom glue glue
 #' @export
@@ -141,7 +107,7 @@ abname_molis <- function(abcode, textbetween = " + ", tolower = FALSE, ...) {
 #' # speciaal geval voor GGD-en
 #' hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naam}")
 #' hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naamkort}")
-#' hospital_name("ggd friesland", "{naam}") # geeft officiele naam
+#' hospital_name("ggd friesland", "{naam}")
 hospital_name <- function(x, format = "{naamkort}, {plaats}") {
   x_trans <- rep(NA_character_, length(x))
   x_trans[x %like% "Martini"] <- glue(format, naam = "Martini Ziekenhuis", naamkort = "MZH", plaats = "Groningen")
@@ -164,37 +130,4 @@ hospital_name <- function(x, format = "{naamkort}, {plaats}") {
   x_trans[x %like% "GGD.*gronin"] <- glue(format, naam = "GGD Groningen", naamkort = "GGD", plaats = "Groningen")
   x_trans[x %like% "GGD.*drent"] <- glue(format, naam = "GGD Drenthe", naamkort = "GGD", plaats = "Drenthe")
   x_trans
-}
-
-#' Certe bacteria code
-#'
-#' Input is evaluated with \code{\link[AMR]{as.mo}} and compared to the data set \code{certetools:::bacteriecode} to retreive a Certe bacteria code.
-#' @param x,... See \code{\link[AMR]{mo_property}}.
-#' @details Reference created with:
-#' \preformatted{
-#' bacterien <- certedb_query("select * from temporary_certemm_bacterienlijst")
-#'
-#' bacterien <- bacterien \%>\%
-#'   transmute(bacteriecode,
-#'             bacteriecode_oud,
-#'             systeemcode,
-#'             fullname = gsub(" species$", "", volledigenaam) \%>\%
-#'               gsub("[)(]", "", .)) \%>\%
-#'   arrange(bacteriecode)
-#'
-#' usethis::use_data(bacterien, internal = TRUE, overwrite = TRUE)
-#' }
-#' @importFrom dplyr left_join
-#' @export
-mo_certe <- function(x, ...) {
-  if (all(x %in% AMR::microorganisms.codes$code)) {
-    return(x)
-  } else {
-    data.frame(fullname = AMR::mo_fullname(x, ...),
-               stringsAsFactors = FALSE) %>%
-      left_join(.$bacterien, # is interne data in dit pakket
-                by = "fullname") %>%
-      pull(.$bacteriecode) %>%
-      .[1]
-  }
 }

@@ -3,28 +3,26 @@
 \name{remember}
 \alias{remember}
 \alias{recall}
-\title{Temporarily save value in Global Environment}
+\title{Temporarily Remember Object}
 \usage{
-remember(.data, ..., envir = globalenv())
+remember(.data, ...)
 
-recall(x = NULL, delete = TRUE, envir = globalenv())
+recall(x = NULL, delete = TRUE)
 }
 \arguments{
-\item{.data}{table to be passes through unchanged.}
+\item{.data}{\link{data.frame}}
 
-\item{...}{value(s) to be remembered.}
+\item{...}{value(s) to be remembered}
 
-\item{envir}{default is Global Environment. The \link{environment} where values are saved.}
+\item{x}{value to be recalled}
 
-\item{x}{value to be recalled.}
-
-\item{delete}{delete value after.}
+\item{delete}{a \link{logical} to indicate whether the delete value after recalling}
 }
 \description{
-Can be used in dplyr-syntax to remember for later use. Values are temporarily saved in the Global Environment.
+Can be used in dplyr-syntax to remember values and objects for later use. Objects are (temporarily) stored in the \code{certetoolbox} package environment.
 }
 \details{
-values can be saved with \strong{\code{remember()}} and recalled (and deleted) with \strong{\code{recall()}}.
+values can be saved with \strong{\code{\link[=remember]{remember()}}} and recalled (and deleted) with \strong{\code{\link[=recall]{recall()}}}.
 }
 \examples{
 \dontrun{

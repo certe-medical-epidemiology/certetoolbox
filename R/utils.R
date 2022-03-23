@@ -17,8 +17,9 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-
 globalVariables(c("."))
+pkg_env <- new.env(hash = FALSE)
+pkg_env$temp <- list()
 
 #' @importFrom dplyr `%>%`
 #' @export
