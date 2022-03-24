@@ -27,7 +27,6 @@ test_that("cbs works", {
 test_that("character works", {
   expect_true(size_humanreadable(1234) %>% is.character())
   expect_true(generate_identifier() %>% is.character())
-  expect_true(ref_dir() %>% is.character())
   expect_true(hospital_name("MZ") %>% is.character())
   expect_true(is.na(hospital_name("test")))
   expect_true(p_symbol(0.05) %>% is.character())
