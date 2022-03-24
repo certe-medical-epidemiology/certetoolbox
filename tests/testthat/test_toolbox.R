@@ -101,9 +101,10 @@ test_that("environment works", {
 test_that("import_export works", {
   tmp <- tempdir()
   tmp_file <-  paste0(tmp, "/test.rds")
-  export(mtcars, filename = tmp_file, card_number = NULL)
-  imp <- import(tmp_file)
+  export_rds(mtcars, filename = tmp_file, card_number = NULL)
+  imp <- import_rds(tmp_file)
   expect_identical(mtcars, imp)
+  
   
 })
 
