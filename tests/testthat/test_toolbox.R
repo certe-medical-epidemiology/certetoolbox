@@ -18,30 +18,88 @@
 # ===================================================================== #
 
 test_that("cbs works", {
-  
+  expect_true(is.data.frame(cbs_topics()))
+  expect_true(is.data.frame(cbs_search("test")))
+  expect_true(is.data.frame(cbs_search("test") %>% cbs_download()))
+  expect_output((cbs_search("test") %>% cbs_download() %>% cbs_moreinfo()))
 })
 
 test_that("character works", {
-  
+  expect_true(size_humanreadable(1234) %>% is.character())
+  expect_true(generate_identifier() %>% is.character())
+  expect_true(ref_dir() %>% is.character())
+  expect_true(hospital_name("MZ") %>% is.character())
+  expect_true(is.na(hospital_name("test")))
+  expect_true(p_symbol(0.05) %>% is.character())
 })
 
 test_that("data.frame works", {
-  
+  expect_true(class(tbl_flextable("test")) == 'flextable')
+  expect_true(class(tbl_markdown("test")) == 'list')
+  expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
 })
 
 test_that("datetime works", {
-  
+  expect_true(as.UTC(Sys.time()) %>% is.POSIXt())
+  expect_true(mtcars %>% mutate(time = Sys.time()) %>% as.UTC.data.frame() %>% is.data.frame())
+  expect_true(as.UTC.POSIXct(Sys.time()) %>% is.POSIXct())
+  expect_true(as.UTC.default(Sys.time()) %>% is.POSIXct())
+  expect_equal(yesterday(), Sys.Date()-1)
+  expect_equal(tomorrow(), Sys.Date()+1)
+  expect_true(week() %>% is.numeric())
+  expect_true(year() %>% is.numeric())
+  expect_true(last_week() %>% inherits('Date'))
+  expect_true(this_week() %>% inherits('Date'))
+  expect_true(next_week() %>% inherits('Date'))
+  expect_true(last_month() %>% inherits('Date'))
+  expect_true(this_month() %>% inherits('Date'))
+  expect_true(next_month() %>% inherits('Date'))
+  expect_true(last_quarter() %>% inherits('Date'))
+  expect_true(this_quarter() %>% inherits('Date'))
+  expect_true(next_quarter() %>% inherits('Date'))
+  expect_true(last_year() %>% inherits('Date'))
+  expect_true(this_year() %>% inherits('Date'))
+  expect_true(next_year() %>% inherits('Date'))
+  expect_true(start_of_last_week() %>% inherits('Date'))
+  expect_true(end_of_last_week() %>% inherits('Date'))
+  expect_true(start_of_this_week() %>% inherits('Date'))
+  expect_true(end_of_this_week() %>% inherits('Date'))
+  expect_true(start_of_last_month() %>% inherits('Date'))
+  expect_true(end_of_last_month() %>% inherits('Date'))
+  expect_true(start_of_this_month() %>% inherits('Date'))
+  expect_true(end_of_this_month() %>% inherits('Date'))
+  expect_true(start_of_next_month() %>% inherits('Date'))
+  expect_true(end_of_next_month() %>% inherits('Date'))
+  expect_true(start_of_last_quarter() %>% inherits('Date'))
+  expect_true(end_of_last_quarter() %>% inherits('Date'))
+  expect_true(start_of_this_quarter() %>% inherits('Date'))
+  expect_true(end_of_this_quarter() %>% inherits('Date'))
+  expect_true(start_of_next_quarter() %>% inherits('Date'))
+  expect_true(end_of_next_quarter() %>% inherits('Date'))
+  expect_true(start_of_last_year() %>% inherits('Date'))
+  expect_true(end_of_last_year() %>% inherits('Date'))
+  expect_true(start_of_this_year() %>% inherits('Date'))
+  expect_true(end_of_this_year() %>% inherits('Date'))
+  expect_true(start_of_next_year() %>% inherits('Date'))
+  expect_true(end_of_next_year() %>% inherits('Date'))
+  expect_true(nth_weekday(n = 1, weekday = 1) %>% inherits('Date'))
+  expect_true(nth_monday() %>% inherits('Date'))
+  expect_true(nth_tuesday() %>% inherits('Date'))
+  expect_true(nth_wednesday() %>% inherits('Date'))
+  expect_true(nth_thursday() %>% inherits('Date'))
+  expect_true(nth_friday() %>% inherits('Date'))
+  expect_true(nth_saturday() %>% inherits('Date'))
+  expect_true(nth_sunday() %>% inherits('Date'))
+  expect_true(week2date(1) %>% inherits('Date'))
+  expect_true(week2resp_season(1) %>% is.ordered())
 })
 
 test_that("environment works", {
-  
+  mtcars %>% remember(rows = nrow(.))
+  expect_identical(pkg_env$temp$rows, recall(rows))
 })
 
 test_that("import_export works", {
-  
-})
-
-test_that("utils work", {
   
 })
 
