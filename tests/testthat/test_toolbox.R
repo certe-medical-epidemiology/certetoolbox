@@ -26,7 +26,7 @@ test_that("cbs works", {
   expect_error(cbs_download(mtcars))
   cbs_search("test")
   expect_true(is.data.frame(cbs_download(identifier = 3)))
-  expect_output(cbs_download() %>% cbs_moreinfo())
+  expect_output(cbs_search("test") %>% cbs_download() %>% cbs_moreinfo())
   expect_output(cbs_download(identifier = 3) %>% cbs_moreinfo())
 })
 
