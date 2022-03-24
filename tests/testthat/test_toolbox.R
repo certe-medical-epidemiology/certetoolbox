@@ -47,6 +47,12 @@ test_that("character works", {
 test_that("data.frame works", {
   expect_true(class(tbl_flextable("test")) == 'flextable')
   expect_true(class(tbl_flextable(mtcars)) == 'flextable')
+  expect_warning(mtcars %>% filter(cyl == 0) %>% tbl_flextable())
+  expect_true(class(tbl_flextable(mtcars, column.total = TRUE)) == 'flextable')
+  expect_true(class(tbl_flextable(mtcars, row.total = TRUE)) == 'flextable')
+  expect_true(class(tbl_flextable(Sys.Date())) == 'flextable')
+  expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, FALSE)) %>% tbl_flextable(logicals = c(TRUE, FALSE))) == 'flextable')
+  expect_true(class(mtcars %>% tbl_flextable(columns.percent = 8)) == 'flextable')
   expect_true(class(tbl_markdown("test")) == 'list')
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
 })
