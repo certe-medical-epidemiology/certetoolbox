@@ -46,6 +46,7 @@ test_that("character works", {
 
 test_that("data.frame works", {
   expect_true(class(tbl_flextable("test")) == 'flextable')
+  expect_true(class(tbl_flextable(mtcars)) == 'flextable')
   expect_true(class(tbl_markdown("test")) == 'list')
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
 })
