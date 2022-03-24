@@ -40,10 +40,9 @@ test_that("data.frame works", {
 })
 
 test_that("datetime works", {
-  expect_true(as.UTC(Sys.time()) %>% is.POSIXt())
-  expect_true(mtcars %>% mutate(time = Sys.time()) %>% as.UTC.data.frame() %>% is.data.frame())
-  expect_true(as.UTC.POSIXct(Sys.time()) %>% is.POSIXct())
-  expect_true(as.UTC.default(Sys.time()) %>% is.POSIXct())
+  expect_true(as.UTC(Sys.time()) %>% inherits("POSIXct"))
+  expect_true(mtcars %>% as.UTC() %>% is.data.frame())
+  expect_identical(as.UTC(123), 123)
   expect_equal(yesterday(), Sys.Date()-1)
   expect_equal(tomorrow(), Sys.Date()+1)
   expect_true(week() %>% is.numeric())
@@ -100,6 +99,11 @@ test_that("environment works", {
 })
 
 test_that("import_export works", {
+  tmp <- tempdir()
+  tmp_file <-  paste0(tmp, "/test.rds")
+  export(mtcars, filename = tmp_file, card_number = NULL)
+  imp <- import(tmp_file)
+  expect_identical(mtcars, imp)
   
 })
 

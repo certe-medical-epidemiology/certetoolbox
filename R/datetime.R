@@ -47,6 +47,7 @@ as.UTC.POSIXct <- function(x, ...) {
   x
 }
 
+#' @method as.UTC default
 #' @rdname as.UTC
 #' @export
 as.UTC.default <- function(x, ...) {
