@@ -20,8 +20,13 @@
 test_that("cbs works", {
   expect_true(is.data.frame(cbs_topics()))
   expect_true(is.data.frame(cbs_search("test")))
+  expect_message(cbs_search("certe"))
+  expect_message(cbs_search("inwoners"))
   expect_true(is.data.frame(cbs_search("test") %>% cbs_download()))
+  expect_error(cbs_download(mtcars))
+  expect_true(is.data.frame(cbs_search("test") %>% cbs_download(3)))
   expect_output((cbs_search("test") %>% cbs_download() %>% cbs_moreinfo()))
+  expect_output((cbs_search("test") %>% cbs_download(3) %>% cbs_moreinfo()))
 })
 
 test_that("character works", {
