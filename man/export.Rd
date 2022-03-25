@@ -27,7 +27,6 @@ export_rds(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   ...
 )
 
@@ -35,7 +34,6 @@ export_xlsx(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
@@ -47,7 +45,6 @@ export_excel(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
@@ -59,7 +56,6 @@ export_csv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   na = "",
   ...
 )
@@ -68,7 +64,6 @@ export_csv2(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   na = "",
   ...
 )
@@ -77,7 +72,6 @@ export_tsv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   na = "",
   ...
 )
@@ -86,7 +80,6 @@ export_sav(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   ...
 )
 
@@ -94,7 +87,6 @@ export_spss(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
-  export_qry = TRUE,
   ...
 )
 
@@ -138,8 +130,6 @@ export_clipboard(
 
 \item{...}{arguments passed on to methods}
 
-\item{export_qry}{export the underlying SQL query as well}
-
 \item{sheet_names}{sheet names}
 
 \item{autofilter}{create autofilter on columns in first row}
@@ -176,7 +166,7 @@ The \code{\link[=export]{export()}} function can export to any file format, as l
 
 RDS files as created using \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
 
-The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions use \code{\link[=as_excel]{as_excel(..., save = TRUE)}} internally.
+The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions use \code{\link[=as_excel]{save_excel(as_excel(...))}} internally.
 
 For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and \code{NA} values will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 

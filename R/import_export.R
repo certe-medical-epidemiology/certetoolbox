@@ -17,6 +17,7 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+#' @importFrom certeprojects project_set_file
 parse_file_location <- function(filename, needed_extension, card_number) {
   if (is.null(card_number) || is.na(card_number) || isFALSE(card_number) || card_number %in% c(0, "")) {
     card_number <- NULL
@@ -30,12 +31,9 @@ parse_file_location <- function(filename, needed_extension, card_number) {
   }
   if (!is.null(card_number) && filename %unlike% paste0("p", card_number, "|[A-Z]:/")) {
     # has no valid location yet, so include card number
-    project_set_file <- get_external_function("project_set_file", "certeprojects")
-    if (!is.null(project_set_file)) {
-      filename_proj <- project_set_file(filename, card_number = card_number)
-      if (!is.na(filename_proj)) {
-        filename <- filename_proj
-      }
+    filename_proj <- project_set_file(filename, card_number = card_number)
+    if (!is.na(filename_proj)) {
+      filename <- filename_proj
     }
   }
   # remove invalid characters
@@ -43,23 +41,7 @@ parse_file_location <- function(filename, needed_extension, card_number) {
   filename
 }
 
-doc_requirement <- function(filetype, fn, pkg) {
-  if (deparse(substitute(fn)) %like% "import") {
-    import_export <- "Importing from"
-  } else {
-    import_export <- "Exporting to"
-  }
-  fn <- paste0("[", fn, "()]", collapse = " or ")
-  paste0(import_export, " ", filetype, " using ", fn, " requires the `", pkg, "` package to be installed")
-}
-
 # Export functions --------------------------------------------------------
-
-# export_query <- function(object, filename) {
-#   filename_qry <- gsub("[.][a-zA-Z0-9]+$", ".sql", filename)
-#   write(suppressMessages(qry(object)), file = filename_qry, ncolumns = 1, append = FALSE)
-#   message(paste0("Query exported as `", tools::file_path_as_absolute(filename_qry), "`."))
-# }
 
 #' Export Data and Plots
 #' 
@@ -68,7 +50,6 @@ doc_requirement <- function(filetype, fn, pkg) {
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files
 #' @param filename the full path of the exported file
 #' @param card_number a Trello card number
-#' @param export_qry export the underlying SQL query as well
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, as long as the export function is passed on to the `fn` argument. This function has to have the object as first argument and the future file location as second argument.
 #' @rdname export
@@ -102,7 +83,6 @@ export <- function(object,
               needed_extension = NULL,
               filename = filename,
               card_number = card_number,
-              export_qry = FALSE,
               fn = fn,
               ...)
 }
@@ -113,7 +93,6 @@ export <- function(object,
 export_rds <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
-                       export_qry = TRUE,
                        ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
@@ -121,7 +100,6 @@ export_rds <- function(object,
   export_exec(object, "rds",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
               compress = "gzip",
               ascii = FALSE,
               version = 2)
@@ -129,12 +107,11 @@ export_rds <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export_xlsx()] and [export_excel()] functions use [`as_excel(..., save = TRUE)`][as_excel()] internally.
+#' @details The [export_xlsx()] and [export_excel()] functions use [`save_excel(as_excel(...))`][as_excel()] internally.
 #' @export
 export_xlsx <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
-                        export_qry = TRUE,
                         sheet_names = NULL,
                         autofilter = TRUE,
                         rows_zebra = TRUE,
@@ -146,13 +123,10 @@ export_xlsx <- function(object,
   export_exec(object, "xlsx",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
-              sheet_names = "Blad1",
+              sheet_names = sheet_names,
               autofilter = autofilter,
               rows_zebra = rows_zebra,
-              cols_zebra = cols_zebra,
-              save = TRUE,
-              overwrite = TRUE)
+              cols_zebra = cols_zebra)
 }
 
 #' @rdname export
@@ -166,7 +140,6 @@ export_excel <- export_xlsx
 export_csv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
-                       export_qry = TRUE,
                        na = "",
                        ...) {
   if (is.null(filename)) {
@@ -175,7 +148,6 @@ export_csv <- function(object,
   export_exec(object, "csv",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
               append = FALSE,
               quote = TRUE,
               sep = ",",
@@ -193,7 +165,6 @@ export_csv <- function(object,
 export_csv2 <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
-                        export_qry = TRUE,
                         na = "",
                         ...) {
   if (is.null(filename)) {
@@ -202,7 +173,6 @@ export_csv2 <- function(object,
   export_exec(object, "csv",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
               append = FALSE,
               quote = TRUE,
               sep = ";",
@@ -220,7 +190,6 @@ export_csv2 <- function(object,
 export_tsv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
-                       export_qry = TRUE,
                        na = "",
                        ...) {
   if (is.null(filename)) {
@@ -229,7 +198,6 @@ export_tsv <- function(object,
   export_exec(object, "tsv",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
               append = FALSE,
               quote = TRUE,
               sep = "\t",
@@ -248,7 +216,6 @@ export_tsv <- function(object,
 export_sav <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
-                       export_qry = TRUE,
                        ...) {
   if (is.null(filename)) {
     filename <- deparse(substitute(object))
@@ -256,7 +223,6 @@ export_sav <- function(object,
   export_exec(object, "sav",
               filename = filename,
               card_number = card_number,
-              export_qry = export_qry,
               compress = FALSE)
 }
 
@@ -277,8 +243,11 @@ export_pdf <- function(plot,
                        portrait = FALSE,
                        ...) {
   check_is_installed("ggplot2")
-  
-  get_plot_title <- get_external_function("get_plot_title", "certeplot2", error_on_fail = FALSE)
+  if ("certeplot2" %in% rownames(utils::installed.packages())) {
+    get_plot_title <- certeplot2::get_plot_title
+  } else {
+    get_plot_title <- NULL
+  }
   
   if (is.null(filename) && !is.null(get_plot_title)) {
     filename <- get_plot_title(plot)
@@ -371,7 +340,11 @@ export_png <- function(plot,
                        text.factor = 1.2,
                        ...) {
   check_is_installed("ggplot2")
-  get_plot_title <- get_external_function("get_plot_title", "certeplot2", error_on_fail = FALSE)
+  if ("certeplot2" %in% rownames(utils::installed.packages())) {
+    get_plot_title <- certeplot2::get_plot_title
+  } else {
+    get_plot_title <- NULL
+  }
   
   if (is.null(filename) && !is.null(get_plot_title)) {
     filename <- get_plot_title(plot)
@@ -451,7 +424,6 @@ export_exec <- function(object,
                         needed_extension,
                         filename,
                         card_number,
-                        export_qry,
                         fn = NULL,
                         ...) {
   if (is.null(needed_extension)) {
@@ -476,13 +448,11 @@ export_exec <- function(object,
     haven::write_sav(object, path = filename, ...)
   } else if (needed_extension == "xlsx") {
     # Excel format
-    if (inherits(object, "Workbook")) {
-      # an openxlsx object
-      suppressMessages(save_excel(object, file = filename, ...))
-    } else {
-      # a data.frame
-      suppressMessages(as_excel(object, file = filename, ...))  
+    if (!inherits(object, "Workbook")) {
+      # not yet an openxlsx object (but rather e.g. a data frame)
+      object <- suppressMessages(as_excel(object, ...))
     }
+    suppressMessages(save_excel(xl = object, filename = filename, overwrite = TRUE))
   } else {
     # flat data file
     if (!all(rownames(object) == as.character(1:nrow(object)))) {
@@ -497,15 +467,12 @@ export_exec <- function(object,
     }
   }
   if (file.exists(filename)) {
-    message(paste0("Data exported as '",
+    message(paste0("Data exported to '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
   } else {
     stop("Error while saving `", filename, "`.", call. = FALSE)
   }
-  # if (export_qry == TRUE && has_qry(object)) {
-  #   export_query(object, filename)
-  # }
   invisible(object)
 }
 
@@ -594,6 +561,9 @@ import_xlsx <- function(filename,
                         na = c("", "NULL", "NA", "<NA>"),
                         ...) {
   check_is_installed("readxl")
+  if (length(sheet) != 1) {
+    stop("'sheet' must be a single number or name, since only one sheet can be imported at a time", call. = FALSE)
+  }
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
@@ -830,6 +800,7 @@ import_mail_attachment <- function(search = "hasattachment:yes",
 
 #' @importFrom readr read_delim locale
 #' @importFrom dplyr select
+#' @importFrom certeprojects project_get_file
 import_exec <- function(filename,
                         extension,
                         card_number,
@@ -850,10 +821,7 @@ import_exec <- function(filename,
   }
   if (!file.exists(filename) && !is.null(card_number)) {
     # try project file using the 'certeprojects' package
-    project_get_file <- get_external_function("project_get_file", "certeprojects", error_on_fail = FALSE)
-    if (!is.null(project_get_file)) {
-      filename <- project_get_file(filename, card_number = card_number)
-    }
+    filename <- project_get_file(filename, card_number = card_number)
   }
   if (!file.exists(filename)) {
     filename <- read_secret("path.refmap")
@@ -920,141 +888,4 @@ import_exec <- function(filename,
   }
   
   df
-}
-
-
-#' Create Excel Document
-#' 
-#' This function relies on the `openxlsx` package for creating Excel documents.
-#' @param ... data objects, use named items for multiple tabs (see *Examples*) zie Examples
-#' @param sheet_names sheet names
-#' @param autofilter create autofilter on columns in first row
-#' @param autowidth automatically adjust columns widths
-#' @param rows_zebra create banded rows
-#' @param cols_zebra create banded columns
-#' @param save save the file directly, defaults to `FALSE`
-#' @param file file location to save Excel document to, defaults to a random filename
-#' @param freeze_top_row freeze the first row of the sheet
-#' @param overwrite overwrite existing file
-#' @rdname as_excel
-#' @importFrom openxlsx createStyle createWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths
-#' @importFrom tibble rownames_to_column
-#' @export
-#' @examples
-#' # does not save, but returns the workbook object
-#' xl <- as_excel("this is a sheet" = mtcars,
-#'                "another sheet" = anscombe)
-#' xl
-#' 
-#' # save with save_excel() or export_excel()
-as_excel <- function(...,
-                     sheet_names = NULL,
-                     autofilter = TRUE,
-                     autowidth = TRUE,
-                     rows_zebra = TRUE,
-                     cols_zebra = FALSE,
-                     save = FALSE,
-                     file = NULL,
-                     freeze_top_row = TRUE,
-                     overwrite = FALSE) {
-  dots <- list(...)
-  if (!is.null(sheet_names)) {
-    names(dots) <- sheet_names
-  }
-  if (is.null(names(dots))) {
-    names(dots) <- paste0("Blad", seq_len(length(dots)))
-  }
-  name_missing <- which(names(dots) == "")
-  names(dots)[names(dots) == ""] <- paste0("Blad", name_missing)
-  
-  options("openxlsx.dateFormat" = "dd-mm-yyyy")
-  options("openxlsx.datetimeFormat" = "dd-mm-yyyy hh:MM:ss")
-  
-  style <- createStyle(fontName = "Calibri",
-                       fontSize = 11,
-                       halign = "center",
-                       valign = "center",
-                       wrapText = TRUE)
-  wb <- createWorkbook(creator = read_secret("department.name"))
-  modifyBaseFont(wb, fontSize = 11, fontColour = "black", fontName = "Calibri")
-  
-  for (i in seq_len(length(dots))) {
-    df <- dots[[i]]
-    # support row names
-    if (!identical(rownames(df), as.character(seq_len(NROW(df))))) {
-      df <- rownames_to_column(df)
-    }
-    col_widths <- double(NCOL(df))
-    # no invalid characters in text like clinical properties, then saving won't work
-    for (col in seq_len(ncol(df))) {
-      if (is.character(df[, col, drop = TRUE])) {
-        # \\s = whitespace character such as \n, \t, \r\n, etc.
-        df[, col] <- gsub("\\s+", " ", df[, col, drop = TRUE], perl = TRUE)
-        # remove trema's and accents
-        df[, col] <- iconv(df[, col, drop = TRUE], from = "UTF-8", to = "ASCII//TRANSLIT")
-      }
-      col_widths[col] <- min(255,
-                             max(c(8, nchar(c(colnames(df)[col],
-                                              as.character(df[, col, drop = TRUE]))) * 1.2)))
-    }
-    addWorksheet(wb = wb,
-                 sheetName = names(dots)[i])
-    writeDataTable(wb = wb,
-                   x = df,
-                   tableName = paste0("tabel_", i),
-                   sheet = i,
-                   withFilter = isTRUE(autofilter),
-                   bandedRows = isTRUE(rows_zebra),
-                   bandedCols = isTRUE(cols_zebra),
-                   tableStyle = "TableStyleMedium2",
-                   headerStyle = style)
-    addStyle(wb = wb,
-             sheet = i,
-             style = style,
-             rows = seq_len(NROW(df) + 1), # voor kopteksten
-             cols = seq_len(NCOL(df)),
-             gridExpand = TRUE,
-             stack = TRUE)
-    if (isTRUE(freeze_top_row)) {
-      freezePane(wb = wb,
-                 sheet = i,
-                 firstRow = TRUE)
-    }
-    if (isTRUE(autowidth)) {
-      if (isFALSE(autofilter)) {
-        col_widths <- "auto"
-      }
-      setColWidths(wb = wb,
-                   sheet = i,
-                   cols = seq_len(NCOL(df)),
-                   widths = col_widths)
-    }
-  }
-  
-  if (isTRUE(save)) {
-    save_excel(wb, file = file, overwrite = overwrite)
-    if (file.exists(tools::file_path_as_absolute(file))) {
-      message(paste0("Exported as '", tools::file_path_as_absolute(file), "' (", size_humanreadable(file.size(file)), ")."))
-    } else {
-      stop("Error while saving '", tools::file_path_as_absolute(file), "'.")
-    }
-  } else {
-    wb
-  }
-}
-
-#' @rdname as_excel
-#' @param xl Excel object, as created with the `openxlsx` package
-#' @importFrom openxlsx saveWorkbook
-#' @export
-save_excel <- function(xl, file = NULL, overwrite = FALSE, ...) {
-  if (!inherits(xl, "Workbook")) {
-    stop("this function can only accept class Workbook from the 'openxlsx' package", call. = FALSE)
-  }
-  if (is.null(file)) {
-    file <- paste0("excel_", generate_identifier(8), ".xlsx")
-  } else if (file %unlike% "[.]xlsx?$") {
-    file <- paste0(file, ".xlsx")
-  }
-  saveWorkbook(xl, file = file, overwrite = overwrite)
 }

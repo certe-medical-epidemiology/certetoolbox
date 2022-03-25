@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{\%>\%}
+\alias{project_get_current_id}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{certeprojects}{\code{\link[certeprojects:project_properties]{project_get_current_id}}}
+
   \item{dplyr}{\code{\link[dplyr:reexports]{\%>\%}}}
 }}
 
