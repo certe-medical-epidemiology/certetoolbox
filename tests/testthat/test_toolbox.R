@@ -62,7 +62,7 @@ test_that("data.frame works", {
   expect_true(class(mtcars %>% tbl_flextable(columns.percent = 8)) == 'flextable')
   expect_true(class(tbl_markdown("test")) == 'list')
   expect_true(class(tbl_markdown(Sys.Date())) == 'list')
-  expect_true(class(tbl_flextable(mtcars, print = TRUE)) == 'flextable')
+  expect_invisible(tbl_flextable(mtcars, print = TRUE))
   expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>% tbl_markdown(logicals = c(TRUE, FALSE))) == 'list')
   expect_true(class(mtcars %>% tbl_markdown(columns.percent = 8, 9)) == 'list')
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
