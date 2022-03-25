@@ -47,7 +47,9 @@ test_that("character works", {
 test_that("data.frame works", {
   expect_true(class(tbl_flextable("test")) == 'flextable')
   expect_true(class(tbl_flextable(mtcars)) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, vline = c(2, 4), rows.zebra = TRUE)) == 'flextable')
+  expect_true(class(tbl_flextable(mtcars, rows.height = 2)) == 'flextable')
+  expect_warning(class(tbl_flextable(mtcars, align = letters)) == 'flextable')
+  expect_true(class(tbl_flextable(mtcars, vline = c(2, 4), rows.zebra = TRUE, columns.width = c(1, 3), autofit.fullpage = FALSE)) == 'flextable')
   expect_warning(mtcars %>% filter(cyl == 0) %>% tbl_flextable())
   expect_true(class(tbl_flextable(mtcars, column.total = TRUE)) == 'flextable')
   expect_true(class(tbl_flextable(mtcars, row.total = TRUE)) == 'flextable')
@@ -60,6 +62,7 @@ test_that("data.frame works", {
   expect_true(class(mtcars %>% tbl_flextable(columns.percent = 8)) == 'flextable')
   expect_true(class(tbl_markdown("test")) == 'list')
   expect_true(class(tbl_markdown(Sys.Date())) == 'list')
+  expect_true(class(tbl_flextable(mtcars, print = TRUE)) == 'flextable')
   expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>% tbl_markdown(logicals = c(TRUE, FALSE))) == 'list')
   expect_true(class(mtcars %>% tbl_markdown(columns.percent = 8, 9)) == 'list')
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
