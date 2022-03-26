@@ -24,4 +24,5 @@ coverage:
 
 ignore:
   - "R/addins.R"
+  - "R/import_export_other.R"
   - "R/utils.R"

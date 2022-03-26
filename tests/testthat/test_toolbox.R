@@ -128,7 +128,11 @@ test_that("environment works", {
 })
 
 test_that("import_export works", {
-  # helper function:
+  # check location parser
+  expect_identical(basename(parse_file_location("test", "csv", card_number = 0)), "test.csv")
+  expect_identical(basename(suppressWarnings(parse_file_location(".", "csv", card_number = 123))), "tbl.csv")
+  
+  # helper function for import/export checking:
   identical_import_export <- function(import_fn, export_fn, fileext,
                                       check_factors = TRUE, check_posix = TRUE,
                                       digits = Inf, ...) {
@@ -155,6 +159,12 @@ test_that("import_export works", {
       new_df$dates <- as.Date(new_df$dates)
       new_df$posix <- as.Date(new_df$posix)
     }
+    for (i in seq_len(ncol(new_df))) {
+      # SPSS
+      vct <- new_df[, i, drop = TRUE]
+      attributes(vct)$format.spss <- NULL
+      new_df[, i] <- vct
+    }
     # clean up:
     unlink(templocation)
     # test:
@@ -177,6 +187,7 @@ test_that("import_export works", {
   }
   # R
   expect_true(identical_import_export(import_rds, export_rds, "rds"))
+  expect_true(identical_import_export(import, export, "rds"))
   # Text files
   expect_true(identical_import_export(import_csv, export_csv, "csv",
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))
@@ -186,18 +197,31 @@ test_that("import_export works", {
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))
   expect_true(identical_import_export(import_txt, export_txt, "txt",
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "csv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "csv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "tsv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "txt",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
   # Excel
   expect_true(identical_import_export(import_xlsx, export_xlsx, "xlsx",
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "xlsx",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
   # SPSS
-  # expect_true(identical_import_export(import_sav, export_sav, "sav", digits = 10))
-  # clipboard
-  # expect_true(identical_import_export(import_clipboard, export_clipboard, "clip"))
+  expect_true(identical_import_export(import_sav, export_sav, "sav",
+                                      check_factors = FALSE, digits = 10))
+  expect_true(identical_import_export(import, export, "sav",
+                                      check_factors = FALSE, digits = 10))
   
   # export of graphical functions
   p <- ggplot2::ggplot(mtcars, ggplot2::aes(mpg, hp)) + ggplot2::geom_point()
   temp_pdf <- tempfile(fileext = ".pdf")
   
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
+  unlink(temp_pdf)
   expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))
   unlink(temp_pdf)
   expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a1"))))
@@ -216,7 +240,6 @@ test_that("import_export works", {
   
   temp_png <- tempfile(fileext = ".png")
   expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
-  
 })
 
 test_that("vctrs work", {
