@@ -749,7 +749,7 @@ auto_transform <- function(x,
   for (i in seq_len(ncol(x))) {
     col_data <- x[, i, drop = TRUE]
     col_data_unique <- unique(col_data)
-    if (!inherits(col_data, c("list", "matrix")) &
+    if (!inherits(col_data, c("list", "matrix")) &&
         # no faeces (F) or tips (T)
         !all(unique(col_data) %in% c("T", "F"))) {
       x[, i] <- parse_guess(x = as.character(col_data),
@@ -764,12 +764,19 @@ auto_transform <- function(x,
                                             encoding = "UTF-8",
                                             tz = timezone,
                                             asciify = FALSE))
+      if (is.double(col_data) && !is.double(x[, i, drop = TRUE]) && decimal.mark != ".") {
+        # exception for csv2 (semi-colon separated) export and import
+        x[, i] <- parse_guess(x = as.character(col_data), guess_integer = TRUE)
+      }
       if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
         x[, i] <- clean_Date(col_data, format = "dd-mm-yyyy")
       }
     }
+    if (inherits(col_data, "POSIXct") && timezone == "UTC") {
+      x[, i] <- as.UTC(col_data)
+    }
     
-    if (inherits(x[, i, drop = TRUE], c("factor", "character"))) {
+    if (inherits(col_data, c("factor", "character"))) {
       # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
       x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {
@@ -785,9 +792,6 @@ auto_transform <- function(x,
     if (colnames(x)[i] %like% "_mic$") {
       x[, i] <- as.mic(col_data)
     }
-  }
-  if (timezone == "UTC") {
-    x <- as.UTC(x)
   }
   x
 }

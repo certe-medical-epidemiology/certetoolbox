@@ -8,6 +8,7 @@
 \alias{import_csv}
 \alias{import_csv2}
 \alias{import_tsv}
+\alias{import_txt}
 \alias{import_sav}
 \alias{import_spss}
 \alias{import_clipboard}
@@ -62,7 +63,7 @@ import_csv(
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
   timeformat = "HH:MM",
-  decimal.mark = ",",
+  decimal.mark = ".",
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
@@ -87,6 +88,21 @@ import_tsv(
   filename,
   card_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
+  datenames = "nl",
+  dateformat = "yyyy-mm-dd",
+  timeformat = "HH:MM",
+  decimal.mark = ".",
+  big.mark = "",
+  timezone = "UTC",
+  na = c("", "NULL", "NA", "<NA>"),
+  ...
+)
+
+import_txt(
+  filename,
+  card_number = project_get_current_id(ask = FALSE),
+  auto_transform = TRUE,
+  sep = "\\t",
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
   timeformat = "HH:MM",

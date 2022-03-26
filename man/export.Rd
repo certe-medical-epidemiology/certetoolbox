@@ -8,6 +8,7 @@
 \alias{export_csv}
 \alias{export_csv2}
 \alias{export_tsv}
+\alias{export_txt}
 \alias{export_sav}
 \alias{export_spss}
 \alias{export_pdf}
@@ -76,6 +77,15 @@ export_tsv(
   ...
 )
 
+export_txt(
+  object,
+  filename = NULL,
+  card_number = project_get_current_id(ask = FALSE),
+  sep = "\\t",
+  na = "",
+  ...
+)
+
 export_sav(
   object,
   filename = NULL,
@@ -122,7 +132,7 @@ export_clipboard(
 \arguments{
 \item{object, plot}{the \R object to export}
 
-\item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files}
+\item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 
 \item{filename}{the full path of the exported file}
 
@@ -140,6 +150,8 @@ export_clipboard(
 
 \item{na}{replacement character for empty values (default: \code{""})}
 
+\item{sep}{(for \code{\link[=export_clipboard]{export_clipboard()}}) separator for values in a row (default: tab)}
+
 \item{size}{paper size, defaults to A5. Can be A0 to A7.}
 
 \item{portrait}{portrait mode, defaults to \code{FALSE} (i.e., landscape mode)}
@@ -149,8 +161,6 @@ export_clipboard(
 \item{height}{required height of the PNG file in pixels}
 
 \item{text.factor}{text factor for the exported plot. Defaults to \code{1.2}, which loosely equals a PDF file in A5 format when it comes to text sizes.}
-
-\item{sep}{(for \code{\link[=export_clipboard]{export_clipboard()}}) separator for values in a row (default: tab)}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 
@@ -170,9 +180,11 @@ The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{exp
 
 For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and \code{NA} values will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 
+The \code{\link[=export_txt]{export_txt()}} function exports to a tab-separated file.
+
 Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-Exporting to a PDF file using \code{\link[=export_pdf]{export_pdf()}} requires the \code{ggplot2} package to be installed. If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if it's available and the \code{certeplot2} package is installed, and a timestamp otherwise.
+Exporting to a PDF file using \code{\link[=export_pdf]{export_pdf()}} requires the \code{ggplot2} package to be installed. If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}} or \code{\link[=export_png]{export_png()}}, the title of \code{plot} will be used if it's available and the \code{certeplot2} package is installed, and a timestamp otherwise. \strong{NOTE:} All export functions invisibly return \code{object} again, but the plotting functions invisibly return the filename.
 
 Exporting to a PNG file using \code{\link[=export_png]{export_png()}} requires the \code{ggplot2} package to be installed.
 

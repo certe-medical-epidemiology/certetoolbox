@@ -128,12 +128,94 @@ test_that("environment works", {
 })
 
 test_that("import_export works", {
-  tmp <- tempdir()
-  tmp_file <-  paste0(tmp, "/test.rds")
-  export_rds(mtcars, filename = tmp_file, card_number = NULL)
-  imp <- import_rds(tmp_file)
-  expect_identical(mtcars, imp)
+  # helper function:
+  identical_import_export <- function(import_fn, export_fn, fileext,
+                                      check_factors = TRUE, check_posix = TRUE,
+                                      digits = Inf, ...) {
+    # generate temporary file location:
+    templocation <- tempfile(fileext = paste0(".", fileext))
+    # generate data:
+    old_df <- data.frame(doubles = round(runif(10, 5, 10), digits = digits),
+                         integers = as.integer(runif(10, 5, 10)),
+                         dates = Sys.Date() - c(1:10),
+                         posix = as.UTC(as.POSIXct(Sys.Date() - c(1:10))),
+                         characters = LETTERS[1:10],
+                         factors = as.factor(LETTERS[1:10]),
+                         stringsAsFactors = FALSE)
+    if (!isTRUE(check_factors)) {
+      old_df$factors <- as.character(old_df$factors)
+    }
+    if (!isTRUE(check_posix)) {
+      old_df$posix <- as.Date(old_df$posix)
+    }
+    # export and import:
+    suppressMessages(export_fn(old_df, templocation))
+    new_df <- suppressMessages(import_fn(templocation, ...))
+    if (!isTRUE(check_posix)) {
+      new_df$dates <- as.Date(new_df$dates)
+      new_df$posix <- as.Date(new_df$posix)
+    }
+    # clean up:
+    unlink(templocation)
+    # test:
+    same <- identical(old_df, new_df)
+    if (!isTRUE(same)) {
+      cat("Non-identical columns for *", fileext, "*:", sep = "")
+      non_identical <- which(!mapply(identical, old_df, new_df))
+      for (i in seq_len(length(non_identical))) {
+        cat("\n------------\n")
+        cat(names(non_identical)[i], "\n")
+        old <- old_df[, non_identical[i], drop = TRUE]
+        new <- new_df[, non_identical[i], drop = TRUE]
+        cat("\nBefore export/import (class: ", paste0(class(old), collapse = "/"), "):\n", sep = "")
+        print(old)
+        cat("\nAfter export/import (class: ", paste0(class(new), collapse = "/"), "):\n", sep = "")
+        print(new)
+      }
+    }
+    isTRUE(same)
+  }
+  # R
+  expect_true(identical_import_export(import_rds, export_rds, "rds"))
+  # Text files
+  expect_true(identical_import_export(import_csv, export_csv, "csv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import_csv2, export_csv2, "csv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import_tsv, export_tsv, "tsv",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  expect_true(identical_import_export(import_txt, export_txt, "txt",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  # Excel
+  expect_true(identical_import_export(import_xlsx, export_xlsx, "xlsx",
+                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+  # SPSS
+  # expect_true(identical_import_export(import_sav, export_sav, "sav", digits = 10))
+  # clipboard
+  # expect_true(identical_import_export(import_clipboard, export_clipboard, "clip"))
   
+  # export of graphical functions
+  p <- ggplot2::ggplot(mtcars, ggplot2::aes(mpg, hp)) + ggplot2::geom_point()
+  temp_pdf <- tempfile(fileext = ".pdf")
+  
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a1"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a2"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a3"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a4"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a5"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a6"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a7"))))
+  
+  temp_png <- tempfile(fileext = ".png")
+  expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
   
 })
 

@@ -47,7 +47,7 @@ parse_file_location <- function(filename, needed_extension, card_number) {
 #' 
 #' These functions can be used to export data and plots. They invisibly return the object itself again, allowing for usage in pipes. The functions work closely with the `certeprojects` package and support Trello card numbers.
 #' @param object,plot the \R object to export
-#' @param fn a manual export function, such as `haven::write_sas` to write SAS files
+#' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
 #' @param card_number a Trello card number
 #' @param ... arguments passed on to methods
@@ -211,6 +211,33 @@ export_tsv <- function(object,
 }
 
 #' @rdname export
+#' @details The [export_txt()] function exports to a tab-separated file.
+#' @export
+export_txt <- function(object,
+                       filename = NULL,
+                       card_number = project_get_current_id(ask = FALSE),
+                       sep = "\t",
+                       na = "",
+                       ...) {
+  if (is.null(filename)) {
+    filename <- deparse(substitute(object))
+  }
+  export_exec(object, "txt",
+              filename = filename,
+              card_number = card_number,
+              append = FALSE,
+              quote = TRUE,
+              sep = sep,
+              eol = "\n",
+              na = na,
+              dec = ".",
+              row.names = FALSE,
+              col.names = TRUE,
+              qmethod = "double",
+              fileEncoding = "UTF-8")
+}
+
+#' @rdname export
 #' @details `r doc_requirement("an SPSS file", c("export_sav", "export_spss"), "haven")`.
 #' @export
 export_sav <- function(object,
@@ -233,7 +260,7 @@ export_spss <- export_sav
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
-#' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise.
+#' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise. **NOTE:** All export functions invisibly return `object` again, but the plotting functions invisibly return the filename.
 #' @importFrom certestyle format2
 #' @export
 export_pdf <- function(plot,
@@ -255,7 +282,7 @@ export_pdf <- function(plot,
       filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
     }
     filename <- paste0(filename, ".pdf")
-  } else {
+  } else if (is.null(filename)) {
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
   filename <- parse_file_location(filename,
@@ -320,7 +347,7 @@ export_pdf <- function(plot,
     message(paste0("Plot exported as '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
-    invisible(plot)
+    invisible(filename)
   } else {
     stop("Error while saving `", filename, "`.", call. = FALSE)
   }
@@ -352,7 +379,7 @@ export_png <- function(plot,
       filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
     }
     filename <- paste0(filename, ".png")
-  } else {
+  } else if (is.null(filename)) {
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
   filename <- parse_file_location(filename,
@@ -373,7 +400,7 @@ export_png <- function(plot,
     message(paste0("Plot exported as '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
-    invisible(plot)
+    invisible(filename)
   } else {
     stop("Error while saving `", filename, "`.", call. = FALSE)
   }
@@ -459,7 +486,7 @@ export_exec <- function(object,
       object <- rownames_to_column(object, var = "rownames")
       warning("Row names added as first column 'rownames'", call. = FALSE)
     }
-    if (needed_extension %in% c("csv", "tsv")) {
+    if (needed_extension %in% c("csv", "tsv", "txt")) {
       # arguments such as 'sep' etc. are passed into '...':
       utils::write.table(object, file = filename, ...)
     } else {
@@ -595,7 +622,7 @@ import_csv <- function(filename,
                        datenames = "nl",
                        dateformat = "yyyy-mm-dd",
                        timeformat = "HH:MM",
-                       decimal.mark = ",",
+                       decimal.mark = ".",
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
@@ -655,7 +682,7 @@ import_tsv <- function(filename,
                        datenames = "nl",
                        dateformat = "yyyy-mm-dd",
                        timeformat = "HH:MM",
-                       decimal.mark = ",",
+                       decimal.mark = ".",
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
@@ -674,6 +701,42 @@ import_tsv <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na)
+}
+
+#' @rdname import
+#' @importFrom cleaner format_datetime
+#' @export
+import_txt <- function(filename,
+                       card_number = project_get_current_id(ask = FALSE),
+                       auto_transform = TRUE,
+                       sep = "\t",
+                       datenames = "nl",
+                       dateformat = "yyyy-mm-dd",
+                       timeformat = "HH:MM",
+                       decimal.mark = ",",
+                       big.mark = "",
+                       timezone = "UTC",
+                       na = c("", "NULL", "NA", "<NA>"),
+                       ...) {
+  if (!is.character(filename)) {
+    filename <- deparse(substitute(filename))
+  }
+  out <- import_exec(filename,
+                     extension = "txt",
+                     card_number = card_number,
+                     auto_transform = FALSE,
+                     sep = sep)
+  if (isTRUE(auto_transform)) {
+    out <- auto_transform(out,
+                          datenames = datenames,
+                          dateformat = format_datetime(dateformat),
+                          timeformat = format_datetime(timeformat),
+                          decimal.mark = decimal.mark,
+                          big.mark = big.mark,
+                          timezone = timezone,
+                          na = na)
+  }
+  out
 }
 
 #' @rdname import
@@ -813,6 +876,8 @@ import_exec <- function(filename,
     extension <- "csv"
   } else if (extension == "tsv") {
     csv_delim <- "\t"
+  } else if (extension == "txt") {
+    csv_delim <- list(...)$sep
   }
   
   filename <- gsub('\\', '/', filename, fixed = TRUE)

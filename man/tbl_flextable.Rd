@@ -212,8 +212,8 @@ tbl_flextable(df,
 
 # column names
 tbl_flextable(df,
-              column.names = c("1" = "Kolom 1",
-                               "2" = "Kolom 2",
+              column.names = c("1" = "Column 1",
+                               "2" = "Column 2",
                                dates = "DATES!"))
 tbl_flextable(df,
               column.names = LETTERS)
