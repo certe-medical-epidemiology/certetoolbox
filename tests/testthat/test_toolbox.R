@@ -216,6 +216,11 @@ test_that("import_export works", {
   expect_true(identical_import_export(import, export, "sav",
                                       check_factors = FALSE, digits = 10))
   
+  # remote files
+  expect_equal(dim(import_url("https://filesamples.com/samples/document/csv/sample1.csv")), c(8, 13))
+  expect_equal(dim(import_url("https://filesamples.com/samples/document/xlsx/sample1.xlsx")), c(390, 5))
+  expect_equal(dim(import_url("github.com/tidyverse/dplyr/blob/8abb54b60e40ef7c619156a12b14872cb2eb7989/data-raw/starwars.csv")), dim(dplyr::starwars))
+  
   # export of graphical functions
   p <- ggplot2::ggplot(mtcars, ggplot2::aes(mpg, hp)) + ggplot2::geom_point()
   temp_pdf <- tempfile(fileext = ".pdf")
@@ -237,9 +242,38 @@ test_that("import_export works", {
   expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a6"))))
   unlink(temp_pdf)
   expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a7"))))
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a999"))))
   
   temp_png <- tempfile(fileext = ".png")
   expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
+  
+  # importing a data.frame with rownames as first column should be transformed right
+  temp_csv <- tempfile(fileext = ".csv")
+  expect_warning(export_csv(mtcars, temp_csv))
+  expect_identical(rownames(import_csv(temp_csv)), rownames(mtcars))
+  
+  # test manual export function
+  unlink(temp_csv)
+  suppressWarnings(export(mtcars, temp_csv, fn = utils::write.table))
+  expect_true(file.exists(temp_csv))
+  unlink(temp_csv)
+  suppressWarnings(export(mtcars, temp_csv, fn = "utils::write.table"))
+  expect_true(file.exists(temp_csv))
+  expect_error(export(mtcars, temp_csv, fn = "non-existing-function"))
+  expect_error(export(mtcars, "file.nocluehowtosave"))
+  
+})
+
+test_that("universal works", {
+  expect_identical(c("a", "b", "c") %like% "a", c(TRUE, FALSE, FALSE))
+  expect_identical("a" %like% c("a", "b", "c") , c(TRUE, FALSE, FALSE))
+  expect_identical(c("a", "b", "c") %like% c("a", "b", "c") , c(TRUE, TRUE, TRUE))
+  expect_error(c("a", "b", "c") %like% c("a", "b"))
+  expect_true("a" %like% "A")
+  expect_false("a" %like_case% "A")
+  expect_false("a" %unlike% "A")
+  expect_true("a" %unlike_case% "A")
 })
 
 test_that("vctrs work", {

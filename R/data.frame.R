@@ -714,7 +714,7 @@ tbl_markdown <- function(x,
 
 #' Automatically Transform Data Set
 #' 
-#' This function transforms a [data.frame] by guessing the right data classes and applying them.
+#' This function transforms a [data.frame] by guessing the right data classes and applying them, using [readr::parse_guess()].
 #' @param x a [data.frame]
 #' @param datenames language of the date names, such as weekdays and months
 #' @param dateformat expected date format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]

@@ -14,7 +14,7 @@
 \alias{export_pdf}
 \alias{export_png}
 \alias{export_clipboard}
-\title{Export Data and Plots}
+\title{Export Data Sets and Plots}
 \usage{
 export(
   object,
@@ -169,7 +169,7 @@ export_clipboard(
 \item{decimal.mark}{(for \code{\link[=export_clipboard]{export_clipboard()}}) character to use for decimal numbers}
 }
 \description{
-These functions can be used to export data and plots. They invisibly return the object itself again, allowing for usage in pipes. The functions work closely with the \code{certeprojects} package and support Trello card numbers.
+These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for \code{\link[=export_pdf]{export_pdf()}} and \code{\link[=export_png]{export_png()}}. The functions work closely together with the \code{certeprojects} package to support Trello card numbers.
 }
 \details{
 The \code{\link[=export]{export()}} function can export to any file format, also with a manually set export function when passed on to the \code{fn} argument. This function \code{fn} has to have the object as first argument and the future file location as second argument. If \code{fn} is left blank, the \verb{export_*} function will be used based on the filename.

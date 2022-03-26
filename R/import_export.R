@@ -171,7 +171,8 @@ import_exec <- function(filename,
                                      tz = list(...)$timezone,
                                      decimal_mark = list(...)$decimal.mark,
                                      grouping_mark = list(...)$big.mark,
-                                     encoding = "UTF-8"))
+                                     encoding = "UTF-8"),
+                     show_col_types = FALSE)
   } else {
     df <- rio::import(file = filename, ...)
   }
@@ -179,10 +180,10 @@ import_exec <- function(filename,
   # force data.frame
   df <- as.data.frame(df, stringsAsFactors = FALSE)
   # if row names were saved as first col, set back to row names
-  if (colnames(df)[1L] %like% "row.names?") {
+  if (colnames(df)[1L] %like% "row.?names?") {
     rownames(df) <- df[, 1, drop = TRUE]
     df <- select(df, -1)
-    message("Row names restored from first column.", call. = FALSE)
+    message("Row names restored from first column.")
   }
   
   if (isTRUE(auto_transform)) {
@@ -205,9 +206,9 @@ import_exec <- function(filename,
 
 # Export functions --------------------------------------------------------
 
-#' Export Data and Plots
+#' Export Data Sets and Plots
 #' 
-#' These functions can be used to export data and plots. They invisibly return the object itself again, allowing for usage in pipes. The functions work closely with the `certeprojects` package and support Trello card numbers.
+#' These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for [export_pdf()] and [export_png()]. The functions work closely together with the `certeprojects` package to support Trello card numbers.
 #' @param object,plot the \R object to export
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
@@ -254,43 +255,43 @@ export <- function(object,
                 card_number = card_number,
                 fn = fn,
                 ...)
-  }
-  
-  if (is.null(filename)) {
-    filename <- deparse(substitute(filename))
-  }
-  if (filename %like% "[.]rds$") {
-    export_rds(object = object,
-               filename = filename,
-               card_number = card_number,
-               ...)
-  } else if (filename %like% "[.]csv$") {
-    export_csv(object = object,
-               filename = filename,
-               card_number = card_number,
-               ...)
-  } else if (filename %like% "[.]tsv$") {
-    export_tsv(object = object,
-               filename = filename,
-               card_number = card_number,
-               ...)
-  } else if (filename %like% "[.]txt$") {
-    export_txt(object = object,
-               filename = filename,
-               card_number = card_number,
-               ...)
-  } else if (filename %like% "[.]xlsx?$") {
-    export_xlsx(object = object,
-                filename = filename,
-                card_number = card_number,
-                ...)
-  } else if (filename %like% "[.]sav$") {
-    export_sav(object = object,
-               filename = filename,
-               card_number = card_number,
-               ...)
   } else {
-    stop("Unknown file format for export: ", filename, call. = FALSE)
+    if (is.null(filename)) {
+      filename <- deparse(substitute(filename))
+    }
+    if (filename %like% "[.]rds$") {
+      export_rds(object = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]csv$") {
+      export_csv(object = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]tsv$") {
+      export_tsv(object = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]txt$") {
+      export_txt(object = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]xlsx?$") {
+      export_xlsx(object = object,
+                  filename = filename,
+                  card_number = card_number,
+                  ...)
+    } else if (filename %like% "[.]sav$") {
+      export_sav(object = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else {
+      stop("Unknown file format for export: ", filename, call. = FALSE)
+    }
   }
 }
 
@@ -603,9 +604,9 @@ export_png <- function(plot,
 
 # Import functions --------------------------------------------------------
 
-#' Import Data and Plots
+#' Import Data Sets
 #' 
-#' These functions can be used to import data. They work closely with the `certeprojects` package and support Trello card numbers.
+#' These functions can be used to import data. They work closely with the `certeprojects` package and support Trello card numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
 #' @param filename the full path of the file to be imported, will be parsed to a [character]
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param card_number a Trello card number
@@ -867,3 +868,49 @@ import_sav <- function(filename,
 #' @rdname import
 #' @export
 import_spss <- import_sav
+
+#' @rdname import
+#' @param url remote location of any data set, can also be a (non-raw) GitHub/GitLab link
+#' @details `r doc_requirement("remote locations (URLs)", "import_url", "rio")`.
+#' @export
+import_url <- function(url,
+                       auto_transform = TRUE,
+                       datenames = "en",
+                       dateformat = "yyyy-mm-dd",
+                       timeformat = "HH:MM",
+                       decimal.mark = ".",
+                       big.mark = "",
+                       timezone = "UTC",
+                       na = c("", "NULL", "NA", "<NA>"),
+                       ...) {
+  check_is_installed("rio")
+  url <- as.character(url)[1L]
+  if (url %like% "git(hub|lab).com/.*/blob/") {
+    # get GitHub/GitLab raw URL
+    url <- gsub("/blob/", "/raw/", url, fixed = TRUE)
+  }
+  if (url %unlike% "://") {
+    url <- paste0("https://", url)
+  }
+  df <- rio::import(url)
+  if (isTRUE(auto_transform)) {
+    df <- auto_transform(df,
+                         datenames = datenames,
+                         dateformat = format_datetime(dateformat),
+                         timeformat = format_datetime(timeformat),
+                         decimal.mark = decimal.mark,
+                         big.mark = big.mark,
+                         timezone = timezone,
+                         na = na)
+  }
+  if (interactive()) {
+    message(
+      paste0(
+        "Imported data set (", format2(NROW(df)), "x", format2(NCOL(df)),
+        ", ", size_humanreadable(utils::object.size(df)),  ") from '",
+        url, "'"
+      )
+    )
+  }
+  df
+}
