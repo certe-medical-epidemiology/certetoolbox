@@ -17,3 +17,12 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
+coverage:
+  range:
+  - 0.0
+  - 90.0
+
+ignore:
+  - "R/addins.R"
+  - "R/import_export_other.R"
+  - "R/utils.R"

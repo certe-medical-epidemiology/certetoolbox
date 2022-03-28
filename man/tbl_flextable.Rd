@@ -184,8 +184,13 @@ df <- data.frame(text = LETTERS[1:10],
                  stringsAsFactors = FALSE)
 
 # default
-tbl_flextable(df)      # dataset heeft geen rijnamen
-tbl_flextable(mtcars)  # dataset heeft wel rijnamen
+tbl_flextable(df)      # dataset has no row names
+tbl_flextable(mtcars)  # dataset has row names
+
+# print in markdown
+df \%>\% 
+  tbl_flextable() \%>\% 
+  tbl_markdown()
 
 # extra formatting
 tbl_flextable(df,
@@ -207,8 +212,8 @@ tbl_flextable(df,
 
 # column names
 tbl_flextable(df,
-              column.names = c("1" = "Kolom 1",
-                               "2" = "Kolom 2",
+              column.names = c("1" = "Column 1",
+                               "2" = "Column 2",
                                dates = "DATES!"))
 tbl_flextable(df,
               column.names = LETTERS)
@@ -231,6 +236,14 @@ tbl_flextable(data.frame(test1 = "A", test2 = "B"),
               vline = 1,
               autofit.fullpage = FALSE,    # no fullpage autofit
               columns.width = c(1, 3))     # cells become 1 and 3 cm
+              
+# adding extra header or footer
+tbl_flextable(data.frame(test1 = "A", test2 = "B"),
+              row.extra.header = list(values = c("Header", "Header"),
+                                      widths = c(1, 1)),
+              row.extra.footer = list(values = c("Footer", "Footer"),
+                                      widths = c(1, 1)))
+                                      
 }
 \seealso{
 \code{\link[=flextable]{flextable()}}

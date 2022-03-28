@@ -90,8 +90,13 @@
 #'                  stringsAsFactors = FALSE)
 #'
 #' # default
-#' tbl_flextable(df)      # dataset heeft geen rijnamen
-#' tbl_flextable(mtcars)  # dataset heeft wel rijnamen
+#' tbl_flextable(df)      # dataset has no row names
+#' tbl_flextable(mtcars)  # dataset has row names
+#' 
+#' # print in markdown
+#' df %>% 
+#'   tbl_flextable() %>% 
+#'   tbl_markdown()
 #'
 #' # extra formatting
 #' tbl_flextable(df,
@@ -113,8 +118,8 @@
 #'
 #' # column names
 #' tbl_flextable(df,
-#'               column.names = c("1" = "Kolom 1",
-#'                                "2" = "Kolom 2",
+#'               column.names = c("1" = "Column 1",
+#'                                "2" = "Column 2",
 #'                                dates = "DATES!"))
 #' tbl_flextable(df,
 #'               column.names = LETTERS)
@@ -137,6 +142,14 @@
 #'               vline = 1,
 #'               autofit.fullpage = FALSE,    # no fullpage autofit
 #'               columns.width = c(1, 3))     # cells become 1 and 3 cm
+#'               
+#' # adding extra header or footer
+#' tbl_flextable(data.frame(test1 = "A", test2 = "B"),
+#'               row.extra.header = list(values = c("Header", "Header"),
+#'                                       widths = c(1, 1)),
+#'               row.extra.footer = list(values = c("Footer", "Footer"),
+#'                                       widths = c(1, 1)))
+#'                                       
 tbl_flextable <- function(x,
                           row.names = rownames(x),
                           row.names.bold = TRUE,
@@ -240,7 +253,7 @@ tbl_flextable <- function(x,
       stop("length of row.names is not equal to number of rows")
     }
     row.names <- as.character(row.names)
-    x <- bind_cols(data.frame("col123456" = row.names), x)
+    x <- bind_cols(data.frame(`col_temp_flextbl_` = row.names, stringsAsFactors = FALSE), x)
   }
   
   if (is.null(ncol(x))) {
@@ -262,16 +275,17 @@ tbl_flextable <- function(x,
                                    }
                                  })
     if (!all(x == "")) {
-      x$col789123 <- column.total.values
+      x$col_temp_flextbl_2 <- column.total.values
       colnames(x)[ncol(x)] <- column.total.name
     }
   }
   
   x.bak <- x
   
-  if (is.null(columns.percent)) {
-    columns.percent <- integer(0)
-  }
+  columns.percent <- columns.percent + as.integer(!isFALSE(row.names))
+  columns.italic <- columns.italic + as.integer(!isFALSE(row.names))
+  columns.bold <- columns.bold + as.integer(!isFALSE(row.names))
+  columns.fill <- columns.fill + as.integer(!isFALSE(row.names))
   for (i in seq_len(col_count)) {
     if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
       x[, i] <- x %>%
@@ -315,6 +329,10 @@ tbl_flextable <- function(x,
   colnames_bak <- NULL
   if (length(column.names) > 0) {
     if (!is.null(names(column.names))) {
+      # NAMED COLUMNS
+      if (length(column.names) != ncol(x) && any(names(column.names) == "", na.rm = TRUE)) {
+        warning("Not all columns are named")
+      }
       for (i in seq_len(length(column.names))) {
         col.name <- names(column.names)[i]
         if (col.name != "") {
@@ -324,9 +342,12 @@ tbl_flextable <- function(x,
           } else {
             colnames(x)[colnames(x) == col.name] <- column.names[i]
           }
+        } else {
+          colnames(x)[i] <- column.names[i]
         }
       }
     } else {
+      # UNNAMED COLUMNS
       if (length(column.names) != ncol(x)) {
         if (length(column.names) < ncol(x)) {
           warning("Only the first ", length(column.names), " column names will be replaced")
@@ -338,7 +359,7 @@ tbl_flextable <- function(x,
       } else {
         colnames(x) <- column.names
       }
-      if (colnames(x)[1] == "col123456") {
+      if (colnames(x)[1] == "col_temp_flextbl_") {
         colnames(x)[1] <- " "
       }
     }
@@ -489,9 +510,9 @@ tbl_flextable <- function(x,
     fontsize(size = font.size, part = "all") %>%
     addif(font.size.header != font.size,
           fontsize(., size = font.size.header, part = "header")) %>%
-    addif(!is.null(columns.italic),
+    addif(length(columns.italic) > 0,
           italic(., j = columns.italic)) %>%
-    addif(!is.null(columns.bold),
+    addif(length(columns.bold) > 0,
           bold(., j = columns.bold)) %>%
     addif(!is.null(rows.italic),
           italic(., i = rows.italic)) %>%
@@ -503,7 +524,7 @@ tbl_flextable <- function(x,
           bg(., i = rows.fill,
              bg = colourpicker(rows.fill.picker),
              part = "body")) %>%
-    addif(!is.null(columns.fill),
+    addif(length(columns.fill) > 0,
           bg(., j = columns.fill,
              bg = colourpicker(columns.fill.picker),
              part = "body"))
@@ -586,7 +607,7 @@ tbl_flextable <- function(x,
       print(ft)
     } else {
       # not interactive like in R Markdown - print as markdown table
-      flextable_to_rmd(ft)
+      flextable_to_rmd(ft, print = TRUE)
     }
   } else {
     ft
@@ -607,6 +628,7 @@ tbl_flextable <- function(x,
 #' @param format.dates formatting of dates, will be evaluated with [`format2()`][certestyle::format2()]
 #' @param newlines.leading number of white lines to print before the table
 #' @param newlines.trailing number of white lines to print after the table
+#' @param print only useful when input is a Flextable: force printing
 #' @inheritParams tbl_flextable
 #' @details When in an R Markdown rapport a table is printed using this function, column headers only print well if `newlines.leading` >= 2, or by manually using `cat("\\n\\n")` before printing the table.
 #' @seealso [knitr::kable()]
@@ -634,20 +656,14 @@ tbl_markdown <- function(x,
                          round.numbers = 2,
                          round.percent = 1,
                          newlines.leading = 0,
-                         newlines.trailing = 2) {
+                         newlines.trailing = 2,
+                         print = TRUE) {
   
   if (inherits(x, "flextable")) {
-    for (i in seq_len(newlines.leading)) {
-      cat("\n\\ ")
-    }
-    flextable_to_rmd(x)
-    for (i in seq_len(newlines.trailing)) {
-      cat("\n\\ ")
-    }
-    return(invisible())
+    return(invisible(flextable_to_rmd(x, print = print)))
   }
   
-  x <- as.data.frame(x)
+  x <- as.data.frame(x, stringsAsFactors = FALSE)
   
   x_name <- deparse(substitute(x))
   if (caption == "") {
@@ -714,7 +730,7 @@ tbl_markdown <- function(x,
 
 #' Automatically Transform Data Set
 #' 
-#' This function transforms a [data.frame] by guessing the right data classes and applying them.
+#' This function transforms a [data.frame] by guessing the right data classes and applying them, using [readr::parse_guess()].
 #' @param x a [data.frame]
 #' @param datenames language of the date names, such as weekdays and months
 #' @param dateformat expected date format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]
@@ -727,7 +743,6 @@ tbl_markdown <- function(x,
 #' @importFrom cleaner format_datetime clean_Date
 #' @importFrom readr parse_guess locale
 #' @importFrom dplyr `%>%`
-#' @importFrom AMR as.rsi as.mic
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -749,7 +764,7 @@ auto_transform <- function(x,
   for (i in seq_len(ncol(x))) {
     col_data <- x[, i, drop = TRUE]
     col_data_unique <- unique(col_data)
-    if (!inherits(col_data, c("list", "matrix")) &
+    if (!inherits(col_data, c("list", "matrix")) &&
         # no faeces (F) or tips (T)
         !all(unique(col_data) %in% c("T", "F"))) {
       x[, i] <- parse_guess(x = as.character(col_data),
@@ -764,30 +779,37 @@ auto_transform <- function(x,
                                             encoding = "UTF-8",
                                             tz = timezone,
                                             asciify = FALSE))
+      if (is.double(col_data) && !is.double(x[, i, drop = TRUE]) && decimal.mark != ".") {
+        # exception for csv2 (semi-colon separated) export and import
+        x[, i] <- parse_guess(x = as.character(col_data), guess_integer = TRUE)
+      }
       if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
         x[, i] <- clean_Date(col_data, format = "dd-mm-yyyy")
       }
     }
+    if (inherits(col_data, "POSIXct") && timezone == "UTC") {
+      x[, i] <- as.UTC(col_data)
+    }
     
-    if (inherits(x[, i, drop = TRUE], c("factor", "character"))) {
+    if (inherits(col_data, c("factor", "character"))) {
       # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
       x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {
                            warning(e$message)
                            return(col_data)})
+    }
+    if ("AMR" %in% rownames(utils::installed.packages())) {
       # check for RSI
-      if (!all(col_data_unique[!is.na(col_data_unique)] == "")
-          & all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S"))) {
-        x[, i] <- as.rsi(col_data)
+      if (inherits(col_data, c("factor", "character")) &&
+          !all(col_data_unique[!is.na(col_data_unique)] == "") &&
+          all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S"))) {
+        x[, i] <- AMR::as.rsi(col_data)
+      }
+      # set Minimum Inhibitory Concentration (MIC)
+      if (colnames(x)[i] %like% "_mic$") {
+        x[, i] <- AMR::as.mic(col_data)
       }
     }
-    # set Minimum Inhibitory Concentration (MIC)
-    if (colnames(x)[i] %like% "_mic$") {
-      x[, i] <- as.mic(col_data)
-    }
-  }
-  if (timezone == "UTC") {
-    x <- as.UTC(x)
   }
   x
 }

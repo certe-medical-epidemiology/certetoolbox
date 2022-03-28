@@ -47,6 +47,7 @@ as.UTC.POSIXct <- function(x, ...) {
   x
 }
 
+#' @method as.UTC default
 #' @rdname as.UTC
 #' @export
 as.UTC.default <- function(x, ...) {
@@ -128,6 +129,14 @@ lubridate::now
 tomorrow <- function(ref = today()) {
   ref <- as_date(ref)
   ref + 1
+}
+
+#' Determine week based on ISO 8601
+#' @rdname days_around_today
+#' @importFrom lubridate isoweek
+#' @export
+week <- function(ref = today()) {
+  isoweek(ref)
 }
 
 #' @rdname days_around_today
@@ -565,3 +574,5 @@ week2resp_season <- function(wk, remove_outside_season = FALSE) {
     factor(wk, levels = c(40:53, 1:39), ordered = TRUE)
   }
 }
+
+

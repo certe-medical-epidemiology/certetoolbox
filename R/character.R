@@ -62,3 +62,91 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
                          replace = TRUE))
          })
 }
+
+#' Return Reference Directory
+#' 
+#' Returns the relative reference directory for non-projects.
+#' @param sub relative subfolder or file
+#' @details This function returns the absolute path using [tools::file_path_as_absolute()].
+#' @export
+ref_dir <- function(sub = "") {
+  if (Sys.info()['sysname'] %in% c("Linux", "Darwin")) {
+    r <- read_secret("path.refmap")
+  } else {
+    r <- gsub('\\', '/', read_secret("path.refmap"), fixed = TRUE)
+  }
+  
+  if (r == "") {
+    stop("Secret 'path.refmap' not set.", call. = FALSE)
+  }
+  if (r %unlike% '[/]$') {
+    r <- paste0(r, '/')
+  }
+  sub <- trimws(sub, "both")
+  r <- paste0(r, sub)
+  if (r %like% '[/]$') {
+    r <- substr(r, 1, nchar(r) - 1)
+  }
+  if (tools::file_ext(r) == "" && !dir.exists(r)) {
+    dir.create(r, recursive = TRUE)
+    message("Created folder: ", r)
+  }
+  tools::file_path_as_absolute(r)
+}
+
+#' Hospitalname
+#'
+#' Hospitalname and/or location, with support for all hospitals in Northern Netherlands, including Meppel, Hardenberg and Zwolle.
+#' @param x text to be transformed
+#' @param format default is `"{naamkort}, {plaats}"`. Attributes like `x` to be returned in '`glue`'-format (in curly brackets).
+#' @importFrom glue glue
+#' @export
+#' @examples
+#' hospital_name(c("MCL", "MCL", "Martini"))
+#' hospital_name(c("Antonius", "WZA", "Martini"), format = "{naam} te {plaats}")
+#'
+#' # special case for GGD
+#' hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naam}")
+#' hospital_name(c("Martini", "GGD Groningen", "GGD Drenthe"), format = "{naamkort}")
+#' hospital_name("ggd friesland", "{naam}")
+hospital_name <- function(x, format = "{naamkort}, {plaats}") {
+  x_trans <- rep(NA_character_, length(x))
+  x_trans[x %like% "MZH?|Martini"] <- glue(format, naam = "Martini Ziekenhuis", naamkort = "MZH", plaats = "Groningen")
+  x_trans[x %like% "MCL|Leeuwarden"] <- glue(format, naam = "Medisch Centrum Leeuwarden", naamkort = "MCL", plaats = "Leeuwarden")
+  x_trans[x %like% "Tjongerschans|Heerenveen"] <- glue(format, naam = "Tjongerschans Ziekenhuis", naamkort = "TZH", plaats = "Heerenveen")
+  x_trans[x %like% "Antonius|Sneek"] <- glue(format, naam = "Antonius Ziekenhuis", naamkort = "AZS", plaats = "Sneek")
+  x_trans[x %like% "Smellinghe|Drachten"] <- glue(format, naam = "Ziekenhuis Nij Smellinghe", naamkort = "NSD", plaats = "Drachten")
+  x_trans[x %like% "WZA|Wilhelmina|Assen"] <- glue(format, naam = "Wilhelmina Ziekenhuis", naamkort = "WZA", plaats = "Assen")
+  x_trans[x %like% "OZG|Ommeland|Scheemda"] <- glue(format, naam = "Ommelander Ziekenhuis Groningen", naamkort = "OZG", plaats = "Scheemda")
+  x_trans[x %like% "Refaja|Stadskanaal"] <- glue(format, naam = "Refaja Ziekenhuis", naamkort = "Treant", plaats = "Stadskanaal")
+  x_trans[x %like% "(^SE$|Scheper|Emmen)"] <- glue(format, naam = "Scheper Ziekenhuis", naamkort = "Treant", plaats = "Emmen")
+  x_trans[x %like% "BH|Bethesda|Hoogeveen"] <- glue(format, naam = "Bethesda Ziekenhuis", naamkort = "Treant", plaats = "Hoogeveen")
+  x_trans[x %like% "UMCG|Universitair"] <- glue(format, naam = "Universitair Medisch Centrum Groningen", naamkort = "UMCG", plaats = "Groningen")
+  x_trans[x %like% "MCL|Leeuwarden"] <- glue(format, naam = "Medisch Centrum Leeuwarden", naamkort = "MCL", plaats = "Leeuwarden")
+  x_trans[x %like% "Isala|Zwolle"] <- glue(format, naam = "Isala Zwolle", naamkort = "Isala", plaats = "Zwolle")
+  x_trans[x %like% "Dia[ck]on|Meppel"] <- glue(format, naam = "Isala Diaconessenhuis Meppel", naamkort = "Isala", plaats = "Meppel")
+  x_trans[x %like% "SH|R.p[ck]+e|Harde.?berg"] <- glue(format, naam = "R\\u00f6pcke-Zweers Ziekenhuis", naamkort = "RZH", plaats = "Hardenberg")
+  # modification for GGD, location is province
+  x_trans[x %like% "GGD.*fr.*sl.*n"] <- glue(format, naam = "GGD Frysl\u00e2n", naamkort = "GGD", plaats = "Frysl\u00e2n")
+  x_trans[x %like% "GGD.*gronin"] <- glue(format, naam = "GGD Groningen", naamkort = "GGD", plaats = "Groningen")
+  x_trans[x %like% "GGD.*drent"] <- glue(format, naam = "GGD Drenthe", naamkort = "GGD", plaats = "Drenthe")
+  x_trans
+}
+
+#' P-symbol format as asterisk
+#' @param p numeric value between 0 and 1
+#' @param emptychar sign to be displayed for 0.1 < p < 1.0
+#' @export
+p_symbol <- function(p, emptychar = " ") {
+  
+  p <- as.double(p)
+  s <- rep(NA_character_, length(p))
+  
+  s[p <= 1] <- emptychar
+  s[p <= 0.100] <- "."
+  s[p <= 0.050] <- "*"
+  s[p <= 0.010] <- "**"
+  s[p <= 0.001] <- "***"
+  
+  s
+}
