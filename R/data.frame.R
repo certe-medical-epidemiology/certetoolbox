@@ -245,7 +245,7 @@ tbl_flextable <- function(x,
       stop("length of row.names is not equal to number of rows")
     }
     row.names <- as.character(row.names)
-    x <- bind_cols(data.frame(`_col_temp_flextbl` = row.names, stringsAsFactors = FALSE), x)
+    x <- bind_cols(data.frame(`col_temp_flextbl_` = row.names, stringsAsFactors = FALSE), x)
   }
   
   if (is.null(ncol(x))) {
@@ -267,16 +267,17 @@ tbl_flextable <- function(x,
                                    }
                                  })
     if (!all(x == "")) {
-      x$col789123 <- column.total.values
+      x$col_temp_flextbl_2 <- column.total.values
       colnames(x)[ncol(x)] <- column.total.name
     }
   }
   
   x.bak <- x
   
-  if (is.null(columns.percent)) {
-    columns.percent <- integer(0)
-  }
+  columns.percent <- columns.percent + as.integer(!isFALSE(row.names))
+  columns.italic <- columns.italic + as.integer(!isFALSE(row.names))
+  columns.bold <- columns.bold + as.integer(!isFALSE(row.names))
+  columns.fill <- columns.fill + as.integer(!isFALSE(row.names))
   for (i in seq_len(col_count)) {
     if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
       x[, i] <- x %>%
@@ -350,7 +351,7 @@ tbl_flextable <- function(x,
       } else {
         colnames(x) <- column.names
       }
-      if (colnames(x)[1] == "_col_temp_flextbl") {
+      if (colnames(x)[1] == "col_temp_flextbl_") {
         colnames(x)[1] <- " "
       }
     }
@@ -501,9 +502,9 @@ tbl_flextable <- function(x,
     fontsize(size = font.size, part = "all") %>%
     addif(font.size.header != font.size,
           fontsize(., size = font.size.header, part = "header")) %>%
-    addif(!is.null(columns.italic),
+    addif(length(columns.italic) > 0,
           italic(., j = columns.italic)) %>%
-    addif(!is.null(columns.bold),
+    addif(length(columns.bold) > 0,
           bold(., j = columns.bold)) %>%
     addif(!is.null(rows.italic),
           italic(., i = rows.italic)) %>%
@@ -515,7 +516,7 @@ tbl_flextable <- function(x,
           bg(., i = rows.fill,
              bg = colourpicker(rows.fill.picker),
              part = "body")) %>%
-    addif(!is.null(columns.fill),
+    addif(length(columns.fill) > 0,
           bg(., j = columns.fill,
              bg = colourpicker(columns.fill.picker),
              part = "body"))
