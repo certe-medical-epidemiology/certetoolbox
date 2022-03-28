@@ -254,6 +254,11 @@ test_that("import_export works", {
   temp_png <- tempfile(fileext = ".png")
   expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
   
+  unlink(temp_pdf)
+  expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
+  unlink(temp_png)
+  expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
+  
   # importing a data.frame with rownames as first column should be transformed right
   temp_csv <- tempfile(fileext = ".csv")
   expect_warning(export_csv(mtcars, temp_csv))

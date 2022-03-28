@@ -289,6 +289,16 @@ export <- function(object,
                  filename = filename,
                  card_number = card_number,
                  ...)
+    } else if (filename %like% "[.]pdf$") {
+      export_pdf(plot = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]png$") {
+      export_png(plot = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
     } else {
       stop("Unknown file format for export: ", filename, call. = FALSE)
     }
