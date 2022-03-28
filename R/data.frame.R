@@ -245,7 +245,7 @@ tbl_flextable <- function(x,
       stop("length of row.names is not equal to number of rows")
     }
     row.names <- as.character(row.names)
-    x <- bind_cols(data.frame("col123456" = row.names), x)
+    x <- bind_cols(data.frame(`_col_temp_flextbl` = row.names, stringsAsFactors = FALSE), x)
   }
   
   if (is.null(ncol(x))) {
@@ -320,6 +320,10 @@ tbl_flextable <- function(x,
   colnames_bak <- NULL
   if (length(column.names) > 0) {
     if (!is.null(names(column.names))) {
+      # NAMED COLUMNS
+      if (length(column.names) != ncol(x) && any(names(column.names) == "", na.rm = TRUE)) {
+        warning("Not all columns are named")
+      }
       for (i in seq_len(length(column.names))) {
         col.name <- names(column.names)[i]
         if (col.name != "") {
@@ -329,9 +333,12 @@ tbl_flextable <- function(x,
           } else {
             colnames(x)[colnames(x) == col.name] <- column.names[i]
           }
+        } else {
+          colnames(x)[i] <- column.names[i]
         }
       }
     } else {
+      # UNNAMED COLUMNS
       if (length(column.names) != ncol(x)) {
         if (length(column.names) < ncol(x)) {
           warning("Only the first ", length(column.names), " column names will be replaced")
@@ -343,7 +350,7 @@ tbl_flextable <- function(x,
       } else {
         colnames(x) <- column.names
       }
-      if (colnames(x)[1] == "col123456") {
+      if (colnames(x)[1] == "_col_temp_flextbl") {
         colnames(x)[1] <- " "
       }
     }
@@ -647,7 +654,7 @@ tbl_markdown <- function(x,
     return(invisible(flextable_to_rmd(x, print = print)))
   }
   
-  x <- as.data.frame(x)
+  x <- as.data.frame(x, stringsAsFactors = FALSE)
   
   x_name <- deparse(substitute(x))
   if (caption == "") {
@@ -727,7 +734,6 @@ tbl_markdown <- function(x,
 #' @importFrom cleaner format_datetime clean_Date
 #' @importFrom readr parse_guess locale
 #' @importFrom dplyr `%>%`
-#' @importFrom AMR as.rsi as.mic
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -782,15 +788,17 @@ auto_transform <- function(x,
                          error = function(e) {
                            warning(e$message)
                            return(col_data)})
+    }
+    if ("AMR" %in% rownames(utils::installed.packages())) {
       # check for RSI
       if (!all(col_data_unique[!is.na(col_data_unique)] == "")
           & all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S"))) {
-        x[, i] <- as.rsi(col_data)
+        x[, i] <- AMR::as.rsi(col_data)
       }
-    }
-    # set Minimum Inhibitory Concentration (MIC)
-    if (colnames(x)[i] %like% "_mic$") {
-      x[, i] <- as.mic(col_data)
+      # set Minimum Inhibitory Concentration (MIC)
+      if (colnames(x)[i] %like% "_mic$") {
+        x[, i] <- AMR::as.mic(col_data)
+      }
     }
   }
   x

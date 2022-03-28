@@ -19,7 +19,7 @@
 
 test_that("cbs works", {
   expect_true(is.data.frame(cbs_topics()))
-  expect_true(is.data.frame(cbs_search("test")))
+  expect_output(cbs_search("test"))
   expect_message(cbs_search("certe"))
   expect_message(cbs_search("inwoners"))
   expect_true(is.data.frame(cbs_search("test") %>% cbs_download()))
@@ -45,26 +45,32 @@ test_that("character works", {
 })
 
 test_that("data.frame works", {
-  expect_true(class(tbl_flextable("test")) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars)) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, rows.height = 2)) == 'flextable')
-  expect_warning(class(tbl_flextable(mtcars, align = letters)) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, vline = c(2, 4), rows.zebra = TRUE, columns.width = c(1, 3), autofit.fullpage = FALSE)) == 'flextable')
+  expect_s3_class(tbl_flextable("test"), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, rows.height = 2), 'flextable')
+  expect_warning(tbl_flextable(mtcars, align = letters))
+  expect_s3_class(tbl_flextable(mtcars, vline = c(2, 4), rows.zebra = TRUE, columns.width = c(1, 3), autofit.fullpage = FALSE), 'flextable')
   expect_warning(mtcars %>% filter(cyl == 0) %>% tbl_flextable())
-  expect_true(class(tbl_flextable(mtcars, column.total = TRUE)) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, row.total = TRUE)) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, row.total = TRUE, columns.percent = c(9))) == 'flextable')
-  expect_true(class(tbl_flextable(mtcars, column.names = c("1" = "column 1", "2" = "column 2"))) == 'flextable')
-  expect_warning(class(tbl_flextable(mtcars, column.names = letters)) == 'flextable')
-  expect_true(class(tbl_flextable(Sys.Date())) == 'flextable')
-  expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>% tbl_flextable(logicals = c(TRUE, FALSE))) == 'flextable')
-  expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>% tbl_flextable(logicals = c(TRUE, FALSE), values.colour = "FALSE", values.fill = "TRUE", values.bold = "FALSE", values.italic = "TRUE", values.fill.picker = "green")) == 'flextable')
-  expect_true(class(mtcars %>% tbl_flextable(columns.percent = 8)) == 'flextable')
-  expect_true(class(tbl_markdown("test")) == 'list')
-  expect_true(class(tbl_markdown(Sys.Date())) == 'list')
+  expect_s3_class(tbl_flextable(mtcars, column.total = TRUE), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, row.total = TRUE), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, row.total = TRUE, columns.percent = c(9)), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, column.names = c("1" = "column 1", "2" = "column 2")), 'flextable')
+  expect_warning(tbl_flextable(mtcars, column.names = letters))
+  expect_warning(tbl_flextable(mtcars, column.names = c("a", "b", "5" = "c")))
+  expect_s3_class(tbl_flextable(Sys.Date()), 'flextable')
+  expect_s3_class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>%
+                    tbl_flextable(logicals = c(TRUE, FALSE)), 'flextable')
+  expect_s3_class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>%
+                    tbl_flextable(logicals = c(TRUE, FALSE), values.colour = "FALSE", values.fill = "TRUE", values.bold = "FALSE", values.italic = "TRUE", values.fill.picker = "green"), 'flextable')
+  expect_s3_class(mtcars %>% tbl_flextable(columns.percent = 8), 'flextable')
+  expect_true(inherits(tbl_markdown("test"), 'list'))
+  expect_true(inherits(tbl_markdown(Sys.Date()), 'list'))
   expect_invisible(tbl_flextable(mtcars, print = TRUE))
-  expect_true(class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) %>% tbl_markdown(logicals = c(TRUE, FALSE))) == 'list')
-  expect_true(class(mtcars %>% tbl_markdown(columns.percent = 8, 9)) == 'list')
+  expect_true(inherits(data.frame(a = c(TRUE, FALSE),
+                                  b = c(FALSE, TRUE)) %>%
+                         tbl_markdown(logicals = c(TRUE, FALSE)),
+                       'list'))
+  expect_true(inherits(mtcars %>% tbl_markdown(columns.percent = 8, 9), 'list'))
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
 })
 
