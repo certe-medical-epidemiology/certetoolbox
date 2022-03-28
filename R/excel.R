@@ -76,7 +76,7 @@ as_excel <- function(...,
                        halign = "center",
                        valign = "center",
                        wrapText = TRUE)
-  wb <- createWorkbook(creator = read_secret("department.name"))
+  wb <- createWorkbook(creator = suppressWarnings(read_secret("department.name")))
   modifyBaseFont(wb, fontSize = 11, fontColour = "black", fontName = "Calibri")
   
   for (i in seq_len(length(dots))) {
