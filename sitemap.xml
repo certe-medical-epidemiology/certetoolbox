@@ -22,6 +22,9 @@
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/auto_transform.html</loc>
   </url>
   <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/cbs.html</loc>
+  </url>
+  <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/certetoolbox-package.html</loc>
   </url>
   <url>
@@ -37,6 +40,9 @@
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/generate_identifier.html</loc>
   </url>
   <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/hospital_name.html</loc>
+  </url>
+  <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/import.html</loc>
   </url>
   <url>
@@ -46,10 +52,19 @@
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/like.html</loc>
   </url>
   <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/p_symbol.html</loc>
+  </url>
+  <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/read_secret.html</loc>
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/ref_dir.html</loc>
+  </url>
+  <url>
+    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/remember_recall.html</loc>
   </url>
   <url>
     <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/size_humanreadable.html</loc>
