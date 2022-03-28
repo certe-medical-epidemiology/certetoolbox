@@ -48,7 +48,11 @@ test_that("data.frame works", {
   expect_s3_class(tbl_flextable("test"), 'flextable')
   expect_s3_class(tbl_flextable(mtcars), 'flextable')
   expect_s3_class(tbl_flextable(mtcars, rows.height = 2), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, row.extra.header = list(values = letters[1:12], widths = rep(1, 12))), 'flextable')
+  expect_s3_class(tbl_flextable(mtcars, row.extra.footer = list(values = letters[1:12], widths = rep(1, 12))), 'flextable')
   expect_warning(tbl_flextable(mtcars, align = letters))
+  expect_warning(tbl_flextable(mtcars, align = c("ll")))
+  expect_warning(tbl_flextable(mtcars[, character(0)]))
   expect_s3_class(tbl_flextable(mtcars, vline = c(2, 4), rows.zebra = TRUE, columns.width = c(1, 3), autofit.fullpage = FALSE), 'flextable')
   expect_warning(mtcars %>% filter(cyl == 0) %>% tbl_flextable())
   expect_s3_class(tbl_flextable(mtcars, column.total = TRUE), 'flextable')
@@ -72,6 +76,7 @@ test_that("data.frame works", {
                        'list'))
   expect_true(inherits(mtcars %>% tbl_markdown(columns.percent = 8, 9), 'list'))
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
+  expect_warning(auto_transform("test"))
 })
 
 test_that("datetime works", {

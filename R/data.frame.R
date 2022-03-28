@@ -142,6 +142,14 @@
 #'               vline = 1,
 #'               autofit.fullpage = FALSE,    # no fullpage autofit
 #'               columns.width = c(1, 3))     # cells become 1 and 3 cm
+#'               
+#' # adding extra header or footer
+#' tbl_flextable(data.frame(test1 = "A", test2 = "B"),
+#'               row.extra.header = list(values = c("Header", "Header"),
+#'                                       widths = c(1, 1)),
+#'               row.extra.footer = list(values = c("Footer", "Footer"),
+#'                                       widths = c(1, 1)))
+#'                                       
 tbl_flextable <- function(x,
                           row.names = rownames(x),
                           row.names.bold = TRUE,
