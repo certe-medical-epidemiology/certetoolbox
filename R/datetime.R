@@ -32,7 +32,7 @@ as.UTC <- function(x, ...) {
 #' @rdname as.UTC
 #' @export
 as.UTC.data.frame <- function(x, ...) {
-  POSIXct_cols <- which(sapply(x, inherits, "POSIXct"))
+  POSIXct_cols <- which(vapply(FUN.VALUE = logical(1), x, inherits, "POSIXct"))
   for (i in POSIXct_cols) {
     x[, i] <- as.UTC(x[, i, drop = TRUE])
   }
