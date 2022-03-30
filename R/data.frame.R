@@ -239,14 +239,14 @@ tbl_flextable <- function(x,
     }
   }
   
-  if (identical(row.names, as.character(c(1:nrow(x)))) & missing(row.names)) {
+  if (identical(row.names, as.character(c(seq_len(nrow(x))))) & missing(row.names)) {
     # rownames not set, are thus 1:nrow(x)
     row.names <- FALSE
   }
   
   if (!isFALSE(row.names)) {
     if (isTRUE(row.names)) {
-      row.names <- c(1:nrow(x))
+      row.names <- seq_len(nrow(x))
     } else if (length(row.names) == 1) {
       row.names <- rep(row.names, nrow(x))
     } else if (length(row.names) != nrow(x)) {
@@ -336,7 +336,7 @@ tbl_flextable <- function(x,
       for (i in seq_len(length(column.names))) {
         col.name <- names(column.names)[i]
         if (col.name != "") {
-          if (as.character(col.name) %in% as.character(c(1:ncol(x)))) {
+          if (as.character(col.name) %in% as.character(seq_len(ncol(x)))) {
             # is an index of a column
             colnames(x)[as.integer(col.name)] <- column.names[i]
           } else {
@@ -351,10 +351,10 @@ tbl_flextable <- function(x,
       if (length(column.names) != ncol(x)) {
         if (length(column.names) < ncol(x)) {
           warning("Only the first ", length(column.names), " column names will be replaced")
-          colnames(x)[1:length(column.names)] <- column.names
+          colnames(x)[seq_len(length(column.names))] <- column.names
         } else {
           warning("Only the first ", ncol(x), " items of column.names will be used")
-          colnames(x) <- column.names[1:ncol(x)]
+          colnames(x) <- column.names[seq_len(ncol(x))]
         }
       } else {
         colnames(x) <- column.names
@@ -369,7 +369,7 @@ tbl_flextable <- function(x,
     colnames_bak <- colnames(x)
     # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
     letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
-    colnames(x) <- letter_vector[1:ncol(x)]
+    colnames(x) <- letter_vector[seq_len(ncol(x))]
     names(colnames_bak) <- colnames(x) # this will make set_header_labels work, furter down
   }
   
@@ -580,7 +580,7 @@ tbl_flextable <- function(x,
         align_setting <- c(align_setting, rep("c", ncol(x) - length(align_setting)))
       } else {
         warning("Only the first ", ncol(x), " alignment settings will be used")
-        align_setting <- align_setting[1:ncol(x)]
+        align_setting <- align_setting[seq_len(ncol(x))]
       }
     }
     if (!isFALSE(row.names)) {
@@ -707,25 +707,26 @@ tbl_markdown <- function(x,
     }
   }
   
+  # nolint start
   opt.old <- options()$knitr.kable.NA
   options(knitr.kable.NA = na)
+  # nolint end
   
-  cat(rep("\n", newlines.leading) %>% concat())
-  print(
-    kable(
-      x,
-      table.attr = paste0("id=\"", x_name, "\""),
-      col.names = column.names,
-      row.names = row.names,
-      align = align,
-      format = type,
-      padding = padding,
-      caption = caption
-    )
-  )
-  cat(rep("\n", newlines.trailing) %>% concat())
+  cat(strrep("\n", newlines.leading))
+  print(kable(
+    x,
+    table.attr = paste0("id=\"", x_name, "\""),
+    col.names = column.names,
+    row.names = row.names,
+    align = align,
+    format = type,
+    padding = padding,
+    caption = caption))
+  cat(strrep("\n", newlines.trailing))
   
+  # nolint start
   options(knitr.kable.NA = opt.old)
+  # nolint end
 }
 
 #' Automatically Transform Data Set
