@@ -54,7 +54,6 @@ as.UTC.default <- function(x, ...) {
   x
 }
 
-
 #' Dates around Today
 #'
 #' @param ref reference date (defaults to today)
@@ -76,16 +75,17 @@ as.UTC.default <- function(x, ...) {
 #' next_week()
 #' next_week(only_start_end = TRUE)
 #' 
-#' library(dplyr, warn.conflicts = FALSE)
-#' 
 #' # 2nd Monday of last month:
 #' last_month() %>% nth_monday(2)
+#' nth_monday(last_month(), 2)
 #'
 #' df <- data.frame(date = sample(seq.Date(start_of_last_year(),
 #'                                         end_of_this_year(),
 #'                                         by = "day"),
 #'                                size = 500))
 #' df$time <- as.POSIXct(paste(df$date, "12:00:00"))
+#' 
+#' library(dplyr, warn.conflicts = FALSE)
 #' 
 #' # these are equal:
 #' df %>%
@@ -94,35 +94,17 @@ as.UTC.default <- function(x, ...) {
 #' df %>%
 #'   filter(date %in% last_week())
 #'
-#'
-#' # be sure to transform times to dates in certain filters
+#' # but this does not work:
 #' df %>%
-#'   filter(as.Date(time) %>% between(start_of_last_week(),
-#'                                    end_of_last_week()))
+#'   filter(time %in% last_week())
+#' 
+#' # so be sure to transform times to dates in certain filters
 #' df %>%
 #'   filter(as.Date(time) %in% last_week())
-#'   
-#' \dontrun{
-#' data <- certedb_getmmb(dates = last_week(only_start_end = TRUE))
-#' data <- certedb_getmmb(where = db$o.ontvangstdatum %in% last_week())
-#' data <- certedb_getmmb(where = db$dlt.modbac_datumtijd > start_of_this_month())
-#' }
 yesterday <- function(ref = today()) {
   ref <- as_date(ref)
   ref - 1
 }
-
-#' @rdname days_around_today
-#' @name today
-#' @importFrom lubridate today
-#' @export
-lubridate::today
-
-#' @rdname days_around_today
-#' @name now
-#' @importFrom lubridate now
-#' @export
-lubridate::now
 
 #' @rdname days_around_today
 #' @export

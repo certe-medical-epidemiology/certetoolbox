@@ -26,6 +26,14 @@ pkg_env$temp <- list()
 #' @export
 dplyr::`%>%`
 
+#' @importFrom lubridate today
+#' @export
+lubridate::today
+
+#' @importFrom lubridate now
+#' @export
+lubridate::now
+
 #' @importFrom certeprojects project_get_current_id
 #' @export
 certeprojects::project_get_current_id
