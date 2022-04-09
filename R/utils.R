@@ -43,12 +43,16 @@ is_installed <- function(pkgs) {
 }
 
 check_is_installed <- function(pkgs) {
-  to_install <- pkgs[which(!pkgs %in% rownames(utils::installed.packages()))]
+  to_install <- pkgs[which(!pkgs %in% rownames(utils::installed.packages(.libPaths())))]
   if (length(to_install) > 0) {
-    # ask to install
-    choice <- utils::askYesNo(paste0("Package(s) required but not installed: ",
-                                     paste0("'", to_install, "'", collapse = ", "), ". ",
-                                     "Install now?"))
+    if (interactive()) {
+      # ask to install
+      choice <- utils::askYesNo(paste0("Package(s) required but not installed: ",
+                                       paste0("'", to_install, "'", collapse = ", "), ". ",
+                                       "Install now?"))
+    } else {
+      choice <- FALSE
+    }
     if (isTRUE(choice)) {
       utils::install.packages(to_install,
                               repos = c(options()$repos,
@@ -68,5 +72,6 @@ check_is_installed <- function(pkgs) {
 doc_requirement <- function(filetype, fn, pkg) {
   fn <- paste0("[", fn, "()]", collapse = " or ")
   paste0(ifelse(fn %like% "import", "Importing from", "Exporting to"), " ", 
-         filetype, " using ", fn, " requires the `", pkg, "` package to be installed")
+         filetype, " using ", fn, " requires the ", paste0("`", pkg, "`", collapse = " and "), 
+         " package", ifelse(length(pkg) > 1, "s", ""), " to be installed")
 }

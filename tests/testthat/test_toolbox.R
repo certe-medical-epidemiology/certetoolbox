@@ -259,10 +259,15 @@ test_that("import_export works", {
   temp_png <- tempfile(fileext = ".png")
   expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
   
+  temp_html <- tempfile(fileext = ".html")
+  expect_true(file.exists(suppressMessages(export_html(p, filename = temp_html))))
+  
   unlink(temp_pdf)
   expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
   unlink(temp_png)
   expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
+  unlink(temp_html)
+  expect_true(file.exists(suppressMessages(export(p, filename = temp_html))))
   
   # importing a data.frame with rownames as first column should be transformed right
   temp_csv <- tempfile(fileext = ".csv")

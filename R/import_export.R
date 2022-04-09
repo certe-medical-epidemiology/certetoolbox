@@ -208,7 +208,7 @@ import_exec <- function(filename,
 
 #' Export Data Sets and Plots
 #' 
-#' These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for [export_pdf()] and [export_png()]. The functions work closely together with the `certeprojects` package to support Trello card numbers.
+#' These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions [export_pdf()], [export_png()] and [export_html()]). The functions work closely together with the `certeprojects` package to support Trello card numbers.
 #' @param object,plot the \R object to export
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
@@ -296,6 +296,11 @@ export <- function(object,
                  ...)
     } else if (filename %like% "[.]png$") {
       export_png(plot = object,
+                 filename = filename,
+                 card_number = card_number,
+                 ...)
+    } else if (filename %like% "[.]html$") {
+      export_html(plot = object,
                  filename = filename,
                  card_number = card_number,
                  ...)
@@ -465,7 +470,7 @@ export_spss <- export_sav
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
-#' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()] or [export_png()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise. **NOTE:** All export functions invisibly return `object` again, but the plotting functions invisibly return the filename.
+#' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()], [export_png()] or [export_html()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise. **NOTE:** All export functions invisibly return `object` again, but the plotting functions invisibly return the file path
 #' @importFrom certestyle format2
 #' @export
 export_pdf <- function(plot,
@@ -563,6 +568,7 @@ export_pdf <- function(plot,
 #' @param height required height of the PNG file in pixels
 #' @param text.factor text factor for the exported plot. Defaults to `1.2`, which loosely equals a PDF file in A5 format when it comes to text sizes.
 #' @details `r doc_requirement("a PNG file", "export_png", "ggplot2")`.
+#' @importFrom certestyle format2
 #' @export
 export_png <- function(plot,
                        filename = NULL,
@@ -599,6 +605,58 @@ export_png <- function(plot,
                     units = "in",
                     plot = plot,
                     ...)
+  )
+  
+  if (file.exists(filename)) {
+    message(paste0("Plot exported as '",
+                   tools::file_path_as_absolute(filename), 
+                   "' (", size_humanreadable(file.size(filename)), ")."))
+    invisible(filename)
+  } else {
+    stop("Error while saving `", filename, "`.", call. = FALSE)
+  }
+}
+
+
+#' @rdname export
+#' @details `r doc_requirement("an HTML file", "export_html", c("ggplot2", "htmltools"))`. The arguments put in `...` will be passed on to [plotly::layout()] if `plot` is not yet a Plotly object (but rather a `ggplot2` object), which of course then requires the `plotly` package to be installed as well.
+#' @importFrom certestyle format2
+#' @export
+export_html <- function(plot,
+                        filename = NULL,
+                        card_number = project_get_current_id(ask = FALSE),
+                        ...) {
+  check_is_installed(c("ggplot2", "htmltools"))
+  if ("certeplot2" %in% rownames(utils::installed.packages())) {
+    get_plot_title <- certeplot2::get_plot_title
+  } else {
+    get_plot_title <- NULL
+  }
+  
+  if (is.null(filename) && !is.null(get_plot_title)) {
+    filename <- get_plot_title(plot)
+    if (is.na(filename)) {
+      filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
+    }
+    filename <- paste0(filename, ".html")
+  } else if (is.null(filename)) {
+    filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
+  }
+  filename <- parse_file_location(filename,
+                                  needed_extension = "html",
+                                  card_number = card_number)
+  
+  if (ggplot2::is.ggplot(plot)) {
+    # transform to plotly first
+    check_is_installed("plotly")
+    plot <- plotly::layout(plotly::ggplotly(plot), ...)
+  }
+  
+  suppressWarnings(
+    htmltools::save_html(plot,
+                         file = filename,
+                         lang = "nl",
+                         libdir = "library_do_not_delete")
   )
   
   if (file.exists(filename)) {
