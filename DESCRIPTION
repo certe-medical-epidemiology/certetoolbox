@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -18,7 +18,7 @@ Description: A Certe R Package for miscellaneous functions that do not fit
   This package is part of the 'certedata' universe.
 URL: https://certe-medical-epidemiology.github.io/certetoolbox, https://github.com/certe-medical-epidemiology/certetoolbox
 Depends: 
-  R (>= 3.6.0)
+  R (>= 4.1.0)
 Imports:
   certeprojects,
   certestyle,
