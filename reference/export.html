@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -92,25 +92,27 @@
 <span class="op">)</span>
 
 <span class="fu">export_xlsx</span><span class="op">(</span>
-  <span class="va">object</span>,
+  <span class="va">...</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
   card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   sheet_names <span class="op">=</span> <span class="cn">NULL</span>,
   autofilter <span class="op">=</span> <span class="cn">TRUE</span>,
   rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
   cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
+  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
+  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
 <span class="op">)</span>
 
 <span class="fu">export_excel</span><span class="op">(</span>
-  <span class="va">object</span>,
+  <span class="va">...</span>,
   filename <span class="op">=</span> <span class="cn">NULL</span>,
   card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   sheet_names <span class="op">=</span> <span class="cn">NULL</span>,
   autofilter <span class="op">=</span> <span class="cn">TRUE</span>,
   rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
   cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
+  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
+  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
 <span class="op">)</span>
 
 <span class="fu">export_csv</span><span class="op">(</span>
@@ -217,6 +219,10 @@
 <dd><p>create banded rows</p></dd>
 <dt>cols_zebra</dt>
 <dd><p>create banded columns</p></dd>
+<dt>freeze_top_row</dt>
+<dd><p>freeze the first row of the sheet</p></dd>
+<dt>table_style</dt>
+<dd><p>style(s) for each table, see below. This can also be a vector with the same length as <code>...</code>.</p></dd>
 <dt>na</dt>
 <dd><p>replacement character for empty values (default: <code>""</code>)</p></dd>
 <dt>sep</dt>
@@ -242,7 +248,7 @@
     <h2>Details</h2>
     <p>The <code>export()</code> function can export to any file format, also with a manually set export function when passed on to the <code>fn</code> argument. This function <code>fn</code> has to have the object as first argument and the future file location as second argument. If <code>fn</code> is left blank, the <code>export_*</code> function will be used based on the filename.</p>
 <p>RDS files as created using <code>export_rds()</code> are compatible with R3 and R4.</p>
-<p>The <code>export_xlsx()</code> and <code>export_excel()</code> functions use <code><a href="as_excel.html">save_excel(as_excel(...))</a></code> internally.</p>
+<p>The <code>export_xlsx()</code> and <code>export_excel()</code> functions use <code><a href="as_excel.html">save_excel(as_excel(...))</a></code> internally. <strong>IMPORTANT</strong>: these two functions can accept more than one <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>. When naming the data sets, the names will become sheet names in the resulting Excel file. For a complete visual overview of supported table styles, see <code><a href="as_excel.html">as_excel()</a></code>. If the last value in <code>...</code> is a <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> of length 1 and <code>filename</code> is <code>NULL</code>, this value is assumed to be the filename.</p>
 <p>For <code>export_csv()</code>, <code>export_csv2()</code> and <code>export_tsv()</code>, files will be saved in UTF-8 encoding and <code>NA</code> values will be exported as <code>""</code> at default. Like other <code>*.csv</code> and <code>*.csv2</code> functions, csv is comma (<code>,</code>) separated and csv2 is semicolon (<code>;</code>) separated.</p>
 <p>The <code>export_txt()</code> function exports to a tab-separated file.</p>
 <p>Exporting to an SPSS file using <code>export_sav()</code> or <code>export_spss()</code> requires the <code>haven</code> package to be installed.</p>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -83,7 +83,8 @@
   autowidth <span class="op">=</span> <span class="cn">TRUE</span>,
   rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
   cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>
+  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
+  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
 <span class="op">)</span>
 
 <span class="fu">save_excel</span><span class="op">(</span><span class="va">xl</span>, filename <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
@@ -105,6 +106,8 @@
 <dd><p>create banded columns</p></dd>
 <dt>freeze_top_row</dt>
 <dd><p>freeze the first row of the sheet</p></dd>
+<dt>table_style</dt>
+<dd><p>style(s) for each table, see below. This can also be a vector with the same length as <code>...</code>.</p></dd>
 <dt>xl</dt>
 <dd><p>Excel object, as created with <code>as_excel()</code> (or manually with the <code>openxlsx</code> package)</p></dd>
 <dt>filename</dt>
@@ -112,13 +115,20 @@
 <dt>overwrite</dt>
 <dd><p>overwrite existing file</p></dd>
 </dl></div>
+    <div id="supported-table-styles">
+    <h2>Supported Table Styles</h2>
+    
+
+<p>For the argument <code>table_style</code>, use one or more of these table styles as character input. The default is <strong>TableStyleMedium2</strong>.</p>
+<p><img src="figures/tablestyles.png" alt=""></p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># creates a Workbook object</span></span>
 <span class="r-in"><span class="va">xl</span> <span class="op">&lt;-</span> <span class="fu">as_excel</span><span class="op">(</span><span class="st">"this is a sheet"</span> <span class="op">=</span> <span class="va">mtcars</span>,</span>
 <span class="r-in">               <span class="st">"another sheet"</span> <span class="op">=</span> <span class="va">anscombe</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Row names added as first column 'rownames'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Row names for object 1 (32x11, sheet 'this is a sheet') added as first column 'rownames'</span>
 <span class="r-in"><span class="va">xl</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A Workbook object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
