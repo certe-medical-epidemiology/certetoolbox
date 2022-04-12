@@ -134,8 +134,11 @@ test_that("datetime works", {
 })
 
 test_that("environment works", {
-  mtcars %>% remember(rows = nrow(.))
+  expect_identical(mtcars %>% remember(rows = nrow(.)), mtcars)
   expect_identical(pkg_env$temp$rows, recall(rows))
+  # unnamed:
+  expect_identical(mtcars %>% remember(nrow(.)), mtcars)
+  expect_identical(pkg_env$temp$remember_temp, recall())
 })
 
 test_that("import_export works", {

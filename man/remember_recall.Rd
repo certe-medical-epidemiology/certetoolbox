@@ -7,7 +7,7 @@
 \usage{
 remember(.data, ...)
 
-recall(x, delete = TRUE)
+recall(x = NULL, delete = TRUE)
 }
 \arguments{
 \item{.data}{\link{data.frame}}
@@ -25,6 +25,13 @@ Can be used in dplyr-syntax to remember values and objects for later use. Object
 values can be saved with \strong{\code{\link[=remember]{remember()}}} and recalled (and deleted) with \strong{\code{\link[=recall]{recall()}}}.
 }
 \examples{
+x <- mtcars \%>\% remember(nrow(.)) 
+recall()
+recall() # value removed
+x <- mtcars \%>\% remember(n = nrow(.)) 
+recall(n)
+recall(n) # value removed
+
 \dontrun{
  tbl \%>\%
    filter(...) \%>\%

@@ -328,24 +328,27 @@ export_rds <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export_xlsx()] and [export_excel()] functions use [`save_excel(as_excel(...))`][as_excel()] internally.
+#' @details The [export_xlsx()] and [export_excel()] functions use [`save_excel(as_excel(...))`][as_excel()] internally. **IMPORTANT**: these two functions can accept more than one [data.frame]. When naming the data sets, the names will become sheet names in the resulting Excel file. For a complete visual overview of supported table styles, see [as_excel()].
 #' @export
-export_xlsx <- function(object,
+export_xlsx <- function(...,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
                         sheet_names = NULL,
                         autofilter = TRUE,
                         rows_zebra = TRUE,
                         cols_zebra = FALSE,
-                        ...) {
-  export_exec(object, "xlsx",
+                        freeze_top_row = TRUE,
+                        table_style = "TableStyleMedium2") {
+  export_exec(object = list(...), "xlsx",
               filename = filename,
-              filename_deparse = deparse(substitute(object)),
+              filename_deparse = ".",
               card_number = card_number,
               sheet_names = sheet_names,
               autofilter = autofilter,
               rows_zebra = rows_zebra,
-              cols_zebra = cols_zebra)
+              cols_zebra = cols_zebra,
+              freeze_top_row = freeze_top_row,
+              table_style = table_style)
 }
 
 #' @rdname export
