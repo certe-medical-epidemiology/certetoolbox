@@ -287,6 +287,7 @@ test_that("import_export works", {
   expect_error(export(mtcars, temp_csv, fn = "non-existing-function"))
   expect_error(export(mtcars, "file.nocluehowtosave"))
   
+  expect_error(as_excel("text"))
 })
 
 test_that("universal works", {

@@ -328,7 +328,7 @@ export_rds <- function(object,
 
 #' @rdname export
 #' @inheritParams as_excel
-#' @details The [export_xlsx()] and [export_excel()] functions use [`save_excel(as_excel(...))`][as_excel()] internally. **IMPORTANT**: these two functions can accept more than one [data.frame]. When naming the data sets, the names will become sheet names in the resulting Excel file. For a complete visual overview of supported table styles, see [as_excel()].
+#' @details The [export_xlsx()] and [export_excel()] functions use [`save_excel(as_excel(...))`][as_excel()] internally. **IMPORTANT**: these two functions can accept more than one [data.frame]. When naming the data sets, the names will become sheet names in the resulting Excel file. For a complete visual overview of supported table styles, see [as_excel()]. If the last value in `...` is a [character] of length 1 and `filename` is `NULL`, this value is assumed to be the filename.
 #' @export
 export_xlsx <- function(...,
                         filename = NULL,
@@ -339,7 +339,14 @@ export_xlsx <- function(...,
                         cols_zebra = FALSE,
                         freeze_top_row = TRUE,
                         table_style = "TableStyleMedium2") {
-  export_exec(object = list(...), "xlsx",
+  object <- list(...)
+  if (length(object) > 1 && is.null(filename) &&
+      is.character(object[[length(object)]]) && length(object[[length(object)]]) == 1) {
+    # unnamed second argument is the filename, like other export functions
+    filename <- object[[length(object)]]
+    object <- object[seq_len(length(object) - 1)]
+  }
+  export_exec(object = object, "xlsx",
               filename = filename,
               filename_deparse = ".",
               card_number = card_number,

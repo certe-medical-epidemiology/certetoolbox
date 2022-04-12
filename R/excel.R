@@ -35,6 +35,7 @@
 #' @rdname as_excel
 #' @importFrom openxlsx createStyle loadWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths removeWorksheet
 #' @importFrom tibble rownames_to_column
+#' @importFrom certestyle format2
 #' @export
 #' @examples
 #' # creates a Workbook object
@@ -97,12 +98,15 @@ as_excel <- function(...,
   for (i in seq_len(length(dots))) {
     df <- dots[[i]]
     if (!is.data.frame(df)) {
-      stop("Item ", i, " ('", names(dots)[i], "') must be a data.frame, not class ", paste0(class(df), collapse = "/"), call. = FALSE)
+      stop("Object ", i, " (sheet '", names(dots)[i], "') must be a data.frame, not class ", paste0(class(df), collapse = "/"), call. = FALSE)
     }
     # support row names
     if (!identical(rownames(df), as.character(seq_len(NROW(df))))) {
+      warning("Row names for object ", i, 
+              " (", paste0(format2(dim(df)), collapse = "x"), ", sheet '", names(dots)[i],
+              "') added as first column 'rownames'",
+              call. = FALSE)
       df <- rownames_to_column(df)
-      warning("Row names for item ", i, " ('", names(dots)[i], "') added as first column 'rownames'", call. = FALSE)
     }
     col_widths <- double(NCOL(df))
     # no invalid characters in text like clinical properties, then saving won't work

@@ -77,7 +77,7 @@
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
 #' @importFrom dplyr `%>%` bind_cols pull
-#' @importFrom flextable flextable add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
+#' @importFrom flextable flextable fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
@@ -202,7 +202,7 @@ tbl_flextable <- function(x,
                           autofit.fullpage = TRUE,
                           autofit.fullpage.width = 16,
                           vline = NULL,
-                          vline.border = officer::fp_border(),
+                          vline.border = fp_border_default("black"),
                           vline.part = c("body", "footer"),
                           print = FALSE,
                           ...) {
