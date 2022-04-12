@@ -33,25 +33,27 @@ export_rds(
 )
 
 export_xlsx(
-  object,
+  ...,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
   cols_zebra = FALSE,
-  ...
+  freeze_top_row = TRUE,
+  table_style = "TableStyleMedium2"
 )
 
 export_excel(
-  object,
+  ...,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
   cols_zebra = FALSE,
-  ...
+  freeze_top_row = TRUE,
+  table_style = "TableStyleMedium2"
 )
 
 export_csv(
@@ -156,6 +158,10 @@ export_clipboard(
 
 \item{cols_zebra}{create banded columns}
 
+\item{freeze_top_row}{freeze the first row of the sheet}
+
+\item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
 \item{na}{replacement character for empty values (default: \code{""})}
 
 \item{sep}{separator for values in a row (default: tab)}
@@ -184,7 +190,7 @@ The \code{\link[=export]{export()}} function can export to any file format, also
 
 RDS files as created using \code{\link[=export_rds]{export_rds()}} are compatible with R3 and R4.
 
-The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions use \code{\link[=as_excel]{save_excel(as_excel(...))}} internally.
+The \code{\link[=export_xlsx]{export_xlsx()}} and \code{\link[=export_excel]{export_excel()}} functions use \code{\link[=as_excel]{save_excel(as_excel(...))}} internally. \strong{IMPORTANT}: these two functions can accept more than one \link{data.frame}. When naming the data sets, the names will become sheet names in the resulting Excel file. For a complete visual overview of supported table styles, see \code{\link[=as_excel]{as_excel()}}. If the last value in \code{...} is a \link{character} of length 1 and \code{filename} is \code{NULL}, this value is assumed to be the filename.
 
 For \code{\link[=export_csv]{export_csv()}}, \code{\link[=export_csv2]{export_csv2()}} and \code{\link[=export_tsv]{export_tsv()}}, files will be saved in UTF-8 encoding and \code{NA} values will be exported as \code{""} at default. Like other \verb{*.csv} and \verb{*.csv2} functions, csv is comma (\verb{,}) separated and csv2 is semicolon (\verb{;}) separated.
 

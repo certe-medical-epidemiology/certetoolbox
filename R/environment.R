@@ -28,6 +28,13 @@
 #' @details values can be saved with **[remember()]** and recalled (and deleted) with **[recall()]**.
 #' @export
 #' @examples
+#' x <- mtcars %>% remember(nrow(.)) 
+#' recall()
+#' recall() # value removed
+#' x <- mtcars %>% remember(n = nrow(.)) 
+#' recall(n)
+#' recall(n) # value removed
+#' 
 #' \dontrun{
 #'  tbl %>%
 #'    filter(...) %>%
@@ -43,17 +50,27 @@ remember <- function(.data, ...) {
   }
   dots <- list(...)
   dots_names <- names(dots)
-  if (is.null(dots_names) || any(dots_names == "")) {
-    stop("Values must be named in remember()")
+  if (is.null(dots_names)) {
+    dots_names <- ""
   }
+  if (sum(dots_names == "") > 1) {
+    stop("The length of objects in remember() must be of length 1 if not named", call. = FALSE)
+  }
+  dots_names[dots_names == ""] <- "remember_temp"
+  names(dots) <- dots_names
   pkg_env$temp <- c(pkg_env$temp, dots)
   .data
 }
 
 #' @rdname remember_recall
 #' @export
-recall <- function(x, delete = TRUE) {
-  x_name <- deparse(substitute(x))
+recall <- function(x = NULL, delete = TRUE) {
+  x_deparsed <- deparse(substitute(x))
+  if (identical(x_deparsed, "NULL") && is.null(x)) {
+    x_name <- "remember_temp"
+  } else {
+    x_name <- x_deparsed
+  }
   x_val <- pkg_env$temp[[x_name]]
   if (isTRUE(delete)) {
     pkg_env$temp <- pkg_env$temp[which(names(pkg_env$temp) != x_name)]

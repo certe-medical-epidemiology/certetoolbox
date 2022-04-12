@@ -142,15 +142,16 @@ like <- function(x, pattern, ignore.case = TRUE) {
 
 #' Paste Character Vectors Together
 #'
-#' This function is identical to `paste(c(...), sep = "", collapse = "")`.
+#' This function is at default identical to `paste(c(...), sep = "", collapse = "")`.
 #' @param ... elements to be pasted together, can also be vectors
+#' @param sep separator character, will also be used for collapsing
 #' @export
 #' @examples 
 #' concat("a", "b", "c")
 #' 
 #' concat(c("a", "b"), "c")
-concat <- function(...) {
-  paste(c(...), collapse = "", sep = "")
+concat <- function(..., sep = "") {
+  paste(c(...), collapse = sep, sep = sep)
 }
 #' Read Certe Secret From File
 #' 

@@ -12,7 +12,8 @@ as_excel(
   autowidth = TRUE,
   rows_zebra = TRUE,
   cols_zebra = FALSE,
-  freeze_top_row = TRUE
+  freeze_top_row = TRUE,
+  table_style = "TableStyleMedium2"
 )
 
 save_excel(xl, filename = NULL, overwrite = FALSE)
@@ -32,6 +33,8 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 
 \item{freeze_top_row}{freeze the first row of the sheet}
 
+\item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
 \item{xl}{Excel object, as created with \code{\link[=as_excel]{as_excel()}} (or manually with the \code{openxlsx} package)}
 
 \item{filename}{file location to save Excel document to, defaults to a random filename in the current folder}
@@ -41,6 +44,13 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 \description{
 The \code{\link[=as_excel]{as_excel()}} function relies on the \code{openxlsx} package for creating an Excel Workbook object in R. These objects can be saved using \code{\link[=save_excel]{save_excel()}} or \code{\link[=export_xlsx]{export_xlsx()}}.
 }
+\section{Supported Table Styles}{
+
+For the argument \code{table_style}, use one or more of these table styles as character input. The default is \strong{TableStyleMedium2}.
+
+\figure{tablestyles.png}
+}
+
 \examples{
 # creates a Workbook object
 xl <- as_excel("this is a sheet" = mtcars,

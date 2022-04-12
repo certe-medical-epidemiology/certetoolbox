@@ -27,9 +27,15 @@
 #' @param rows_zebra create banded rows
 #' @param cols_zebra create banded columns
 #' @param freeze_top_row freeze the first row of the sheet
+#' @param table_style style(s) for each table, see below. This can also be a vector with the same length as `...`.
+#' @section Supported Table Styles:
+#' For the argument `table_style`, use one or more of these table styles as character input. The default is **TableStyleMedium2**.
+#' 
+#' ![table styles](tablestyles.png)
 #' @rdname as_excel
-#' @importFrom openxlsx createStyle createWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths
+#' @importFrom openxlsx createStyle loadWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths removeWorksheet
 #' @importFrom tibble rownames_to_column
+#' @importFrom certestyle format2
 #' @export
 #' @examples
 #' # creates a Workbook object
@@ -57,8 +63,13 @@ as_excel <- function(...,
                      autowidth = TRUE,
                      rows_zebra = TRUE,
                      cols_zebra = FALSE,
-                     freeze_top_row = TRUE) {
+                     freeze_top_row = TRUE,
+                     table_style = "TableStyleMedium2") {
   dots <- list(...)
+  if (length(dots) == 1 && is.list(dots[[1]]) && !is.data.frame(dots[[1]])) {
+    # was passed on as a list, e.g. from export_xlsx()
+    dots <- dots[[1]]
+  }
   if (!is.null(sheet_names)) {
     names(dots) <- sheet_names
   }
@@ -68,23 +79,34 @@ as_excel <- function(...,
   name_missing <- which(names(dots) == "")
   names(dots)[names(dots) == ""] <- paste0("Blad", name_missing)
   
+  if (length(table_style) == 1 && length(dots) > 1) {
+    table_style <- rep(table_style, length(dots))
+  }
+  
   options("openxlsx.dateFormat" = "dd-mm-yyyy")
   options("openxlsx.datetimeFormat" = "dd-mm-yyyy hh:MM:ss")
+  
+  wb <- loadWorkbook(file = system.file("exceltemplate", "exceltemplate.xlsx",
+                                        package = "certetoolbox"))
+  modifyBaseFont(wb, fontSize = 11, fontColour = "black", fontName = "Calibri")
   
   style <- createStyle(fontName = "Calibri",
                        fontSize = 11,
                        halign = "center",
                        valign = "center",
                        wrapText = TRUE)
-  wb <- createWorkbook(creator = suppressWarnings(read_secret("department.name")))
-  modifyBaseFont(wb, fontSize = 11, fontColour = "black", fontName = "Calibri")
-  
   for (i in seq_len(length(dots))) {
     df <- dots[[i]]
+    if (!is.data.frame(df)) {
+      stop("Object ", i, " (sheet '", names(dots)[i], "') must be a data.frame, not class ", paste0(class(df), collapse = "/"), call. = FALSE)
+    }
     # support row names
     if (!identical(rownames(df), as.character(seq_len(NROW(df))))) {
+      warning("Row names for object ", i, 
+              " (", paste0(format2(dim(df)), collapse = "x"), ", sheet '", names(dots)[i],
+              "') added as first column 'rownames'",
+              call. = FALSE)
       df <- rownames_to_column(df)
-      warning("Row names added as first column 'rownames'", call. = FALSE)
     }
     col_widths <- double(NCOL(df))
     # no invalid characters in text like clinical properties, then saving won't work
@@ -104,14 +126,14 @@ as_excel <- function(...,
     writeDataTable(wb = wb,
                    x = df,
                    tableName = paste0("tabel_", i),
-                   sheet = i,
+                   sheet = i + 1, # since template sheet is #1
                    withFilter = isTRUE(autofilter),
                    bandedRows = isTRUE(rows_zebra),
                    bandedCols = isTRUE(cols_zebra),
-                   tableStyle = "TableStyleMedium2",
+                   tableStyle = table_style[i],
                    headerStyle = style)
     addStyle(wb = wb,
-             sheet = i,
+             sheet = i + 1, # since template sheet is #1
              style = style,
              rows = seq_len(NROW(df) + 1), # voor kopteksten
              cols = seq_len(NCOL(df)),
@@ -119,7 +141,7 @@ as_excel <- function(...,
              stack = TRUE)
     if (isTRUE(freeze_top_row)) {
       freezePane(wb = wb,
-                 sheet = i,
+                 sheet = i + 1, # since template sheet is #1
                  firstRow = TRUE)
     }
     if (isTRUE(autowidth)) {
@@ -127,11 +149,14 @@ as_excel <- function(...,
         col_widths <- "auto"
       }
       setColWidths(wb = wb,
-                   sheet = i,
+                   sheet = i + 1, # since template sheet is #1
                    cols = seq_len(NCOL(df)),
                    widths = col_widths)
     }
   }
+  
+  # remove template worksheet
+  removeWorksheet(wb, "exceltemplate")
   
   wb
 }

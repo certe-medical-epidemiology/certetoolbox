@@ -57,7 +57,7 @@ tbl_flextable(
   autofit.fullpage = TRUE,
   autofit.fullpage.width = 16,
   vline = NULL,
-  vline.border = officer::fp_border(),
+  vline.border = fp_border_default("black"),
   vline.part = c("body", "footer"),
   print = FALSE,
   ...

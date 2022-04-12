@@ -4,13 +4,15 @@
 \alias{concat}
 \title{Paste Character Vectors Together}
 \usage{
-concat(...)
+concat(..., sep = "")
 }
 \arguments{
 \item{...}{elements to be pasted together, can also be vectors}
+
+\item{sep}{separator character, will also be used for collapsing}
 }
 \description{
-This function is identical to \code{paste(c(...), sep = "", collapse = "")}.
+This function is at default identical to \code{paste(c(...), sep = "", collapse = "")}.
 }
 \examples{
 concat("a", "b", "c")
