@@ -18,7 +18,7 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
       </span>
     </div>
 
@@ -228,15 +228,17 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu">start_of_last_week</span><span class="op">(</span><span class="op">)</span>,</span>
 <span class="r-in">                          <span class="fu">end_of_last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-18 2022-04-18 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-20 2022-04-20 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-04-19 2022-04-19 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-04-23 2022-04-23 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-04-18 2022-04-18 12:00:00</span>
 <span class="r-in"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-18 2022-04-18 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-20 2022-04-20 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-04-19 2022-04-19 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-04-23 2022-04-23 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-04-18 2022-04-18 12:00:00</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># but this does not work:</span></span>
 <span class="r-in"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -248,9 +250,10 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
 <span class="r-in"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-18 2022-04-18 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-04-20 2022-04-20 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-04-19 2022-04-19 12:00:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-04-23 2022-04-23 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-04-18 2022-04-18 12:00:00</span>
 </code></pre></div>
     </div>
   </div>
