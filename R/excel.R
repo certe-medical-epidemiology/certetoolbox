@@ -120,7 +120,8 @@ as_excel <- function(...,
       col_widths[col] <- min(255,
                              max(c(8, nchar(c(colnames(df)[col],
                                               as.character(df[, col, drop = TRUE]))) * 1.2),
-                                 na.rm = TRUE))
+                                 na.rm = TRUE),
+                             na.rm = TRUE)
     }
     addWorksheet(wb = wb,
                  sheetName = names(dots)[i])
