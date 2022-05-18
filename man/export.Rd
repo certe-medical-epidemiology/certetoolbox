@@ -118,7 +118,7 @@ export_png(
   card_number = project_get_current_id(ask = FALSE),
   width = 1000,
   height = 800,
-  dpi = showtext_opts()$dpi,
+  dpi = showtext::showtext_opts()$dpi,
   ...
 )
 
@@ -173,6 +173,8 @@ export_clipboard(
 \item{width}{required width of the PNG file in pixels}
 
 \item{height}{required height of the PNG file in pixels}
+
+\item{dpi}{plot resolution}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 

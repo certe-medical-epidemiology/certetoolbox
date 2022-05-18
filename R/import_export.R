@@ -576,6 +576,7 @@ export_pdf <- function(plot,
 #' @rdname export
 #' @param width required width of the PNG file in pixels
 #' @param height required height of the PNG file in pixels
+#' @param dpi plot resolution
 #' @details `r doc_requirement("a PNG file", "export_png", "ggplot2")`.
 #' @importFrom certestyle format2
 #' @export
@@ -586,6 +587,11 @@ export_png <- function(plot,
                        height = 800,
                        dpi = showtext::showtext_opts()$dpi,
                        ...) {
+  
+  if (!"showtext" %in% rownames(utils::installed.packages())) {
+    stop("Package 'showtext' not installed")
+  }
+  
   check_is_installed("ggplot2")
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
     get_plot_title <- certeplot2::get_plot_title
