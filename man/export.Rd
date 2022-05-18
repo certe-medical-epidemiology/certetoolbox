@@ -118,7 +118,7 @@ export_png(
   card_number = project_get_current_id(ask = FALSE),
   width = 1000,
   height = 800,
-  text.factor = 1.2,
+  dpi = showtext_opts()$dpi,
   ...
 )
 
@@ -173,8 +173,6 @@ export_clipboard(
 \item{width}{required width of the PNG file in pixels}
 
 \item{height}{required height of the PNG file in pixels}
-
-\item{text.factor}{text factor for the exported plot. Defaults to \code{1.2}, which loosely equals a PDF file in A5 format when it comes to text sizes.}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 

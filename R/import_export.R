@@ -584,7 +584,7 @@ export_png <- function(plot,
                        card_number = project_get_current_id(ask = FALSE),
                        width = 1000,
                        height = 800,
-                       dpi = showtext_opts()$dpi,
+                       dpi = showtext::showtext_opts()$dpi,
                        ...) {
   check_is_installed("ggplot2")
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
@@ -606,7 +606,7 @@ export_png <- function(plot,
                                   needed_extension = "png",
                                   card_number = card_number)
   
-  dpi_old <- showtext_opts()$dpi
+  dpi_old <- showtext::showtext_opts()$dpi
   showtext::showtext_opts(dpi = dpi)
   
   suppressWarnings(
