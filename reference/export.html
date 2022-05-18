@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.4</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@
   card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
   width <span class="op">=</span> <span class="fl">1000</span>,
   height <span class="op">=</span> <span class="fl">800</span>,
-  text.factor <span class="op">=</span> <span class="fl">1.2</span>,
+  dpi <span class="op">=</span> <span class="fu">showtext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/showtext/man/showtext_opts.html" class="external-link">showtext_opts</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">dpi</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -235,8 +235,8 @@
 <dd><p>required width of the PNG file in pixels</p></dd>
 <dt>height</dt>
 <dd><p>required height of the PNG file in pixels</p></dd>
-<dt>text.factor</dt>
-<dd><p>text factor for the exported plot. Defaults to <code>1.2</code>, which loosely equals a PDF file in A5 format when it comes to text sizes.</p></dd>
+<dt>dpi</dt>
+<dd><p>plot resolution</p></dd>
 <dt>header</dt>
 <dd><p>(for <code>export_clipboard()</code>) use column names as header (default: <code>TRUE</code>)</p></dd>
 <dt>quote</dt>
@@ -269,15 +269,15 @@
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'</span></span>
-<span class="r-in"><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">starwars</span> |&gt;</span>
+<span class="r-in">  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> |&gt;</span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt;</span>
 <span class="r-in">  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span>
 <span class="r-in">  </span>
 <span class="r-in"><span class="co"># the above is equal to:</span></span>
-<span class="r-in"><span class="va">starwars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">export</span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in"><span class="va">starwars</span> |&gt;</span>
+<span class="r-in">  <span class="fu">export</span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span> |&gt;</span>
+<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt;</span>
 <span class="r-in">  <span class="fu">export</span><span class="op">(</span><span class="st">"first_ten_rows.xlsx"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
