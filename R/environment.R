@@ -28,7 +28,7 @@
 #' @details values can be saved with **[remember()]** and recalled (and deleted) with **[recall()]**.
 #' @export
 #' @examples
-#' library(dplyr, warn-conflicts = FALSE)
+#' library(dplyr, warn.conflicts = FALSE)
 #' 
 #' x <- mtcars %>% remember(nrow(.)) 
 #' recall()
