@@ -17,14 +17,15 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-globalVariables(c("."))
+globalVariables(c(".",
+                  "Identifier",
+                  "Title",
+                  "Summary",
+                  "SearchPriority",
+                  "ShortTitle"))
 
 pkg_env <- new.env(hash = FALSE)
 pkg_env$temp <- list()
-
-#' @importFrom dplyr `%>%`
-#' @export
-dplyr::`%>%`
 
 #' @importFrom lubridate today
 #' @export

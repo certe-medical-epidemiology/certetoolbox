@@ -188,8 +188,8 @@ tbl_flextable(df)      # dataset has no row names
 tbl_flextable(mtcars)  # dataset has row names
 
 # print in markdown
-df \%>\% 
-  tbl_flextable() \%>\% 
+df |> 
+  tbl_flextable() |> 
   tbl_markdown()
 
 # extra formatting

@@ -20,7 +20,7 @@
 coverage:
   range:
   - 0.0
-  - 90.0
+  - 85.0
 
 ignore:
   - "R/addins.R"

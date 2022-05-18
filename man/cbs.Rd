@@ -25,10 +25,10 @@ cbs_moreinfo(identifier)
 \item{clean_cols}{Clean column names.}
 }
 \description{
-Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data}.
+Download data from \href{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statline-als-open-data}{CBS Open data Statline}.
 }
 \details{
-\code{\link[=cbs_topics]{cbs_topics()}} Retrieves all topics
+\code{\link[=cbs_topics]{cbs_topics()}} retrieves all topics.
 
 \code{\link[=cbs_search]{cbs_search()}} searches for a specific subject.
 
@@ -37,21 +37,11 @@ Download data from CBS Open data Statline. See \url{https://www.cbs.nl/nl-nl/onz
 \code{\link[=cbs_moreinfo]{cbs_moreinfo()}} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{\link[=cbs_download]{cbs_download()}}.
 }
 \examples{
-\dontrun{
 cbs_search("Inwoners")
 
 x <- cbs_download(2) # 2nd hit of cbs_search()
+str(x)
 
 cbs_moreinfo(x)
 cbs_moreinfo(2)
-
-cbs_search("Overledenen; doodsoorzaak, kwartaal en jaar overlijden") \%>\%
-  cbs_download() \%>\%
-  filter(perioden \%like\% "J00") \%>\%
-  mutate(perioden = clean_integer(gsub("J00", "", perioden))) \%>\%
-  select(-matches("totaal")) \%>\%
-  set_names(label(.)) \%>\% # CBS-kolommen hebben labels met netjes opgemaakte tekst
-  pivot_longer(-perioden) \%>\%
-  plot2.line(x = perioden, x.category = name, y = value, sort.x = NULL)
-}
 }

@@ -118,7 +118,7 @@ export_png(
   card_number = project_get_current_id(ask = FALSE),
   width = 1000,
   height = 800,
-  text.factor = 1.2,
+  dpi = showtext::showtext_opts()$dpi,
   ...
 )
 
@@ -174,7 +174,7 @@ export_clipboard(
 
 \item{height}{required height of the PNG file in pixels}
 
-\item{text.factor}{text factor for the exported plot. Defaults to \code{1.2}, which loosely equals a PDF file in A5 format when it comes to text sizes.}
+\item{dpi}{plot resolution}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 
@@ -212,15 +212,15 @@ Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard
 library(dplyr)
 
 # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
-starwars \%>\%
-  export_rds("whole_file") \%>\%
-  slice(1:10) \%>\%
+starwars |>
+  export_rds("whole_file") |>
+  slice(1:10) |>
   export_xlsx("first_ten_rows")
   
 # the above is equal to:
-starwars \%>\%
-  export("whole_file.rds") \%>\%
-  slice(1:10) \%>\%
+starwars |>
+  export("whole_file.rds") |>
+  slice(1:10) |>
   export("first_ten_rows.xlsx")
 }
 }

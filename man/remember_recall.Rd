@@ -25,6 +25,8 @@ Can be used in dplyr-syntax to remember values and objects for later use. Object
 values can be saved with \strong{\code{\link[=remember]{remember()}}} and recalled (and deleted) with \strong{\code{\link[=recall]{recall()}}}.
 }
 \examples{
+library(dplyr, warn.conflicts = FALSE)
+
 x <- mtcars \%>\% remember(nrow(.)) 
 recall()
 recall() # value removed

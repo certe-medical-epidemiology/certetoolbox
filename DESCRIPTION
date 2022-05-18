@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.1.3
+Version: 1.1.4
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -48,9 +48,11 @@ Suggests:
   plotly (>= 4.8.0),
   readxl (>= 1.3.0),
   rio (>= 0.5.27),
+  showtext (>= 0.9.0),
+  showtextdb (>= 3.0.0),
   testthat (>= 2.0.0)
 License: GPL-2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Config/testthat/edition: 2

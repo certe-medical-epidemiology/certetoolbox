@@ -224,15 +224,15 @@ import_exec <- function(filename,
 #' library(dplyr)
 #' 
 #' # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
-#' starwars %>%
-#'   export_rds("whole_file") %>%
-#'   slice(1:10) %>%
+#' starwars |>
+#'   export_rds("whole_file") |>
+#'   slice(1:10) |>
 #'   export_xlsx("first_ten_rows")
 #'   
 #' # the above is equal to:
-#' starwars %>%
-#'   export("whole_file.rds") %>%
-#'   slice(1:10) %>%
+#' starwars |>
+#'   export("whole_file.rds") |>
+#'   slice(1:10) |>
 #'   export("first_ten_rows.xlsx")
 #' }
 export <- function(object,
@@ -576,7 +576,7 @@ export_pdf <- function(plot,
 #' @rdname export
 #' @param width required width of the PNG file in pixels
 #' @param height required height of the PNG file in pixels
-#' @param text.factor text factor for the exported plot. Defaults to `1.2`, which loosely equals a PDF file in A5 format when it comes to text sizes.
+#' @param dpi plot resolution
 #' @details `r doc_requirement("a PNG file", "export_png", "ggplot2")`.
 #' @importFrom certestyle format2
 #' @export
@@ -585,8 +585,13 @@ export_png <- function(plot,
                        card_number = project_get_current_id(ask = FALSE),
                        width = 1000,
                        height = 800,
-                       text.factor = 1.2,
+                       dpi = showtext::showtext_opts()$dpi,
                        ...) {
+  
+  if (!"showtext" %in% rownames(utils::installed.packages())) {
+    stop("Package 'showtext' not installed")
+  }
+  
   check_is_installed("ggplot2")
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
     get_plot_title <- certeplot2::get_plot_title
@@ -607,15 +612,20 @@ export_png <- function(plot,
                                   needed_extension = "png",
                                   card_number = card_number)
   
+  dpi_old <- showtext::showtext_opts()$dpi
+  showtext::showtext_opts(dpi = dpi)
+  
   suppressWarnings(
     ggplot2::ggsave(filename = filename,
-                    dpi =  text.factor * 100,
-                    width = width / (text.factor * 100),
-                    height = height / (text.factor * 100),
-                    units = "in",
+                    dpi = dpi,
+                    width = width,
+                    height = height,
+                    units = "px",
                     plot = plot,
                     ...)
   )
+  
+  showtext::showtext_opts(dpi = dpi_old)
   
   if (file.exists(filename)) {
     message(paste0("Plot exported as '",

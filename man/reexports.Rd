@@ -3,7 +3,6 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{\%>\%}
 \alias{today}
 \alias{now}
 \alias{project_get_current_id}
@@ -15,8 +14,6 @@ below to see their documentation.
 
 \describe{
   \item{certeprojects}{\code{\link[certeprojects:project_properties]{project_get_current_id}}}
-
-  \item{dplyr}{\code{\link[dplyr:reexports]{\%>\%}}}
 
   \item{lubridate}{\code{\link[lubridate]{now}}, \code{\link[lubridate:now]{today}}}
 }}

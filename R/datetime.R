@@ -66,7 +66,7 @@ as.UTC.default <- function(x, ...) {
 #' [year()] always returns an [integer].
 #' @rdname days_around_today
 #' @name days_around_today
-#' @importFrom dplyr `%>%` filter
+#' @importFrom dplyr filter
 #' @importFrom lubridate as_date dweeks dmonths dyears floor_date ceiling_date year
 #' @export
 #' @examples
@@ -76,7 +76,7 @@ as.UTC.default <- function(x, ...) {
 #' next_week(only_start_end = TRUE)
 #' 
 #' # 2nd Monday of last month:
-#' last_month() %>% nth_monday(2)
+#' last_month() |> nth_monday(2)
 #' nth_monday(last_month(), 2)
 #'
 #' df <- data.frame(date = sample(seq.Date(start_of_last_year(),
@@ -88,18 +88,18 @@ as.UTC.default <- function(x, ...) {
 #' library(dplyr, warn.conflicts = FALSE)
 #' 
 #' # these are equal:
-#' df %>%
-#'   filter(date %>% between(start_of_last_week(),
+#' df |>
+#'   filter(date |> between(start_of_last_week(),
 #'                           end_of_last_week()))
-#' df %>%
+#' df |>
 #'   filter(date %in% last_week())
 #'
 #' # but this does not work:
-#' df %>%
+#' df |>
 #'   filter(time %in% last_week())
 #' 
 #' # so be sure to transform times to dates in certain filters
-#' df %>%
+#' df |>
 #'   filter(as.Date(time) %in% last_week())
 yesterday <- function(ref = today()) {
   ref <- as_date(ref)
