@@ -224,15 +224,15 @@ import_exec <- function(filename,
 #' library(dplyr)
 #' 
 #' # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
-#' starwars %>%
-#'   export_rds("whole_file") %>%
-#'   slice(1:10) %>%
+#' starwars |>
+#'   export_rds("whole_file") |>
+#'   slice(1:10) |>
 #'   export_xlsx("first_ten_rows")
 #'   
 #' # the above is equal to:
-#' starwars %>%
-#'   export("whole_file.rds") %>%
-#'   slice(1:10) %>%
+#' starwars |>
+#'   export("whole_file.rds") |>
+#'   slice(1:10) |>
 #'   export("first_ten_rows.xlsx")
 #' }
 export <- function(object,

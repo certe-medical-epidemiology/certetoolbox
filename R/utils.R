@@ -22,10 +22,6 @@ globalVariables(c("."))
 pkg_env <- new.env(hash = FALSE)
 pkg_env$temp <- list()
 
-#' @importFrom dplyr `%>%`
-#' @export
-dplyr::`%>%`
-
 #' @importFrom lubridate today
 #' @export
 lubridate::today

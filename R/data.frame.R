@@ -76,7 +76,7 @@
 #' @return list
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
-#' @importFrom dplyr `%>%` bind_cols pull
+#' @importFrom dplyr bind_cols pull
 #' @importFrom flextable flextable fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
 #' @importFrom cleaner as.percentage
 #' @export
@@ -94,8 +94,8 @@
 #' tbl_flextable(mtcars)  # dataset has row names
 #' 
 #' # print in markdown
-#' df %>% 
-#'   tbl_flextable() %>% 
+#' df |> 
+#'   tbl_flextable() |> 
 #'   tbl_markdown()
 #'
 #' # extra formatting
@@ -288,28 +288,28 @@ tbl_flextable <- function(x,
   columns.fill <- columns.fill + as.integer(!isFALSE(row.names))
   for (i in seq_len(col_count)) {
     if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
-      x[, i] <- x %>%
-        pull(i) %>% 
-        as.Date() %>% 
+      x[, i] <- x |>
+        pull(i) |> 
+        as.Date() |> 
         format2(format = format.dates)
     }
     if (is.logical(x[1, i, drop = TRUE])) {
-      x[, i] <- x %>%
-        pull(i) %>% 
-        as.character() %>% 
-        gsub("TRUE", logicals[1], .) %>%
-        gsub("FALSE", logicals[2], .)
+      x[, i] <- gsub("TRUE", logicals[1],
+                     gsub("FALSE", logicals[2],
+                          x |>
+                            pull(i) |> 
+                            as.character()))
     }
     if (inherits(x[1, i, drop = TRUE], c("double", "integer", "numeric", "single")) &
         !i %in% columns.percent) {
-      x[, i] <- x %>%
-        pull(i) %>% 
+      x[, i] <- x |>
+        pull(i) |> 
         format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
     }
     if (i %in% columns.percent) {
-      x[, i] <- x %>% 
-        pull(i) %>%
-        as.percentage() %>% 
+      x[, i] <- x |> 
+        pull(i) |>
+        as.percentage() |> 
         format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
     }
   }
@@ -364,7 +364,7 @@ tbl_flextable <- function(x,
       }
     }
     # support duplicate colnames, so this will work:
-    # data.frame(col1 = 1, col2 = 2) %>%
+    # data.frame(col1 = 1, col2 = 2) |>
     #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
     colnames_bak <- colnames(x)
     # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
@@ -374,7 +374,7 @@ tbl_flextable <- function(x,
   }
   
   ft <- flextable(x)
-  
+ 
   # row and column names
   if (row.total == TRUE) {
     ind <- 0
@@ -389,17 +389,17 @@ tbl_flextable <- function(x,
                                         round_pct = round.percent) {
                                  ind <<- ind + 1
                                  if (ind %in% columns.percent) {
-                                   x %>% 
-                                     FUN() %>%
-                                     as.percentage() %>%
+                                   x |> 
+                                     FUN() |>
+                                     as.percentage() |>
                                      format2(round = round.percent, decimal.mark = dec, big.mark = big)
                                  } else if (!identical(FUN, sum) & inherits(x, c("Date", "POSIXt"))) {
-                                   x %>%
-                                     FUN() %>%
+                                   x |>
+                                     FUN() |>
                                      format2(format = date_format)
                                  } else if (is.numeric(x)) {
-                                   x %>% 
-                                     FUN() %>%
+                                   x |> 
+                                     FUN() |>
                                      format2(round = round, decimal.mark = dec, big.mark = big)
                                  } else {
                                    ""
@@ -414,11 +414,13 @@ tbl_flextable <- function(x,
       if (length(row.total.widths) == 1) {
         row.total.widths <- rep(row.total.widths, ncol(x))
       }
-      ft <- ft %>%
+      ft <- ft |>
         add_footer_row(values = row.total.values,
-                       colwidths = row.total.widths) %>%
-        addif(row.total.bold == TRUE,
-              bold(., part = "footer", i = nrow(.$footer$dataset)))
+                       colwidths = row.total.widths)
+      if (row.total.bold == TRUE) {
+        ft <- ft |>
+          bold(part = "footer", i = nrow(ft$footer$dataset))
+      }
     }
   }
   if (is.list(row.extra.header)) {
@@ -426,7 +428,7 @@ tbl_flextable <- function(x,
       if (length(row.extra.header$widths) == 1) {
         row.extra.header$widths <- rep(row.extra.header$widths, ncol(x))
       }
-      ft <- ft %>%
+      ft <- ft |>
         add_header_row(values = row.extra.header$values,
                        colwidths = row.extra.header$widths)
     }
@@ -436,7 +438,7 @@ tbl_flextable <- function(x,
       if (length(row.extra.footer$widths) == 1) {
         row.extra.footer$widths <- rep(row.extra.footer$widths, ncol(x))
       }
-      ft <- ft %>%
+      ft <- ft |>
         add_footer_row(values = row.extra.footer$values,
                        colwidths = row.extra.footer$widths)
     }
@@ -446,45 +448,45 @@ tbl_flextable <- function(x,
   if (!is.null(values.colour)) {
     ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
     for (row in seq_len(nrow(ind))) {
-      ft <- ft %>% color(i = ind[row, "row"],
-                         j = ind[row, "col"],
-                         color = colourpicker(values.colour.picker))
+      ft <- ft |> color(i = ind[row, "row"],
+                        j = ind[row, "col"],
+                        color = colourpicker(values.colour.picker))
     }
   }
   if (!is.null(values.fill)) {
     ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
     for (row in seq_len(nrow(ind))) {
-      ft <- ft %>% bg(i = ind[row, "row"],
-                      j = ind[row, "col"],
-                      bg = colourpicker(values.fill.picker))
+      ft <- ft |> bg(i = ind[row, "row"],
+                     j = ind[row, "col"],
+                     bg = colourpicker(values.fill.picker))
     }
   }
   if (!is.null(values.bold)) {
     ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
     for (row in seq_len(nrow(ind))) {
-      ft <- ft %>% bold(i = ind[row, "row"],
-                        j = ind[row, "col"])
+      ft <- ft |> bold(i = ind[row, "row"],
+                       j = ind[row, "col"])
     }
   }
   if (!is.null(values.italic)) {
     ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
     for (row in seq_len(nrow(ind))) {
-      ft <- ft %>% italic(i = ind[row, "row"],
-                          j = ind[row, "col"])
+      ft <- ft |> italic(i = ind[row, "row"],
+                         j = ind[row, "col"])
     }
   }
   
   # format column total
   if (column.total == TRUE & column.total.bold == TRUE) {
-    ft <- ft %>% bold(j = ncol(x.bak), part = "all")
+    ft <- ft |> bold(j = ncol(x.bak), part = "all")
   }
   
   # vertical lines
   if (!is.null(vline)) {
     for (i in seq_len(length(vline.part))) {
-      ft <- ft %>% vline(border = vline.border,
-                         j = vline,
-                         part = vline.part[i])
+      ft <- ft |> vline(border = vline.border,
+                        j = vline,
+                        part = vline.part[i])
     }
   }
   
@@ -497,37 +499,59 @@ tbl_flextable <- function(x,
   }
   
   # Certe theme
-  ft <- ft %>%
-    addif(caption != "",
-          set_caption(., caption)) %>%
-    # bold headers
-    addif(column.names.bold == TRUE,
-          bold(., part = "header")) %>%
-    # bold row names
-    addif(!isFALSE(row.names) & row.names.bold == TRUE,
-          bold(., j = 1)) %>%
-    font(fontname = font.family, part = "all") %>%
-    fontsize(size = font.size, part = "all") %>%
-    addif(font.size.header != font.size,
-          fontsize(., size = font.size.header, part = "header")) %>%
-    addif(length(columns.italic) > 0,
-          italic(., j = columns.italic)) %>%
-    addif(length(columns.bold) > 0,
-          bold(., j = columns.bold)) %>%
-    addif(!is.null(rows.italic),
-          italic(., i = rows.italic)) %>%
-    addif(!is.null(rows.bold),
-          bold(., i = rows.bold)) %>%
-    addif(!is.null(colnames_bak),
-          set_header_labels(., values = colnames_bak)) %>%
-    addif(!is.null(rows.fill),
-          bg(., i = rows.fill,
-             bg = colourpicker(rows.fill.picker),
-             part = "body")) %>%
-    addif(length(columns.fill) > 0,
-          bg(., j = columns.fill,
-             bg = colourpicker(columns.fill.picker),
-             part = "body"))
+  ft <- ft |>
+    font(fontname = font.family, part = "all") |>
+    fontsize(size = font.size, part = "all")
+  if (caption != "") {
+    ft <- ft |>
+      set_caption(caption)
+  }
+  # bold headers
+  if (column.names.bold == TRUE) {
+    ft <- ft |>
+      bold(part = "header")
+  }
+  # bold row names
+  if (!isFALSE(row.names) & row.names.bold == TRUE) {
+    ft <- ft |>
+      bold(j = 1)
+  }
+  if (font.size.header != font.size) {
+    ft <- ft |>
+      fontsize(size = font.size.header, part = "header")
+  }
+  if (length(columns.italic) > 0) {
+    ft <- ft |>
+      italic(j = columns.italic)
+  }
+  if (length(columns.bold) > 0) {
+    ft <- ft |>
+      bold(j = columns.bold)
+  }
+  if (!is.null(rows.italic)) {
+    ft <- ft |>
+      italic(i = rows.italic)
+  }
+  if (!is.null(rows.bold)) {
+    ft <- ft |>
+      bold(i = rows.bold)
+  }
+  if (!is.null(colnames_bak)) {
+    ft <- ft |>
+      set_header_labels(values = colnames_bak)
+  }
+  if (!is.null(rows.fill)) {
+    ft <- ft |>
+      bg(i = rows.fill,
+         bg = colourpicker(rows.fill.picker),
+         part = "body")
+  }
+  if (length(columns.fill) > 0) {
+    ft <- ft |>
+      bg(j = columns.fill,
+         bg = colourpicker(columns.fill.picker),
+         part = "body")
+  }
   
   # set width
   if (!is.null(columns.width)) {
@@ -543,7 +567,7 @@ tbl_flextable <- function(x,
       columns.width <- columns.width / 2.54
     }
     for (j in seq_len(ncol(x))) {
-      ft <- ft %>% width(j = j, width = columns.width[j])
+      ft <- ft |> width(j = j, width = columns.width[j])
     }
   }
   # set height
@@ -553,16 +577,17 @@ tbl_flextable <- function(x,
     }
     rows.height <- rows.height / 2.54
     for (i in seq_len(nrow(x))) {
-      ft <- ft %>% height(i = i, height = rows.height[i])
+      ft <- ft |> height(i = i, height = rows.height[i])
     }
   }
   
-  ft <- ft %>%
-    addif(autofit == TRUE,
-          autofit(.)) %>%
-    addif(autofit.fullpage == TRUE,
-          # width as inch
-          width(., width = dim(.)$widths * (autofit.fullpage.width / 2.54) / (flextable_dim(.)$widths)))
+  if (autofit == TRUE) {
+    ft <- ft |> autofit()
+  }
+  if (autofit.fullpage == TRUE) {
+    # width as inch
+    ft <- ft |> width(width = dim(ft)$widths * (autofit.fullpage.width / 2.54) / (flextable_dim(ft)$widths))
+  }
   
   # alignment
   if (!is.null(align)) {
@@ -589,16 +614,16 @@ tbl_flextable <- function(x,
     }
     align_setting[align_setting == "u"] <- "j" # 'justify' instead of 'uitlijnen'
     if (any(align_setting == "l")) {
-      ft <- ft %>% align(align = "left", j = which(align_setting == "l"), part = align.part)
+      ft <- ft |> align(align = "left", j = which(align_setting == "l"), part = align.part)
     }
     if (any(align_setting == "c")) {
-      ft <- ft %>% align(align = "center", j = which(align_setting == "c"), part = align.part)
+      ft <- ft |> align(align = "center", j = which(align_setting == "c"), part = align.part)
     }
     if (any(align_setting == "r")) {
-      ft <- ft %>% align(align = "right", j = which(align_setting == "r"), part = align.part)
+      ft <- ft |> align(align = "right", j = which(align_setting == "r"), part = align.part)
     }
     if (any(align_setting == "j")) {
-      ft <- ft %>% align(align = "justify", j = which(align_setting == "j"), part = align.part)
+      ft <- ft |> align(align = "justify", j = which(align_setting == "j"), part = align.part)
     }
   }
   
@@ -633,7 +658,7 @@ tbl_flextable <- function(x,
 #' @details When in an R Markdown rapport a table is printed using this function, column headers only print well if `newlines.leading` >= 2, or by manually using `cat("\\n\\n")` before printing the table.
 #' @seealso [knitr::kable()]
 #' @return character
-#' @importFrom dplyr `%>%` pull 
+#' @importFrom dplyr pull 
 #' @importFrom flextable flextable_to_rmd
 #' @importFrom knitr kable
 #' @export
@@ -682,27 +707,28 @@ tbl_markdown <- function(x,
   
   for (i in seq_len(col_count)) {
     if (class(x[1, i])[1] %in% c("Date", "POSIXct", "POSIXlt")) {
-      x[, i] <- x %>% 
-        pull(i) %>%
+      x[, i] <- x |> 
+        pull(i) |>
         format2(format = format.dates)
     }
     if (class(x[1, i])[1] %in% "logical") {
-      x[, i] <- x %>%
-        pull(i) %>% 
-        as.character() %>%
-        gsub("TRUE", logicals[1], .) %>%
-        gsub("FALSE", logicals[2], .)
+      x[, i] <- gsub("TRUE", logicals[1],
+                     gsub("FALSE", logicals[2],
+                          x |>
+                            pull(i) |> 
+                            as.character()))
+      
     }
     if (class(x[1, i])[1] %in% c("double", "integer", "numeric", "single") &
         !i %in% columns.percent) {
-      x[, i] <- x %>%
-        pull(i) %>%
+      x[, i] <- x |>
+        pull(i) |>
         format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
     }
     if (i %in% columns.percent) {
-      x[, i] <- x %>%
-        pull(i) %>%
-        as.percentage() %>%
+      x[, i] <- x |>
+        pull(i) |>
+        as.percentage() |>
         format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
     }
   }
@@ -743,7 +769,6 @@ tbl_markdown <- function(x,
 #' @param ... not used as the time, allows for future extension
 #' @importFrom cleaner format_datetime clean_Date
 #' @importFrom readr parse_guess locale
-#' @importFrom dplyr `%>%`
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
