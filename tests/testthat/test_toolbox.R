@@ -17,24 +17,24 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-test_that("cbs works", {
-  expect_true(is.data.frame(cbs_topics()))
-  expect_output(cbs_search("test"))
-  expect_message(cbs_search("certe"))
-  expect_message(cbs_search("inwoners"))
-  expect_true(is.data.frame(cbs_search("test") |> cbs_download()))
-  expect_error(cbs_download(mtcars))
-  cbs_search("test")
-  expect_true(is.data.frame(cbs_download(identifier = 3)))
-  pkg_env$cbs_identifiers <- NULL
-  expect_error(cbs_download(identifier = 3))
-  expect_output(cbs_search("test") |> cbs_download() |> cbs_moreinfo())
-  expect_error(cbs_moreinfo(mtcars))
-  cbs_search("test")
-  expect_output(cbs_moreinfo(identifier = 3))
-  pkg_env$cbs_identifiers <- NULL
-  expect_error(cbs_moreinfo(identifier = 3))
-})
+# test_that("cbs works", {
+#   expect_true(is.data.frame(cbs_topics()))
+#   expect_output(cbs_search("test"))
+#   expect_message(cbs_search("certe"))
+#   expect_message(cbs_search("inwoners"))
+#   expect_true(is.data.frame(cbs_search("test") |> cbs_download()))
+#   expect_error(cbs_download(mtcars))
+#   cbs_search("test")
+#   expect_true(is.data.frame(cbs_download(identifier = 3)))
+#   pkg_env$cbs_identifiers <- NULL
+#   expect_error(cbs_download(identifier = 3))
+#   expect_output(cbs_search("test") |> cbs_download() |> cbs_moreinfo())
+#   expect_error(cbs_moreinfo(mtcars))
+#   cbs_search("test")
+#   expect_output(cbs_moreinfo(identifier = 3))
+#   pkg_env$cbs_identifiers <- NULL
+#   expect_error(cbs_moreinfo(identifier = 3))
+# })
 
 test_that("character works", {
   expect_true(size_humanreadable(1234) |> is.character())
