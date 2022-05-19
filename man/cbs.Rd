@@ -37,6 +37,7 @@ Download data from \href{https://www.cbs.nl/nl-nl/onze-diensten/open-data/statli
 \code{\link[=cbs_moreinfo]{cbs_moreinfo()}} gives a detailed explanation for the table. Input can also be a dataset downloaded with \code{\link[=cbs_download]{cbs_download()}}.
 }
 \examples{
+\dontrun{
 cbs_search("Inwoners")
 
 x <- cbs_download(2) # 2nd hit of cbs_search()
@@ -44,4 +45,5 @@ str(x)
 
 cbs_moreinfo(x)
 cbs_moreinfo(2)
+}
 }
