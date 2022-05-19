@@ -34,6 +34,7 @@
 #' @rdname cbs
 #' @export
 #' @examples
+#' \dontrun{
 #' cbs_search("Inwoners")
 #'
 #' x <- cbs_download(2) # 2nd hit of cbs_search()
@@ -41,6 +42,7 @@
 #'
 #' cbs_moreinfo(x)
 #' cbs_moreinfo(2)
+#' }
 cbs_topics <- function() {
   check_is_installed("cbsodataR")
   cbsodataR::cbs_get_toc(Language = "nl")
