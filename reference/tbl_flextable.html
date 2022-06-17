@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.5</span>
       </span>
     </div>
 
@@ -140,112 +140,217 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></p></dd>
+
+
 <dt>row.names</dt>
 <dd><p>row names to be displayed. Will be <code>1:nrow(x)</code> if set to TRUE, but can be a vector of values.</p></dd>
+
+
 <dt>row.names.bold</dt>
 <dd><p>display row names in bold</p></dd>
+
+
 <dt>rows.italic</dt>
 <dd><p>column indexes of rows in italics</p></dd>
+
+
 <dt>rows.bold</dt>
 <dd><p>column indexes of rows in bold</p></dd>
+
+
 <dt>rows.height</dt>
 <dd><p>height of the rows in centimetres</p></dd>
+
+
 <dt>rows.fill</dt>
 <dd><p>the column indices of rows to be shaded</p></dd>
+
+
 <dt>rows.fill.picker</dt>
 <dd><p>the colour for values in <code>rows.fill</code>, is evaluated with <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/colourpicker.html" class="external-link">colourpicker()</a></code></p></dd>
+
+
 <dt>rows.zebra</dt>
 <dd><p>banded rows in the body - equivalent to <code>rows.fill = seq(2, nrow(x), 2)</code></p></dd>
+
+
 <dt>row.total</dt>
 <dd><p>add a row total (at the bottom of the table)</p></dd>
+
+
 <dt>row.total.name</dt>
 <dd><p>name of the row total</p></dd>
+
+
 <dt>row.total.function</dt>
 <dd><p>function used to calculate all numeric values per column (non-numeric columns are skipped)</p></dd>
+
+
 <dt>row.total.widths</dt>
 <dd><p>cell width in row total</p></dd>
+
+
 <dt>row.total.bold</dt>
 <dd><p>bold formatting of row total</p></dd>
+
+
 <dt>row.extra.header</dt>
 <dd><p>an extra header to be displayed above the table</p></dd>
+
+
 <dt>row.extra.footer</dt>
 <dd><p>an extra footer to show below the table</p></dd>
+
+
 <dt>column.names</dt>
 <dd><p>column names to be displayed. Can also be a named vector where the names are existing columns, or indices of columns. When this vector is smaller than <code>ncol(x)</code>, only the first <code>length(column.names)</code> are replaced. When this vector is longer than <code>ncol(x)</code>, all column names are replaced</p></dd>
+
+
 <dt>column.names.bold</dt>
 <dd><p>display column names in bold</p></dd>
+
+
 <dt>columns.width</dt>
 <dd><p>width of columns. For <code>autofit.fullpage = TRUE</code>, these are proportions to <code>autofit.fullpage.width</code>. For <code>autofit.fullpage = FALSE</code>, these are centimeters</p></dd>
+
+
 <dt>columns.percent</dt>
 <dd><p>display the column indices as percentages using <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code> - example: <code>columns.percent = c(2, 3)</code></p></dd>
+
+
 <dt>columns.italic</dt>
 <dd><p>column indices of columns to be displayed in italics</p></dd>
+
+
 <dt>columns.bold</dt>
 <dd><p>column indices of columns in bold</p></dd>
+
+
 <dt>columns.fill</dt>
 <dd><p>the column indices of rows to be shaded</p></dd>
+
+
 <dt>columns.fill.picker</dt>
 <dd><p>the colour for values in <code>columns.fill</code>, is evaluated with <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/colourpicker.html" class="external-link">colourpicker()</a></code></p></dd>
+
+
 <dt>columns.zebra</dt>
 <dd><p>banded columns - equivalent to <code>columns.fill = seq(2, ncol(x), 2)</code></p></dd>
+
+
 <dt>column.total</dt>
 <dd><p>adding a column total (to the right of the table)</p></dd>
+
+
 <dt>column.total.name</dt>
 <dd><p>name of the column total</p></dd>
+
+
 <dt>column.total.function</dt>
 <dd><p>function used to calculate all numeric values per row</p></dd>
+
+
 <dt>column.total.bold</dt>
 <dd><p>bold formatting of column total</p></dd>
+
+
 <dt>align</dt>
 <dd><p>default is "c", which aligns everything centrally. Use "r", "l", "c" and "j"/"u" (justify/align) to change alignment. Can be a vector or a character (like "lrrrcc")</p></dd>
+
+
 <dt>align.part</dt>
 <dd><p>part of the table where the alignment should take place ("all", "header", "body", "footer")</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>table caption</p></dd>
+
+
 <dt>na</dt>
 <dd><p>text for missing values</p></dd>
+
+
 <dt>logicals</dt>
 <dd><p>vector with two values that replace <code>TRUE</code> and <code>FALSE</code></p></dd>
+
+
 <dt>round.numbers</dt>
 <dd><p>number of decimal places to round up for numbers</p></dd>
+
+
 <dt>round.percent</dt>
 <dd><p>number of decimal places to round to when using <code>columns.percent</code></p></dd>
+
+
 <dt>format.dates</dt>
 <dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code></p></dd>
+
+
 <dt>decimal.mark</dt>
 <dd><p>decimal separator</p></dd>
+
+
 <dt>big.mark</dt>
 <dd><p>thousands separator</p></dd>
+
+
 <dt>font.family</dt>
 <dd><p>table font family</p></dd>
+
+
 <dt>font.size</dt>
 <dd><p>table font size</p></dd>
+
+
 <dt>font.size.header</dt>
 <dd><p>font size of header</p></dd>
+
+
 <dt>values.colour, values.fill, values.bold, values.italic</dt>
 <dd><p>values to be formatted</p></dd>
+
+
 <dt>values.colour.picker, values.fill.picker</dt>
 <dd><p>the colour for values in <code>values.colour</code> or <code>values.fill</code>, is evaluated with <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/colourpicker.html" class="external-link">colourpicker()</a></code></p></dd>
+
+
 <dt>autofit</dt>
 <dd><p>format table in width automatically</p></dd>
+
+
 <dt>autofit.fullpage</dt>
 <dd><p>display table across width of page</p></dd>
+
+
 <dt>autofit.fullpage.width</dt>
 <dd><p>set number of centimetres to width of table</p></dd>
+
+
 <dt>vline</dt>
 <dd><p>indices of columns to have a vertical line to their right</p></dd>
+
+
 <dt>vline.border</dt>
 <dd><p>function to define vertical line</p></dd>
+
+
 <dt>vline.part</dt>
 <dd><p>part of the table where the vertical lines should be placed ("all", "header", "body", "footer")</p></dd>
+
+
 <dt>print</dt>
 <dd><p>forced printing (required in a `for`` loop)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>not used</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list</p>
+    
+
+<p>list</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -270,11 +375,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 0,48 3   12 dec 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 4,71 6   21 mrt 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 7,05 4   17 jul 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,32 4   15 jul 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 4,56 3    2 dec 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,46 2   15 aug 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,84 7    6 jan 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 1,28 6   24 apr 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,70 5 X  5 dec 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 1,84 7    7 okt 2018</span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>  <span class="co"># dataset has row names</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` </span>
@@ -295,11 +400,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```{=html}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="tabwid"&gt;&lt;style&gt;.cl-90c695f6{}.cl-90be4216{font-family:'Calibri';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-90be422a{font-family:'Calibri';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-90be5f4e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-90beb7fa{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb804{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb805{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb80e{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb818{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb819{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb822{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb823{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb82c{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb82d{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb82e{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb82f{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb836{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb837{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb840{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb841{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb842{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb84a{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb84b{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb854{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb855{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb856{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb85e{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb85f{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb868{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb869{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb86a{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb872{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb873{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-90beb87c{width:78.9pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-90c695f6'&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="tabwid"&gt;&lt;style&gt;.cl-ecd6cd7e{}.cl-eccfe590{font-family:'Calibri';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-eccfe5a4{font-family:'Calibri';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-eccffe9a{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ecd0427e{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd04288{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd04292{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd04293{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd0429c{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd0429d{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042a6{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042b0{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042ba{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042bb{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042c4{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042c5{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042ce{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042cf{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042d0{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042d8{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042d9{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042da{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042e2{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042e3{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042ec{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042ed{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042f6{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd042f7{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ecd04300{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-ecd6cd7e'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```{=html}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb869"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be4216"&gt;text&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb86a"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be4216"&gt;decimal.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb872"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be4216"&gt;whole.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb873"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be4216"&gt;logical.values&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb87c"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be4216"&gt;dates&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb80e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;A&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb805"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;0,48&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb7fa"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb818"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb804"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;12 dec 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb82e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;B&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb840"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;4,71&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb82f"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb836"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb837"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;21 mrt 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb84a"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;C&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb854"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;7,05&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb84b"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb842"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb841"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;17 jul 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb84a"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;D&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb854"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;5,32&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb84b"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb842"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb841"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;15 jul 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb80e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;E&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb805"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;4,56&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb7fa"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb818"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb804"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;2 dec 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb855"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;F&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb85e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;9,62&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb85f"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb868"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb856"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;3 sep 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb80e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;G&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb805"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;3,22&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb7fa"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb818"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb804"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;9 feb 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb80e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;H&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb805"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;6,14&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb7fa"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb818"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb804"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;25 dec 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb80e"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb805"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;0,21&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb7fa"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb818"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb804"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;23 nov 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-90beb82d"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;J&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb822"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;7,88&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb819"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb82c"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-90beb823"&gt;&lt;p class="cl-90be5f4e"&gt;&lt;span class="cl-90be422a"&gt;1 sep 2021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042ec"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe590"&gt;text&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042ed"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe590"&gt;decimal.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042f6"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe590"&gt;whole.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042f7"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe590"&gt;logical.values&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04300"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe590"&gt;dates&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd04293"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;A&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04292"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;7,46&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0427e"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0429c"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04288"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;15 aug 2017&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042c4"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;B&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d0"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;9,84&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042c5"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042ce"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042cf"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;6 jan 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd04293"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;C&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04292"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;1,28&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0427e"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0429c"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04288"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;24 apr 2021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042d9"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;D&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042da"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;5,70&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d8"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e3"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e2"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;5 dec 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042d9"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;E&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042da"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;1,84&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d8"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e3"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e2"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;7 okt 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042d9"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;F&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042da"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;7,00&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d8"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;9&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e3"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042e2"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;16 okt 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042c4"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;G&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d0"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;2,16&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042c5"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042ce"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042cf"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;14 jun 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042c4"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;H&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042d0"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;1,71&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042c5"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042ce"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042cf"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;21 jan 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd04293"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04292"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;5,75&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0427e"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0429c"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd04288"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;13 apr 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-ecd042bb"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;J&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042a6"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;3,39&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd0429d"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042ba"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-ecd042b0"&gt;&lt;p class="cl-eccffe9a"&gt;&lt;span class="cl-eccfe5a4"&gt;27 sep 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -320,11 +425,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A B     C D E           F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S. aureus A 0,478 3 - wo 12-12-18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 S. aureus B 4,715 6 - do 21-03-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S. aureus C 7,051 4 - wo 17-07-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 S. aureus D 5,321 4 - wo 15-07-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 S. aureus E 4,560 3 - ma 02-12-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S. aureus A 7,457 2 - di 15-08-17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 S. aureus B 9,842 7 - za 06-01-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S. aureus C 1,280 6 - za 24-04-21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 S. aureus D 5,696 5 X wo 05-12-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 S. aureus E 1,838 7 - zo 07-10-18</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># row totals</span></span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
@@ -339,11 +444,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A  48% 3   12 dec 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 471% 6   21 mrt 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 705% 4   17 jul 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 532% 4   15 jul 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 456% 3    2 dec 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 746% 2   15 aug 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 984% 7    6 jan 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 128% 6   24 apr 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 570% 5 X  5 dec 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 184% 7    7 okt 2018</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># column names</span></span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
@@ -356,11 +461,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 0,48 3   12 dec 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 4,71 6   21 mrt 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 7,05 4   17 jul 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,32 4   15 jul 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 4,56 3    2 dec 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,46 2   15 aug 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,84 7    6 jan 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 1,28 6   24 apr 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,70 5 X  5 dec 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 1,84 7    7 okt 2018</span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
 <span class="r-in">              column.names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">)</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Only the first 5 items of column.names will be used</span>
@@ -370,11 +475,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 0,48 3   12 dec 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 4,71 6   21 mrt 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 7,05 4   17 jul 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,32 4   15 jul 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 4,56 3    2 dec 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,46 2   15 aug 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,84 7    6 jan 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 1,28 6   24 apr 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 5,70 5 X  5 dec 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 1,84 7    7 okt 2018</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># vertical lines, alignment and row names</span></span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
@@ -389,11 +494,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              A B    C D E           F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Experiment 1 A 0,48 3   12 dec 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Experiment 2 B 4,71 6   21 mrt 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Experiment 3 C 7,05 4   17 jul 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Experiment 4 D 5,32 4   15 jul 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Experiment 5 E 4,56 3    2 dec 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Experiment 1 A 7,46 2   15 aug 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Experiment 2 B 9,84 7    6 jan 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Experiment 3 C 1,28 6   24 apr 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Experiment 4 D 5,70 5 X  5 dec 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Experiment 5 E 1,84 7    7 okt 2018</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># width of cells and table</span></span>
 <span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span>
@@ -448,7 +553,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
