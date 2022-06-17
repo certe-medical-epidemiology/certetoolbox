@@ -174,6 +174,8 @@ import_exec <- function(filename,
                                      encoding = "UTF-8"),
                      show_col_types = FALSE)
   } else {
+    # use rio::import which pretty much understands any file type
+    check_is_installed("rio")
     df <- rio::import(file = filename, ...)
   }
   
@@ -301,9 +303,9 @@ export <- function(object,
                  ...)
     } else if (filename %like% "[.]html$") {
       export_html(plot = object,
-                 filename = filename,
-                 card_number = card_number,
-                 ...)
+                  filename = filename,
+                  card_number = card_number,
+                  ...)
     } else {
       stop("Unknown file format for export: ", filename, call. = FALSE)
     }
@@ -710,7 +712,12 @@ import <- function(filename,
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
-  if (filename %like% "[.]rds$") {
+  if (filename %like% "^(http|https|ftp|sftp|ftps|ssh)://") {
+    import_url(url = filename,
+               card_number = card_number,
+               auto_transform = auto_transform,
+               ...)
+  } else if (filename %like% "[.]rds$") {
     import_rds(filename = filename,
                card_number = card_number,
                ...)
@@ -740,8 +747,6 @@ import <- function(filename,
                auto_transform = auto_transform,
                ...)
   } else {
-    # uses rio::import which pretty much understands any file type
-    check_is_installed("rio")
     import_exec(filename,
                 extension = "",
                 card_number = card_number,
