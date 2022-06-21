@@ -114,19 +114,26 @@ import_exec <- function(filename,
                         auto_transform,
                         ...) {
   extension <- extension[1L]
-  csv_delim <- ","
-  if (extension == "csv2") {
-    csv_delim <- ";"
-    extension <- "csv"
-  } else if (extension == "tsv") {
-    csv_delim <- "\t"
-  } else if (extension == "txt") {
-    csv_delim <- list(...)$sep
-  }
   
   if (!is.character(filename)) {
     filename <- filename_deparse
   }
+  
+  filename_url <- NULL
+  if (filename %like% "^(http|https|ftp|sftp|ftps|ssh)://") {
+    # download the file first
+    filename_url <- filename
+    if (filename_url %like% "git(hub|lab).com/.*/blob/") {
+      # get GitHub/GitLab raw URL
+      filename_url <- gsub("/blob/", "/raw/", filename_url, fixed = TRUE)
+    }
+    filename <- tempfile(pattern = "import_", fileext = paste0(".", extension))
+    utils::download.file(url = filename_url, destfile = filename)
+    if (!file.exists(filename)) {
+      stop("Failed to download: ", filename_url, call. = FALSE)
+    }
+  }
+  
   filename <- gsub('\\', '/', filename, fixed = TRUE)
   if (filename %unlike% paste0(extension, "$")) {
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
@@ -158,11 +165,11 @@ import_exec <- function(filename,
                              range = list(...)$range,
                              na = list(...)$na)
     
-  } else if (extension %in% c("csv", "tsv")) {
+  } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
     df <- read_delim(file = filename,
                      guess_max = 200000,
-                     delim = csv_delim,
+                     delim = list(...)$sep,
                      na = list(...)$na,
                      progress = interactive(),
                      locale = locale(date_names = list(...)$datenames,
@@ -173,6 +180,10 @@ import_exec <- function(filename,
                                      grouping_mark = list(...)$big.mark,
                                      encoding = "UTF-8"),
                      show_col_types = FALSE)
+    if (isTRUE(auto_transform)) {
+      df <- auto_transform(df, decimal.mark = ".", big.mark = "")
+      auto_transform <- FALSE
+    }
   } else {
     # use rio::import which pretty much understands any file type
     check_is_installed("rio")
@@ -193,11 +204,18 @@ import_exec <- function(filename,
   }
   
   if (interactive()) {
+    if (is.null(filename_url)) {
+      file_src <- tools::file_path_as_absolute(filename)
+    } else {
+      file_src <- filename_url
+      # try to remove downloaded file
+      try(unlink(filename), silent = TRUE)
+    }
     message(
       paste0(
         "Imported data set (", format2(NROW(df)), "x", format2(NCOL(df)),
         ", ", size_humanreadable(utils::object.size(df)),  ") from '",
-        tools::file_path_as_absolute(filename), "'"
+        file_src, "'"
       )
     )
   }
@@ -712,20 +730,20 @@ import <- function(filename,
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
   }
-  if (filename %like% "^(http|https|ftp|sftp|ftps|ssh)://") {
-    import_url(url = filename,
-               card_number = card_number,
-               auto_transform = auto_transform,
-               ...)
-  } else if (filename %like% "[.]rds$") {
+  if (filename %like% "[.]rds$") {
     import_rds(filename = filename,
                card_number = card_number,
                ...)
-  } else if (filename %like% "[.]csv$") {
+  } else if (filename %like% "[.]csv$" && (is.null(list(...)$sep) || identical(list(...)$sep, ","))) {
     import_csv(filename = filename,
                card_number = card_number,
                auto_transform = auto_transform,
                ...)
+  } else if (filename %like% "[.]csv$" && identical(list(...)$sep, ";")) {
+    import_csv2(filename = filename,
+                card_number = card_number,
+                auto_transform = auto_transform,
+                ...)
   } else if (filename %like% "[.]tsv$") {
     import_tsv(filename = filename,
                card_number = card_number,
@@ -828,6 +846,7 @@ import_csv <- function(filename,
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "csv",
+              sep = ",",
               card_number = card_number,
               auto_transform = auto_transform,
               datenames = datenames,
@@ -855,7 +874,8 @@ import_csv2 <- function(filename,
                         ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
-              extension = "csv2",
+              extension = "csv",
+              sep = ";",
               card_number = card_number,
               auto_transform = auto_transform,
               datenames = datenames,
@@ -884,6 +904,7 @@ import_tsv <- function(filename,
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "tsv",
+              sep = "\t",
               card_number = card_number,
               auto_transform = auto_transform,
               datenames = datenames,
@@ -910,23 +931,19 @@ import_txt <- function(filename,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        ...) {
-  out <- import_exec(filename,
-                     filename_deparse = deparse(substitute(filename)),
-                     extension = "txt",
-                     card_number = card_number,
-                     auto_transform = FALSE,
-                     sep = sep)
-  if (isTRUE(auto_transform)) {
-    out <- auto_transform(out,
-                          datenames = datenames,
-                          dateformat = format_datetime(dateformat),
-                          timeformat = format_datetime(timeformat),
-                          decimal.mark = decimal.mark,
-                          big.mark = big.mark,
-                          timezone = timezone,
-                          na = na)
-  }
-  out
+  import_exec(filename,
+              filename_deparse = deparse(substitute(filename)),
+              extension = "txt",
+              sep = sep,
+              card_number = card_number,
+              auto_transform = auto_transform,
+              datenames = datenames,
+              dateformat = format_datetime(dateformat),
+              timeformat = format_datetime(timeformat),
+              decimal.mark = decimal.mark,
+              big.mark = big.mark,
+              timezone = timezone,
+              na = na)
 }
 
 #' @rdname import
@@ -964,10 +981,11 @@ import_spss <- import_sav
 
 #' @rdname import
 #' @param url remote location of any data set, can also be a (non-raw) GitHub/GitLab link
-#' @details `r doc_requirement("remote locations (URLs)", "import_url", "rio")`.
+#' @details The [import_url()] tries to download the file first, after which it will be imported using the appropriate `import_*()` function.
 #' @export
 import_url <- function(url,
                        auto_transform = TRUE,
+                       sep = ",",
                        datenames = "en",
                        dateformat = "yyyy-mm-dd",
                        timeformat = "HH:MM",
@@ -976,34 +994,21 @@ import_url <- function(url,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        ...) {
-  check_is_installed("rio")
-  url <- as.character(url)[1L]
-  if (url %like% "git(hub|lab).com/.*/blob/") {
-    # get GitHub/GitLab raw URL
-    url <- gsub("/blob/", "/raw/", url, fixed = TRUE)
-  }
+  url <- url[1]
   if (url %unlike% "://") {
-    url <- paste0("https://", url)
+    url <- paste0("http://", url)
   }
-  df <- rio::import(url)
-  if (isTRUE(auto_transform)) {
-    df <- auto_transform(df,
-                         datenames = datenames,
-                         dateformat = format_datetime(dateformat),
-                         timeformat = format_datetime(timeformat),
-                         decimal.mark = decimal.mark,
-                         big.mark = big.mark,
-                         timezone = timezone,
-                         na = na)
-  }
-  if (interactive()) {
-    message(
-      paste0(
-        "Imported data set (", format2(NROW(df)), "x", format2(NCOL(df)),
-        ", ", size_humanreadable(utils::object.size(df)),  ") from '",
-        url, "'"
-      )
-    )
-  }
-  df
+  import_exec(url,
+              filename_deparse = deparse(substitute(url)),
+              extension = gsub(".+[.](.*)$", "\\1", basename(url)),
+              sep = sep,
+              card_number = NULL,
+              auto_transform = auto_transform,
+              datenames = datenames,
+              dateformat = dateformat,
+              timeformat = timeformat,
+              decimal.mark = decimal.mark,
+              big.mark = big.mark,
+              timezone = timezone,
+              na = na)
 }

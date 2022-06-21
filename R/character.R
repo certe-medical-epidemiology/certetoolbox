@@ -23,6 +23,7 @@
 #' @param bytes number of bytes
 #' @param decimals precision, not used for bytes and kilobytes
 #' @param decimal.mark decimal mark to use
+#' @details If using [object.size()] on an object, this function is equal to using [`format2()`][certestyle::format2()] to format the object size.
 #' @export
 #' @examples 
 #' size_humanreadable(c(12, 1234, 123456, 12345678))

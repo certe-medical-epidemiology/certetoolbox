@@ -145,6 +145,7 @@ import_spss(
 import_url(
   url,
   auto_transform = TRUE,
+  sep = ",",
   datenames = "en",
   dateformat = "yyyy-mm-dd",
   timeformat = "HH:MM",
@@ -244,7 +245,7 @@ Importing from an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or 
 
 Importing from an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
 
-Importing from remote locations (URLs) using \code{\link[=import_url]{import_url()}} requires the \code{rio} package to be installed.
+The \code{\link[=import_url]{import_url()}} tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
 
 Importing from the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 

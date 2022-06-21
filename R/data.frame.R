@@ -811,6 +811,9 @@ auto_transform <- function(x,
       } else if (inherits(col_data, "integer64")) {
         x[, i] <- col_data
       }
+      if (!is.double(col_data) && is.double(x[, i, drop = TRUE]) && decimal.mark == ".") {
+        col_data <- x[, i, drop = TRUE]
+      }
       if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
         x[, i] <- clean_Date(col_data, format = "dd-mm-yyyy")
       }

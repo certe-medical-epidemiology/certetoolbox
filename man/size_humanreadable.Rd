@@ -16,6 +16,9 @@ size_humanreadable(bytes, decimals = 1, decimal.mark = ",")
 \description{
 Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).
 }
+\details{
+If using \code{\link[=object.size]{object.size()}} on an object, this function is equal to using \code{\link[certestyle:format2]{format2()}} to format the object size.
+}
 \examples{
 size_humanreadable(c(12, 1234, 123456, 12345678))
 
