@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
       </span>
     </div>
 
@@ -205,6 +205,7 @@
 <span class="fu">import_url</span><span class="op">(</span>
   <span class="va">url</span>,
   auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
+  sep <span class="op">=</span> <span class="st">","</span>,
   datenames <span class="op">=</span> <span class="st">"en"</span>,
   dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
   timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
@@ -351,7 +352,7 @@
     <p>Importing from any unlisted filetype using <code>import()</code> requires the <code>rio</code> package to be installed.</p>
 <p>Importing from an Excel file using <code>import_xlsx()</code> or <code>import_excel()</code> requires the <code>readxl</code> package to be installed.</p>
 <p>Importing from an SPSS file using <code>import_sav()</code> or <code>import_spss()</code> requires the <code>haven</code> package to be installed.</p>
-<p>Importing from remote locations (URLs) using <code>import_url()</code> requires the <code>rio</code> package to be installed.</p>
+<p>The <code>import_url()</code> tries to download the file first, after which it will be imported using the appropriate <code>import_*()</code> function.</p>
 <p>Importing from the clipboard using <code>import_clipboard()</code> requires the <code>clipr</code> package to be installed.</p>
 <p>Importing from mail attachments using <code>import_mail_attachment()</code> requires the <code>certemail</code> package to be installed. It calls <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code> internally and saves the attachment to a temporary folder.</p>
     </div>
