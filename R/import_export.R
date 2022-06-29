@@ -128,14 +128,19 @@ import_exec <- function(filename,
       filename_url <- gsub("/blob/", "/raw/", filename_url, fixed = TRUE)
     }
     filename <- tempfile(pattern = "import_", fileext = paste0(".", extension))
-    utils::download.file(url = filename_url, destfile = filename)
+    if (.Platform$OS.type == "windows") {
+      utils::download.file(url = filename_url, destfile = filename, mode = "wb")
+    } else {
+      utils::download.file(url = filename_url, destfile = filename)
+    }
     if (!file.exists(filename)) {
       stop("Failed to download: ", filename_url, call. = FALSE)
     }
   }
   
   filename <- gsub('\\', '/', filename, fixed = TRUE)
-  if (filename %unlike% paste0(extension, "$")) {
+  if (filename %unlike% "[.][a-zA-Z0-9]{1,5}$") {
+    # does not have extension yet
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
   }
   if (!file.exists(filename) && !is.null(card_number)) {
@@ -156,11 +161,11 @@ import_exec <- function(filename,
   } else if (extension %like% "xlsx?") {
     # Excel format
     df <- readxl::read_excel(path = filename,
+                             guess_max = 200000,
                              sheet = list(...)$sheet,
                              range = list(...)$range,
                              na = list(...)$na,
-                             skip = list(...)$skip,
-                             guess_max = 5000)
+                             skip = list(...)$skip)
     
   } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
@@ -169,6 +174,7 @@ import_exec <- function(filename,
                      delim = list(...)$sep,
                      na = list(...)$na,
                      progress = interactive(),
+                     skip = list(...)$skip,
                      locale = locale(date_names = list(...)$datenames,
                                      date_format = list(...)$dateformat,
                                      time_format = list(...)$timeformat,
@@ -842,6 +848,7 @@ import_csv <- function(filename,
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
+                       skip = 0,
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -855,7 +862,8 @@ import_csv <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }
 
 #' @rdname import
@@ -871,6 +879,7 @@ import_csv2 <- function(filename,
                         big.mark = "",
                         timezone = "UTC",
                         na = c("", "NULL", "NA", "<NA>"),
+                        skip = 0,
                         ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -884,7 +893,8 @@ import_csv2 <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }
 
 #' @rdname import
@@ -900,6 +910,7 @@ import_tsv <- function(filename,
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
+                       skip = 0,
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -913,7 +924,8 @@ import_tsv <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }
 
 #' @rdname import
@@ -930,6 +942,7 @@ import_txt <- function(filename,
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
+                       skip = 0,
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -943,7 +956,8 @@ import_txt <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }
 
 #' @rdname import
@@ -993,6 +1007,7 @@ import_url <- function(url,
                        big.mark = "",
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
+                       skip = 0,
                        ...) {
   url <- url[1]
   if (url %unlike% "://") {
@@ -1010,5 +1025,6 @@ import_url <- function(url,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }

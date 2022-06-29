@@ -38,6 +38,7 @@ import_xlsx(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -54,6 +55,7 @@ import_excel(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -68,6 +70,7 @@ import_csv(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -82,6 +85,7 @@ import_csv2(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -96,6 +100,7 @@ import_tsv(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -111,6 +116,7 @@ import_txt(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -153,6 +159,7 @@ import_url(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
   ...
 )
 
@@ -210,6 +217,8 @@ import_mail_attachment(
 \item{timezone}{expected time zone}
 
 \item{na}{values to interpret as \code{NA}}
+
+\item{skip}{number of first rows to skip}
 
 \item{sep}{character to separate values in a row}
 
