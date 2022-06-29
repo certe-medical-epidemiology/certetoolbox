@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -76,173 +76,180 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">import</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_rds</span><span class="op">(</span><span class="va">filename</span>, card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">import_xlsx</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  sheet <span class="op">=</span> <span class="fl">1</span>,
-  range <span class="op">=</span> <span class="cn">NULL</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_excel</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  sheet <span class="op">=</span> <span class="fl">1</span>,
-  range <span class="op">=</span> <span class="cn">NULL</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_csv</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_csv2</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_tsv</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_txt</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  sep <span class="op">=</span> <span class="st">"\t"</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_sav</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"en"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_spss</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"en"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_url</span><span class="op">(</span>
-  <span class="va">url</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  sep <span class="op">=</span> <span class="st">","</span>,
-  datenames <span class="op">=</span> <span class="st">"en"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">"."</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_clipboard</span><span class="op">(</span>
-  sep <span class="op">=</span> <span class="st">"\t"</span>,
-  header <span class="op">=</span> <span class="cn">TRUE</span>,
-  startrow <span class="op">=</span> <span class="fl">1</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  datenames <span class="op">=</span> <span class="st">"nl"</span>,
-  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,
-  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">""</span>,
-  timezone <span class="op">=</span> <span class="st">"UTC"</span>,
-  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">import_mail_attachment</span><span class="op">(</span>
-  search <span class="op">=</span> <span class="st">"hasattachment:yes"</span>,
-  search_subject <span class="op">=</span> <span class="cn">NULL</span>,
-  search_from <span class="op">=</span> <span class="cn">NULL</span>,
-  search_when <span class="op">=</span> <span class="cn">NULL</span>,
-  search_attachment <span class="op">=</span> <span class="cn">NULL</span>,
-  n <span class="op">=</span> <span class="fl">5</span>,
-  sort <span class="op">=</span> <span class="st">"received desc"</span>,
-  account <span class="op">=</span> <span class="cn">NULL</span>,
-  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">import</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_rds</span><span class="op">(</span><span class="va">filename</span>, card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_xlsx</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  sheet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  range <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_excel</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  sheet <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  range <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_csv</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_csv2</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_tsv</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_txt</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_sav</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"en"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_spss</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"en"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_url</span><span class="op">(</span></span>
+<span>  <span class="va">url</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"en"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_clipboard</span><span class="op">(</span></span>
+<span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  header <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  startrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  datenames <span class="op">=</span> <span class="st">"nl"</span>,</span>
+<span>  dateformat <span class="op">=</span> <span class="st">"yyyy-mm-dd"</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"HH:MM"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  timezone <span class="op">=</span> <span class="st">"UTC"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NULL"</span>, <span class="st">"NA"</span>, <span class="st">"&lt;NA&gt;"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">import_mail_attachment</span><span class="op">(</span></span>
+<span>  search <span class="op">=</span> <span class="st">"hasattachment:yes"</span>,</span>
+<span>  search_subject <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  search_from <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  search_when <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  search_attachment <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  sort <span class="op">=</span> <span class="st">"received desc"</span>,</span>
+<span>  account <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  auto_transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -297,6 +304,10 @@
 
 <dt>na</dt>
 <dd><p>values to interpret as <code>NA</code></p></dd>
+
+
+<dt>skip</dt>
+<dd><p>number of first rows to skip</p></dd>
 
 
 <dt>sep</dt>
@@ -373,7 +384,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

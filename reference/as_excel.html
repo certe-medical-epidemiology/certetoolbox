@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -76,18 +76,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_excel</span><span class="op">(</span>
-  <span class="va">...</span>,
-  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,
-  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,
-  autowidth <span class="op">=</span> <span class="cn">TRUE</span>,
-  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
-  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
-  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
-<span class="op">)</span>
-
-<span class="fu">save_excel</span><span class="op">(</span><span class="va">xl</span>, filename <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_excel</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  autowidth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">save_excel</span><span class="op">(</span><span class="va">xl</span>, filename <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -146,11 +146,11 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># creates a Workbook object</span></span>
-<span class="r-in"><span class="va">xl</span> <span class="op">&lt;-</span> <span class="fu">as_excel</span><span class="op">(</span><span class="st">"this is a sheet"</span> <span class="op">=</span> <span class="va">mtcars</span>,</span>
-<span class="r-in">               <span class="st">"another sheet"</span> <span class="op">=</span> <span class="va">anscombe</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># creates a Workbook object</span></span></span>
+<span class="r-in"><span><span class="va">xl</span> <span class="op">&lt;-</span> <span class="fu">as_excel</span><span class="op">(</span><span class="st">"this is a sheet"</span> <span class="op">=</span> <span class="va">mtcars</span>,</span></span>
+<span class="r-in"><span>               <span class="st">"another sheet"</span> <span class="op">=</span> <span class="va">anscombe</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Row names for object 1 (32x11, sheet 'this is a sheet') added as first column 'rownames'</span>
-<span class="r-in"><span class="va">xl</span></span>
+<span class="r-in"><span><span class="va">xl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A Workbook object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Worksheets:</span>
@@ -171,21 +171,21 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Active Sheet 1: "this is a sheet" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	Position: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># save it with save_excel() or export_xlsx()</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ycphs.github.io/openxlsx/index.html" class="external-link">openxlsx</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># add a new empty sheet</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/addWorksheet.html" class="external-link">addWorksheet</a></span><span class="op">(</span>wb <span class="op">=</span> <span class="va">xl</span>,</span>
-<span class="r-in">             sheetName <span class="op">=</span> <span class="st">"new sheet"</span><span class="op">)</span></span>
-<span class="r-in">             </span>
-<span class="r-in"><span class="va">some_style</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/createStyle.html" class="external-link">createStyle</a></span><span class="op">(</span>fontColour <span class="op">=</span> <span class="st">"#9C0006"</span>, bgFill <span class="op">=</span> <span class="st">"#FFC7CE"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/addStyle.html" class="external-link">addStyle</a></span><span class="op">(</span>wb <span class="op">=</span> <span class="va">xl</span>,</span>
-<span class="r-in">         sheet <span class="op">=</span> <span class="fl">3</span>,</span>
-<span class="r-in">         style <span class="op">=</span> <span class="va">some_style</span>,</span>
-<span class="r-in">         rows <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>,</span>
-<span class="r-in">         cols <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,</span>
-<span class="r-in">         gridExpand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># save it with save_excel() or export_xlsx()</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ycphs.github.io/openxlsx/index.html" class="external-link">openxlsx</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># add a new empty sheet</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/addWorksheet.html" class="external-link">addWorksheet</a></span><span class="op">(</span>wb <span class="op">=</span> <span class="va">xl</span>,</span></span>
+<span class="r-in"><span>             sheetName <span class="op">=</span> <span class="st">"new sheet"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             </span></span>
+<span class="r-in"><span><span class="va">some_style</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/createStyle.html" class="external-link">createStyle</a></span><span class="op">(</span>fontColour <span class="op">=</span> <span class="st">"#9C0006"</span>, bgFill <span class="op">=</span> <span class="st">"#FFC7CE"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/addStyle.html" class="external-link">addStyle</a></span><span class="op">(</span>wb <span class="op">=</span> <span class="va">xl</span>,</span></span>
+<span class="r-in"><span>         sheet <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>         style <span class="op">=</span> <span class="va">some_style</span>,</span></span>
+<span class="r-in"><span>         rows <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>,</span></span>
+<span class="r-in"><span>         cols <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,</span></span>
+<span class="r-in"><span>         gridExpand <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -200,7 +200,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

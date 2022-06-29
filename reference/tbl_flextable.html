@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -76,64 +76,64 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_flextable</span><span class="op">(</span>
-  <span class="va">x</span>,
-  row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  row.names.bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  rows.italic <span class="op">=</span> <span class="cn">NULL</span>,
-  rows.bold <span class="op">=</span> <span class="cn">NULL</span>,
-  rows.height <span class="op">=</span> <span class="cn">NULL</span>,
-  rows.fill <span class="op">=</span> <span class="cn">NULL</span>,
-  rows.fill.picker <span class="op">=</span> <span class="st">"certeblauw5"</span>,
-  rows.zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  row.total <span class="op">=</span> <span class="cn">FALSE</span>,
-  row.total.name <span class="op">=</span> <span class="st">"Totaal"</span>,
-  row.total.function <span class="op">=</span> <span class="va">sum</span>,
-  row.total.widths <span class="op">=</span> <span class="cn">NULL</span>,
-  row.total.bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  row.extra.header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, widths <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-  row.extra.footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, widths <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-  column.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  column.names.bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  columns.width <span class="op">=</span> <span class="cn">NULL</span>,
-  columns.percent <span class="op">=</span> <span class="cn">NULL</span>,
-  columns.italic <span class="op">=</span> <span class="cn">NULL</span>,
-  columns.bold <span class="op">=</span> <span class="cn">NULL</span>,
-  columns.fill <span class="op">=</span> <span class="cn">NULL</span>,
-  columns.fill.picker <span class="op">=</span> <span class="st">"certeblauw5"</span>,
-  columns.zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  column.total <span class="op">=</span> <span class="cn">FALSE</span>,
-  column.total.name <span class="op">=</span> <span class="st">"Totaal"</span>,
-  column.total.function <span class="op">=</span> <span class="va">sum</span>,
-  column.total.bold <span class="op">=</span> <span class="cn">TRUE</span>,
-  align <span class="op">=</span> <span class="st">"c"</span>,
-  align.part <span class="op">=</span> <span class="st">"all"</span>,
-  caption <span class="op">=</span> <span class="st">""</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  logicals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">""</span><span class="op">)</span>,
-  round.numbers <span class="op">=</span> <span class="fl">2</span>,
-  round.percent <span class="op">=</span> <span class="fl">1</span>,
-  format.dates <span class="op">=</span> <span class="st">"d mmm yyyy"</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  big.mark <span class="op">=</span> <span class="st">"."</span>,
-  font.family <span class="op">=</span> <span class="st">"Calibri"</span>,
-  font.size <span class="op">=</span> <span class="fl">9</span>,
-  font.size.header <span class="op">=</span> <span class="va">font.size</span> <span class="op">+</span> <span class="fl">1</span>,
-  values.colour <span class="op">=</span> <span class="cn">NULL</span>,
-  values.colour.picker <span class="op">=</span> <span class="st">"certeroze"</span>,
-  values.fill <span class="op">=</span> <span class="cn">NULL</span>,
-  values.fill.picker <span class="op">=</span> <span class="st">"certeroze3"</span>,
-  values.bold <span class="op">=</span> <span class="cn">NULL</span>,
-  values.italic <span class="op">=</span> <span class="cn">NULL</span>,
-  autofit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">columns.width</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">rows.height</span><span class="op">)</span>,
-  autofit.fullpage <span class="op">=</span> <span class="cn">TRUE</span>,
-  autofit.fullpage.width <span class="op">=</span> <span class="fl">16</span>,
-  vline <span class="op">=</span> <span class="cn">NULL</span>,
-  vline.border <span class="op">=</span> <span class="fu">fp_border_default</span><span class="op">(</span><span class="st">"black"</span><span class="op">)</span>,
-  vline.part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"body"</span>, <span class="st">"footer"</span><span class="op">)</span>,
-  print <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_flextable</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  row.names.bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rows.italic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rows.bold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rows.height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rows.fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rows.fill.picker <span class="op">=</span> <span class="st">"certeblauw5"</span>,</span>
+<span>  rows.zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  row.total <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  row.total.name <span class="op">=</span> <span class="st">"Totaal"</span>,</span>
+<span>  row.total.function <span class="op">=</span> <span class="va">sum</span>,</span>
+<span>  row.total.widths <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  row.total.bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  row.extra.header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, widths <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  row.extra.footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="cn">NULL</span>, widths <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  column.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  column.names.bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  columns.width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  columns.percent <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  columns.italic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  columns.bold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  columns.fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  columns.fill.picker <span class="op">=</span> <span class="st">"certeblauw5"</span>,</span>
+<span>  columns.zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  column.total <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  column.total.name <span class="op">=</span> <span class="st">"Totaal"</span>,</span>
+<span>  column.total.function <span class="op">=</span> <span class="va">sum</span>,</span>
+<span>  column.total.bold <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  align <span class="op">=</span> <span class="st">"c"</span>,</span>
+<span>  align.part <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  logicals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>  round.numbers <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  round.percent <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  format.dates <span class="op">=</span> <span class="st">"d mmm yyyy"</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  font.family <span class="op">=</span> <span class="st">"Calibri"</span>,</span>
+<span>  font.size <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>  font.size.header <span class="op">=</span> <span class="va">font.size</span> <span class="op">+</span> <span class="fl">1</span>,</span>
+<span>  values.colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  values.colour.picker <span class="op">=</span> <span class="st">"certeroze"</span>,</span>
+<span>  values.fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  values.fill.picker <span class="op">=</span> <span class="st">"certeroze3"</span>,</span>
+<span>  values.bold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  values.italic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  autofit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">columns.width</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">rows.height</span><span class="op">)</span>,</span>
+<span>  autofit.fullpage <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  autofit.fullpage.width <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>  vline <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vline.border <span class="op">=</span> <span class="fu">fp_border_default</span><span class="op">(</span><span class="st">"black"</span><span class="op">)</span>,</span>
+<span>  vline.part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"body"</span>, <span class="st">"footer"</span><span class="op">)</span>,</span>
+<span>  print <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -359,28 +359,28 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># generate a data.frame</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span class="r-in">                 `decimal numbers` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">                 `whole numbers` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 `logical values` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                 dates <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">200</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
-<span class="r-in">                 stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># default</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span><span class="op">)</span>      <span class="co"># dataset has no row names</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># generate a data.frame</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                 `decimal numbers` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 `whole numbers` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 `logical values` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 dates <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">200</span>, <span class="fl">2000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># default</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span><span class="op">)</span>      <span class="co"># dataset has no row names</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 1,51 6 X 29 aug 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 8,97 4   25 aug 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 9,66 1   18 sep 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 6,51 9   18 feb 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 2,93 1   15 okt 2020</span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>  <span class="co"># dataset has row names</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,00 7   21 feb 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,17 2    1 apr 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 3,30 5   12 feb 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 8,52 8 X 26 mei 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 8,55 3   13 nov 2021</span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>  <span class="co"># dataset has row names</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
@@ -392,82 +392,82 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        Datsun 710 22,8 4 108,0  93 3,85 2,32 18,61 1 1 4 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    Hornet 4 Drive 21,4 6 258,0 110 3,08 3,21 19,44 1 0 3 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 Hornet Sportabout 18,7 8 360,0 175 3,15 3,44 17,02 0 0 3 2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print in markdown</span></span>
-<span class="r-in"><span class="va">df</span> |&gt; </span>
-<span class="r-in">  <span class="fu">tbl_flextable</span><span class="op">(</span><span class="op">)</span> |&gt; </span>
-<span class="r-in">  <span class="fu"><a href="tbl_markdown.html">tbl_markdown</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print in markdown</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu">tbl_flextable</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_markdown.html">tbl_markdown</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```{=html}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="tabwid"&gt;&lt;style&gt;.cl-7616a474{}.cl-760f9ad0{font-family:'Calibri';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-760f9ae4{font-family:'Calibri';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-760fb2e0{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-760ff570{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff57a{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff584{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff58e{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff58f{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff598{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff599{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5a2{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5a3{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5a4{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5ac{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5ad{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5b6{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5b7{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5c0{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5c1{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5ca{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5cb{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5cc{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5d4{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5de{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5df{width:120.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5e8{width:109.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5e9{width:100pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-760ff5f2{width:79.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-7616a474'&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;div class="tabwid"&gt;&lt;style&gt;.cl-4c941544{}.cl-4c8c85ea{font-family:'Calibri';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-4c8c85fe{font-family:'Calibri';font-size:9pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-4c8ca228{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-4c8cefda{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cefee{width:79.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8ceff8{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf002{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf003{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf00c{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf00d{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf016{width:79.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf017{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf020{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf021{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf02a{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf02b{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf034{width:79.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf035{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf048{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf052{width:79.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf053{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf054{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf05c{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf066{width:44.3pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf067{width:120.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf070{width:109.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf071{width:100.1pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-4c8cf072{width:79.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-4c941544'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```{=html}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5de"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ad0"&gt;text&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5df"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ad0"&gt;decimal.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5e8"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ad0"&gt;whole.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5e9"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ad0"&gt;logical.values&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5f2"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ad0"&gt;dates&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff58e"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;A&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff584"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;1,51&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff570"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff58f"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff57a"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;29 aug 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff58e"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;B&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff584"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;8,97&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff570"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff58f"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff57a"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;25 aug 2021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff58e"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;C&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff584"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;9,66&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff570"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff58f"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff57a"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;18 sep 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ad"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;D&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b6"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;6,51&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5ac"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;9&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c0"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b7"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;18 feb 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ad"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;E&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b6"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;2,93&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5ac"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c0"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b7"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;15 okt 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ad"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;F&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b6"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;8,76&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5ac"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c0"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b7"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;17 dec 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ad"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;G&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b6"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;6,92&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5ac"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c0"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5b7"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;5 mei 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ca"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;H&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5cb"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;5,11&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5cc"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5d4"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c1"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;26 jan 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5ca"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5cb"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;3,58&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5cc"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5d4"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5c1"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;27 jun 2017&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-760ff5a4"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;J&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff599"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;9,88&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff598"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5a3"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-760ff5a2"&gt;&lt;p class="cl-760fb2e0"&gt;&lt;span class="cl-760f9ae4"&gt;25 aug 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf066"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85ea"&gt;text&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf067"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85ea"&gt;decimal.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf070"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85ea"&gt;whole.numbers&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf071"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85ea"&gt;logical.values&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf072"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85ea"&gt;dates&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;A&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;7,00&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;21 feb 2020&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf021"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;B&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf035"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;9,17&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf02a"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf02b"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf034"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;1 apr 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;C&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;3,30&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;12 feb 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;D&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8,52&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;26 mei 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;E&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8,55&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;13 nov 2021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf048"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;F&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf053"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8,93&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf054"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;9&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf05c"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf052"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;20 jul 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf048"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;G&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf053"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;4,62&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf054"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf05c"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf052"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;13 jan 2017&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;H&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;4,03&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;31 dec 2019&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf002"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;I&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8ceff8"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8,12&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefda"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf003"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;X&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cefee"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;3 okt 2021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-4c8cf020"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;J&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf00d"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;8,73&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf00c"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf017"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-4c8cf016"&gt;&lt;p class="cl-4c8ca228"&gt;&lt;span class="cl-4c8c85fe"&gt;28 jun 2018&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ```</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># extra formatting</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">              logicals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"-"</span><span class="op">)</span>,     <span class="co"># replaces TRUE en FALSE</span></span>
-<span class="r-in">              values.colour <span class="op">=</span> <span class="st">"X"</span>,</span>
-<span class="r-in">              values.fill <span class="op">=</span> <span class="st">"X"</span>,</span>
-<span class="r-in">              row.names <span class="op">=</span> <span class="st">"S. aureus"</span>,</span>
-<span class="r-in">              columns.italic <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">              format.dates <span class="op">=</span> <span class="st">"ddd dd-mm-yy"</span>,</span>
-<span class="r-in">              round.numbers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># extra formatting</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>              logicals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"-"</span><span class="op">)</span>,     <span class="co"># replaces TRUE en FALSE</span></span></span>
+<span class="r-in"><span>              values.colour <span class="op">=</span> <span class="st">"X"</span>,</span></span>
+<span class="r-in"><span>              values.fill <span class="op">=</span> <span class="st">"X"</span>,</span></span>
+<span class="r-in"><span>              row.names <span class="op">=</span> <span class="st">"S. aureus"</span>,</span></span>
+<span class="r-in"><span>              columns.italic <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>              format.dates <span class="op">=</span> <span class="st">"ddd dd-mm-yy"</span>,</span></span>
+<span class="r-in"><span>              round.numbers <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           A B     C D E           F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S. aureus A 1,510 6 X do 29-08-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 S. aureus B 8,973 4 - wo 25-08-21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S. aureus C 9,656 1 - vr 18-09-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 S. aureus D 6,506 9 - ma 18-02-19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 S. aureus E 2,932 1 - do 15-10-20</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># row totals</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">              row.total <span class="op">=</span> <span class="cn">TRUE</span>,           <span class="co"># add row total</span></span>
-<span class="r-in">              row.total.function <span class="op">=</span> <span class="va">max</span>,   <span class="co"># instead of sum()</span></span>
-<span class="r-in">              row.total.name <span class="op">=</span> <span class="st">"Maximum"</span>, <span class="co"># also works with dates</span></span>
-<span class="r-in">              columns.percent <span class="op">=</span> <span class="fl">2</span>,        <span class="co"># 2nd column as percentages</span></span>
-<span class="r-in">              round.percent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>          <span class="co"># rounding percentages</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S. aureus A 7,005 7 - vr 21-02-20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 S. aureus B 9,173 2 - zo 01-04-18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S. aureus C 3,302 5 - di 12-02-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 S. aureus D 8,517 8 X zo 26-05-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 S. aureus E 8,551 3 - za 13-11-21</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># row totals</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>              row.total <span class="op">=</span> <span class="cn">TRUE</span>,           <span class="co"># add row total</span></span></span>
+<span class="r-in"><span>              row.total.function <span class="op">=</span> <span class="va">max</span>,   <span class="co"># instead of sum()</span></span></span>
+<span class="r-in"><span>              row.total.name <span class="op">=</span> <span class="st">"Maximum"</span>, <span class="co"># also works with dates</span></span></span>
+<span class="r-in"><span>              columns.percent <span class="op">=</span> <span class="fl">2</span>,        <span class="co"># 2nd column as percentages</span></span></span>
+<span class="r-in"><span>              round.percent <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>          <span class="co"># rounding percentages</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 151% 6 X 29 aug 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 897% 4   25 aug 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 966% 1   18 sep 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 651% 9   18 feb 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 293% 1   15 okt 2020</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># column names</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">              column.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span> <span class="op">=</span> <span class="st">"Column 1"</span>,</span>
-<span class="r-in">                               <span class="st">"2"</span> <span class="op">=</span> <span class="st">"Column 2"</span>,</span>
-<span class="r-in">                               dates <span class="op">=</span> <span class="st">"DATES!"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 700% 7   21 feb 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 917% 2    1 apr 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 330% 5   12 feb 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 852% 8 X 26 mei 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 855% 3   13 nov 2021</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># column names</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>              column.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span> <span class="op">=</span> <span class="st">"Column 1"</span>,</span></span>
+<span class="r-in"><span>                               <span class="st">"2"</span> <span class="op">=</span> <span class="st">"Column 2"</span>,</span></span>
+<span class="r-in"><span>                               dates <span class="op">=</span> <span class="st">"DATES!"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 1,51 6 X 29 aug 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 8,97 4   25 aug 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 9,66 1   18 sep 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 6,51 9   18 feb 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 2,93 1   15 okt 2020</span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">              column.names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,00 7   21 feb 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,17 2    1 apr 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 3,30 5   12 feb 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 8,52 8 X 26 mei 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 8,55 3   13 nov 2021</span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>              column.names <span class="op">=</span> <span class="va">LETTERS</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Only the first 5 items of column.names will be used</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E` </span>
@@ -475,36 +475,36 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A    B C D           E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 1,51 6 X 29 aug 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 8,97 4   25 aug 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 9,66 1   18 sep 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 6,51 9   18 feb 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 2,93 1   15 okt 2020</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># vertical lines, alignment and row names</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span>
-<span class="r-in">              align <span class="op">=</span> <span class="st">"lrrcc"</span>, <span class="co"># also works: c("l", "r", "r", "c", "c")</span></span>
-<span class="r-in">              font.size <span class="op">=</span> <span class="fl">12</span>,</span>
-<span class="r-in">              vline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span class="r-in">              vline.part <span class="op">=</span> <span class="st">"all"</span>,</span>
-<span class="r-in">              row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Experiment"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 A 7,00 7   21 feb 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 B 9,17 2    1 apr 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 C 3,30 5   12 feb 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 D 8,52 8 X 26 mei 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 E 8,55 3   13 nov 2021</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># vertical lines, alignment and row names</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>              align <span class="op">=</span> <span class="st">"lrrcc"</span>, <span class="co"># also works: c("l", "r", "r", "c", "c")</span></span></span>
+<span class="r-in"><span>              font.size <span class="op">=</span> <span class="fl">12</span>,</span></span>
+<span class="r-in"><span>              vline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              vline.part <span class="op">=</span> <span class="st">"all"</span>,</span></span>
+<span class="r-in"><span>              row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Experiment"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B`, `C`, `D`, `E`, `F` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> body has 10 row(s) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              A B    C D E           F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Experiment 1 A 1,51 6 X 29 aug 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Experiment 2 B 8,97 4   25 aug 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Experiment 3 C 9,66 1   18 sep 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Experiment 4 D 6,51 9   18 feb 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Experiment 5 E 2,93 1   15 okt 2020</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># width of cells and table</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span>
-<span class="r-in">              vline <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">              autofit.fullpage.width <span class="op">=</span> <span class="fl">16</span>, <span class="co"># default values in cm</span></span>
-<span class="r-in">              columns.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>     <span class="co"># ratio; cells become 4 and 12 cm</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Experiment 1 A 7,00 7   21 feb 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Experiment 2 B 9,17 2    1 apr 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Experiment 3 C 3,30 5   12 feb 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Experiment 4 D 8,52 8 X 26 mei 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 Experiment 5 E 8,55 3   13 nov 2021</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># width of cells and table</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              vline <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>              autofit.fullpage.width <span class="op">=</span> <span class="fl">16</span>, <span class="co"># default values in cm</span></span></span>
+<span class="r-in"><span>              columns.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>     <span class="co"># ratio; cells become 4 and 12 cm</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
@@ -512,11 +512,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 A B</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span>
-<span class="r-in">              vline <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">              autofit.fullpage <span class="op">=</span> <span class="cn">FALSE</span>,    <span class="co"># no fullpage autofit</span></span>
-<span class="r-in">              columns.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>     <span class="co"># cells become 1 and 3 cm</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              vline <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>              autofit.fullpage <span class="op">=</span> <span class="cn">FALSE</span>,    <span class="co"># no fullpage autofit</span></span></span>
+<span class="r-in"><span>              columns.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>     <span class="co"># cells become 1 and 3 cm</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 1 row(s) </span>
@@ -524,13 +524,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 A B</span>
-<span class="r-in">              </span>
-<span class="r-in"><span class="co"># adding extra header or footer</span></span>
-<span class="r-in"><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span>
-<span class="r-in">              row.extra.header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Header"</span>, <span class="st">"Header"</span><span class="op">)</span>,</span>
-<span class="r-in">                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">              row.extra.footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer"</span>, <span class="st">"Footer"</span><span class="op">)</span>,</span>
-<span class="r-in">                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span>              </span></span>
+<span class="r-in"><span><span class="co"># adding extra header or footer</span></span></span>
+<span class="r-in"><span><span class="fu">tbl_flextable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>test1 <span class="op">=</span> <span class="st">"A"</span>, test2 <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              row.extra.header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Header"</span>, <span class="st">"Header"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              row.extra.footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer"</span>, <span class="st">"Footer"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a flextable object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> col_keys: `A`, `B` </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> header has 2 row(s) </span>
@@ -538,7 +538,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> original dataset sample: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 A B</span>
-<span class="r-in">                                      </span>
+<span class="r-in"><span>                                      </span></span>
 </code></pre></div>
     </div>
   </div>
@@ -553,7 +553,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

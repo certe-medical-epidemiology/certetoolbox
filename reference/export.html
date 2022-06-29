@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -76,127 +76,127 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">export</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  fn <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_rds</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_xlsx</span><span class="op">(</span>
-  <span class="va">...</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,
-  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,
-  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
-  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
-  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
-<span class="op">)</span>
-
-<span class="fu">export_excel</span><span class="op">(</span>
-  <span class="va">...</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,
-  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,
-  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,
-  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,
-  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,
-  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>
-<span class="op">)</span>
-
-<span class="fu">export_csv</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_csv2</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_tsv</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_txt</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  sep <span class="op">=</span> <span class="st">"\t"</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_sav</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_spss</span><span class="op">(</span>
-  <span class="va">object</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_pdf</span><span class="op">(</span>
-  <span class="va">plot</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  size <span class="op">=</span> <span class="st">"A5"</span>,
-  portrait <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_png</span><span class="op">(</span>
-  <span class="va">plot</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  width <span class="op">=</span> <span class="fl">1000</span>,
-  height <span class="op">=</span> <span class="fl">800</span>,
-  dpi <span class="op">=</span> <span class="fu">showtext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/showtext/man/showtext_opts.html" class="external-link">showtext_opts</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">dpi</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_html</span><span class="op">(</span>
-  <span class="va">plot</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
-  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">export_clipboard</span><span class="op">(</span>
-  <span class="va">object</span>,
-  sep <span class="op">=</span> <span class="st">"\t"</span>,
-  na <span class="op">=</span> <span class="st">""</span>,
-  header <span class="op">=</span> <span class="cn">TRUE</span>,
-  quote <span class="op">=</span> <span class="cn">FALSE</span>,
-  decimal.mark <span class="op">=</span> <span class="st">","</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">export</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_rds</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_xlsx</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_excel</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_csv</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_csv2</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_tsv</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_txt</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_sav</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_spss</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_pdf</span><span class="op">(</span></span>
+<span>  <span class="va">plot</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  size <span class="op">=</span> <span class="st">"A5"</span>,</span>
+<span>  portrait <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_png</span><span class="op">(</span></span>
+<span>  <span class="va">plot</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  height <span class="op">=</span> <span class="fl">800</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fu">showtext</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/showtext/man/showtext_opts.html" class="external-link">showtext_opts</a></span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">dpi</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_html</span><span class="op">(</span></span>
+<span>  <span class="va">plot</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  card_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">export_clipboard</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
+<span>  na <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  header <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quote <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -295,7 +295,7 @@
 <p>Exporting to an SPSS file using <code>export_sav()</code> or <code>export_spss()</code> requires the <code>haven</code> package to be installed.</p>
 <p>Exporting to a PDF file using <code>export_pdf()</code> requires the <code>ggplot2</code> package to be installed. If the filename is left blank in <code>export_pdf()</code>, <code>export_png()</code> or <code>export_html()</code>, the title of <code>plot</code> will be used if it's available and the <code>certeplot2</code> package is installed, and a timestamp otherwise. <strong>NOTE:</strong> All export functions invisibly return <code>object</code> again, but the plotting functions invisibly return the file path</p>
 <p>Exporting to a PNG file using <code>export_png()</code> requires the <code>ggplot2</code> package to be installed.</p>
-<p>Exporting to an HTML file using <code>export_html()</code> requires the <code>ggplot2</code> and <code>htmltools</code> packages to be installed. The arguments put in <code>...</code> will be passed on to <code><a href="https://rdrr.io/pkg/plotly/man/layout.html" class="external-link">plotly::layout()</a></code> if <code>plot</code> is not yet a Plotly object (but rather a <code>ggplot2</code> object), which of course then requires the <code>plotly</code> package to be installed as well.</p>
+<p>Exporting to an HTML file using <code>export_html()</code> requires the <code>ggplot2</code> and <code>htmltools</code> packages to be installed. The arguments put in <code>...</code> will be passed on to <code>plotly::layout()</code> if <code>plot</code> is not yet a Plotly object (but rather a <code>ggplot2</code> object), which of course then requires the <code>plotly</code> package to be installed as well.</p>
 <p>Exporting to the clipboard using <code>export_clipboard()</code> requires the <code>clipr</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) and is only limited to the available amount of RAM memory.</p>
     </div>
     <div id="see-also">
@@ -305,22 +305,22 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'</span></span>
-<span class="r-in"><span class="va">starwars</span> |&gt;</span>
-<span class="r-in">  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> |&gt;</span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt;</span>
-<span class="r-in">  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="co"># the above is equal to:</span></span>
-<span class="r-in"><span class="va">starwars</span> |&gt;</span>
-<span class="r-in">  <span class="fu">export</span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span> |&gt;</span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt;</span>
-<span class="r-in">  <span class="fu">export</span><span class="op">(</span><span class="st">"first_ten_rows.xlsx"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'</span></span></span>
+<span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
+<span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">export</span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">export</span><span class="op">(</span><span class="st">"first_ten_rows.xlsx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -335,7 +335,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

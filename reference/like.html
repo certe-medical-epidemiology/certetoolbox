@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.8</span>
       </span>
     </div>
 
@@ -76,15 +76,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">like</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">x</span> <span class="op">%like%</span> <span class="va">pattern</span>
-
-<span class="va">x</span> <span class="op">%unlike%</span> <span class="va">pattern</span>
-
-<span class="va">x</span> <span class="op">%like_case%</span> <span class="va">pattern</span>
-
-<span class="va">x</span> <span class="op">%unlike_case%</span> <span class="va">pattern</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">like</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">%like%</span> <span class="va">pattern</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">%unlike%</span> <span class="va">pattern</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">%like_case%</span> <span class="va">pattern</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">%unlike_case%</span> <span class="va">pattern</span></span></code></pre></div>
     </div>
 
     <div id="source">
@@ -126,24 +126,24 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"This is a test"</span></span>
-<span class="r-in"><span class="va">b</span> <span class="op">&lt;-</span> <span class="st">"TEST"</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="st">"This is a test"</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="st">"TEST"</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span class="va">b</span> <span class="op">%like%</span> <span class="va">a</span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">%like%</span> <span class="va">a</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># also supports multiple patterns</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Test case"</span>, <span class="st">"Something different"</span>, <span class="st">"Yet another thing"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>     <span class="st">"case"</span>,           <span class="st">"diff"</span>,      <span class="st">"yet"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># also supports multiple patterns</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Test case"</span>, <span class="st">"Something different"</span>, <span class="st">"Yet another thing"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>     <span class="st">"case"</span>,           <span class="st">"diff"</span>,      <span class="st">"yet"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE TRUE TRUE</span>
-<span class="r-in"><span class="va">a</span> <span class="op">%unlike%</span> <span class="va">b</span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">%unlike%</span> <span class="va">b</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE FALSE</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">a</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">%like%</span> <span class="va">b</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">a</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">%like%</span> <span class="va">b</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  TRUE FALSE FALSE</span>
-<span class="r-in"><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">%like%</span> <span class="va">b</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  TRUE FALSE FALSE</span>
 </code></pre></div>
     </div>
@@ -159,7 +159,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
