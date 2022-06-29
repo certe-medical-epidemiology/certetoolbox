@@ -142,12 +142,7 @@ import_exec <- function(filename,
     # try project file using the 'certeprojects' package
     filename <- project_get_file(filename, card_number = card_number)
   }
-  if (!file.exists(filename)) {
-    filename <- read_secret("path.refmap")
-    if (!file.exists(filename)) {
-      stop("File not found: ", filename, call. = FALSE)
-    }
-  }
+  
   if (!file.exists(filename)) {
     stop("File not found: ", filename, call. = FALSE)
   }
@@ -158,12 +153,14 @@ import_exec <- function(filename,
   } else if (extension == "sav") {
     # SPSS format
     df <- haven::as_factor(haven::read_sav(file = filename))
-  } else if (extension == "xlsx") {
+  } else if (extension %like% "xlsx?") {
     # Excel format
     df <- readxl::read_excel(path = filename,
                              sheet = list(...)$sheet,
                              range = list(...)$range,
-                             na = list(...)$na)
+                             na = list(...)$na,
+                             skip = list(...)$skip,
+                             guess_max = 5000)
     
   } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
@@ -788,6 +785,7 @@ import_rds <- function(filename,
 #' @rdname import
 #' @param sheet Excel sheet to import, defaults to first sheet
 #' @param range a cell range to read from, allows typical Excel ranges such as "B3:D87" and "Budget!B2:G14"
+#' @param skip number of first rows to skip
 #' @inheritParams auto_transform
 #' @details `r doc_requirement("an Excel file", c("import_xlsx", "import_excel"), "readxl")`.
 #' @importFrom cleaner format_datetime
@@ -804,6 +802,7 @@ import_xlsx <- function(filename,
                         big.mark = "",
                         timezone = "UTC",
                         na = c("", "NULL", "NA", "<NA>"),
+                        skip = 0,
                         ...) {
   check_is_installed("readxl")
   if (length(sheet) != 1) {
@@ -811,7 +810,7 @@ import_xlsx <- function(filename,
   }
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
-              extension = "xlsx",
+              extension = ifelse(filename %like% "[.]xls$", "xls", "xlsx"),
               card_number = card_number,
               sheet = sheet,
               range = range,
@@ -822,7 +821,8 @@ import_xlsx <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              skip = skip)
 }
 
 #' @rdname import
