@@ -118,6 +118,7 @@ import_mail_attachment <- function(search = "hasattachment:yes",
                                    sort = "received desc",
                                    account = NULL,
                                    auto_transform = TRUE,
+                                   sep = ",",
                                    ...) {
   check_is_installed("certemail")
   if (missing(account)) {
@@ -137,7 +138,11 @@ import_mail_attachment <- function(search = "hasattachment:yes",
     account = account))
   
   if (file.exists(path)) {
-    import(path, auto_transform = auto_transform, ...)
+    if (path %like% "[.]csv$") {
+      import(path, auto_transform = auto_transform, sep = sep, ...)
+    } else {
+      import(path, auto_transform = auto_transform, ...)
+    }
   } else {
     stop("Importing attachment failed")
   }

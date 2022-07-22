@@ -43,7 +43,6 @@ parse_file_location <- function(filename, needed_extension, card_number) {
   filename
 }
 
-#' @importFrom tibble rownames_to_column
 export_exec <- function(object,
                         needed_extension,
                         filename,
@@ -63,8 +62,8 @@ export_exec <- function(object,
                                   card_number = card_number)
   needed_extension <- needed_extension[1L]
   if (needed_extension == "") {
-    if (filename %unlike% "[.][a-z0-9]+$") {
-      warning("No file extension set.", call. = FALSE)
+    if (filename %unlike% "[.][a-z0-9_-]+$") {
+      warning("No (valid) file extension set.", call. = FALSE)
     }
     # custom method
     fn(object, filename, ...)
@@ -74,6 +73,14 @@ export_exec <- function(object,
   } else if (needed_extension == "sav") {
     # SPSS format
     haven::write_sav(object, path = filename, ...)
+  } else if (needed_extension == "feather") {
+    # Apache's Feather format
+    object <- rownames_1st_column(object)
+    arrow::write_feather(x = object, sink = filename, ...)
+  } else if (needed_extension == "parquet") {
+    # Apache's Parquet format
+    object <- rownames_1st_column(object)
+    arrow::write_parquet(x = object, sink = filename, ...)
   } else if (needed_extension == "xlsx") {
     # Excel format
     if (!inherits(object, "Workbook")) {
@@ -83,10 +90,7 @@ export_exec <- function(object,
     suppressMessages(save_excel(xl = object, filename = filename, overwrite = TRUE))
   } else {
     # flat data file
-    if (!all(rownames(object) == as.character(1:nrow(object)))) {
-      object <- rownames_to_column(object, var = "rownames")
-      warning("Row names added as first column 'rownames'", call. = FALSE)
-    }
+    object <- rownames_1st_column(object)
     if (needed_extension %in% c("csv", "tsv", "txt")) {
       # arguments such as 'sep' etc. are passed into '...':
       utils::write.table(object, file = filename, ...)
@@ -139,7 +143,7 @@ import_exec <- function(filename,
   }
   
   filename <- gsub('\\', '/', filename, fixed = TRUE)
-  if (filename %unlike% "[.][a-zA-Z0-9]{1,5}$") {
+  if (filename %unlike% "[.][a-zA-Z0-9]{1,7}$") {
     # does not have extension yet
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
   }
@@ -155,22 +159,10 @@ import_exec <- function(filename,
   if (extension == "rds") {
     # R format
     df <- base::readRDS(file = filename)
-  } else if (extension == "sav") {
-    # SPSS format
-    df <- haven::as_factor(haven::read_sav(file = filename))
-  } else if (extension %like% "xlsx?") {
-    # Excel format
-    df <- readxl::read_excel(path = filename,
-                             guess_max = 200000,
-                             sheet = list(...)$sheet,
-                             range = list(...)$range,
-                             na = list(...)$na,
-                             skip = list(...)$skip)
-    
   } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
     df <- read_delim(file = filename,
-                     guess_max = 200000,
+                     guess_max = 20000,
                      delim = list(...)$sep,
                      na = list(...)$na,
                      progress = interactive(),
@@ -187,6 +179,27 @@ import_exec <- function(filename,
       df <- auto_transform(df, decimal.mark = ".", big.mark = "")
       auto_transform <- FALSE
     }
+  } else if (extension == "sav") {
+    # SPSS format
+    df <- haven::as_factor(haven::read_sav(file = filename))
+  } else if (extension %like% "xlsx?") {
+    # Excel format
+    df <- readxl::read_excel(path = filename,
+                             guess_max = 200000,
+                             sheet = list(...)$sheet,
+                             range = list(...)$range,
+                             na = list(...)$na,
+                             skip = list(...)$skip)
+  } else if (extension == "feather") {
+    # Apache's Feather format
+    df <- arrow::read_feather(file = filename,
+                              as_data_frame = TRUE,
+                              col_select = list(...)$select)
+  } else if (extension == "parquet") {
+    # Apache's Parquet format
+    df <- arrow::read_parquet(file = filename,
+                              as_data_frame = TRUE,
+                              col_select = list(...)$select)
   } else {
     # use rio::import which pretty much understands any file type
     check_is_installed("rio")
@@ -312,6 +325,16 @@ export <- function(object,
                  filename = filename,
                  card_number = card_number,
                  ...)
+    } else if (filename %like% "[.]feather$") {
+      export_feather(object = object,
+                     filename = filename,
+                     card_number = card_number,
+                     ...)
+    } else if (filename %like% "[.]parquet$") {
+      export_parquet(object = object,
+                     filename = filename,
+                     card_number = card_number,
+                     ...)
     } else if (filename %like% "[.]pdf$") {
       export_pdf(plot = object,
                  filename = filename,
@@ -489,6 +512,7 @@ export_sav <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
                        ...) {
+  check_is_installed("haven")
   export_exec(object, "sav",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
@@ -499,6 +523,37 @@ export_sav <- function(object,
 #' @rdname export
 #' @export
 export_spss <- export_sav 
+
+
+#' @rdname export
+#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
+#' @export
+export_feather <- function(object,
+                           filename = NULL,
+                           card_number = project_get_current_id(ask = FALSE),
+                           ...) {
+  check_is_installed("arrow")
+  export_exec(object, "feather",
+              filename = filename,
+              filename_deparse = deparse(substitute(object)),
+              card_number = card_number,
+              ...)
+}
+
+#' @rdname export
+#' @details `r doc_requirement("a Parquet file", "export_parquet", "arrow")`. 'Parquet' is a columnar storage file format.
+#' @export
+export_parquet <- function(object,
+                           filename = NULL,
+                           card_number = project_get_current_id(ask = FALSE),
+                           ...) {
+  check_is_installed("arrow")
+  export_exec(object, "parquet",
+              filename = filename,
+              filename_deparse = deparse(substitute(object)),
+              card_number = card_number,
+              ...)
+}
 
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
@@ -717,7 +772,7 @@ export_html <- function(plot,
 
 #' Import Data Sets
 #' 
-#' These functions can be used to import data. They work closely with the `certeprojects` package and support Trello card numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
+#' These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the `certeprojects` package and support Trello card numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
 #' @param filename the full path of the file to be imported, will be parsed to a [character]
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param card_number a Trello card number
@@ -767,6 +822,22 @@ import <- function(filename,
                card_number = card_number,
                auto_transform = auto_transform,
                ...)
+  } else if (filename %like% "[.]feather$") {
+    if (missing(auto_transform)) {
+      auto_transform <- FALSE
+    }
+    import_feather(filename = filename,
+                   card_number = card_number,
+                   auto_transform = auto_transform,
+                   ...)
+  } else if (filename %like% "[.]parquet$") {
+    if (missing(auto_transform)) {
+      auto_transform <- FALSE
+    }
+    import_parquet(filename = filename,
+                   card_number = card_number,
+                   auto_transform = auto_transform,
+                   ...)
   } else {
     import_exec(filename,
                 extension = "",
@@ -992,6 +1063,71 @@ import_sav <- function(filename,
 #' @rdname import
 #' @export
 import_spss <- import_sav
+
+#' @rdname import
+#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. The imported data set will not be transformed automatically, since Feather files contain a data type structure already. Use the `select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection.
+#' @param select columns to select, supports the [tidyselect language][tidyselect::language])
+#' @importFrom dplyr everything
+#' @export
+import_feather <- function(filename,
+                           card_number = project_get_current_id(ask = FALSE),
+                           select = everything(),
+                           auto_transform = FALSE,
+                           datenames = "en",
+                           dateformat = "yyyy-mm-dd",
+                           timeformat = "HH:MM",
+                           decimal.mark = ".",
+                           big.mark = "",
+                           timezone = "UTC",
+                           na = c("", "NULL", "NA", "<NA>"),
+                           ...) {
+  check_is_installed("arrow")
+  import_exec(filename,
+              filename_deparse = deparse(substitute(filename)),
+              extension = "feather",
+              card_number = card_number,
+              select = select,
+              auto_transform = auto_transform,
+              datenames = datenames,
+              dateformat = dateformat,
+              timeformat = timeformat,
+              decimal.mark = decimal.mark,
+              big.mark = big.mark,
+              timezone = timezone,
+              na = na)
+}
+
+#' @rdname import
+#' @details `r doc_requirement("a Parquet file", "import_parquet", "arrow")`. 'Parquet' is a columnar storage file format. The imported data set will not be transformed automatically, since Parquet files contain a data type structure already. Use the `select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection.
+#' @importFrom dplyr everything
+#' @export
+import_parquet <- function(filename,
+                           card_number = project_get_current_id(ask = FALSE),
+                           select = everything(),
+                           auto_transform = FALSE,
+                           datenames = "en",
+                           dateformat = "yyyy-mm-dd",
+                           timeformat = "HH:MM",
+                           decimal.mark = ".",
+                           big.mark = "",
+                           timezone = "UTC",
+                           na = c("", "NULL", "NA", "<NA>"),
+                           ...) {
+  check_is_installed("arrow")
+  import_exec(filename,
+              filename_deparse = deparse(substitute(filename)),
+              extension = "parquet",
+              card_number = card_number,
+              select = select,
+              auto_transform = auto_transform,
+              datenames = datenames,
+              dateformat = dateformat,
+              timeformat = timeformat,
+              decimal.mark = decimal.mark,
+              big.mark = big.mark,
+              timezone = timezone,
+              na = na)
+}
 
 #' @rdname import
 #' @param url remote location of any data set, can also be a (non-raw) GitHub/GitLab link
