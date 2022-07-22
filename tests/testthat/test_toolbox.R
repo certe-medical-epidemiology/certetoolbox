@@ -230,6 +230,15 @@ test_that("import_export works", {
                                       check_factors = FALSE, digits = 10))
   expect_true(identical_import_export(import, export, "sav",
                                       check_factors = FALSE, digits = 10))
+  # Apache
+  expect_true(identical_import_export(import_feather, export_feather, "feather",
+                                      check_factors = TRUE, digits = 10))
+  expect_true(identical_import_export(import, export, "feather",
+                                      check_factors = TRUE, digits = 10))
+  expect_true(identical_import_export(import_parquet, export_parquet, "parquet",
+                                      check_factors = TRUE, digits = 10))
+  expect_true(identical_import_export(import, export, "parquet",
+                                      check_factors = TRUE, digits = 10))
   
   # remote files
   expect_equal(dim(import_url("https://filesamples.com/samples/document/csv/sample1.csv")), c(8, 13))

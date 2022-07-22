@@ -72,7 +72,16 @@ check_is_installed <- function(pkgs) {
 
 doc_requirement <- function(filetype, fn, pkg) {
   fn <- paste0("[", fn, "()]", collapse = " or ")
-  paste0(ifelse(fn %like% "import", "Importing from", "Exporting to"), " ", 
+  paste0(ifelse(fn %like% "import", "Importing", "Exporting to"), " ", 
          filetype, " using ", fn, " requires the ", paste0("`", pkg, "`", collapse = " and "), 
          " package", ifelse(length(pkg) > 1, "s", ""), " to be installed")
+}
+
+#' @importFrom tibble rownames_to_column
+rownames_1st_column <- function(object) {
+  if (!all(rownames(object) == as.character(1:nrow(object)))) {
+    object <- rownames_to_column(object, var = "rownames")
+    warning("Row names added as first column 'rownames'", call. = FALSE)
+  }
+  object
 }

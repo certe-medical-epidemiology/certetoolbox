@@ -11,6 +11,8 @@
 \alias{import_txt}
 \alias{import_sav}
 \alias{import_spss}
+\alias{import_feather}
+\alias{import_parquet}
 \alias{import_url}
 \alias{import_clipboard}
 \alias{import_mail_attachment}
@@ -148,6 +150,36 @@ import_spss(
   ...
 )
 
+import_feather(
+  filename,
+  card_number = project_get_current_id(ask = FALSE),
+  select = everything(),
+  auto_transform = FALSE,
+  datenames = "en",
+  dateformat = "yyyy-mm-dd",
+  timeformat = "HH:MM",
+  decimal.mark = ".",
+  big.mark = "",
+  timezone = "UTC",
+  na = c("", "NULL", "NA", "<NA>"),
+  ...
+)
+
+import_parquet(
+  filename,
+  card_number = project_get_current_id(ask = FALSE),
+  select = everything(),
+  auto_transform = FALSE,
+  datenames = "en",
+  dateformat = "yyyy-mm-dd",
+  timeformat = "HH:MM",
+  decimal.mark = ".",
+  big.mark = "",
+  timezone = "UTC",
+  na = c("", "NULL", "NA", "<NA>"),
+  ...
+)
+
 import_url(
   url,
   auto_transform = TRUE,
@@ -188,6 +220,7 @@ import_mail_attachment(
   sort = "received desc",
   account = NULL,
   auto_transform = TRUE,
+  sep = ",",
   ...
 )
 }
@@ -222,6 +255,8 @@ import_mail_attachment(
 
 \item{sep}{character to separate values in a row}
 
+\item{select}{columns to select, supports the \link[tidyselect:language]{tidyselect language})}
+
 \item{url}{remote location of any data set, can also be a (non-raw) GitHub/GitLab link}
 
 \item{header}{use first row as header}
@@ -245,20 +280,24 @@ import_mail_attachment(
 \item{account}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
 }
 \description{
-These functions can be used to import data. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
+These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
 }
 \details{
-Importing from any unlisted filetype using \code{\link[=import]{import()}} requires the \code{rio} package to be installed.
+Importing any unlisted filetype using \code{\link[=import]{import()}} requires the \code{rio} package to be installed.
 
-Importing from an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code{\link[=import_excel]{import_excel()}} requires the \code{readxl} package to be installed.
+Importing an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code{\link[=import_excel]{import_excel()}} requires the \code{readxl} package to be installed.
 
-Importing from an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
+Importing an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
+
+Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. The imported data set will not be transformed automatically, since Feather files contain a data type structure already. Use the \code{select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection.
+
+Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. 'Parquet' is a columnar storage file format. The imported data set will not be transformed automatically, since Parquet files contain a data type structure already. Use the \code{select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection.
 
 The \code{\link[=import_url]{import_url()}} tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
 
-Importing from the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
+Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
-Importing from mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
+Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
 }
 \seealso{
 \code{\link[=export]{export()}}
