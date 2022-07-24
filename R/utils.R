@@ -69,10 +69,3 @@ check_is_installed <- function(pkgs) {
     return(TRUE)
   }
 }
-
-doc_requirement <- function(filetype, fn, pkg) {
-  fn <- paste0("[", fn, "()]", collapse = " or ")
-  paste0(ifelse(fn %like% "import", "Importing from", "Exporting to"), " ", 
-         filetype, " using ", fn, " requires the ", paste0("`", pkg, "`", collapse = " and "), 
-         " package", ifelse(length(pkg) > 1, "s", ""), " to be installed")
-}

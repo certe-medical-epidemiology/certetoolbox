@@ -186,7 +186,7 @@ tbl_flextable <- function(x,
                           logicals = c("X", ""),
                           round.numbers = 2,
                           round.percent = 1,
-                          format.dates = 'd mmm yyyy',
+                          format.dates = "d mmm yyyy",
                           decimal.mark = ",",
                           big.mark = ".",
                           font.family = "Calibri",
@@ -216,7 +216,7 @@ tbl_flextable <- function(x,
   
   # be nice in case of typing errors
   dots <- list(...)
-  if (is.null(vline) & missing(vline)) {
+  if (is.null(vline) && missing(vline)) {
     vline <- dots$vline.columns
   }
   if (!is.null(dots$vline.parts)) {
@@ -230,14 +230,6 @@ tbl_flextable <- function(x,
   }
   
   x <- as.data.frame(x, stringsAsFactors = FALSE)
-  
-  addif <- function(ft, test, elem) {
-    if (isTRUE(test)) {
-      elem
-    } else {
-      ft
-    }
-  }
   
   if (identical(row.names, as.character(c(seq_len(nrow(x))))) & missing(row.names)) {
     # rownames not set, are thus 1:nrow(x)

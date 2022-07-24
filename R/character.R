@@ -37,8 +37,12 @@ size_humanreadable <- function(bytes, decimals = 1, decimal.mark = ",") {
   factor <- floor((nchar(formatC(bytes, format = "f", digits = 0)) - 1) / 3)
   factor[factor > length(size) - 1] <- length(size) - 1
   # added slight improvement; no decimals for B and kB:
-  decimals <- rep(decimals, length(bytes))
-  decimals[size[factor + 1]  %in% c("B", "kB")] <- 0
+  decimals_bak <- decimals[1]
+  decimals <- rep(decimals[1], length(bytes))
+  decimals[size[factor + 1] %in% c("B", "kB")] <- 0
+  # but do set decimal for kB under 100 kB
+  decimals[size[factor + 1] == "kB" & (bytes / 1024) < 100] <- decimals_bak
+  # format
   out <- paste(sprintf(paste0("%.", decimals, "f"), bytes / (1024 ^ factor)), size[factor + 1])
   out <- trimws(gsub(".", decimal.mark, out, fixed = TRUE))
   out
@@ -71,21 +75,21 @@ generate_identifier <- function(id_length = 6, n = 1, chars = c(0:9, letters[1:6
 #' @details This function returns the absolute path using [tools::file_path_as_absolute()].
 #' @export
 ref_dir <- function(sub = "") {
-  if (Sys.info()['sysname'] %in% c("Linux", "Darwin")) {
+  if (Sys.info()["sysname"] %in% c("Linux", "Darwin")) {
     r <- read_secret("path.refmap")
   } else {
-    r <- gsub('\\', '/', read_secret("path.refmap"), fixed = TRUE)
+    r <- gsub("\\", "/", read_secret("path.refmap"), fixed = TRUE)
   }
   
   if (r == "") {
     stop("Secret 'path.refmap' not set.", call. = FALSE)
   }
-  if (r %unlike% '[/]$') {
-    r <- paste0(r, '/')
+  if (r %unlike% "[/]$") {
+    r <- paste0(r, "/")
   }
   sub <- trimws(sub, "both")
   r <- paste0(r, sub)
-  if (r %like% '[/]$') {
+  if (r %like% "[/]$") {
     r <- substr(r, 1, nchar(r) - 1)
   }
   if (tools::file_ext(r) == "" && !dir.exists(r)) {
