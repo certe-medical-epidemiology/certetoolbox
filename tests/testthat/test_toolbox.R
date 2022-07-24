@@ -272,7 +272,7 @@ test_that("import_export works", {
   p <- ggplot2::ggplot(mtcars, ggplot2::aes(mpg, hp)) + ggplot2::geom_point()
   temp_pdf <- tempfile(fileext = ".pdf")
   
-  if (.Platform$OS.type == "windows") {
+  if (.Platform$OS.type %in% c("windows", "unix")) {
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
     unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))

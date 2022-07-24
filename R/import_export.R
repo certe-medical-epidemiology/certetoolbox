@@ -328,7 +328,7 @@ plot_export_result <- function(filename) {
   filename_old <- paste0(filename, ".certetoolbox_export")
   if (file.exists(filename)) {
     message(paste0("Exported plot to '",
-                   tools::file_path_as_absolute(filename), 
+                   tools::file_path_as_absolute(filename),
                    "' (", size_humanreadable(file.size(filename)), ")."))
   } else {
     # revert the old existing file (see the file_can_be_overwritten() function)
@@ -340,7 +340,7 @@ plot_export_result <- function(filename) {
   
   try(unlink(filename_old, force = TRUE), silent = TRUE)
   if (file.exists(filename)) {
-    return(invisible(filename_old))
+    return(invisible(tools::file_path_as_absolute(filename)))
   } else {
     return(invisible(NULL))
   }
