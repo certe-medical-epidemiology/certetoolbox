@@ -304,13 +304,11 @@ test_that("import_export works", {
     expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
     unlink(temp_html)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_html))))
-    
   }
-  
   
   # importing a data.frame with rownames as first column should be transformed right
   temp_csv <- tempfile(fileext = ".csv")
-  expect_warning(export_csv(mtcars, temp_csv))
+  expect_message(export_csv(mtcars, temp_csv))
   expect_identical(rownames(import_csv(temp_csv)), rownames(mtcars))
   
   # test manual export function

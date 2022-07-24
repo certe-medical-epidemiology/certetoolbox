@@ -231,7 +231,7 @@ The \code{\link[=export_txt]{export_txt()}} function exports to a tab-separated 
 
 Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
+Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R).
 
 Exporting to a Parquet file using \code{\link[=export_parquet]{export_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval.
 
@@ -246,7 +246,7 @@ Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 
-# export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
+# export to two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 starwars |>
   export_rds("whole_file") |>
   slice(1:10) |>
@@ -260,11 +260,17 @@ starwars |>
 
 
 # Apache's Feather and Parquet formats are column-based
-# and allow for specific and fast file reading
+# and allow for cross-language specific and fast file reading
 starwars |> export_feather()
 import("starwars.feather",
        col_select = starts_with("h")) |> 
   head()
+  
+
+# (cleanup)
+unlink("whole_file.rds")
+unlink("first_ten_rows.xlsx")
+unlink("starwars.feather")
 }
 \seealso{
 \code{\link[=import]{import()}}

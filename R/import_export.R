@@ -27,7 +27,7 @@ export_exec <- function(object,
                         overwrite,
                         fn = NULL,
                         ...) {
-  if (!is.data.frame(object)) {
+  if (!is.data.frame(object) && !is.list(object) && needed_extension %unlike% "xls" ) {
     # maybe it's a name of an object? Try to get it:
     object <- tryCatch(eval(parse(text = object)),
                        error = function(e) NULL)
@@ -275,11 +275,9 @@ doc_requirement <- function(filetype, fn, pkg) {
 
 #' @importFrom tibble rownames_to_column
 rownames_1st_column <- function(object) {
-  if (!all(rownames(object) == as.character(1:nrow(object)))) {
+  if (!all(rownames(object) == as.character(seq_len(NROW(object))))) {
     object <- rownames_to_column(object, var = "rownames")
-    warning("Row names added as first column 'rownames'",
-            call. = FALSE,
-            immediate. = TRUE)
+    message("Note: Row names added as first column 'rownames'")
   }
   object
 }
@@ -329,7 +327,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
 plot_export_result <- function(filename) {
   filename_old <- paste0(filename, ".certetoolbox_export")
   if (file.exists(filename)) {
-    message(paste0("Plot exported as '",
+    message(paste0("Exported plot to '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
   } else {
@@ -367,7 +365,7 @@ plot_export_result <- function(filename) {
 #' @examples 
 #' library(dplyr, warn.conflicts = FALSE)
 #' 
-#' # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
+#' # export to two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 #' starwars |>
 #'   export_rds("whole_file") |>
 #'   slice(1:10) |>
@@ -381,11 +379,17 @@ plot_export_result <- function(filename) {
 #' 
 #' 
 #' # Apache's Feather and Parquet formats are column-based
-#' # and allow for specific and fast file reading
+#' # and allow for cross-language specific and fast file reading
 #' starwars |> export_feather()
 #' import("starwars.feather",
 #'        col_select = starts_with("h")) |> 
 #'   head()
+#'   
+#' 
+#' # (cleanup)
+#' unlink("whole_file.rds")
+#' unlink("first_ten_rows.xlsx")
+#' unlink("starwars.feather")
 export <- function(object,
                    filename = NULL,
                    card_number = project_get_current_id(ask = FALSE),
@@ -404,6 +408,7 @@ export <- function(object,
     export_exec(object = object,
                 needed_extension = NULL,
                 filename = filename,
+                filename_deparse = deparse(substitute(filename)),
                 card_number = card_number,
                 overwrite = overwrite,
                 fn = fn,
@@ -667,7 +672,7 @@ export_sav <- function(object,
 export_spss <- export_sav 
 
 #' @rdname export
-#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
+#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R).
 #' @export
 export_feather <- function(object,
                            filename = NULL,
@@ -916,16 +921,16 @@ export_html <- function(plot,
 #' @seealso [export()]
 #' @export
 #' @examples 
-#' export_csv("iris")
+#' export_csv(iris)
 #' import_csv("iris") |> head()
 #' 
 #' # the above is equal to:
-#' export("iris.csv")
-#' import("iris.csv") |> head()
+#' # export(iris.csv)
+#' # import("iris.csv") |> head()
 #' 
 #' 
 #' # row names are also supported
-#' export_csv("mtcars")
+#' export_csv(mtcars)
 #' import_csv("mtcars") |> head()
 #' 
 #' 
@@ -936,6 +941,12 @@ export_html <- function(plot,
 #' import("starwars.feather",
 #'        col_select = starts_with("h")) |> 
 #'   head()
+#'   
+#' 
+#' # (cleanup)
+#' unlink("iris.csv")
+#' unlink("mtcars.csv")
+#' unlink("starwars.feather")
 import <- function(filename,
                    card_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
@@ -1212,7 +1223,7 @@ import_sav <- function(filename,
 import_spss <- import_sav
 
 #' @rdname import
-#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
+#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
 #' @param col_select columns to select, supports the [tidyselect language][tidyselect::language])
 #' @importFrom dplyr everything
 #' @export

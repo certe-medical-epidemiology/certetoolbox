@@ -273,7 +273,7 @@ Importing an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code
 
 Importing an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
 
-Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
+Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
 Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
@@ -284,16 +284,16 @@ Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}
 Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
 }
 \examples{
-export_csv("iris")
+export_csv(iris)
 import_csv("iris") |> head()
 
 # the above is equal to:
-export("iris.csv")
-import("iris.csv") |> head()
+# export(iris.csv)
+# import("iris.csv") |> head()
 
 
 # row names are also supported
-export_csv("mtcars")
+export_csv(mtcars)
 import_csv("mtcars") |> head()
 
 
@@ -304,6 +304,12 @@ starwars |> export_feather()
 import("starwars.feather",
        col_select = starts_with("h")) |> 
   head()
+  
+
+# (cleanup)
+unlink("iris.csv")
+unlink("mtcars.csv")
+unlink("starwars.feather")
 }
 \seealso{
 \code{\link[=export]{export()}}
