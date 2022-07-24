@@ -19,40 +19,26 @@
 
 # Helper functions --------------------------------------------------------
 
-#' @importFrom certeprojects project_set_file
-parse_file_location <- function(filename, needed_extension, card_number) {
-  if (is.null(card_number) || is.na(card_number) || isFALSE(card_number) || card_number %in% c(0, "")) {
-    card_number <- NULL
-  }
-  needed_extension <- gsub("^[.]", "", needed_extension[1L])
-  if (filename == ".") {
-    filename <- "tbl"
-  }
-  if (needed_extension != "" & filename %unlike% paste0("[.](", paste0(needed_extension, collapse = "|"), ")$")) {
-    filename <- paste0(filename, ".", needed_extension[1L])
-  }
-  if (!is.null(card_number) && filename %unlike% paste0("p", card_number, "|[A-Z]:/")) {
-    # has no valid location yet, so include card number
-    filename_proj <- project_set_file(filename, card_number = card_number)
-    if (!is.na(filename_proj)) {
-      filename <- filename_proj
-    }
-  }
-  # remove invalid characters
-  filename <- gsub("[?|<>|*]+", "", filename)
-  filename
-}
-
 export_exec <- function(object,
                         needed_extension,
                         filename,
                         filename_deparse,
                         card_number,
+                        overwrite,
                         fn = NULL,
                         ...) {
+  if (!is.data.frame(object)) {
+    # maybe it's a name of an object? Try to get it:
+    object <- tryCatch(eval(parse(text = object)),
+                       error = function(e) NULL)
+    if (!is.data.frame(object)) {
+      stop("'object' must be a data.frame", call. = FALSE)
+    }
+  }
   if (is.null(needed_extension)) {
     needed_extension <- ""
   }
+  filename_deparse <- gsub('"', "", filename_deparse, fixed = TRUE)
   if (is.null(filename)) {
     filename <- filename_deparse
   }
@@ -60,6 +46,11 @@ export_exec <- function(object,
   filename <- parse_file_location(filename,
                                   needed_extension = needed_extension,
                                   card_number = card_number)
+  filename_old <- paste0(filename, ".certetoolbox_export")
+  if (!file_can_be_overwritten(overwrite, filename)) {
+    return(invisible(object))
+  }
+  
   needed_extension <- needed_extension[1L]
   if (needed_extension == "") {
     if (filename %unlike% "[.][a-z0-9_-]+$") {
@@ -87,7 +78,7 @@ export_exec <- function(object,
       # not yet an openxlsx object (but rather e.g. a data frame)
       object <- suppressMessages(as_excel(object, ...))
     }
-    suppressMessages(save_excel(xl = object, filename = filename, overwrite = TRUE))
+    suppressMessages(save_excel(xl = object, filename = filename))
   } else {
     # flat data file
     object <- rownames_1st_column(object)
@@ -99,11 +90,20 @@ export_exec <- function(object,
     }
   }
   if (file.exists(filename)) {
-    message(paste0("Data exported to '",
+    message(paste0("Exported data set (",
+                   format2(NROW(object)), "x", format2(NCOL(object)),
+                   ") to '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
   } else {
-    stop("Error while saving `", filename, "`.", call. = FALSE)
+    warning("Error while exporting to `", filename, "`.", call. = FALSE)
+    # revert the old existing file (see the file_can_be_overwritten() function)
+    if (file.exists(filename_old)) {
+      file.copy(filename_old, filename, copy.mode = TRUE, copy.date = TRUE)
+    }
+  }
+  if (file.exists(filename_old)) {
+    try(unlink(filename_old), silent = TRUE)
   }
   invisible(object)
 }
@@ -190,16 +190,19 @@ import_exec <- function(filename,
                              range = list(...)$range,
                              na = list(...)$na,
                              skip = list(...)$skip)
-  } else if (extension == "feather") {
-    # Apache's Feather format
-    df <- arrow::read_feather(file = filename,
-                              as_data_frame = TRUE,
-                              col_select = list(...)$select)
-  } else if (extension == "parquet") {
-    # Apache's Parquet format
-    df <- arrow::read_parquet(file = filename,
-                              as_data_frame = TRUE,
-                              col_select = list(...)$select)
+  } else if (extension %in% c("feather", "parquet")) {
+    # Apache's Feather and Parquet format
+    fun <- eval(parse(text = paste0("read_", extension)),
+                envir = asNamespace("arrow"))
+    df <- fun(file = filename,
+              # always include first column, might be rownames
+              col_select = c(1, list(...)$col_select),
+              as_data_frame = TRUE)
+    if (colnames(df)[1] != "rownames" && !1 %in% list(...)$col_select) {
+      # 1st column is not rownames and 1st column was not in original selection, so:
+      df <- df |> select(-1)
+    }
+    
   } else {
     # use rio::import which pretty much understands any file type
     check_is_installed("rio")
@@ -229,14 +232,120 @@ import_exec <- function(filename,
     }
     message(
       paste0(
-        "Imported data set (", format2(NROW(df)), "x", format2(NCOL(df)),
-        ", ", size_humanreadable(utils::object.size(df)),  ") from '",
+        "Imported data set (",
+        format2(NROW(df)), "x", format2(NCOL(df)), ") from '",
         file_src, "'"
       )
     )
   }
   
   df
+}
+
+#' @importFrom certeprojects project_set_file
+parse_file_location <- function(filename, needed_extension, card_number) {
+  if (is.null(card_number) || is.na(card_number) || isFALSE(card_number) || card_number %in% c(0, "")) {
+    card_number <- NULL
+  }
+  needed_extension <- gsub("^[.]", "", needed_extension[1L])
+  if (filename == ".") {
+    filename <- "tbl"
+  }
+  if (needed_extension != "" & filename %unlike% paste0("[.](", paste0(needed_extension, collapse = "|"), ")$")) {
+    filename <- paste0(filename, ".", needed_extension[1L])
+  }
+  if (!is.null(card_number) && filename %unlike% paste0("p", card_number, "|[A-Z]:/")) {
+    # has no valid location yet, so include card number
+    filename_proj <- project_set_file(filename, card_number = card_number)
+    if (!is.na(filename_proj)) {
+      filename <- filename_proj
+    }
+  }
+  # remove invalid characters
+  filename <- gsub("[?|<>|*]+", "", filename)
+  filename
+}
+
+doc_requirement <- function(filetype, fn, pkg) {
+  fn <- paste0("[", fn, "()]", collapse = " or ")
+  paste0(ifelse(fn %like% "import", "Importing", "Exporting to"), " ", 
+         filetype, " using ", fn, " requires the ", paste0("`", pkg, "`", collapse = " and "), 
+         " package", ifelse(length(pkg) > 1, "s", ""), " to be installed")
+}
+
+#' @importFrom tibble rownames_to_column
+rownames_1st_column <- function(object) {
+  if (!all(rownames(object) == as.character(1:nrow(object)))) {
+    object <- rownames_to_column(object, var = "rownames")
+    warning("Row names added as first column 'rownames'",
+            call. = FALSE,
+            immediate. = TRUE)
+  }
+  object
+}
+
+#' @importFrom certestyle format2
+file_can_be_overwritten <- function(overwrite, filename) {
+  if (!file.exists(filename)) {
+    return(TRUE)
+  }
+  if (is.logical(overwrite)) {
+    return(overwrite)
+  }
+  
+  file_info <- file.info(filename)
+  file_text <- paste0("Created: ", format2(file_info$mtime, "yyyy-mm-dd HH:MM:ss"), "\n",
+                      "Changed: ", format2(file_info$ctime, "yyyy-mm-dd HH:MM:ss"), "\n",
+                      "Size: ", size_humanreadable(file_info$size, decimal.mark = "."))
+  if (base::interactive()) {
+    q_text <- paste0("The file '", filename, "' already exists:\n",
+                     file_text, "\n\n",
+                     "Overwrite this file?")
+    if ("rstudioapi" %in% utils::installed.packages()) {
+      q <- rstudioapi::showQuestion(title = paste("File", basename(filename), "exists"),
+                                    message = q_text,
+                                    ok = "Yes",
+                                    cancel = "No")
+    } else {
+      q <- utils::askYesNo(q_text, default = TRUE, prompts = c("Yes", "No", "Cancel"))
+    }
+    if (isTRUE(q)) {
+      # so the file exists - create a backup so it can be reverted back if export fails
+      file.copy(from = filename, to = paste0(filename, ".certetoolbox_export"))
+      # and remove the existing file
+      try(unlink(filename, force = TRUE), silent = TRUE)
+    }
+    return(isTRUE(q))
+  } else {
+    warning("NOT exporting file in non-interactive mode since file '",
+            filename, "' already exists:\n",
+            file_text, "\n",
+            "Use `overwite = TRUE` to overrule this.",
+            call. = FALSE)
+    return(FALSE)
+  }
+}
+
+plot_export_result <- function(filename) {
+  filename_old <- paste0(filename, ".certetoolbox_export")
+  if (file.exists(filename)) {
+    message(paste0("Plot exported as '",
+                   tools::file_path_as_absolute(filename), 
+                   "' (", size_humanreadable(file.size(filename)), ")."))
+  } else {
+    # revert the old existing file (see the file_can_be_overwritten() function)
+    if (file.exists(filename_old)) {
+      file.copy(filename_old, filename, copy.mode = TRUE, copy.date = TRUE)
+    }
+    warning("Error while saving `", filename, "`.", call. = FALSE)
+  }
+  
+  try(unlink(filename_old, force = TRUE), silent = TRUE)
+  if (file.exists(filename)) {
+    return(invisible(filename_old))
+  } else {
+    return(invisible(NULL))
+  }
 }
 
 
@@ -249,15 +358,14 @@ import_exec <- function(filename,
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
 #' @param card_number a Trello card number
+#' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this defaults to `FALSE`. Exporting with existing files is always non-destructive: if exporting fails, the existing file will be remained.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
 #' @rdname export
 #' @seealso [import()]
 #' @export
 #' @examples 
-#' \dontrun{
-#' 
-#' library(dplyr)
+#' library(dplyr, warn.conflicts = FALSE)
 #' 
 #' # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 #' starwars |>
@@ -266,14 +374,22 @@ import_exec <- function(filename,
 #'   export_xlsx("first_ten_rows")
 #'   
 #' # the above is equal to:
-#' starwars |>
-#'   export("whole_file.rds") |>
-#'   slice(1:10) |>
-#'   export("first_ten_rows.xlsx")
-#' }
+#' # starwars |>
+#' #   export("whole_file.rds") |>
+#' #   slice(1:10) |>
+#' #   export("first_ten_rows.xlsx")
+#' 
+#' 
+#' # Apache's Feather and Parquet formats are column-based
+#' # and allow for specific and fast file reading
+#' starwars |> export_feather()
+#' import("starwars.feather",
+#'        col_select = starts_with("h")) |> 
+#'   head()
 export <- function(object,
                    filename = NULL,
                    card_number = project_get_current_id(ask = FALSE),
+                   overwrite = NULL,
                    fn = NULL,
                    ...) {
   
@@ -289,6 +405,7 @@ export <- function(object,
                 needed_extension = NULL,
                 filename = filename,
                 card_number = card_number,
+                overwrite = overwrite,
                 fn = fn,
                 ...)
   } else {
@@ -299,56 +416,67 @@ export <- function(object,
       export_rds(object = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]csv$") {
       export_csv(object = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]tsv$") {
       export_tsv(object = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]txt$") {
       export_txt(object = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]xlsx?$") {
       export_xlsx(object = object,
                   filename = filename,
                   card_number = card_number,
+                  overwrite = overwrite,
                   ...)
     } else if (filename %like% "[.]sav$") {
       export_sav(object = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]feather$") {
       export_feather(object = object,
                      filename = filename,
                      card_number = card_number,
+                     overwrite = overwrite,
                      ...)
     } else if (filename %like% "[.]parquet$") {
       export_parquet(object = object,
                      filename = filename,
                      card_number = card_number,
+                     overwrite = overwrite,
                      ...)
     } else if (filename %like% "[.]pdf$") {
       export_pdf(plot = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]png$") {
       export_png(plot = object,
                  filename = filename,
                  card_number = card_number,
+                 overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]html$") {
       export_html(plot = object,
                   filename = filename,
                   card_number = card_number,
+                  overwrite = overwrite,
                   ...)
     } else {
       stop("Unknown file format for export: ", filename, call. = FALSE)
@@ -362,11 +490,13 @@ export <- function(object,
 export_rds <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        ...) {
   export_exec(object, "rds",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               compress = "gzip",
               ascii = FALSE,
               version = 2)
@@ -379,6 +509,7 @@ export_rds <- function(object,
 export_xlsx <- function(...,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
+                        overwrite = NULL,
                         sheet_names = NULL,
                         autofilter = TRUE,
                         rows_zebra = TRUE,
@@ -396,6 +527,7 @@ export_xlsx <- function(...,
               filename = filename,
               filename_deparse = ".",
               card_number = card_number,
+              overwrite = overwrite,
               sheet_names = sheet_names,
               autofilter = autofilter,
               rows_zebra = rows_zebra,
@@ -415,12 +547,14 @@ export_excel <- export_xlsx
 export_csv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        na = "",
                        ...) {
   export_exec(object, "csv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
               sep = ",",
@@ -438,12 +572,14 @@ export_csv <- function(object,
 export_csv2 <- function(object,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
+                        overwrite = NULL,
                         na = "",
                         ...) {
   export_exec(object, "csv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
               sep = ";",
@@ -461,12 +597,14 @@ export_csv2 <- function(object,
 export_tsv <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        na = "",
                        ...) {
   export_exec(object, "tsv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
               sep = "\t",
@@ -486,6 +624,7 @@ export_tsv <- function(object,
 export_txt <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        sep = "\t",
                        na = "",
                        ...) {
@@ -493,6 +632,7 @@ export_txt <- function(object,
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
               sep = sep,
@@ -511,12 +651,14 @@ export_txt <- function(object,
 export_sav <- function(object,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        ...) {
   check_is_installed("haven")
   export_exec(object, "sav",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               compress = FALSE)
 }
 
@@ -524,34 +666,37 @@ export_sav <- function(object,
 #' @export
 export_spss <- export_sav 
 
-
 #' @rdname export
-#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
+#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
 #' @export
 export_feather <- function(object,
                            filename = NULL,
                            card_number = project_get_current_id(ask = FALSE),
+                           overwrite = NULL,
                            ...) {
   check_is_installed("arrow")
   export_exec(object, "feather",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               ...)
 }
 
 #' @rdname export
-#' @details `r doc_requirement("a Parquet file", "export_parquet", "arrow")`. 'Parquet' is a columnar storage file format.
+#' @details `r doc_requirement("a Parquet file", "export_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval.
 #' @export
 export_parquet <- function(object,
                            filename = NULL,
                            card_number = project_get_current_id(ask = FALSE),
+                           overwrite = NULL,
                            ...) {
   check_is_installed("arrow")
   export_exec(object, "parquet",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               card_number = card_number,
+              overwrite = overwrite,
               ...)
 }
 
@@ -564,6 +709,7 @@ export_parquet <- function(object,
 export_pdf <- function(plot,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        size = "A5",
                        portrait = FALSE,
                        ...) {
@@ -586,6 +732,9 @@ export_pdf <- function(plot,
   filename <- parse_file_location(filename,
                                   needed_extension = "pdf",
                                   card_number = card_number)
+  if (!file_can_be_overwritten(overwrite, filename)) {
+    return(invisible(NULL))
+  }
   
   a0_height <- sqrt(sqrt(2)) * 1000 # x1000 for millimetres
   a1_height <- a0_height / sqrt(2)
@@ -620,7 +769,7 @@ export_pdf <- function(plot,
     height <- a7_height
     width <- a7_height / sqrt(2)
   } else {
-    message("No valid value for size; using A4 as paper format.")
+    message("No valid value for size - using A4 as paper format.")
     height <- a4_height
     width <- a4_height / sqrt(2)
   }
@@ -641,36 +790,26 @@ export_pdf <- function(plot,
                     ...)
   )
   
-  if (file.exists(filename)) {
-    message(paste0("Plot exported as '",
-                   tools::file_path_as_absolute(filename), 
-                   "' (", size_humanreadable(file.size(filename)), ")."))
-    invisible(filename)
-  } else {
-    stop("Error while saving `", filename, "`.", call. = FALSE)
-  }
+  plot_export_result(filename)
 }
 
 #' @rdname export
 #' @param width required width of the PNG file in pixels
 #' @param height required height of the PNG file in pixels
-#' @param dpi plot resolution
-#' @details `r doc_requirement("a PNG file", "export_png", "ggplot2")`.
+#' @param dpi plot resolution, defaults to DPI set in `showtext` package
+#' @details `r doc_requirement("a PNG file", "export_png", c("ggplot2", "showtext"))`.
 #' @importFrom certestyle format2
 #' @export
 export_png <- function(plot,
                        filename = NULL,
                        card_number = project_get_current_id(ask = FALSE),
+                       overwrite = NULL,
                        width = 1000,
                        height = 800,
-                       dpi = showtext::showtext_opts()$dpi,
+                       dpi = NULL,
                        ...) {
   
-  if (!"showtext" %in% rownames(utils::installed.packages())) {
-    stop("Package 'showtext' not installed")
-  }
-  
-  check_is_installed("ggplot2")
+  check_is_installed(c("ggplot2", "showtext"))
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
     get_plot_title <- certeplot2::get_plot_title
   } else {
@@ -689,7 +828,13 @@ export_png <- function(plot,
   filename <- parse_file_location(filename,
                                   needed_extension = "png",
                                   card_number = card_number)
+  if (!file_can_be_overwritten(overwrite, filename)) {
+    return(invisible(NULL))
+  }
   
+  if (is.null(dpi)) {
+    dpi <- showtext::showtext_opts()$dpi
+  }
   dpi_old <- showtext::showtext_opts()$dpi
   showtext::showtext_opts(dpi = dpi)
   
@@ -705,16 +850,8 @@ export_png <- function(plot,
   
   showtext::showtext_opts(dpi = dpi_old)
   
-  if (file.exists(filename)) {
-    message(paste0("Plot exported as '",
-                   tools::file_path_as_absolute(filename), 
-                   "' (", size_humanreadable(file.size(filename)), ")."))
-    invisible(filename)
-  } else {
-    stop("Error while saving `", filename, "`.", call. = FALSE)
-  }
+  plot_export_result(filename)
 }
-
 
 #' @rdname export
 #' @details `r doc_requirement("an HTML file", "export_html", c("ggplot2", "htmltools"))`. The arguments put in `...` will be passed on to [plotly::layout()] if `plot` is not yet a Plotly object (but rather a `ggplot2` object), which of course then requires the `plotly` package to be installed as well.
@@ -723,6 +860,7 @@ export_png <- function(plot,
 export_html <- function(plot,
                         filename = NULL,
                         card_number = project_get_current_id(ask = FALSE),
+                        overwrite = NULL,
                         ...) {
   check_is_installed(c("ggplot2", "htmltools"))
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
@@ -743,6 +881,9 @@ export_html <- function(plot,
   filename <- parse_file_location(filename,
                                   needed_extension = "html",
                                   card_number = card_number)
+  if (!file_can_be_overwritten(overwrite, filename)) {
+    return(invisible(NULL))
+  }
   
   if (ggplot2::is.ggplot(plot)) {
     # transform to plotly first
@@ -757,14 +898,7 @@ export_html <- function(plot,
                          libdir = "library_do_not_delete")
   )
   
-  if (file.exists(filename)) {
-    message(paste0("Plot exported as '",
-                   tools::file_path_as_absolute(filename), 
-                   "' (", size_humanreadable(file.size(filename)), ")."))
-    invisible(filename)
-  } else {
-    stop("Error while saving `", filename, "`.", call. = FALSE)
-  }
+  plot_export_result(filename)
 }
 
 
@@ -781,6 +915,27 @@ export_html <- function(plot,
 #' @rdname import
 #' @seealso [export()]
 #' @export
+#' @examples 
+#' export_csv("iris")
+#' import_csv("iris") |> head()
+#' 
+#' # the above is equal to:
+#' export("iris.csv")
+#' import("iris.csv") |> head()
+#' 
+#' 
+#' # row names are also supported
+#' export_csv("mtcars")
+#' import_csv("mtcars") |> head()
+#' 
+#' 
+#' # Apache's Feather and Parquet formats are column-based
+#' # and allow for specific and fast file reading
+#' library(dplyr, warn.conflicts = FALSE)
+#' starwars |> export_feather()
+#' import("starwars.feather",
+#'        col_select = starts_with("h")) |> 
+#'   head()
 import <- function(filename,
                    card_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
@@ -823,20 +978,12 @@ import <- function(filename,
                auto_transform = auto_transform,
                ...)
   } else if (filename %like% "[.]feather$") {
-    if (missing(auto_transform)) {
-      auto_transform <- FALSE
-    }
     import_feather(filename = filename,
                    card_number = card_number,
-                   auto_transform = auto_transform,
                    ...)
   } else if (filename %like% "[.]parquet$") {
-    if (missing(auto_transform)) {
-      auto_transform <- FALSE
-    }
     import_parquet(filename = filename,
                    card_number = card_number,
-                   auto_transform = auto_transform,
                    ...)
   } else {
     import_exec(filename,
@@ -1065,68 +1212,38 @@ import_sav <- function(filename,
 import_spss <- import_sav
 
 #' @rdname import
-#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. The imported data set will not be transformed automatically, since Feather files contain a data type structure already. Use the `select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection.
-#' @param select columns to select, supports the [tidyselect language][tidyselect::language])
+#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
+#' @param col_select columns to select, supports the [tidyselect language][tidyselect::language])
 #' @importFrom dplyr everything
 #' @export
 import_feather <- function(filename,
                            card_number = project_get_current_id(ask = FALSE),
-                           select = everything(),
-                           auto_transform = FALSE,
-                           datenames = "en",
-                           dateformat = "yyyy-mm-dd",
-                           timeformat = "HH:MM",
-                           decimal.mark = ".",
-                           big.mark = "",
-                           timezone = "UTC",
-                           na = c("", "NULL", "NA", "<NA>"),
+                           col_select = everything(),
                            ...) {
   check_is_installed("arrow")
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "feather",
               card_number = card_number,
-              select = select,
-              auto_transform = auto_transform,
-              datenames = datenames,
-              dateformat = dateformat,
-              timeformat = timeformat,
-              decimal.mark = decimal.mark,
-              big.mark = big.mark,
-              timezone = timezone,
-              na = na)
+              auto_transform = FALSE,
+              col_select = col_select)
 }
 
 #' @rdname import
-#' @details `r doc_requirement("a Parquet file", "import_parquet", "arrow")`. 'Parquet' is a columnar storage file format. The imported data set will not be transformed automatically, since Parquet files contain a data type structure already. Use the `select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection.
+#' @details `r doc_requirement("a Parquet file", "import_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
 #' @importFrom dplyr everything
 #' @export
 import_parquet <- function(filename,
                            card_number = project_get_current_id(ask = FALSE),
-                           select = everything(),
-                           auto_transform = FALSE,
-                           datenames = "en",
-                           dateformat = "yyyy-mm-dd",
-                           timeformat = "HH:MM",
-                           decimal.mark = ".",
-                           big.mark = "",
-                           timezone = "UTC",
-                           na = c("", "NULL", "NA", "<NA>"),
+                           col_select = everything(),
                            ...) {
   check_is_installed("arrow")
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "parquet",
               card_number = card_number,
-              select = select,
-              auto_transform = auto_transform,
-              datenames = datenames,
-              dateformat = dateformat,
-              timeformat = timeformat,
-              decimal.mark = decimal.mark,
-              big.mark = big.mark,
-              timezone = timezone,
-              na = na)
+              auto_transform = FALSE,
+              col_select = col_select)
 }
 
 #' @rdname import

@@ -231,14 +231,37 @@ test_that("import_export works", {
   expect_true(identical_import_export(import, export, "sav",
                                       check_factors = FALSE, digits = 10))
   # Apache
-  expect_true(identical_import_export(import_feather, export_feather, "feather",
-                                      check_factors = TRUE, digits = 10))
-  expect_true(identical_import_export(import, export, "feather",
-                                      check_factors = TRUE, digits = 10))
-  expect_true(identical_import_export(import_parquet, export_parquet, "parquet",
-                                      check_factors = TRUE, digits = 10))
-  expect_true(identical_import_export(import, export, "parquet",
-                                      check_factors = TRUE, digits = 10))
+  expect_true(identical_import_export(import_feather, export_feather, "feather"))
+  expect_true(identical_import_export(import, export, "feather"))
+  expect_true(identical_import_export(import_parquet, export_parquet, "parquet"))
+  expect_true(identical_import_export(import, export, "parquet"))
+  export_feather(iris)
+  export_feather(mtcars)
+  expect_equal("iris" |> 
+                 import_feather(col_select = dplyr::matches("d")) |> 
+                 dim(),
+               c(150, 2))
+  expect_equal("mtcars" |> 
+                 import_feather(col_select = dplyr::matches("d")) |> 
+                 dim(),
+               c(32, 2))
+  unlink("iris.feather")
+  unlink("mtcars.feather")
+  
+  # check overwrite function
+  export_csv(iris, "iris_overwrite")
+  expect_true(file_can_be_overwritten(TRUE, "iris_overwrite.csv"))
+  expect_false(file_can_be_overwritten(FALSE, "iris_overwrite.csv"))
+  if (!interactive()) {
+    expect_warning(export_csv(iris, "iris_overwrite"))
+    expect_false(suppressWarnings(file_can_be_overwritten(NULL, "iris_overwrite.csv")))
+  }
+  mtime_old <- file.mtime("iris_overwrite.csv")
+  Sys.sleep(1)
+  export_csv(iris, "iris_overwrite", overwrite = TRUE)
+  mtime_new <- file.mtime("iris_overwrite.csv")
+  expect_lt(mtime_old, mtime_new)
+  unlink("iris_overwrite.csv")
   
   # remote files
   expect_equal(dim(import_url("https://filesamples.com/samples/document/csv/sample1.csv")), c(8, 13))

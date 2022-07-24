@@ -23,6 +23,7 @@ export(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   fn = NULL,
   ...
 )
@@ -31,6 +32,7 @@ export_rds(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -38,6 +40,7 @@ export_xlsx(
   ...,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
@@ -50,6 +53,7 @@ export_excel(
   ...,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   sheet_names = NULL,
   autofilter = TRUE,
   rows_zebra = TRUE,
@@ -62,6 +66,7 @@ export_csv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   na = "",
   ...
 )
@@ -70,6 +75,7 @@ export_csv2(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   na = "",
   ...
 )
@@ -78,6 +84,7 @@ export_tsv(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   na = "",
   ...
 )
@@ -86,6 +93,7 @@ export_txt(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   sep = "\\t",
   na = "",
   ...
@@ -95,6 +103,7 @@ export_sav(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -102,6 +111,7 @@ export_spss(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -109,6 +119,7 @@ export_feather(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -116,6 +127,7 @@ export_parquet(
   object,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -123,6 +135,7 @@ export_pdf(
   plot,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   size = "A5",
   portrait = FALSE,
   ...
@@ -132,9 +145,10 @@ export_png(
   plot,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   width = 1000,
   height = 800,
-  dpi = showtext::showtext_opts()$dpi,
+  dpi = NULL,
   ...
 )
 
@@ -142,6 +156,7 @@ export_html(
   plot,
   filename = NULL,
   card_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
   ...
 )
 
@@ -161,6 +176,8 @@ export_clipboard(
 \item{filename}{the full path of the exported file}
 
 \item{card_number}{a Trello card number}
+
+\item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this will be asked if the file exists. In non-interactive mode, this defaults to \code{FALSE}. Exporting with existing files is always non-destructive: if exporting fails, the existing file will be remained.}
 
 \item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 
@@ -190,7 +207,7 @@ export_clipboard(
 
 \item{height}{required height of the PNG file in pixels}
 
-\item{dpi}{plot resolution}
+\item{dpi}{plot resolution, defaults to DPI set in \code{showtext} package}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 
@@ -214,22 +231,20 @@ The \code{\link[=export_txt]{export_txt()}} function exports to a tab-separated 
 
 Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. Feather provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
+Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages.
 
-Exporting to a Parquet file using \code{\link[=export_parquet]{export_parquet()}} requires the \code{arrow} package to be installed. 'Parquet' is a columnar storage file format.
+Exporting to a Parquet file using \code{\link[=export_parquet]{export_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval.
 
 Exporting to a PDF file using \code{\link[=export_pdf]{export_pdf()}} requires the \code{ggplot2} package to be installed. If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} or \code{\link[=export_html]{export_html()}}, the title of \code{plot} will be used if it's available and the \code{certeplot2} package is installed, and a timestamp otherwise. \strong{NOTE:} All export functions invisibly return \code{object} again, but the plotting functions invisibly return the file path
 
-Exporting to a PNG file using \code{\link[=export_png]{export_png()}} requires the \code{ggplot2} package to be installed.
+Exporting to a PNG file using \code{\link[=export_png]{export_png()}} requires the \code{ggplot2} and \code{showtext} packages to be installed.
 
 Exporting to an HTML file using \code{\link[=export_html]{export_html()}} requires the \code{ggplot2} and \code{htmltools} packages to be installed. The arguments put in \code{...} will be passed on to \code{\link[plotly:layout]{plotly::layout()}} if \code{plot} is not yet a Plotly object (but rather a \code{ggplot2} object), which of course then requires the \code{plotly} package to be installed as well.
 
 Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard()}} requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
 }
 \examples{
-\dontrun{
-
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 # export two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 starwars |>
@@ -238,11 +253,18 @@ starwars |>
   export_xlsx("first_ten_rows")
   
 # the above is equal to:
-starwars |>
-  export("whole_file.rds") |>
-  slice(1:10) |>
-  export("first_ten_rows.xlsx")
-}
+# starwars |>
+#   export("whole_file.rds") |>
+#   slice(1:10) |>
+#   export("first_ten_rows.xlsx")
+
+
+# Apache's Feather and Parquet formats are column-based
+# and allow for specific and fast file reading
+starwars |> export_feather()
+import("starwars.feather",
+       col_select = starts_with("h")) |> 
+  head()
 }
 \seealso{
 \code{\link[=import]{import()}}

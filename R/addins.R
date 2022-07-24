@@ -74,7 +74,7 @@ addin_insert_section <- function() {
     return(invisible())
   }
   width <- min(options()$width, 100)
-  user <- paste("#" , format2(today(), "yyyy-mm-dd"), "/", Sys.info()[["user"]])
+  user <- paste("#", format2(today(), "yyyy-mm-dd"), "/", Sys.info()[["user"]])
   lbl <- trimws(lbl)
   label <- paste("#", lbl, strrep("-", times = width - nchar(lbl) - 4))
   invisible(insertText(paste0("\n", label, "\n", user, "\n\n")))
