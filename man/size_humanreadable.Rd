@@ -4,14 +4,14 @@
 \alias{size_humanreadable}
 \title{Human-readable File Size}
 \usage{
-size_humanreadable(bytes, decimals = 1, decimal.mark = ",")
+size_humanreadable(bytes, decimals = 1, decimal.mark = dec_mark())
 }
 \arguments{
 \item{bytes}{number of bytes}
 
 \item{decimals}{precision, not used for bytes and kilobytes}
 
-\item{decimal.mark}{decimal mark to use}
+\item{decimal.mark}{decimal mark to use, defaults to \code{\link[=dec_mark]{dec_mark()}}}
 }
 \description{
 Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).

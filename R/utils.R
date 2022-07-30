@@ -35,6 +35,14 @@ lubridate::today
 #' @export
 lubridate::now
 
+#' @importFrom certestyle dec_mark
+#' @export
+certestyle::dec_mark
+
+#' @importFrom certestyle big_mark
+#' @export
+certestyle::big_mark
+
 #' @importFrom certeprojects project_get_current_id
 #' @export
 certeprojects::project_get_current_id

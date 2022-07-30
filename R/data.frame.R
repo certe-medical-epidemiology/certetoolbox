@@ -46,8 +46,8 @@
 #' @param column.total.name name of the column total
 #' @param column.total.function function used to calculate all numeric values per row
 #' @param column.total.bold bold formatting of column total
-#' @param decimal.mark decimal separator
-#' @param big.mark thousands separator
+#' @param decimal.mark decimal separator, defaults to [dec_mark()]
+#' @param big.mark thousands separator, defaults to [big_mark()]
 #' @param font.family table font family
 #' @param font.size table font size
 #' @param font.size.header font size of header
@@ -187,8 +187,8 @@ tbl_flextable <- function(x,
                           round.numbers = 2,
                           round.percent = 1,
                           format.dates = "d mmm yyyy",
-                          decimal.mark = ",",
-                          big.mark = ".",
+                          decimal.mark = dec_mark(),
+                          big.mark = big_mark(),
                           font.family = "Calibri",
                           font.size = 9,
                           font.size.header = font.size + 1,
@@ -665,8 +665,8 @@ tbl_markdown <- function(x,
                          na = "",
                          type = "markdown",
                          format.dates = "dd-mm-yyyy",
-                         decimal.mark = ",",
-                         big.mark = ".",
+                         decimal.mark = dec_mark(),
+                         big.mark = big_mark(),
                          logicals = c("X", ""),
                          columns.percent = NA,
                          column.names.bold = TRUE,

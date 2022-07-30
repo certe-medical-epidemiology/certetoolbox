@@ -42,8 +42,8 @@ tbl_flextable(
   round.numbers = 2,
   round.percent = 1,
   format.dates = "d mmm yyyy",
-  decimal.mark = ",",
-  big.mark = ".",
+  decimal.mark = dec_mark(),
+  big.mark = big_mark(),
   font.family = "Calibri",
   font.size = 9,
   font.size.header = font.size + 1,
@@ -138,9 +138,9 @@ tbl_flextable(
 
 \item{format.dates}{see \code{\link[certestyle:format2]{format2()}}}
 
-\item{decimal.mark}{decimal separator}
+\item{decimal.mark}{decimal separator, defaults to \code{\link[=dec_mark]{dec_mark()}}}
 
-\item{big.mark}{thousands separator}
+\item{big.mark}{thousands separator, defaults to \code{\link[=big_mark]{big_mark()}}}
 
 \item{font.family}{table font family}
 

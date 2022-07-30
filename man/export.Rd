@@ -166,7 +166,7 @@ export_clipboard(
   na = "",
   header = TRUE,
   quote = FALSE,
-  decimal.mark = ",",
+  decimal.mark = dec_mark(),
   ...
 )
 }
@@ -213,7 +213,7 @@ export_clipboard(
 
 \item{quote}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use quotation marks (default: \code{FALSE})}
 
-\item{decimal.mark}{(for \code{\link[=export_clipboard]{export_clipboard()}}) character to use for decimal numbers}
+\item{decimal.mark}{(for \code{\link[=export_clipboard]{export_clipboard()}}) character to use for decimal numbers, defaults to \code{\link[=dec_mark]{dec_mark()}}}
 }
 \description{
 These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} and \code{\link[=export_html]{export_html()}}). The functions work closely together with the \code{certeprojects} package to support Trello card numbers.

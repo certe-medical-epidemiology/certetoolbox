@@ -14,8 +14,8 @@ tbl_markdown(
   na = "",
   type = "markdown",
   format.dates = "dd-mm-yyyy",
-  decimal.mark = ",",
-  big.mark = ".",
+  decimal.mark = dec_mark(),
+  big.mark = big_mark(),
   logicals = c("X", ""),
   columns.percent = NA,
   column.names.bold = TRUE,
@@ -45,9 +45,9 @@ tbl_markdown(
 
 \item{format.dates}{formatting of dates, will be evaluated with \code{\link[certestyle:format2]{format2()}}}
 
-\item{decimal.mark}{decimal separator}
+\item{decimal.mark}{decimal separator, defaults to \code{\link[=dec_mark]{dec_mark()}}}
 
-\item{big.mark}{thousands separator}
+\item{big.mark}{thousands separator, defaults to \code{\link[=big_mark]{big_mark()}}}
 
 \item{logicals}{vector with two values that replace \code{TRUE} and \code{FALSE}}
 

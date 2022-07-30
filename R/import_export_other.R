@@ -21,7 +21,7 @@
 #' @param na replacement character for empty values (default: `""`)
 #' @param header (for [export_clipboard()]) use column names as header (default: `TRUE`)
 #' @param quote (for [export_clipboard()]) use quotation marks (default: `FALSE`)
-#' @param decimal.mark (for [export_clipboard()]) character to use for decimal numbers
+#' @param decimal.mark (for [export_clipboard()]) character to use for decimal numbers, defaults to [dec_mark()]
 #' @details `r doc_requirement("the clipboard", "export_clipboard", "clipr")`. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
 #' @importFrom certestyle format2
 #' @export
@@ -30,7 +30,7 @@ export_clipboard <- function(object,
                              na = "",
                              header = TRUE,
                              quote = FALSE,
-                             decimal.mark = ",",
+                             decimal.mark = dec_mark(),
                              ...) {
   check_is_installed("clipr")
   clipr::write_clip(content = object,
@@ -69,7 +69,7 @@ import_clipboard <- function(sep = "\t",
                              datenames = "nl",
                              dateformat = "yyyy-mm-dd",
                              timeformat = "HH:MM",
-                             decimal.mark = ",",
+                             decimal.mark = dec_mark(),
                              big.mark = "",
                              timezone = "UTC",
                              na = c("", "NULL", "NA", "<NA>"),

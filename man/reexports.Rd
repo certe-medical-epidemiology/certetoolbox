@@ -5,6 +5,8 @@
 \alias{reexports}
 \alias{today}
 \alias{now}
+\alias{dec_mark}
+\alias{big_mark}
 \alias{project_get_current_id}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -14,6 +16,8 @@ below to see their documentation.
 
 \describe{
   \item{certeprojects}{\code{\link[certeprojects:project_properties]{project_get_current_id}}}
+
+  \item{certestyle}{\code{\link[certestyle:dec_mark]{big_mark}}, \code{\link[certestyle]{dec_mark}}}
 
   \item{lubridate}{\code{\link[lubridate]{now}}, \code{\link[lubridate:now]{today}}}
 }}

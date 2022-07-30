@@ -22,14 +22,14 @@
 #' Formats bytes into human-readable units, from "kB" (10^3) to "YB" (10^23).
 #' @param bytes number of bytes
 #' @param decimals precision, not used for bytes and kilobytes
-#' @param decimal.mark decimal mark to use
+#' @param decimal.mark decimal mark to use, defaults to [dec_mark()]
 #' @details If using [object.size()] on an object, this function is equal to using [`format2()`][certestyle::format2()] to format the object size.
 #' @export
 #' @examples 
 #' size_humanreadable(c(12, 1234, 123456, 12345678))
 #' 
 #' size_humanreadable(1024 ^ c(0:4))
-size_humanreadable <- function(bytes, decimals = 1, decimal.mark = ",") {
+size_humanreadable <- function(bytes, decimals = 1, decimal.mark = dec_mark()) {
   bytes <- as.double(bytes)
   # Adapted from:
   # http://jeffreysambells.com/2012/10/25/human-readable-filesize-php
