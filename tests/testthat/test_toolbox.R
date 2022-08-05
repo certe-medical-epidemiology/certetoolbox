@@ -76,6 +76,11 @@ test_that("data.frame works", {
                        'list'))
   expect_true(inherits(mtcars |> tbl_markdown(columns.percent = 8, 9), 'list'))
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
+  
+  expect_s3_class(iris |> tbl_gtsummary_flextable(Species), 'flextable')
+  expect_s3_class(iris |> tbl_gtsummary_flextable(Species, decimal.mark = ","), 'flextable')
+  expect_s3_class(iris |> tbl_gtsummary_flextable(Species, digits = 1), 'flextable')
+  
   expect_warning(auto_transform("test"))
 })
 

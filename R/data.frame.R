@@ -72,8 +72,9 @@
 #' @param round.numbers number of decimal places to round up for numbers
 #' @param round.percent number of decimal places to round to when using `columns.percent`
 #' @param print forced printing (required in a `for`` loop)
+#' @details Run [tbl_markdown()] on a `flextable` object to transform it into R Markdown and use it for Quarto or R Markdown reports.
 #' @seealso [flextable()]
-#' @return list
+#' @return [flextable] object
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
 #' @importFrom dplyr bind_cols pull
@@ -97,7 +98,13 @@
 #' df |> 
 #'   tbl_flextable() |> 
 #'   tbl_markdown()
-#'
+#'   
+#' # create a gtsummary as flextable
+#' iris |> 
+#'   tbl_gtsummary_flextable(Species, decimal.mark = ".")
+#' iris |> 
+#'   tbl_gtsummary_flextable(Species, decimal.mark = ",")
+#'   
 #' # extra formatting
 #' tbl_flextable(df,
 #'               logicals = c("X", "-"),     # replaces TRUE en FALSE
@@ -207,166 +214,174 @@ tbl_flextable <- function(x,
                           print = FALSE,
                           ...) {
   
-  if (NROW(x) == 0) {
-    warning("`x` has no rows")
-  }
-  if (NCOL(x) == 0) {
-    warning("`x` has no columns")
-  }
-  
-  # be nice in case of typing errors
-  dots <- list(...)
-  if (is.null(vline) && missing(vline)) {
-    vline <- dots$vline.columns
-  }
-  if (!is.null(dots$vline.parts)) {
-    vline.part <- dots$vline.parts
-  }
-  if (!is.null(dots$col.names)) {
-    column.names <- dots$col.names
-  }
-  if (!is.null(dots$row.height)) {
-    rows.height <- dots$row.height
-  }
-  
-  x <- as.data.frame(x, stringsAsFactors = FALSE)
-  
-  if (identical(row.names, as.character(c(seq_len(nrow(x))))) & missing(row.names)) {
-    # rownames not set, are thus 1:nrow(x)
-    row.names <- FALSE
-  }
-  
-  if (!isFALSE(row.names)) {
-    if (isTRUE(row.names)) {
-      row.names <- seq_len(nrow(x))
-    } else if (length(row.names) == 1) {
-      row.names <- rep(row.names, nrow(x))
-    } else if (length(row.names) != nrow(x)) {
-      stop("length of row.names is not equal to number of rows")
-    }
-    row.names <- as.character(row.names)
-    x <- bind_cols(data.frame(`col_temp_flextbl_` = row.names, stringsAsFactors = FALSE), x)
-  }
-  
-  if (is.null(ncol(x))) {
-    col_count <- 1
+  if (inherits(x, "flextable")) {
+    ft <- x
+    colnames_bak <- NULL
+    x <- x$body$dataset
+    
   } else {
-    col_count <- ncol(x)
-  }
-  
-  if (column.total == TRUE) {
-    column.total.df <- x[, vapply(FUN.VALUE = logical(1), x, is.numeric), drop = FALSE]
-    column.total.values <- apply(column.total.df,
-                                 1,
-                                 function(x,
-                                          FUN = column.total.function) {
-                                   if (is.numeric(x)) {
-                                     FUN(x)
-                                   } else {
-                                     ""
-                                   }
-                                 })
-    if (!all(x == "")) {
-      x$col_temp_flextbl_2 <- column.total.values
-      colnames(x)[ncol(x)] <- column.total.name
+    
+    if (NROW(x) == 0) {
+      warning("`x` has no rows")
     }
-  }
-  
-  x.bak <- x
-  
-  columns.percent <- columns.percent + as.integer(!isFALSE(row.names))
-  columns.italic <- columns.italic + as.integer(!isFALSE(row.names))
-  columns.bold <- columns.bold + as.integer(!isFALSE(row.names))
-  columns.fill <- columns.fill + as.integer(!isFALSE(row.names))
-  for (i in seq_len(col_count)) {
-    if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
-      x[, i] <- x |>
-        pull(i) |> 
-        as.Date() |> 
-        format2(format = format.dates)
+    if (NCOL(x) == 0) {
+      warning("`x` has no columns")
     }
-    if (is.logical(x[1, i, drop = TRUE])) {
-      x[, i] <- gsub("TRUE", logicals[1],
-                     gsub("FALSE", logicals[2],
-                          x |>
-                            pull(i) |> 
-                            as.character()))
+    
+    # be nice in case of typing errors
+    dots <- list(...)
+    if (is.null(vline) && missing(vline)) {
+      vline <- dots$vline.columns
     }
-    if (inherits(x[1, i, drop = TRUE], c("double", "integer", "numeric", "single")) &
-        !i %in% columns.percent) {
-      x[, i] <- x |>
-        pull(i) |> 
-        format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
+    if (!is.null(dots$vline.parts)) {
+      vline.part <- dots$vline.parts
     }
-    if (i %in% columns.percent) {
-      x[, i] <- x |> 
-        pull(i) |>
-        as.percentage() |> 
-        format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
+    if (!is.null(dots$col.names)) {
+      column.names <- dots$col.names
     }
-  }
-  
-  # replace NAs
-  colnames.bak <- colnames(x)
-  x <- as.data.frame(lapply(x,
-                            function(x, na_val = na) {
-                              x <- as.character(x)
-                              x[is.na(x)] <- na_val
-                              x
-                            }),
-                     stringsAsFactors = FALSE)
-  colnames(x) <- colnames.bak
-  
-  # colnames BEFORE the flextable (set_header_labels is hard...)
-  colnames_bak <- NULL
-  if (length(column.names) > 0) {
-    if (!is.null(names(column.names))) {
-      # NAMED COLUMNS
-      if (length(column.names) != ncol(x) && any(names(column.names) == "", na.rm = TRUE)) {
-        warning("Not all columns are named")
+    if (!is.null(dots$row.height)) {
+      rows.height <- dots$row.height
+    }
+    
+    x <- as.data.frame(x, stringsAsFactors = FALSE)
+    
+    if (identical(row.names, as.character(c(seq_len(nrow(x))))) & missing(row.names)) {
+      # rownames not set, are thus 1:nrow(x)
+      row.names <- FALSE
+    }
+    
+    if (!isFALSE(row.names)) {
+      if (isTRUE(row.names)) {
+        row.names <- seq_len(nrow(x))
+      } else if (length(row.names) == 1) {
+        row.names <- rep(row.names, nrow(x))
+      } else if (length(row.names) != nrow(x)) {
+        stop("length of row.names is not equal to number of rows")
       }
-      for (i in seq_len(length(column.names))) {
-        col.name <- names(column.names)[i]
-        if (col.name != "") {
-          if (as.character(col.name) %in% as.character(seq_len(ncol(x)))) {
-            # is an index of a column
-            colnames(x)[as.integer(col.name)] <- column.names[i]
-          } else {
-            colnames(x)[colnames(x) == col.name] <- column.names[i]
-          }
-        } else {
-          colnames(x)[i] <- column.names[i]
-        }
-      }
+      row.names <- as.character(row.names)
+      x <- bind_cols(data.frame(`col_temp_flextbl_` = row.names, stringsAsFactors = FALSE), x)
+    }
+    
+    if (is.null(ncol(x))) {
+      col_count <- 1
     } else {
-      # UNNAMED COLUMNS
-      if (length(column.names) != ncol(x)) {
-        if (length(column.names) < ncol(x)) {
-          warning("Only the first ", length(column.names), " column names will be replaced")
-          colnames(x)[seq_len(length(column.names))] <- column.names
-        } else {
-          warning("Only the first ", ncol(x), " items of column.names will be used")
-          colnames(x) <- column.names[seq_len(ncol(x))]
+      col_count <- ncol(x)
+    }
+    
+    if (column.total == TRUE) {
+      column.total.df <- x[, vapply(FUN.VALUE = logical(1), x, is.numeric), drop = FALSE]
+      column.total.values <- apply(column.total.df,
+                                   1,
+                                   function(x,
+                                            FUN = column.total.function) {
+                                     if (is.numeric(x)) {
+                                       FUN(x)
+                                     } else {
+                                       ""
+                                     }
+                                   })
+      if (!all(x == "")) {
+        x$col_temp_flextbl_2 <- column.total.values
+        colnames(x)[ncol(x)] <- column.total.name
+      }
+    }
+    
+    x.bak <- x
+    
+    columns.percent <- columns.percent + as.integer(!isFALSE(row.names))
+    columns.italic <- columns.italic + as.integer(!isFALSE(row.names))
+    columns.bold <- columns.bold + as.integer(!isFALSE(row.names))
+    columns.fill <- columns.fill + as.integer(!isFALSE(row.names))
+    for (i in seq_len(col_count)) {
+      if (inherits(x[1, i, drop = TRUE], c("Date", "POSIXct", "POSIXlt"))) {
+        x[, i] <- x |>
+          pull(i) |> 
+          as.Date() |> 
+          format2(format = format.dates)
+      }
+      if (is.logical(x[1, i, drop = TRUE])) {
+        x[, i] <- gsub("TRUE", logicals[1],
+                       gsub("FALSE", logicals[2],
+                            x |>
+                              pull(i) |> 
+                              as.character()))
+      }
+      if (inherits(x[1, i, drop = TRUE], c("double", "integer", "numeric", "single")) &
+          !i %in% columns.percent) {
+        x[, i] <- x |>
+          pull(i) |> 
+          format2(round = round.numbers, decimal.mark = decimal.mark, big.mark = big.mark)
+      }
+      if (i %in% columns.percent) {
+        x[, i] <- x |> 
+          pull(i) |>
+          as.percentage() |> 
+          format2(round = round.percent, decimal.mark = decimal.mark, big.mark = big.mark)
+      }
+    }
+    
+    # replace NAs
+    colnames.bak <- colnames(x)
+    x <- as.data.frame(lapply(x,
+                              function(x, na_val = na) {
+                                x <- as.character(x)
+                                x[is.na(x)] <- na_val
+                                x
+                              }),
+                       stringsAsFactors = FALSE)
+    colnames(x) <- colnames.bak
+    
+    # colnames BEFORE the flextable (set_header_labels is hard...)
+    colnames_bak <- NULL
+    if (length(column.names) > 0) {
+      if (!is.null(names(column.names))) {
+        # NAMED COLUMNS
+        if (length(column.names) != ncol(x) && any(names(column.names) == "", na.rm = TRUE)) {
+          warning("Not all columns are named")
+        }
+        for (i in seq_len(length(column.names))) {
+          col.name <- names(column.names)[i]
+          if (col.name != "") {
+            if (as.character(col.name) %in% as.character(seq_len(ncol(x)))) {
+              # is an index of a column
+              colnames(x)[as.integer(col.name)] <- column.names[i]
+            } else {
+              colnames(x)[colnames(x) == col.name] <- column.names[i]
+            }
+          } else {
+            colnames(x)[i] <- column.names[i]
+          }
         }
       } else {
-        colnames(x) <- column.names
+        # UNNAMED COLUMNS
+        if (length(column.names) != ncol(x)) {
+          if (length(column.names) < ncol(x)) {
+            warning("Only the first ", length(column.names), " column names will be replaced")
+            colnames(x)[seq_len(length(column.names))] <- column.names
+          } else {
+            warning("Only the first ", ncol(x), " items of column.names will be used")
+            colnames(x) <- column.names[seq_len(ncol(x))]
+          }
+        } else {
+          colnames(x) <- column.names
+        }
+        if (colnames(x)[1] == "col_temp_flextbl_") {
+          colnames(x)[1] <- " "
+        }
       }
-      if (colnames(x)[1] == "col_temp_flextbl_") {
-        colnames(x)[1] <- " "
-      }
+      # support duplicate colnames, so this will work:
+      # data.frame(col1 = 1, col2 = 2) |>
+      #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
+      colnames_bak <- colnames(x)
+      # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
+      letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
+      colnames(x) <- letter_vector[seq_len(ncol(x))]
+      names(colnames_bak) <- colnames(x) # this will make set_header_labels work, furter down
     }
-    # support duplicate colnames, so this will work:
-    # data.frame(col1 = 1, col2 = 2) |>
-    #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
-    colnames_bak <- colnames(x)
-    # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
-    letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
-    colnames(x) <- letter_vector[seq_len(ncol(x))]
-    names(colnames_bak) <- colnames(x) # this will make set_header_labels work, furter down
+    
+    ft <- flextable(x)
   }
   
-  ft <- flextable(x)
- 
   # row and column names
   if (row.total == TRUE) {
     ind <- 0
@@ -629,6 +644,74 @@ tbl_flextable <- function(x,
   } else {
     ft
   }
+}
+
+#' @rdname tbl_flextable
+#' @inheritParams gtsummary::tbl_summary
+#' @param ... Arguments passed on to [gtsummary::tbl_summary()]
+#' @details [tbl_gtsummary_flextable()] creates a summary table with [gtsummary::tbl_summary()], transforms it to a flextable and runs [tbl_flextable()] to apply the Certe style. The table will be Dutch if `decimal.mark` is a comma (default on Dutch systems). To turn a manual `gtsummary` into a 'Certe flextable', run [gtsummary_as_flextable()] on a `gtsummary` object.
+#' @export
+tbl_gtsummary_flextable <- function(data, by, label = NULL, digits = 2, ..., decimal.mark = dec_mark()) {
+  check_is_installed("gtsummary")
+  gt <- data |> 
+    gtsummary::tbl_summary(by = {{ by }}, label = label, digits = dplyr::everything() ~ digits, ...)
+  
+  if (decimal.mark == ",") {
+    stat_cols <- names(gt$table_body)[names(gt$table_body) %like% "stat_"]
+    for (col in stat_cols) {
+      gt$table_body[, col] <- gsub(",", ";", gt$table_body[, col, drop = TRUE], fixed = TRUE)
+      gt$table_body[, col] <- gsub(".", decimal.mark, gt$table_body[, col, drop = TRUE], fixed = TRUE)
+      # Dutch language
+      gt$table_body[, col] <- gsub(" to ", " t/m ", gt$table_body[, col, drop = TRUE], fixed = TRUE)
+    }
+    # Dutch language
+    gt$table_styling$header$label <- gsub("Characteristic", "Eigenschap", gt$table_styling$header$label, fixed = TRUE)
+    gt$table_styling$header$label <- gsub("**TRUE**", "**Wel**", gt$table_styling$header$label, fixed = TRUE)
+    gt$table_styling$header$label <- gsub("**FALSE**", "**Niet**", gt$table_styling$header$label, fixed = TRUE)
+    footnote <- gt$table_styling$footnote$footnote
+    footnote <- gsub("CI = Credible Interval", "CI = geloofwaardigheidsinterval", footnote, fixed = TRUE)
+    footnote <- gsub("Credible Interval", "Geloofwaardigheidsinterval", footnote, fixed = TRUE)
+    footnote <- gsub("CI = Confidence Interval", "CI = betrouwbaarheidsinterval", footnote, fixed = TRUE)
+    footnote <- gsub("Confidence Interval", "Betrouwbaarheidsinterval", footnote, fixed = TRUE)
+    footnote <- gsub("HR = Hazard Ratio", "HR = Hazard-ratio", footnote, fixed = TRUE)
+    footnote <- gsub("IRR = Incidence Rate Ratio", "IRR = Incidence Rate Ratio", footnote, fixed = TRUE)
+    footnote <- gsub("RR = Relative Risk", "RR = Relatieve risico", footnote, fixed = TRUE)
+    footnote <- gsub("SE = Standard Error", "SE = Standard Error", footnote, fixed = TRUE)
+    footnote <- gsub("% missing", "% ontbrekend", footnote, fixed = TRUE)
+    footnote <- gsub("% Missing (unweighted)", "% ontbrekend (ongewogen)", footnote, fixed = TRUE)
+    footnote <- gsub("% not missing", "% niet ontbrekend", footnote, fixed = TRUE)
+    footnote <- gsub("% not Missing (unweighted)", "% niet ontbrekend (ongewogen)", footnote, fixed = TRUE)
+    footnote <- gsub("Characteristic", "Karakteristiek", footnote, fixed = TRUE)
+    footnote <- gsub("Mean", "gemiddelde", footnote, fixed = TRUE)
+    footnote <- gsub("Median", "mediaan", footnote, fixed = TRUE)
+    footnote <- gsub("N missing", "N ontbrekend", footnote, fixed = TRUE)
+    footnote <- gsub("N Missing", "N ontbrekend", footnote, fixed = TRUE)
+    footnote <- gsub("N Missing (unweighted)", "N ontbrekend (ongewogen)", footnote, fixed = TRUE)
+    footnote <- gsub("N not Missing", "N niet ontbrekend", footnote, fixed = TRUE)
+    footnote <- gsub("N not Missing (unweighted)", "N niet ontbrekend (ongewogen)", footnote, fixed = TRUE)
+    footnote <- gsub("No. obs.", "Aantal obs.", footnote, fixed = TRUE)
+    footnote <- gsub("Range", "bereik", footnote, fixed = TRUE)
+    footnote <- gsub("SD", "SD", footnote, fixed = TRUE)
+    footnote <- gsub("Statistics presented", "Getoonde statistieken", footnote, fixed = TRUE)
+    footnote <- gsub("Sum", "som", footnote, fixed = TRUE)
+    footnote <- gsub("Total N", "Totaal N", footnote, fixed = TRUE)
+    footnote <- gsub("Total N (unweighted)", "Totaal N (ongewogen)", footnote, fixed = TRUE)
+    footnote <- gsub("Unknown", "onbekend", footnote, fixed = TRUE)
+    footnote <- gsub("Variance", "variantie", footnote, fixed = TRUE)
+    gt$table_styling$footnote$footnote <- footnote
+  }
+  
+  gt |>
+    gtsummary_as_flextable()
+}
+
+#' @rdname tbl_flextable
+#' @param gtsummary a `gtsummary` object created with [gtsummary::tbl_summary()]
+#' @export
+gtsummary_as_flextable <- function(gtsummary) {
+  gtsummary |> 
+    gtsummary::as_flex_table() |>
+    tbl_flextable()
 }
 
 #' Print Table as Markdown, LaTeX of HTML
