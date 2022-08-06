@@ -27,7 +27,7 @@ tbl_markdown(
 )
 }
 \arguments{
-\item{x}{a \link{data.frame}}
+\item{x}{a \link{data.frame} or a \code{\link[flextable:flextable]{flextable}} object or a \code{\link[gtsummary:tbl_summary]{gtsummary}} object}
 
 \item{row.names}{row names to be displayed}
 

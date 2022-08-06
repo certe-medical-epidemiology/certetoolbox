@@ -2,8 +2,6 @@
 % Please edit documentation in R/data.frame.R
 \name{tbl_flextable}
 \alias{tbl_flextable}
-\alias{tbl_gtsummary_flextable}
-\alias{gtsummary_as_flextable}
 \title{Format Table as Flextable}
 \usage{
 tbl_flextable(
@@ -64,20 +62,9 @@ tbl_flextable(
   print = FALSE,
   ...
 )
-
-tbl_gtsummary_flextable(
-  data,
-  by,
-  label = NULL,
-  digits = 2,
-  ...,
-  decimal.mark = dec_mark()
-)
-
-gtsummary_as_flextable(gtsummary)
 }
 \arguments{
-\item{x}{a \link{data.frame}}
+\item{x}{a \link{data.frame} or a \code{\link[flextable:flextable]{flextable}} object or a \code{\link[gtsummary:tbl_summary]{gtsummary}} object}
 
 \item{row.names}{row names to be displayed. Will be \code{1:nrow(x)} if set to TRUE, but can be a vector of values.}
 
@@ -179,43 +166,16 @@ gtsummary_as_flextable(gtsummary)
 
 \item{print}{forced printing (required in a `for`` loop)}
 
-\item{...}{Arguments passed on to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}}
-
-\item{data}{A data frame}
-
-\item{by}{A column name (quoted or unquoted) in \code{data}.
-Summary statistics will be calculated separately for each level of the \code{by}
-variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations. To stratify a table by two or more
-variables, use \code{tbl_strata()}}
-
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
-
-\item{digits}{List of formulas specifying the number of decimal
-places to round summary statistics. If not specified,
-\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
-When multiple statistics are displayed for a single variable, supply a vector
-rather than an integer.  For example, if the
-statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}. User
-may also pass a styling function: \code{digits = age ~ style_sigfig}}
-
-\item{gtsummary}{a \code{gtsummary} object created with \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}}
+\item{...}{not used}
 }
 \value{
 \link{flextable} object
 }
 \description{
-Format a \link{data.frame} as \code{\link[=flextable]{flextable()}} with Certe style, bold headers and Dutch number formats.
+Format a \link{data.frame} as \code{\link[=flextable]{flextable()}} with Certe style, bold headers and Dutch number formats. This function can also transform existing \code{flextable} and \code{gtsummary} objects to allow the formatting provided in this \code{\link[=tbl_flextable]{tbl_flextable()}} function.
 }
 \details{
-Run \code{\link[=tbl_markdown]{tbl_markdown()}} on a \code{flextable} object to transform it into R Markdown and use it for Quarto or R Markdown reports.
-
-\code{\link[=tbl_gtsummary_flextable]{tbl_gtsummary_flextable()}} creates a summary table with \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}, transforms it to a flextable and runs \code{\link[=tbl_flextable]{tbl_flextable()}} to apply the Certe style. The table will be Dutch if \code{decimal.mark} is a comma (default on Dutch systems). To turn a manual \code{gtsummary} into a 'Certe flextable', run \code{\link[=gtsummary_as_flextable]{gtsummary_as_flextable()}} on a \code{gtsummary} object.
+Run \code{\link[=tbl_markdown]{tbl_markdown()}} on a \code{flextable} object to transform it into markdown for use in Quarto or R Markdown reports. If \code{print = TRUE} in non-interactive sessions (Quarto or R Markdown), the \code{flextable} object will also be printed in markdown.
 }
 \examples{
 # generate a data.frame
@@ -235,11 +195,10 @@ df |>
   tbl_flextable() |> 
   tbl_markdown()
   
-# create a gtsummary as flextable
-iris |> 
-  tbl_gtsummary_flextable(Species, decimal.mark = ".")
-iris |> 
-  tbl_gtsummary_flextable(Species, decimal.mark = ",")
+# transform a gtsummary to a flextable
+iris |>
+  tbl_gtsummary(Species, add_p = TRUE) |>
+  tbl_flextable()
   
 # extra formatting
 tbl_flextable(df,

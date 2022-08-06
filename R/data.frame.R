@@ -19,8 +19,8 @@
 
 #' Format Table as Flextable
 #'
-#' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats.
-#' @param x a [data.frame]
+#' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats. This function can also transform existing `flextable` and `gtsummary` objects to allow the formatting provided in this [tbl_flextable()] function.
+#' @param x a [data.frame] or a [`flextable`][flextable::flextable()] object or a [`gtsummary`][gtsummary::tbl_summary()] object
 #' @param rows.height height of the rows in centimetres
 #' @param row.names.bold display row names in bold
 #' @param rows.italic column indexes of rows in italics
@@ -72,13 +72,13 @@
 #' @param round.numbers number of decimal places to round up for numbers
 #' @param round.percent number of decimal places to round to when using `columns.percent`
 #' @param print forced printing (required in a `for`` loop)
-#' @details Run [tbl_markdown()] on a `flextable` object to transform it into R Markdown and use it for Quarto or R Markdown reports.
+#' @details Run [tbl_markdown()] on a `flextable` object to transform it into markdown for use in Quarto or R Markdown reports. If `print = TRUE` in non-interactive sessions (Quarto or R Markdown), the `flextable` object will also be printed in markdown.
 #' @seealso [flextable()]
 #' @return [flextable] object
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
 #' @importFrom dplyr bind_cols pull
-#' @importFrom flextable flextable fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
+#' @importFrom flextable flextable border fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
@@ -99,11 +99,10 @@
 #'   tbl_flextable() |> 
 #'   tbl_markdown()
 #'   
-#' # create a gtsummary as flextable
-#' iris |> 
-#'   tbl_gtsummary_flextable(Species, decimal.mark = ".")
-#' iris |> 
-#'   tbl_gtsummary_flextable(Species, decimal.mark = ",")
+#' # transform a gtsummary to a flextable
+#' iris |>
+#'   tbl_gtsummary(Species, add_p = TRUE) |>
+#'   tbl_flextable()
 #'   
 #' # extra formatting
 #' tbl_flextable(df,
@@ -214,10 +213,37 @@ tbl_flextable <- function(x,
                           print = FALSE,
                           ...) {
   
+  if (inherits(x, "gtsummary")) {
+    check_is_installed("gtsummary")
+    gt <- x
+    # get the flextable calls
+    gt_flex <- gt |> gtsummary::as_flex_table(return_calls = TRUE)
+    # remove formatting functions
+    gt_flex <- gt_flex[names(gt_flex) %unlike% "border|padding"]
+    # apply to gtsummary object
+    .eval_list_of_exprs <- get(".eval_list_of_exprs", envir = asNamespace("gtsummary"))
+    x <- .eval_list_of_exprs(gt_flex)
+    if (length(unique(gt$table_styling$header$spanning_header)) > 1) {
+    # fix for double header
+    x <- x |>
+      border(i = 1:2, j = 1,
+             border.bottom = fp_border_default(NA),
+             border.top = fp_border_default(NA),
+             part = "header") |>
+      border(i = 1, j = 1,
+             border.top = fp_border_default(width = 2),
+             part = "header") |>
+      border(i = 2, j = 1,
+             border.bottom = fp_border_default(width = 2),
+             part = "header")
+    }
+  }
+  
   if (inherits(x, "flextable")) {
     ft <- x
     colnames_bak <- NULL
     x <- x$body$dataset
+    x.bak <- x
     
   } else {
     
@@ -373,10 +399,10 @@ tbl_flextable <- function(x,
       # data.frame(col1 = 1, col2 = 2) |>
       #   tbl_flextable(column.names = c(col1 = "test", col2 = "test"))
       colnames_bak <- colnames(x)
-      # A to Z, then AA to ZZ (total 26 + 26 * 26 = 702)
+      # A to ZZ (total 26 + 26 * 26 = 702)
       letter_vector <- c(LETTERS, unlist(lapply(LETTERS, function(x) paste0(x, LETTERS))))
       colnames(x) <- letter_vector[seq_len(ncol(x))]
-      names(colnames_bak) <- colnames(x) # this will make set_header_labels work, furter down
+      names(colnames_bak) <- colnames(x) # this will make set_header_labels work, further down
     }
     
     ft <- flextable(x)
@@ -510,42 +536,33 @@ tbl_flextable <- function(x,
     font(fontname = font.family, part = "all") |>
     fontsize(size = font.size, part = "all")
   if (caption != "") {
-    ft <- ft |>
-      set_caption(caption)
+    ft <- ft |> set_caption(caption)
   }
   # bold headers
   if (column.names.bold == TRUE) {
-    ft <- ft |>
-      bold(part = "header")
+    ft <- ft |> bold(part = "header")
   }
   # bold row names
   if (!isFALSE(row.names) & row.names.bold == TRUE) {
-    ft <- ft |>
-      bold(j = 1)
+    ft <- ft |> bold(j = 1)
   }
   if (font.size.header != font.size) {
-    ft <- ft |>
-      fontsize(size = font.size.header, part = "header")
+    ft <- ft |> fontsize(size = font.size.header, part = "header")
   }
   if (length(columns.italic) > 0) {
-    ft <- ft |>
-      italic(j = columns.italic)
+    ft <- ft |> italic(j = columns.italic)
   }
   if (length(columns.bold) > 0) {
-    ft <- ft |>
-      bold(j = columns.bold)
+    ft <- ft |> bold(j = columns.bold)
   }
   if (!is.null(rows.italic)) {
-    ft <- ft |>
-      italic(i = rows.italic)
+    ft <- ft |> italic(i = rows.italic)
   }
   if (!is.null(rows.bold)) {
-    ft <- ft |>
-      bold(i = rows.bold)
+    ft <- ft |> bold(i = rows.bold)
   }
   if (!is.null(colnames_bak)) {
-    ft <- ft |>
-      set_header_labels(values = colnames_bak)
+    ft <- ft |> set_header_labels(values = colnames_bak)
   }
   if (!is.null(rows.fill)) {
     ft <- ft |>
@@ -646,78 +663,148 @@ tbl_flextable <- function(x,
   }
 }
 
-#' @rdname tbl_flextable
+#' Summarise Table as `gtsummary`
+#'
+#' Summarise a [data.frame] as [`gtsummary`][gtsummary::tbl_summary()] with Dutch defaults. These objects are based on the `gt` package by RStudio. To provide Certe style and compatibility with MS Word, use [tbl_flextable()] to transform the [`gtsummary`][gtsummary::tbl_summary()] object.
 #' @inheritParams gtsummary::tbl_summary
+#' @param x a [data.frame]
 #' @param ... Arguments passed on to [gtsummary::tbl_summary()]
-#' @details [tbl_gtsummary_flextable()] creates a summary table with [gtsummary::tbl_summary()], transforms it to a flextable and runs [tbl_flextable()] to apply the Certe style. The table will be Dutch if `decimal.mark` is a comma (default on Dutch systems). To turn a manual `gtsummary` into a 'Certe flextable', run [gtsummary_as_flextable()] on a `gtsummary` object.
+#' @param language the language to use, defaults to Dutch
+#' @param column1_name name to use for the first column
+#' @param add_n add the overall N using [gtsummary::add_n()]
+#' @param add_p add the p values [gtsummary::add_p()] (tests will be determined automatcally)
+#' @param add_ci add the confidence interval using [gtsummary::add_ci()]
+#' @param add_overall add the overall statistics using [gtsummary::add_overall()]
+#' @param decimal.mark decimal separator, defaults to [dec_mark()]
+#' @param big.mark thousands separator, defaults to [big_mark()]
+#' @inheritParams gtsummary::tbl_summary
+#' @details [tbl_gtsummary()] creates a summary table with [gtsummary::tbl_summary()], to which different extra columns can be added e.g. with `add_p = TRUE` and `add_overall = TRUE`.
+#' @importFrom dplyr select everything %>%
 #' @export
-tbl_gtsummary_flextable <- function(data, by, label = NULL, digits = 2, ..., decimal.mark = dec_mark()) {
+#' @examples 
+#' iris |>
+#'   tbl_gtsummary()
+#' 
+#' iris |> 
+#'   tbl_gtsummary(Species, add_p = TRUE)
+#'   
+#' iris |> 
+#'   tbl_gtsummary(Species, add_n = TRUE)
+#'   
+#' # support strata by providing 
+#' iris2 <- iris
+#' iris2$Category <- sample(LETTERS[1:2], size = 150, replace = TRUE)
+#' head(iris2)
+#' 
+#' iris2 |> 
+#'   tbl_gtsummary(c(Category, Species))
+#' 
+#' # transform to flextable 
+#' # (formats to Certe style and allows rendering to Word)
+#' iris |> 
+#'   tbl_gtsummary(Species) |> 
+#'   tbl_flextable()
+tbl_gtsummary <- function(x,
+                          by = NULL,
+                          label = NULL,
+                          digits = 1,
+                          ...,
+                          language = "nl",
+                          column1_name = "Eigenschap",
+                          add_n = FALSE,
+                          add_p = FALSE,
+                          add_ci = FALSE,
+                          add_overall = FALSE,
+                          decimal.mark = dec_mark(),
+                          big.mark = big_mark()) {
   check_is_installed("gtsummary")
-  gt <- data |> 
-    gtsummary::tbl_summary(by = {{ by }}, label = label, digits = dplyr::everything() ~ digits, ...)
   
-  if (decimal.mark == ",") {
-    stat_cols <- names(gt$table_body)[names(gt$table_body) %like% "stat_"]
-    for (col in stat_cols) {
-      gt$table_body[, col] <- gsub(",", ";", gt$table_body[, col, drop = TRUE], fixed = TRUE)
-      gt$table_body[, col] <- gsub(".", decimal.mark, gt$table_body[, col, drop = TRUE], fixed = TRUE)
-      # Dutch language
-      gt$table_body[, col] <- gsub(" to ", " t/m ", gt$table_body[, col, drop = TRUE], fixed = TRUE)
-    }
-    # Dutch language
-    gt$table_styling$header$label <- gsub("Characteristic", "Eigenschap", gt$table_styling$header$label, fixed = TRUE)
-    gt$table_styling$header$label <- gsub("**TRUE**", "**Wel**", gt$table_styling$header$label, fixed = TRUE)
-    gt$table_styling$header$label <- gsub("**FALSE**", "**Niet**", gt$table_styling$header$label, fixed = TRUE)
-    footnote <- gt$table_styling$footnote$footnote
-    footnote <- gsub("CI = Credible Interval", "CI = geloofwaardigheidsinterval", footnote, fixed = TRUE)
-    footnote <- gsub("Credible Interval", "Geloofwaardigheidsinterval", footnote, fixed = TRUE)
-    footnote <- gsub("CI = Confidence Interval", "CI = betrouwbaarheidsinterval", footnote, fixed = TRUE)
-    footnote <- gsub("Confidence Interval", "Betrouwbaarheidsinterval", footnote, fixed = TRUE)
-    footnote <- gsub("HR = Hazard Ratio", "HR = Hazard-ratio", footnote, fixed = TRUE)
-    footnote <- gsub("IRR = Incidence Rate Ratio", "IRR = Incidence Rate Ratio", footnote, fixed = TRUE)
-    footnote <- gsub("RR = Relative Risk", "RR = Relatieve risico", footnote, fixed = TRUE)
-    footnote <- gsub("SE = Standard Error", "SE = Standard Error", footnote, fixed = TRUE)
-    footnote <- gsub("% missing", "% ontbrekend", footnote, fixed = TRUE)
-    footnote <- gsub("% Missing (unweighted)", "% ontbrekend (ongewogen)", footnote, fixed = TRUE)
-    footnote <- gsub("% not missing", "% niet ontbrekend", footnote, fixed = TRUE)
-    footnote <- gsub("% not Missing (unweighted)", "% niet ontbrekend (ongewogen)", footnote, fixed = TRUE)
-    footnote <- gsub("Characteristic", "Karakteristiek", footnote, fixed = TRUE)
-    footnote <- gsub("Mean", "gemiddelde", footnote, fixed = TRUE)
-    footnote <- gsub("Median", "mediaan", footnote, fixed = TRUE)
-    footnote <- gsub("N missing", "N ontbrekend", footnote, fixed = TRUE)
-    footnote <- gsub("N Missing", "N ontbrekend", footnote, fixed = TRUE)
-    footnote <- gsub("N Missing (unweighted)", "N ontbrekend (ongewogen)", footnote, fixed = TRUE)
-    footnote <- gsub("N not Missing", "N niet ontbrekend", footnote, fixed = TRUE)
-    footnote <- gsub("N not Missing (unweighted)", "N niet ontbrekend (ongewogen)", footnote, fixed = TRUE)
-    footnote <- gsub("No. obs.", "Aantal obs.", footnote, fixed = TRUE)
-    footnote <- gsub("Range", "bereik", footnote, fixed = TRUE)
-    footnote <- gsub("SD", "SD", footnote, fixed = TRUE)
-    footnote <- gsub("Statistics presented", "Getoonde statistieken", footnote, fixed = TRUE)
-    footnote <- gsub("Sum", "som", footnote, fixed = TRUE)
-    footnote <- gsub("Total N", "Totaal N", footnote, fixed = TRUE)
-    footnote <- gsub("Total N (unweighted)", "Totaal N (ongewogen)", footnote, fixed = TRUE)
-    footnote <- gsub("Unknown", "onbekend", footnote, fixed = TRUE)
-    footnote <- gsub("Variance", "variantie", footnote, fixed = TRUE)
-    gt$table_styling$footnote$footnote <- footnote
+  # set the theme with the chosen decimal marks
+  theme_old <- gtsummary::get_gtsummary_theme()
+  gtsummary::theme_gtsummary_language(language = "en",
+                                      decimal.mark = decimal.mark,
+                                      big.mark = big.mark,
+                                      iqr.sep = "\u2009\u2013\u2009", # small space, en dash, small space
+                                      ci.sep = "\u2009\u2013\u2009",
+                                      set_theme = FALSE) |>
+    gtsummary::set_gtsummary_theme(quiet = TRUE)
+  
+  # determine the 'by'
+  by_select <- x |>
+    select({{ by }}) |>
+    colnames()
+  
+  if (length(by_select) == 0) {
+    by_select <- NULL
   }
   
-  gt |>
-    gtsummary_as_flextable()
-}
-
-#' @rdname tbl_flextable
-#' @param gtsummary a `gtsummary` object created with [gtsummary::tbl_summary()]
-#' @export
-gtsummary_as_flextable <- function(gtsummary) {
-  gtsummary |> 
-    gtsummary::as_flex_table() |>
-    tbl_flextable()
+  if (length(by_select) <= 1) {
+    # at most 1 variable to split data by
+    if (tryCatch(is.numeric(digits) && length(digits) == 1, error = function(e) FALSE)) {
+      # support for tbl_gtsummary(..., digits = 1)
+      out <- x |> 
+        gtsummary::tbl_summary(by = by_select[1], label = label, digits = everything() ~ digits, ...)
+    } else {
+      out <- x |> 
+        gtsummary::tbl_summary(by = by_select[1], label = label, digits = digits, ...)
+    }
+    
+  } else if (length(by_select) == 2) {
+    # 2 variables to split data by
+    if (tryCatch(is.numeric(digits) && length(digits) == 1, error = function(e) FALSE)) {
+      # support for tbl_gtsummary(..., digits = 1)
+      out <- gtsummary::tbl_strata(x,
+                                   strata = by_select[1],
+                                   .tbl_fun = gtsummary::tbl_summary,
+                                   by = by_select[2],
+                                   label = label,
+                                   digits = everything() ~ digits,
+                                   ...)
+    } else {
+      out <- gtsummary::tbl_strata(x,
+                                   strata = by_select[1],
+                                   .tbl_fun = gtsummary::tbl_summary,
+                                   by = by_select[2],
+                                   label = label,
+                                   digits = digits,
+                                   ...)
+    }
+  } else {
+    stop("'by' can only be 1 or 2 variables")
+  }
+  
+  if (isTRUE(add_n)) {
+    out <- out |> 
+      gtsummary::add_n(last = TRUE)
+  }
+  if (isTRUE(add_overall)) {
+    out <- out |> 
+      gtsummary::add_overall(last = FALSE)
+  }
+  if (isTRUE(add_ci)) {
+    out <- out |> 
+      gtsummary::add_ci()
+  }
+  if (isTRUE(add_p)) {
+    out <- out |> 
+      gtsummary::add_p()
+  }
+  
+  if (language == "nl") {
+    # set Dutch language (until Dutch is implemented, see https://github.com/ddsjoberg/gtsummary/pull/1302)
+    out$table_styling$header$label <- gtsummary_translate(out$table_styling$header$label, characteristic = column1_name)
+    out$table_styling$footnote$footnote <- gtsummary_translate(out$table_styling$footnote$footnote)
+    out$table_styling$footnote_abbrev$footnote <- gtsummary_translate(out$table_styling$footnote_abbrev$footnote)
+  }
+  
+  gtsummary::set_gtsummary_theme(theme_old, quiet = TRUE)
+  out
 }
 
 #' Print Table as Markdown, LaTeX of HTML
 #'
 #' Prints a [data.frame] as Markdown, LaTeX or HTML using [knitr::kable()], with bold headers and Dutch number formats.
-#' @param x a [data.frame]
+#' @param x a [data.frame] or a [`flextable`][flextable::flextable()] object or a [`gtsummary`][gtsummary::tbl_summary()] object
 #' @param row.names row names to be displayed
 #' @param column.names column names to be displayed
 #' @param align alignment of columns (default: numbers to the right, others to the left)
@@ -758,6 +845,11 @@ tbl_markdown <- function(x,
                          newlines.leading = 0,
                          newlines.trailing = 2,
                          print = TRUE) {
+  
+  if (inherits(x, "gtsummary")) {
+    # first transform to flextable
+    x <- tbl_flextable(x)
+  }
   
   if (inherits(x, "flextable")) {
     return(invisible(flextable_to_rmd(x, print = print)))
@@ -917,5 +1009,84 @@ auto_transform <- function(x,
       }
     }
   }
+  x
+}
+
+gtsummary_translate <- function(x, characteristic = NULL) {
+  if (!is.null(characteristic)) {
+    x <- gsub("Characteristic", characteristic, x, fixed = TRUE)
+  }
+  x <- gsub("**TRUE**", "**Wel**", x, fixed = TRUE)
+  x <- gsub("**FALSE**", "**Niet**", x, fixed = TRUE)
+  
+  x <- gsub("% Missing (unweighted)", "% ontbrekend (ongewogen)", x, fixed = TRUE)
+  x <- gsub("% missing", "% ontbrekend", x, fixed = TRUE)
+  x <- gsub("% not Missing (unweighted)", "% niet ontbrekend (ongewogen)", x, fixed = TRUE)
+  x <- gsub("% not missing", "% niet ontbrekend", x, fixed = TRUE)
+  x <- gsub("Adjusted R\U00B2", "Aangepaste R\U00B2", x, fixed = TRUE)
+  x <- gsub("ajusted Wald test of independence for complex survey samples", "aangepaste Wald-onafhankelijkheidstoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("Benjamini & Hochberg correction for multiple testing", "Benjamini- en Hochberg-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Benjamini & Yekutieli correction for multiple testing", "Benjamini- en Yekutieli-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Bonferroni correction for multiple testing", "Bonferroni-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Characteristic", "Karakteristiek", x, fixed = TRUE)
+  x <- gsub("chi-squared test adjusted by a design effect estimate", "chi-kwadraattoets gecorrigeerd met een 'design effect'-schatting", x, fixed = TRUE)
+  x <- gsub("chi-squared test with Rao & Scott's second-order correction", "chi-kwadraattoets met Rao en Scott tweede-ordecorrectie", x, fixed = TRUE)
+  x <- gsub("CI = Confidence Interval", "CI = betrouwbaarheidsinterval", x, fixed = TRUE)
+  x <- gsub("CI = Credible Interval", "CI = geloofwaardigheidsinterval", x, fixed = TRUE)
+  x <- gsub("Confidence Interval", "Betrouwbaarheidsinterval", x, fixed = TRUE)
+  x <- gsub("Credible Interval", "Geloofwaardigheidsinterval", x, fixed = TRUE)
+  x <- gsub("False discovery rate correction for multiple testing", "'False discovery rate'-detectie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Fisher's exact test", "Fishers exacte toets", x, fixed = TRUE)
+  x <- gsub("Hochberg correction for multiple testing", "Hochberg-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Holm correction for multiple testing", "Holm-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("Hommel correction for multiple testing", "Hommel-correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("HR = Hazard Ratio", "HR = Hazard-ratio", x, fixed = TRUE)
+  x <- gsub("Kruskal-Wallis rank sum test", "Kruskal-Wallistoets", x, fixed = TRUE)
+  x <- gsub("Kruskal-Wallis rank-sum test for complex survey samples", "Kruskal-Wallistoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("log-likelihood", "log-aannemelijkheidsfunctie", x, fixed = TRUE)
+  x <- gsub("McNemar's Chi-squared test with continuity correction", "McNemars chi-kwadraattoets met continu\u00efteitscorrectie", x, fixed = TRUE)
+  x <- gsub("McNemar's Chi-squared test", "McNemars chi-kwadraattoets", x, fixed = TRUE)
+  x <- gsub("Mean", "Gemiddelde", x, fixed = TRUE)
+  x <- gsub("Median", "Mediaan", x, fixed = TRUE)
+  x <- gsub("Mood's test for the median for complex survey samples", "Moodstoets voor de mediaan voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("N events", "N events", x, fixed = TRUE)
+  x <- gsub("N Missing (unweighted)", "N ontbrekend (ongewogen)", x, fixed = TRUE)
+  x <- gsub("N missing", "N ontbrekend", x, fixed = TRUE)
+  x <- gsub("N Missing", "N ontbrekend", x, fixed = TRUE)
+  x <- gsub("N not Missing (unweighted)", "N niet ontbrekend (ongewogen)", x, fixed = TRUE)
+  x <- gsub("N not Missing", "N niet ontbrekend", x, fixed = TRUE)
+  x <- gsub("No correction for multiple testing", "Geen correctie voor multipele toetsen", x, fixed = TRUE)
+  x <- gsub("No. obs.", "Aantal obs.", x, fixed = TRUE)
+  x <- gsub("Null deviance", "Null variantie", x, fixed = TRUE)
+  x <- gsub("Null df", "Null vrijheidsgraden", x, fixed = TRUE)
+  x <- gsub("One-way ANOVA", "E\u00e9n-weg-variantieanalyse", x, fixed = TRUE)
+  x <- gsub("Overall", "Totaal", x, fixed = TRUE)
+  x <- gsub("p-value", "p-waarde", x, fixed = TRUE)
+  x <- gsub("Paired t-test", "Gepaarde t-toets", x, fixed = TRUE)
+  x <- gsub("Pearson's Chi-squared test", "Pearson's chi-kwadraattoets", x, fixed = TRUE)
+  x <- gsub("Percentile", "Percentiel", x, fixed = TRUE)
+  x <- gsub("q-value", "q-waarde", x, fixed = TRUE)
+  x <- gsub("random intercept logistic regression", "Logistische regressie met willekeurige intercept", x, fixed = TRUE)
+  x <- gsub("Range", "Bereik", x, fixed = TRUE)
+  x <- gsub("Residual df", "Residuele vrijheidsgraden", x, fixed = TRUE)
+  x <- gsub("RR = Relative Risk", "RR = Relatieve risico", x, fixed = TRUE)
+  x <- gsub("Statistic", "Statistiek", x, fixed = TRUE)
+  x <- gsub("Statistical tests performed", "Statistische testen verricht", x, fixed = TRUE)
+  x <- gsub("Statistics presented", "Getoonde statistieken", x, fixed = TRUE)
+  x <- gsub("Sum", "Som", x, fixed = TRUE)
+  x <- gsub("t-test adapted to complex survey samples", "t-toets aangepast aan complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("test of independence using a saddlepoint approximation for complex survey samples", "onafhankelijkheidstoets met zadelpuntbenadering voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("test of independence using the exact asymptotic distribution for complex survey samples", "onafhankelijkheidsbepaling met behulp van de exacte asymptotische verdeling voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("Time", "Tijd", x, fixed = TRUE)
+  x <- gsub("Total N (unweighted)", "Totaal N (ongewogen)", x, fixed = TRUE)
+  x <- gsub("Total N", "Totaal N", x, fixed = TRUE)
+  x <- gsub("Two Sample t-test", "t-toets", x, fixed = TRUE)
+  x <- gsub("Unknown", "Onbekend", x, fixed = TRUE)
+  x <- gsub("van der Waerden's normal-scores test for complex survey samples", "Van der Waerden's normaalscorentoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("Variance", "Variantie", x, fixed = TRUE)
+  x <- gsub("Wald test of independence for complex survey samples", "Wald-onafhankelijkheidstoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
+  x <- gsub("Welch Two Sample t-test", "t-toets", x, fixed = TRUE)
+  x <- gsub("Wilcoxon rank sum test", "Mann-Whitney-Wilcoxontoets", x, fixed = TRUE)
+  x <- gsub("Wilcoxon rank-sum test for complex survey samples", "Wilcoxon rank-sum test voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
   x
 }
