@@ -8,6 +8,13 @@
 \alias{dec_mark}
 \alias{big_mark}
 \alias{project_get_current_id}
+\alias{extract}
+\alias{extract2}
+\alias{add}
+\alias{subtract}
+\alias{multiply_by}
+\alias{raise_to_power}
+\alias{divide_by}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -20,5 +27,7 @@ below to see their documentation.
   \item{certestyle}{\code{\link[certestyle:dec_mark]{big_mark}}, \code{\link[certestyle]{dec_mark}}}
 
   \item{lubridate}{\code{\link[lubridate]{now}}, \code{\link[lubridate:now]{today}}}
+
+  \item{magrittr}{\code{\link[magrittr:aliases]{add}}, \code{\link[magrittr:aliases]{divide_by}}, \code{\link[magrittr:aliases]{extract}}, \code{\link[magrittr:aliases]{extract2}}, \code{\link[magrittr:aliases]{multiply_by}}, \code{\link[magrittr:aliases]{raise_to_power}}, \code{\link[magrittr:aliases]{subtract}}}
 }}
 
