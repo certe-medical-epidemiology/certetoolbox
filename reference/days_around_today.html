@@ -18,7 +18,7 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
       </span>
     </div>
 
@@ -217,10 +217,10 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">next_week</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-08" "2022-08-09" "2022-08-10" "2022-08-11" "2022-08-12"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "2022-08-13" "2022-08-14"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-15" "2022-08-16" "2022-08-17" "2022-08-18" "2022-08-19"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6] "2022-08-20" "2022-08-21"</span>
 <span class="r-in"><span><span class="fu">next_week</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-08" "2022-08-14"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2022-08-15" "2022-08-21"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 2nd Monday of last month:</span></span></span>
 <span class="r-in"><span><span class="fu">last_month</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">nth_monday</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
@@ -241,21 +241,19 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/between.html" class="external-link">between</a></span><span class="op">(</span><span class="fu">start_of_last_week</span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          <span class="fu">end_of_last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-07-29 2022-07-29 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-07-30 2022-07-30 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-07-31 2022-07-31 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-07-27 2022-07-27 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-07-28 2022-07-28 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2022-07-26 2022-07-26 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-08-01 2022-08-01 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-08-04 2022-08-04 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-08-02 2022-08-02 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-08-03 2022-08-03 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-08-06 2022-08-06 12:00:00</span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">date</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-07-29 2022-07-29 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-07-30 2022-07-30 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-07-31 2022-07-31 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-07-27 2022-07-27 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-07-28 2022-07-28 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2022-07-26 2022-07-26 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-08-01 2022-08-01 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-08-04 2022-08-04 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-08-02 2022-08-02 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-08-03 2022-08-03 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-08-06 2022-08-06 12:00:00</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># but this does not work:</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span></span></span>
@@ -267,12 +265,11 @@ Determine week based on ISO 8601"><meta property="og:image" content="https://cer
 <span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">last_week</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         date                time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-07-29 2022-07-29 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-07-30 2022-07-30 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-07-31 2022-07-31 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-07-27 2022-07-27 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-07-28 2022-07-28 12:00:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2022-07-26 2022-07-26 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2022-08-01 2022-08-01 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2022-08-04 2022-08-04 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2022-08-02 2022-08-02 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2022-08-03 2022-08-03 12:00:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2022-08-06 2022-08-06 12:00:00</span>
 </code></pre></div>
     </div>
   </div>
