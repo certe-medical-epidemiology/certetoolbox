@@ -73,12 +73,16 @@ export_exec <- function(object,
     object <- rownames_1st_column(object)
     arrow::write_parquet(x = object, sink = filename, ...)
   } else if (needed_extension == "xlsx") {
+    xl_object <- object
     # Excel format
-    if (!inherits(object, "Workbook")) {
+    if (!inherits(xl_object, "Workbook")) {
       # not yet an openxlsx object (but rather e.g. a data frame)
-      object <- suppressMessages(as_excel(object, ...))
+      xl_object <- suppressMessages(as_excel(xl_object, ...))
     }
-    suppressMessages(save_excel(xl = object, filename = filename))
+    suppressMessages(save_excel(xl = xl_object, filename = filename))
+    if (is.list(object)) {
+      object <- object[[1]]
+    }
   } else {
     # flat data file
     object <- rownames_1st_column(object)
@@ -520,13 +524,20 @@ export_xlsx <- function(...,
                         rows_zebra = TRUE,
                         cols_zebra = FALSE,
                         freeze_top_row = TRUE,
-                        table_style = "TableStyleMedium2") {
+                        table_style = "TableStyleMedium2",
+                        align = "center") {
   object <- list(...)
-  if (length(object) > 1 && is.null(filename) &&
-      is.character(object[[length(object)]]) && length(object[[length(object)]]) == 1) {
-    # unnamed second argument is the filename, like other export functions
-    filename <- object[[length(object)]]
-    object <- object[seq_len(length(object) - 1)]
+  if (length(object) > 1) {
+    # check if second value is filename
+    if ( is.null(filename) && is.character(object[[2]]) && length(object[[2]]) == 1) {
+      filename <- object[[2]]
+      object <- object[-2]
+    }
+    # check if third value is card number
+    if (length(object) > 1 && is.null(card_number) && is.numeric(object[[length(object)]]) && length(object[[length(object)]]) == 1) {
+      card_number <- object[[length(object)]]
+      object <- object[-length(object)]
+    }
   }
   export_exec(object = object, "xlsx",
               filename = filename,
@@ -538,7 +549,8 @@ export_xlsx <- function(...,
               rows_zebra = rows_zebra,
               cols_zebra = cols_zebra,
               freeze_top_row = freeze_top_row,
-              table_style = table_style)
+              table_style = table_style,
+              align = align)
 }
 
 #' @rdname export

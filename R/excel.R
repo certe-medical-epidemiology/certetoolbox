@@ -28,6 +28,7 @@
 #' @param cols_zebra create banded columns
 #' @param freeze_top_row freeze the first row of the sheet
 #' @param table_style style(s) for each table, see below. This can also be a vector with the same length as `...`.
+#' @param align horizontal alignment of text
 #' @section Supported Table Styles:
 #' For the argument `table_style`, use one or more of these table styles as character input. The default is **TableStyleMedium2**.
 #' 
@@ -64,7 +65,8 @@ as_excel <- function(...,
                      rows_zebra = TRUE,
                      cols_zebra = FALSE,
                      freeze_top_row = TRUE,
-                     table_style = "TableStyleMedium2") {
+                     table_style = "TableStyleMedium2",
+                     align = "center") {
   dots <- list(...)
   if (length(dots) == 1 && is.list(dots[[1]]) && !is.data.frame(dots[[1]])) {
     # was passed on as a list, e.g. from export_xlsx()
@@ -92,7 +94,7 @@ as_excel <- function(...,
   
   style <- createStyle(fontName = "Calibri",
                        fontSize = 11,
-                       halign = "center",
+                       halign = align,
                        valign = "center",
                        wrapText = TRUE)
   for (i in seq_len(length(dots))) {

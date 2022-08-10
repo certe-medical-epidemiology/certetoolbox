@@ -13,7 +13,8 @@ as_excel(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
-  table_style = "TableStyleMedium2"
+  table_style = "TableStyleMedium2",
+  align = "center"
 )
 
 save_excel(xl, filename = NULL, overwrite = FALSE)
@@ -34,6 +35,8 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 \item{freeze_top_row}{freeze the first row of the sheet}
 
 \item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
+\item{align}{horizontal alignment of text}
 
 \item{xl}{Excel object, as created with \code{\link[=as_excel]{as_excel()}} (or manually with the \code{openxlsx} package)}
 

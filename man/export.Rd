@@ -46,7 +46,8 @@ export_xlsx(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
-  table_style = "TableStyleMedium2"
+  table_style = "TableStyleMedium2",
+  align = "center"
 )
 
 export_excel(
@@ -59,7 +60,8 @@ export_excel(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
-  table_style = "TableStyleMedium2"
+  table_style = "TableStyleMedium2",
+  align = "center"
 )
 
 export_csv(
@@ -194,6 +196,8 @@ export_clipboard(
 \item{freeze_top_row}{freeze the first row of the sheet}
 
 \item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
+\item{align}{horizontal alignment of text}
 
 \item{na}{replacement character for empty values (default: \code{""})}
 
