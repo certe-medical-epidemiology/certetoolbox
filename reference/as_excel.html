@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
       </span>
     </div>
 
@@ -84,7 +84,8 @@
 <span>  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span></span>
+<span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>,</span>
+<span>  align <span class="op">=</span> <span class="st">"center"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">save_excel</span><span class="op">(</span><span class="va">xl</span>, filename <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -122,6 +123,10 @@
 
 <dt>table_style</dt>
 <dd><p>style(s) for each table, see below. This can also be a vector with the same length as <code>...</code>.</p></dd>
+
+
+<dt>align</dt>
+<dd><p>horizontal alignment of text</p></dd>
 
 
 <dt>xl</dt>
