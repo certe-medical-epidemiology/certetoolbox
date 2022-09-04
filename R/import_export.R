@@ -303,12 +303,12 @@ file_can_be_overwritten <- function(overwrite, filename) {
     q_text <- paste0("The file '", filename, "' already exists:\n",
                      file_text, "\n\n",
                      "Overwrite this file?")
-    if ("rstudioapi" %in% rownames(utils::installed.packages()) && isTRUE(rstudioapi::isAvailable())) {
-      q <- rstudioapi::showQuestion(title = paste("File", basename(filename), "exists"),
-                                    message = q_text,
-                                    ok = "Yes",
-                                    cancel = "No")
-    } else {
+    q <- tryCatch(rstudioapi::showQuestion(title = paste("File", basename(filename), "exists"),
+                                           message = q_text,
+                                           ok = "Yes",
+                                           cancel = "No"),
+                  error = function(e) NULL)
+    if (is.null(q)) {
       q <- utils::askYesNo(q_text, default = TRUE, prompts = c("Yes", "No", "Cancel"))
     }
     if (isTRUE(q)) {
