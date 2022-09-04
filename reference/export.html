@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.5</span>
       </span>
     </div>
 
@@ -245,7 +245,7 @@
 
 
 <dt>overwrite</dt>
-<dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> value to indicate if an existing file must be overwritten. In <a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive mode</a>, this will be asked if the file exists. In non-interactive mode, this defaults to <code>FALSE</code>. Exporting with existing files is always non-destructive: if exporting fails, the existing file will be remained.</p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> value to indicate if an existing file must be overwritten. In <a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive mode</a>, this has a special default behaviour: the original file will be copied to <code>filename_datetime.ext</code> before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.</p></dd>
 
 
 <dt>fn</dt>
@@ -353,8 +353,8 @@
 <span class="r-in"><span>  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpdQ4eKQ/file2a9a31384a24/reference/whole_file.rds' (3.5 kB).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10x14) to '/tmp/RtmpdQ4eKQ/file2a9a31384a24/reference/first_ten_rows.xlsx' (8.8 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpDUppbH/file2abfbcaab39/reference/whole_file.rds' (3.5 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10x14) to '/tmp/RtmpDUppbH/file2abfbcaab39/reference/first_ten_rows.xlsx' (8.8 kB).</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># starwars |&gt;</span></span></span>
@@ -366,7 +366,7 @@
 <span class="r-in"><span><span class="co"># Apache's Feather and Parquet formats are column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for cross-language specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu">export_feather</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpdQ4eKQ/file2a9a31384a24/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpDUppbH/file2abfbcaab39/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu"><a href="import.html">import</a></span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
