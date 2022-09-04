@@ -319,12 +319,12 @@ file_can_be_overwritten <- function(overwrite, filename) {
     }
     return(isTRUE(q))
   } else {
-    warning("NOT exporting file in non-interactive mode since file '",
-            filename, "' already exists:\n",
-            file_text, "\n",
-            "Use `overwite = TRUE` to overrule this.",
-            call. = FALSE)
-    return(FALSE)
+    filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", now(), ".\\1"), filename)
+    file.copy(from = filename, to = filename_new)
+    # and remove the existing file
+    try(unlink(filename, force = TRUE), silent = TRUE)
+    message("Original file ", filename, " existed, this file was renamed to ", filename_new, " before overwriting the original file.")
+    return(TRUE)
   }
 }
 
@@ -360,7 +360,7 @@ plot_export_result <- function(filename) {
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
 #' @param card_number a Trello card number
-#' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this defaults to `FALSE`. Exporting with existing files is always non-destructive: if exporting fails, the existing file will be remained.
+#' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
 #' @rdname export
