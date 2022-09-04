@@ -296,8 +296,8 @@ file_can_be_overwritten <- function(overwrite, filename) {
   }
   
   file_info <- file.info(filename)
-  file_text <- paste0("Created: ", format2(file_info$mtime, "yyyy-mm-dd HH:MM:ss"), "\n",
-                      "Changed: ", format2(file_info$ctime, "yyyy-mm-dd HH:MM:ss"), "\n",
+  file_text <- paste0("Created: ", format2(file_info$ctime, "yyyy-mm-dd HH:MM:ss"), "\n",
+                      "Changed: ", format2(file_info$mtime, "yyyy-mm-dd HH:MM:ss"), "\n",
                       "Size: ", size_humanreadable(file_info$size, decimal.mark = "."))
   if (base::interactive()) {
     q_text <- paste0("The file '", filename, "' already exists:\n",
