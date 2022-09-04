@@ -270,13 +270,13 @@ test_that("import_export works", {
   
   # check overwrite function
   export_csv(iris, "iris_overwrite")
+  mtime_old <- file.mtime("iris_overwrite.csv")
   expect_true(file_can_be_overwritten(TRUE, "iris_overwrite.csv"))
   expect_false(file_can_be_overwritten(FALSE, "iris_overwrite.csv"))
   if (!interactive()) {
     expect_message(export_csv(iris, "iris_overwrite"))
     expect_true(file_can_be_overwritten(NULL, "iris_overwrite.csv"))
   }
-  mtime_old <- file.mtime("iris_overwrite.csv")
   Sys.sleep(1)
   export_csv(iris, "iris_overwrite", overwrite = TRUE)
   mtime_new <- file.mtime("iris_overwrite.csv")
