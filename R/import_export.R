@@ -303,7 +303,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
     q_text <- paste0("The file '", filename, "' already exists:\n",
                      file_text, "\n\n",
                      "Overwrite this file?")
-    if ("rstudioapi" %in% utils::installed.packages()) {
+    if ("rstudioapi" %in% utils::installed.packages() && rstudioapi::isAvailable()) {
       q <- rstudioapi::showQuestion(title = paste("File", basename(filename), "exists"),
                                     message = q_text,
                                     ok = "Yes",
@@ -319,7 +319,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
     }
     return(isTRUE(q))
   } else {
-    filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", now(), ".\\1"), filename)
+    filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
     file.copy(from = filename, to = filename_new)
     # and remove the existing file
     try(unlink(filename, force = TRUE), silent = TRUE)
