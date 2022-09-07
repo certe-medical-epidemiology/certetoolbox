@@ -79,7 +79,7 @@ export_exec <- function(object,
       # not yet an openxlsx object (but rather e.g. a data frame)
       xl_object <- suppressMessages(as_excel(xl_object, ...))
     }
-    suppressMessages(save_excel(xl = xl_object, filename = filename))
+    suppressMessages(save_excel(xl = xl_object, filename = filename, overwrite = TRUE))
     if (is.list(object)) {
       object <- object[[1]]
     }
@@ -319,6 +319,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
     }
     return(isTRUE(q))
   } else {
+    # non-interactive mode, make a permanent copy
     filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
     file.copy(from = filename, to = filename_new)
     # and remove the existing file

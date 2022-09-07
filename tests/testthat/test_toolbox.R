@@ -357,6 +357,29 @@ test_that("universal works", {
 
 test_that("vctrs work", {
   library(dplyr, warn.conflicts = FALSE)
+  expect_identical(iris |> 
+                     update(Species == "setosa" & Sepal.Length > 5, Species = "test") |> 
+                     head() |> 
+                     pull(Species),
+                   c("test", rep("setosa", 4), "test"))
+  
+  expect_equal(iris |> 
+                 update(1:3, Species = "test") |> 
+                 filter(Species == "test") |> 
+                 nrow(),
+               3)
+  expect_equal(iris |> 
+                 # group on species
+                 group_by(Species) |> 
+                 # update every 1st to 3rd row in group
+                 update(1:3, Species = "test") |> 
+                 filter(Species == "test") |> 
+                 nrow(),
+               9)
+})
+
+test_that("vctrs work", {
+  library(dplyr, warn.conflicts = FALSE)
   df1 <- tibble(postcode = c(2,4,6))
   df2 <- tibble(postcode = as.character(c(1:10)),
                 letter = letters[1:10])

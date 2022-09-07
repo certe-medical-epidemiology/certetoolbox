@@ -179,7 +179,7 @@ export_clipboard(
 
 \item{card_number}{a Trello card number}
 
-\item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this has a special default behaviour: the original file will be copied to \code{filename_datetime.ext} before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.}
+\item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to \code{filename_datetime.ext} before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.}
 
 \item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 

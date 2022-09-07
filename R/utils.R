@@ -18,6 +18,8 @@
 # ===================================================================== #
 
 globalVariables(c(".",
+                  ".row_index",
+                  ".row_original",
                   "Identifier",
                   "Title",
                   "Summary",
