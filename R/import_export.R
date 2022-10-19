@@ -131,7 +131,7 @@ import_exec <- function(filename,
   if (filename %like% "^(http|https|ftp|sftp|ftps|ssh)://") {
     # download the file first
     filename_url <- filename
-    if (filename_url %like% "git(hub|lab).com/.*/blob/") {
+    if (filename_url %like% "git(hub|lab)[.]com/.*/blob/") {
       # get GitHub/GitLab raw URL
       filename_url <- gsub("/blob/", "/raw/", filename_url, fixed = TRUE)
     }
@@ -143,6 +143,8 @@ import_exec <- function(filename,
     }
     if (!file.exists(filename)) {
       stop("Failed to download: ", filename_url, call. = FALSE)
+    } else {
+      message("Downloaded file: ", size_humanreadable(file.size(filename), decimal.mark = "."), " (", file.size(filename), " bytes)")
     }
   }
   
@@ -925,7 +927,7 @@ export_html <- function(plot,
 #' Import Data Sets
 #' 
 #' These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the `certeprojects` package and support Trello card numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
-#' @param filename the full path of the file to be imported, will be parsed to a [character]
+#' @param filename the full path of the file to be imported, will be parsed to a [character], can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param card_number a Trello card number
 #' @param ... arguments passed on to methods

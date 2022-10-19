@@ -209,7 +209,7 @@ import_mail_attachment(
 )
 }
 \arguments{
-\item{filename}{the full path of the file to be imported, will be parsed to a \link{character}}
+\item{filename}{the full path of the file to be imported, will be parsed to a \link{character}, can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)}
 
 \item{card_number}{a Trello card number}
 
