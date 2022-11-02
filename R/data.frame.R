@@ -17,7 +17,7 @@
 #  useful, but it comes WITHOUT ANY WARRANTY OR LIABILITY.              #
 # ===================================================================== #
 
-#' Format Table as Flextable
+#' Format Data Set as Flextable
 #'
 #' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats. This function can also transform existing `flextable` and `gtsummary` objects to allow the formatting provided in this [tbl_flextable()] function.
 #' @param x a [data.frame] or a [`flextable`][flextable::flextable()] object or a [`gtsummary`][gtsummary::tbl_summary()] object
@@ -26,7 +26,6 @@
 #' @param rows.italic column indexes of rows in italics
 #' @param rows.bold column indexes of rows in bold
 #' @param rows.fill the column indices of rows to be shaded
-#' @param rows.fill.picker the colour for values in `rows.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
 #' @param rows.zebra banded rows in the body - equivalent to `rows.fill = seq(2, nrow(x), 2)`
 #' @param row.total add a row total (at the bottom of the table)
 #' @param row.total.name name of the row total
@@ -40,7 +39,6 @@
 #' @param columns.italic column indices of columns to be displayed in italics
 #' @param columns.bold column indices of columns in bold
 #' @param columns.fill the column indices of rows to be shaded
-#' @param columns.fill.picker the colour for values in `columns.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
 #' @param columns.zebra banded columns - equivalent to `columns.fill = seq(2, ncol(x), 2)`
 #' @param column.total adding a column total (to the right of the table)
 #' @param column.total.name name of the column total
@@ -52,12 +50,10 @@
 #' @param font.size table font size
 #' @param font.size.header font size of header
 #' @param values.colour,values.fill,values.bold,values.italic values to be formatted
-#' @param values.colour.picker,values.fill.picker the colour for values in `values.colour` or `values.fill`, is evaluated with [`colourpicker()`][certestyle::colourpicker()]
-#' @param autofit format table in width automatically
+#' @param autofit format table in width automatically. This will apply [`autofit()`][flextable::autofit()], but will also set [`set_flextable_defaults(table.layout = "autofit")`][flextable::set_flextable_defaults()] .
 #' @param autofit.fullpage display table across width of page
 #' @param autofit.fullpage.width set number of centimetres to width of table
 #' @param vline indices of columns to have a vertical line to their right
-#' @param vline.border function to define vertical line
 #' @param vline.part part of the table where the vertical lines should be placed ("all", "header", "body", "footer")
 #' @param ... not used
 #' @param row.names row names to be displayed. Will be `1:nrow(x)` if set to TRUE, but can be a vector of values.
@@ -71,14 +67,37 @@
 #' @param columns.percent display the column indices as percentages using [`format2()`][certestyle::format2()] - example: `columns.percent = c(2, 3)`
 #' @param round.numbers number of decimal places to round up for numbers
 #' @param round.percent number of decimal places to round to when using `columns.percent`
+#' @param theme a Certe colour theme, such as `"certeblauw"` (default), `"certeroze"` or `"certegroen"`. This will set the list in `colours` and will be ignored if `colours` is set manually. Can be set to "white" for a clean look.
+#' @param colours a [list] with the following named character values: `rows.fill.even`, `rows.fill.odd`, `columns.fill`, `values.fill`, and `values.colour`. All values will be evaluated with [`colourpicker()`][certestyle::colourpicker()].
 #' @param print forced printing (required in a `for`` loop)
 #' @details Run [tbl_markdown()] on a `flextable` object to transform it into markdown for use in Quarto or R Markdown reports. If `print = TRUE` in non-interactive sessions (Quarto or R Markdown), the `flextable` object will also be printed in markdown.
+#' 
+#' Use `theme` to set a colour theme, defaults to `"certeblauw"`:
+#' 
+#' ```r
+#' # from the example below
+#' tbl_flextable(df)
+#' ````
+#' 
+#' ![tbl_flextable_certeblauw](flextableblauw.png)
+#' 
+#' ```r
+#' tbl_flextable(df, theme = "certeroze")
+#' ````
+#' 
+#' ![tbl_flextable_certeroze](flextableroze.png)
+#' 
+#' ```r
+#' tbl_flextable(df, theme = "certegroen", vline = c(2:3))
+#' ````
+#' 
+#' ![tbl_flextable_certegroen](flextablegroen.png)
 #' @seealso [flextable()]
 #' @return [flextable] object
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2
 #' @importFrom dplyr bind_cols pull
-#' @importFrom flextable flextable border fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row
+#' @importFrom flextable flextable border fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row set_flextable_defaults hline_top hline_bottom
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
@@ -163,8 +182,7 @@ tbl_flextable <- function(x,
                           rows.bold = NULL,
                           rows.height = NULL,
                           rows.fill = NULL,
-                          rows.fill.picker = "certeblauw5",
-                          rows.zebra = FALSE,
+                          rows.zebra = TRUE,
                           row.total = FALSE,
                           row.total.name = "Totaal",
                           row.total.function = sum,
@@ -179,7 +197,6 @@ tbl_flextable <- function(x,
                           columns.italic = NULL,
                           columns.bold = NULL,
                           columns.fill = NULL,
-                          columns.fill.picker = "certeblauw5",
                           columns.zebra = FALSE,
                           column.total = FALSE,
                           column.total.name = "Totaal",
@@ -199,19 +216,49 @@ tbl_flextable <- function(x,
                           font.size = 9,
                           font.size.header = font.size + 1,
                           values.colour = NULL,
-                          values.colour.picker = "certeroze",
                           values.fill = NULL,
-                          values.fill.picker = "certeroze3",
                           values.bold = NULL,
                           values.italic = NULL,
                           autofit = is.null(columns.width) & is.null(rows.height),
                           autofit.fullpage = TRUE,
                           autofit.fullpage.width = 16,
                           vline = NULL,
-                          vline.border = fp_border_default("black"),
                           vline.part = c("body", "footer"),
+                          theme = "certeblauw",
+                          colours = list(
+                            rows.fill.even = paste0(theme, "6"),
+                            rows.fill.odd = paste0(theme, "5"),
+                            columns.fill = paste0(theme, "5"),
+                            values.fill = paste0(theme, "3"),
+                            values.colour = theme,
+                            vline.colour = theme,
+                            hline.colour = theme,
+                            header.fill = theme,
+                            header.colour = "white",
+                            vline.header.colour = "white"),
                           print = FALSE,
                           ...) {
+  
+  if (any(c("rows.fill.picker", "values.colour.picker", "values.fill.picker", "columns.fill.picker", "vline.border") %in% names(list(...)))) {
+    stop("Set a tbl_flextable() theme now with the arguments `theme` or `colours`.", call. = FALSE)
+  }
+  
+  if (theme == "white") {
+    colours <- list(
+      rows.fill.even = "certeroze5",
+      rows.fill.odd = "white",
+      columns.fill = "certeroze5",
+      values.fill = "certeroze3",
+      values.colour = "certeroze",
+      vline.colour = "black",
+      hline.colour = "black",
+      header.fill = "white",
+      header.colour = "black",
+      vline.header.colour = "black")
+    if (missing(rows.zebra)) {
+      rows.zebra <- FALSE
+    }
+  }
   
   if (inherits(x, "gtsummary")) {
     check_is_installed("gtsummary")
@@ -483,7 +530,7 @@ tbl_flextable <- function(x,
     for (row in seq_len(nrow(ind))) {
       ft <- ft |> color(i = ind[row, "row"],
                         j = ind[row, "col"],
-                        color = colourpicker(values.colour.picker))
+                        color = colourpicker(colours$values.colour))
     }
   }
   if (!is.null(values.fill)) {
@@ -491,7 +538,7 @@ tbl_flextable <- function(x,
     for (row in seq_len(nrow(ind))) {
       ft <- ft |> bg(i = ind[row, "row"],
                      j = ind[row, "col"],
-                     bg = colourpicker(values.fill.picker))
+                     bg = colourpicker(colours$values.fill))
     }
   }
   if (!is.null(values.bold)) {
@@ -517,15 +564,38 @@ tbl_flextable <- function(x,
   # vertical lines
   if (!is.null(vline)) {
     for (i in seq_len(length(vline.part))) {
-      ft <- ft |> vline(border = vline.border,
+      ft <- ft |> vline(border = fp_border_default(colourpicker(colours$vline.colour)),
                         j = vline,
                         part = vline.part[i])
     }
   }
+  # horizontal lines on top and bottom
+  ft <- ft |>
+    border(part = "all",
+           # this is to remove border between multiline headers
+           border.top = fp_border_default(NA),
+           border.bottom = fp_border_default(NA)) |> 
+    hline_top(part = "all",
+              border = fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
+    hline_bottom(part = "all",
+                 border = fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
+    hline_bottom(part = "footer",
+                 border = fp_border_default(NA))
+  # header colours
+  ft <- ft |> 
+    bg(part = "header",
+       bg = colourpicker(colours$header.fill)) |> 
+    color(part = "header",
+          color = colourpicker(colours$header.colour))
+  if (!is.null(vline)) {
+    ft <- ft |> vline(part = "header",
+                      border = fp_border_default(colourpicker(colours$vline.header.colour)),
+                      j = vline)
+  }
   
   # zebra print
   if (isTRUE(rows.zebra)) {
-    rows.fill <- seq(2, nrow(x), 2)
+    rows.fill <- seq_len(nrow(x))
   }
   if (isTRUE(columns.zebra)) {
     columns.fill <- seq(2, ncol(x), 2)
@@ -566,14 +636,18 @@ tbl_flextable <- function(x,
   }
   if (!is.null(rows.fill)) {
     ft <- ft |>
-      bg(i = rows.fill,
-         bg = colourpicker(rows.fill.picker),
+      bg(i = rows.fill[which(rows.fill %% 2 == 0)],
+         bg = colourpicker(colours$rows.fill.even),
+         part = "body")
+    ft <- ft |>
+      bg(i = rows.fill[which(rows.fill %% 2 != 0)],
+         bg = colourpicker(colours$rows.fill.odd),
          part = "body")
   }
   if (length(columns.fill) > 0) {
     ft <- ft |>
       bg(j = columns.fill,
-         bg = colourpicker(columns.fill.picker),
+         bg = colourpicker(colours$columns.fill),
          part = "body")
   }
   
@@ -606,6 +680,7 @@ tbl_flextable <- function(x,
   }
   
   if (autofit == TRUE) {
+    set_flextable_defaults(table.layout = "autofit")
     ft <- ft |> autofit()
   }
   if (autofit.fullpage == TRUE) {
@@ -682,6 +757,8 @@ tbl_flextable <- function(x,
 #' @importFrom dplyr select everything %>%
 #' @export
 #' @examples 
+#' # These examples default to the Dutch language
+#' 
 #' iris |>
 #'   tbl_gtsummary()
 #' 
@@ -721,10 +798,10 @@ tbl_gtsummary <- function(x,
   
   # set the theme with the chosen decimal marks
   theme_old <- gtsummary::get_gtsummary_theme()
-  gtsummary::theme_gtsummary_language(language = "en",
+  gtsummary::theme_gtsummary_language(language = language,
                                       decimal.mark = decimal.mark,
                                       big.mark = big.mark,
-                                      iqr.sep = "\u2009\u2013\u2009", # small space, en dash, small space
+                                      iqr.sep = "\u2009\u2013\u2009", # small space, 'en' dash, small space
                                       ci.sep = "\u2009\u2013\u2009",
                                       set_theme = FALSE) |>
     gtsummary::set_gtsummary_theme(quiet = TRUE)
@@ -788,13 +865,6 @@ tbl_gtsummary <- function(x,
   if (isTRUE(add_p)) {
     out <- out |> 
       gtsummary::add_p()
-  }
-  
-  if (language == "nl") {
-    # set Dutch language (until Dutch is implemented, see https://github.com/ddsjoberg/gtsummary/pull/1302)
-    out$table_styling$header$label <- gtsummary_translate(out$table_styling$header$label, characteristic = column1_name)
-    out$table_styling$footnote$footnote <- gtsummary_translate(out$table_styling$footnote$footnote)
-    out$table_styling$footnote_abbrev$footnote <- gtsummary_translate(out$table_styling$footnote_abbrev$footnote)
   }
   
   gtsummary::set_gtsummary_theme(theme_old, quiet = TRUE)
@@ -1009,84 +1079,5 @@ auto_transform <- function(x,
       }
     }
   }
-  x
-}
-
-gtsummary_translate <- function(x, characteristic = NULL) {
-  if (!is.null(characteristic)) {
-    x <- gsub("Characteristic", characteristic, x, fixed = TRUE)
-  }
-  x <- gsub("**TRUE**", "**Wel**", x, fixed = TRUE)
-  x <- gsub("**FALSE**", "**Niet**", x, fixed = TRUE)
-  
-  x <- gsub("% Missing (unweighted)", "% ontbrekend (ongewogen)", x, fixed = TRUE)
-  x <- gsub("% missing", "% ontbrekend", x, fixed = TRUE)
-  x <- gsub("% not Missing (unweighted)", "% niet ontbrekend (ongewogen)", x, fixed = TRUE)
-  x <- gsub("% not missing", "% niet ontbrekend", x, fixed = TRUE)
-  x <- gsub("Adjusted R\U00B2", "Aangepaste R\U00B2", x, fixed = TRUE)
-  x <- gsub("ajusted Wald test of independence for complex survey samples", "aangepaste Wald-onafhankelijkheidstoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("Benjamini & Hochberg correction for multiple testing", "Benjamini- en Hochberg-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Benjamini & Yekutieli correction for multiple testing", "Benjamini- en Yekutieli-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Bonferroni correction for multiple testing", "Bonferroni-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Characteristic", "Karakteristiek", x, fixed = TRUE)
-  x <- gsub("chi-squared test adjusted by a design effect estimate", "chi-kwadraattoets gecorrigeerd met een 'design effect'-schatting", x, fixed = TRUE)
-  x <- gsub("chi-squared test with Rao & Scott's second-order correction", "chi-kwadraattoets met Rao en Scott tweede-ordecorrectie", x, fixed = TRUE)
-  x <- gsub("CI = Confidence Interval", "CI = betrouwbaarheidsinterval", x, fixed = TRUE)
-  x <- gsub("CI = Credible Interval", "CI = geloofwaardigheidsinterval", x, fixed = TRUE)
-  x <- gsub("Confidence Interval", "Betrouwbaarheidsinterval", x, fixed = TRUE)
-  x <- gsub("Credible Interval", "Geloofwaardigheidsinterval", x, fixed = TRUE)
-  x <- gsub("False discovery rate correction for multiple testing", "'False discovery rate'-detectie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Fisher's exact test", "Fishers exacte toets", x, fixed = TRUE)
-  x <- gsub("Hochberg correction for multiple testing", "Hochberg-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Holm correction for multiple testing", "Holm-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("Hommel correction for multiple testing", "Hommel-correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("HR = Hazard Ratio", "HR = Hazard-ratio", x, fixed = TRUE)
-  x <- gsub("Kruskal-Wallis rank sum test", "Kruskal-Wallistoets", x, fixed = TRUE)
-  x <- gsub("Kruskal-Wallis rank-sum test for complex survey samples", "Kruskal-Wallistoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("log-likelihood", "log-aannemelijkheidsfunctie", x, fixed = TRUE)
-  x <- gsub("McNemar's Chi-squared test with continuity correction", "McNemars chi-kwadraattoets met continu\u00efteitscorrectie", x, fixed = TRUE)
-  x <- gsub("McNemar's Chi-squared test", "McNemars chi-kwadraattoets", x, fixed = TRUE)
-  x <- gsub("Mean", "Gemiddelde", x, fixed = TRUE)
-  x <- gsub("Median", "Mediaan", x, fixed = TRUE)
-  x <- gsub("Mood's test for the median for complex survey samples", "Moodstoets voor de mediaan voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("N events", "N events", x, fixed = TRUE)
-  x <- gsub("N Missing (unweighted)", "N ontbrekend (ongewogen)", x, fixed = TRUE)
-  x <- gsub("N missing", "N ontbrekend", x, fixed = TRUE)
-  x <- gsub("N Missing", "N ontbrekend", x, fixed = TRUE)
-  x <- gsub("N not Missing (unweighted)", "N niet ontbrekend (ongewogen)", x, fixed = TRUE)
-  x <- gsub("N not Missing", "N niet ontbrekend", x, fixed = TRUE)
-  x <- gsub("No correction for multiple testing", "Geen correctie voor multipele toetsen", x, fixed = TRUE)
-  x <- gsub("No. obs.", "Aantal obs.", x, fixed = TRUE)
-  x <- gsub("Null deviance", "Null variantie", x, fixed = TRUE)
-  x <- gsub("Null df", "Null vrijheidsgraden", x, fixed = TRUE)
-  x <- gsub("One-way ANOVA", "E\u00e9n-weg-variantieanalyse", x, fixed = TRUE)
-  x <- gsub("Overall", "Totaal", x, fixed = TRUE)
-  x <- gsub("p-value", "p-waarde", x, fixed = TRUE)
-  x <- gsub("Paired t-test", "Gepaarde t-toets", x, fixed = TRUE)
-  x <- gsub("Pearson's Chi-squared test", "Pearson's chi-kwadraattoets", x, fixed = TRUE)
-  x <- gsub("Percentile", "Percentiel", x, fixed = TRUE)
-  x <- gsub("q-value", "q-waarde", x, fixed = TRUE)
-  x <- gsub("random intercept logistic regression", "Logistische regressie met willekeurige intercept", x, fixed = TRUE)
-  x <- gsub("Range", "Bereik", x, fixed = TRUE)
-  x <- gsub("Residual df", "Residuele vrijheidsgraden", x, fixed = TRUE)
-  x <- gsub("RR = Relative Risk", "RR = Relatieve risico", x, fixed = TRUE)
-  x <- gsub("Statistic", "Statistiek", x, fixed = TRUE)
-  x <- gsub("Statistical tests performed", "Statistische testen verricht", x, fixed = TRUE)
-  x <- gsub("Statistics presented", "Getoonde statistieken", x, fixed = TRUE)
-  x <- gsub("Sum", "Som", x, fixed = TRUE)
-  x <- gsub("t-test adapted to complex survey samples", "t-toets aangepast aan complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("test of independence using a saddlepoint approximation for complex survey samples", "onafhankelijkheidstoets met zadelpuntbenadering voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("test of independence using the exact asymptotic distribution for complex survey samples", "onafhankelijkheidsbepaling met behulp van de exacte asymptotische verdeling voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("Time", "Tijd", x, fixed = TRUE)
-  x <- gsub("Total N (unweighted)", "Totaal N (ongewogen)", x, fixed = TRUE)
-  x <- gsub("Total N", "Totaal N", x, fixed = TRUE)
-  x <- gsub("Two Sample t-test", "t-toets", x, fixed = TRUE)
-  x <- gsub("Unknown", "Onbekend", x, fixed = TRUE)
-  x <- gsub("van der Waerden's normal-scores test for complex survey samples", "Van der Waerden's normaalscorentoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("Variance", "Variantie", x, fixed = TRUE)
-  x <- gsub("Wald test of independence for complex survey samples", "Wald-onafhankelijkheidstoets voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
-  x <- gsub("Welch Two Sample t-test", "t-toets", x, fixed = TRUE)
-  x <- gsub("Wilcoxon rank sum test", "Mann-Whitney-Wilcoxontoets", x, fixed = TRUE)
-  x <- gsub("Wilcoxon rank-sum test for complex survey samples", "Wilcoxon rank-sum test voor complexe enqu\u00eatesteekproeven", x, fixed = TRUE)
   x
 }

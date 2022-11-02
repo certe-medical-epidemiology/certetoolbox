@@ -69,6 +69,8 @@ Summarise a \link{data.frame} as \code{\link[gtsummary:tbl_summary]{gtsummary}} 
 \code{\link[=tbl_gtsummary]{tbl_gtsummary()}} creates a summary table with \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}, to which different extra columns can be added e.g. with \code{add_p = TRUE} and \code{add_overall = TRUE}.
 }
 \examples{
+# These examples default to the Dutch language
+
 iris |>
   tbl_gtsummary()
 

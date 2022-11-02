@@ -95,6 +95,11 @@ import_clipboard <- function(sep = "\t",
   if (auto_transform == TRUE) {
     df <-  auto_transform(df, ...)
   }
+  message(
+    paste0(
+      "Imported data set (",
+      format2(NROW(df)), "x", format2(NCOL(df)), ") from clipboard")
+  )
   df
 }
 

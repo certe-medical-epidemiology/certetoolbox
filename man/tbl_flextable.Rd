@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.frame.R
 \name{tbl_flextable}
 \alias{tbl_flextable}
-\title{Format Table as Flextable}
+\title{Format Data Set as Flextable}
 \usage{
 tbl_flextable(
   x,
@@ -12,8 +12,7 @@ tbl_flextable(
   rows.bold = NULL,
   rows.height = NULL,
   rows.fill = NULL,
-  rows.fill.picker = "certeblauw5",
-  rows.zebra = FALSE,
+  rows.zebra = TRUE,
   row.total = FALSE,
   row.total.name = "Totaal",
   row.total.function = sum,
@@ -28,7 +27,6 @@ tbl_flextable(
   columns.italic = NULL,
   columns.bold = NULL,
   columns.fill = NULL,
-  columns.fill.picker = "certeblauw5",
   columns.zebra = FALSE,
   column.total = FALSE,
   column.total.name = "Totaal",
@@ -48,17 +46,19 @@ tbl_flextable(
   font.size = 9,
   font.size.header = font.size + 1,
   values.colour = NULL,
-  values.colour.picker = "certeroze",
   values.fill = NULL,
-  values.fill.picker = "certeroze3",
   values.bold = NULL,
   values.italic = NULL,
   autofit = is.null(columns.width) & is.null(rows.height),
   autofit.fullpage = TRUE,
   autofit.fullpage.width = 16,
   vline = NULL,
-  vline.border = fp_border_default("black"),
   vline.part = c("body", "footer"),
+  theme = "certeblauw",
+  colours = list(rows.fill.even = paste0(theme, "6"), rows.fill.odd = paste0(theme, "5"),
+    columns.fill = paste0(theme, "5"), values.fill = paste0(theme, "3"), values.colour =
+    theme, vline.colour = theme, hline.colour = theme, header.fill = theme, header.colour
+    = "white", vline.header.colour = "white"),
   print = FALSE,
   ...
 )
@@ -77,8 +77,6 @@ tbl_flextable(
 \item{rows.height}{height of the rows in centimetres}
 
 \item{rows.fill}{the column indices of rows to be shaded}
-
-\item{rows.fill.picker}{the colour for values in \code{rows.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
 
 \item{rows.zebra}{banded rows in the body - equivalent to \code{rows.fill = seq(2, nrow(x), 2)}}
 
@@ -109,8 +107,6 @@ tbl_flextable(
 \item{columns.bold}{column indices of columns in bold}
 
 \item{columns.fill}{the column indices of rows to be shaded}
-
-\item{columns.fill.picker}{the colour for values in \code{columns.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
 
 \item{columns.zebra}{banded columns - equivalent to \code{columns.fill = seq(2, ncol(x), 2)}}
 
@@ -150,9 +146,7 @@ tbl_flextable(
 
 \item{values.colour, values.fill, values.bold, values.italic}{values to be formatted}
 
-\item{values.colour.picker, values.fill.picker}{the colour for values in \code{values.colour} or \code{values.fill}, is evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}}
-
-\item{autofit}{format table in width automatically}
+\item{autofit}{format table in width automatically. This will apply \code{\link[flextable:autofit]{autofit()}}, but will also set \code{\link[flextable:set_flextable_defaults]{set_flextable_defaults(table.layout = "autofit")}} .}
 
 \item{autofit.fullpage}{display table across width of page}
 
@@ -160,9 +154,11 @@ tbl_flextable(
 
 \item{vline}{indices of columns to have a vertical line to their right}
 
-\item{vline.border}{function to define vertical line}
-
 \item{vline.part}{part of the table where the vertical lines should be placed ("all", "header", "body", "footer")}
+
+\item{theme}{a Certe colour theme, such as \code{"certeblauw"} (default), \code{"certeroze"} or \code{"certegroen"}. This will set the list in \code{colours} and will be ignored if \code{colours} is set manually. Can be set to "white" for a clean look.}
+
+\item{colours}{a \link{list} with the following named character values: \code{rows.fill.even}, \code{rows.fill.odd}, \code{columns.fill}, \code{values.fill}, and \code{values.colour}. All values will be evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}.}
 
 \item{print}{forced printing (required in a `for`` loop)}
 
@@ -176,6 +172,24 @@ Format a \link{data.frame} as \code{\link[=flextable]{flextable()}} with Certe s
 }
 \details{
 Run \code{\link[=tbl_markdown]{tbl_markdown()}} on a \code{flextable} object to transform it into markdown for use in Quarto or R Markdown reports. If \code{print = TRUE} in non-interactive sessions (Quarto or R Markdown), the \code{flextable} object will also be printed in markdown.
+
+Use \code{theme} to set a colour theme, defaults to \code{"certeblauw"}:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# from the example below
+tbl_flextable(df)
+}\if{html}{\out{</div>}}
+
+\figure{flextableblauw.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl_flextable(df, theme = "certeroze")
+}\if{html}{\out{</div>}}
+
+\figure{flextableroze.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl_flextable(df, theme = "certegroen", vline = c(2:3))
+}\if{html}{\out{</div>}}
+
+\figure{flextablegroen.png}
 }
 \examples{
 # generate a data.frame

@@ -65,7 +65,7 @@ test_that("data.frame works", {
   expect_s3_class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) |>
                     tbl_flextable(logicals = c(TRUE, FALSE)), "flextable")
   expect_s3_class(data.frame(a = c(TRUE, FALSE), b = c(FALSE, TRUE)) |>
-                    tbl_flextable(logicals = c(TRUE, FALSE), values.colour = "FALSE", values.fill = "TRUE", values.bold = "FALSE", values.italic = "TRUE", values.fill.picker = "green"), "flextable")
+                    tbl_flextable(logicals = c(TRUE, FALSE), theme = "white"), "flextable")
   expect_s3_class(mtcars |> tbl_flextable(columns.percent = 8), "flextable")
   expect_true(inherits(tbl_markdown("test"), "list"))
   expect_true(inherits(tbl_markdown(Sys.Date()), "list"))
