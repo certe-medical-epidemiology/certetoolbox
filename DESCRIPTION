@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.4.2
+Version: 1.5.0
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -27,7 +27,7 @@ Imports:
   flextable (>= 0.6.8),
   glue (>= 1.6.1),
   knitr (>= 1.32),
-  lubridate (>= 1.7),
+  lubridate (>= 1.9.0),
   magrittr (>= 2.0.0),
   openxlsx (>= 4.2.0),
   readr (>= 2.0.0),
@@ -39,7 +39,7 @@ Imports:
 Suggests: 
   certeplot2,
   certemail,
-  AMR (>= 1.7.1),
+  AMR (>= 1.8.1),
   arrow (>= 7.0.0),
   cbsodataR (>= 0.5.1),
   clipr (>= 0.7.1),

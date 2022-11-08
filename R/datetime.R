@@ -77,7 +77,6 @@ as.UTC.default <- function(x, ...) {
 #' 
 #' # 2nd Monday of last month:
 #' last_month() |> nth_monday(2)
-#' nth_monday(last_month(), 2)
 #'
 #' df <- data.frame(date = sample(seq.Date(start_of_last_year(),
 #'                                         end_of_this_year(),
@@ -286,7 +285,7 @@ next_year <- function(ref = today(), only_start_end = FALSE) {
 start_of_last_week <- function(ref = today(), day = 1) {
   ref <- as_date(ref)
   if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 0) - 7 + day
+  floor_date(ref, unit = "week", week_start = 7) - 7 + day
 }
 
 #' @rdname days_around_today
@@ -294,7 +293,7 @@ start_of_last_week <- function(ref = today(), day = 1) {
 end_of_last_week <- function(ref = today(), day = 7) {
   ref <- as_date(ref)
   if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 0) - 7 + day
+  floor_date(ref, unit = "week", week_start = 7) - 7 + day
 }
 
 #' @rdname days_around_today
@@ -302,7 +301,7 @@ end_of_last_week <- function(ref = today(), day = 7) {
 start_of_this_week <- function(ref = today(), day = 1) {
   ref <- as_date(ref)
   if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 0) + day
+  floor_date(ref, unit = "week", week_start = 7) + day
 }
 
 #' @rdname days_around_today
@@ -310,7 +309,7 @@ start_of_this_week <- function(ref = today(), day = 1) {
 end_of_this_week <- function(ref = today(), day = 7) {
   ref <- as_date(ref)
   if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 0) + day
+  floor_date(ref, unit = "week", week_start = 7) + day
 }
 
 #' @rdname days_around_today

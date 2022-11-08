@@ -282,6 +282,7 @@ test_that("import_export works", {
   mtime_new <- file.mtime("iris_overwrite.csv")
   expect_lt(mtime_old, mtime_new)
   unlink("iris_overwrite.csv")
+  unlink("iris_overwrite*.csv")
   
   # remote files
   expect_equal(dim(import_url("https://filesamples.com/samples/document/csv/sample1.csv")), c(8, 13))

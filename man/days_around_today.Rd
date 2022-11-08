@@ -182,7 +182,6 @@ next_week(only_start_end = TRUE)
 
 # 2nd Monday of last month:
 last_month() |> nth_monday(2)
-nth_monday(last_month(), 2)
 
 df <- data.frame(date = sample(seq.Date(start_of_last_year(),
                                         end_of_this_year(),
