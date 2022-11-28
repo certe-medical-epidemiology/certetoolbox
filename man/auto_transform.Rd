@@ -13,6 +13,7 @@ auto_transform(
   big.mark = "",
   timezone = "",
   na = c("", "NULL", "NA", "<NA>"),
+  snake_case = FALSE,
   ...
 )
 }
@@ -32,6 +33,8 @@ auto_transform(
 \item{timezone}{expected time zone}
 
 \item{na}{values to interpret as \code{NA}}
+
+\item{snake_case}{apply \href{https://en.wikipedia.org/wiki/Snake_case}{snake case} to the column names}
 
 \item{...}{not used as the time, allows for future extension}
 }

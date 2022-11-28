@@ -76,6 +76,8 @@ test_that("data.frame works", {
                        "list"))
   expect_true(inherits(mtcars |> tbl_markdown(columns.percent = 8, 9), "list"))
   expect_true(is.data.frame(auto_transform(as.data.frame("test"))))
+  expect_equal(iris |> auto_transform(snake_case = TRUE) |> colnames(),
+               c("sepal_length", "sepal_width", "petal_length", "petal_width", "species"))
   
   expect_s3_class(iris |> tbl_gtsummary(), "gtsummary")
   expect_s3_class(iris |> tbl_gtsummary(digits = list(Sepal.Length = 1)), "gtsummary")

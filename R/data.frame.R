@@ -1002,8 +1002,9 @@ tbl_markdown <- function(x,
 #' @param big.mark separator for thousands
 #' @param timezone expected time zone
 #' @param na values to interpret as `NA`
+#' @param snake_case apply [snake case](https://en.wikipedia.org/wiki/Snake_case) to the column names
 #' @param ... not used as the time, allows for future extension
-#' @importFrom cleaner format_datetime clean_Date
+#' @importFrom cleaner format_names format_datetime clean_Date
 #' @importFrom readr parse_guess locale
 #' @export
 auto_transform <- function(x,
@@ -1014,6 +1015,7 @@ auto_transform <- function(x,
                            big.mark = "",
                            timezone = "",
                            na = c("", "NULL", "NA", "<NA>"),
+                           snake_case = FALSE,
                            ...) {
   if (!inherits(x, "data.frame")) {
     warning("auto_transform() can only transform a 'data.frame', not ",
@@ -1021,6 +1023,11 @@ auto_transform <- function(x,
             " (data left unchanged)", call. = FALSE)
     return(x)
   }
+  
+  if (isTRUE(snake_case)) {
+    x <- format_names(x, snake_case = TRUE)
+  }
+  
   dateformat <- format_datetime(dateformat)
   timeformat <- format_datetime(timeformat)
   for (i in seq_len(ncol(x))) {
