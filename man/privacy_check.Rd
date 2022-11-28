@@ -7,13 +7,18 @@
 privacy_check(
   path = getwd(),
   vault = paste0(path, "/vault"),
-  suspicion = "(postcode|bsn|geboortedatum)"
+  log_file = paste0(vault, "/_privacy_log.txt"),
+  suspicious_cols = "(zip.*code|postcode|bsn|geboortedatum)"
 )
 }
 \arguments{
 \item{path}{path to check}
 
 \item{vault}{path to vault}
+
+\item{log_file}{path to log file where details will be written to}
+
+\item{suspicious_cols}{\link[base:regex]{regular expression} to match suspicious column names}
 }
 \description{
 Checks if files contain privacy sensitive data and moves them to a 'vault folder' if this is the case.

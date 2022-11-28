@@ -22,26 +22,30 @@
 #' Checks if files contain privacy sensitive data and moves them to a 'vault folder' if this is the case.
 #' @param path path to check 
 #' @param vault path to vault
+#' @param log_file path to log file where details will be written to
+#' @param suspicious_cols [regular expression][base::regex] to match suspicious column names
 #' @importFrom readr read_tsv write_tsv
-#' @importFrom dplyr left_join mutate distinct
+#' @importFrom dplyr left_join mutate distinct desc
 #' @importFrom certestyle format2
 #' @export
-privacy_check <- function(path = getwd(), vault = paste0(path, "/vault"), suspicion = "(postcode|bsn|geboortedatum)") {
+privacy_check <- function(path = getwd(),
+                          vault = paste0(path, "/vault"),
+                          log_file = paste0(vault, "/_privacy_log.txt"),
+                          suspicious_cols = "(zip.*code|postcode|bsn|geboortedatum)") {
   vault <- tools::file_path_as_absolute(vault)
   if (!dir.exists(vault)) {
     dir.create(vault)
   }
   
-  log_path <- paste0(vault, "/_privacy_log.txt")
-  if (!file.exists(log_path)) {
+  if (!file.exists(log_file)) {
     log <- data.frame(file = character(0),
                       last_checked = Sys.time()[0])
   } else {
-    log <- suppressWarnings(suppressMessages(read_tsv(log_path, show_col_types = FALSE)))
+    log <- suppressWarnings(suppressMessages(read_tsv(log_file, show_col_types = FALSE)))
   }
   
   message("Vault folder: '", vault, "'\n",
-          "Log path:     '", tools::file_path_as_absolute(log_path), "'")
+          "Log path:     '", tools::file_path_as_absolute(log_file), "'")
   
   suspects <- list.files(path = path,
                          pattern = "[.](csv|tsv|txt|xlsx?|rds)$",
@@ -56,19 +60,27 @@ privacy_check <- function(path = getwd(), vault = paste0(path, "/vault"), suspic
     mutate(modified = file.mtime(file)) |> 
     filter(is.na(last_checked) | last_checked < modified)
   
+  is_ok <- rep(TRUE, nrow(to_check))
   for (i in seq_len(nrow(to_check))) {
     f <- to_check[i, "file", drop = TRUE]
     
     df <- tryCatch(suppressWarnings(suppressMessages(import(filename = f, card_number = NULL, auto_transform = FALSE))),
                    error = function(x) NULL)
     
-    is_ok <<- TRUE
     if (!is.null(df)) {
-      suspicious_cols <- which(colnames(df) %like% suspicion)
+      suspicious_cols <- which(colnames(df) %like% suspicious_cols)
       if (length(suspicious_cols) > 0) {
         for (susp in suspicious_cols) {
-          if (!all(is.na(df[, susp, drop = TRUE]))) {
-            is_ok <<- FALSE
+          values <- df[, susp, drop = TRUE]
+          if (!all(is.na(values))) {
+            if (susp %like% "postcode|zip") {
+              # check if >4 chars
+              if (any(nchar(values) > 4)) {
+                is_ok[i] <- FALSE
+              }
+            } else {
+              is_ok[i] <- FALSE  
+            }
           }
         }
       }
@@ -76,7 +88,7 @@ privacy_check <- function(path = getwd(), vault = paste0(path, "/vault"), suspic
       message("** FILE ", f, " CANNOT BE READ **")
     }
     
-    if (!is_ok) {
+    if (!is_ok[i]) {
       file.rename(from = f, to = paste0(vault, "/", format2(Sys.Date(), "yymmdd"), "/", basename(f)))
       message("** MOVING FILE ", f, " TO VAULT **")
     }
@@ -90,6 +102,6 @@ privacy_check <- function(path = getwd(), vault = paste0(path, "/vault"), suspic
     arrange(file, desc(last_checked)) |> 
     distinct(file, .keep_all = TRUE)
   
-  write_tsv(log, tools::file_path_as_absolute(log_path), append = FALSE)
+  write_tsv(log, tools::file_path_as_absolute(log_file), append = FALSE)
   message("Done.")
 }
