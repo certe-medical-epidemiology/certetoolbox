@@ -146,7 +146,7 @@ tbl_flextable(
 
 \item{values.colour, values.fill, values.bold, values.italic}{values to be formatted}
 
-\item{autofit}{format table in width automatically. This will apply \code{\link[flextable:autofit]{autofit()}}, but will also set \code{\link[flextable:set_flextable_defaults]{set_flextable_defaults(table.layout = "autofit")}} .}
+\item{autofit}{format table in width automatically. This will apply \code{\link[flextable:autofit]{autofit()}}.}
 
 \item{autofit.fullpage}{display table across width of page}
 

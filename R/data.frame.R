@@ -50,7 +50,7 @@
 #' @param font.size table font size
 #' @param font.size.header font size of header
 #' @param values.colour,values.fill,values.bold,values.italic values to be formatted
-#' @param autofit format table in width automatically. This will apply [`autofit()`][flextable::autofit()], but will also set [`set_flextable_defaults(table.layout = "autofit")`][flextable::set_flextable_defaults()] .
+#' @param autofit format table in width automatically. This will apply [`autofit()`][flextable::autofit()].
 #' @param autofit.fullpage display table across width of page
 #' @param autofit.fullpage.width set number of centimetres to width of table
 #' @param vline indices of columns to have a vertical line to their right
@@ -680,7 +680,6 @@ tbl_flextable <- function(x,
   }
   
   if (autofit == TRUE) {
-    set_flextable_defaults(table.layout = "autofit")
     ft <- ft |> autofit()
   }
   if (autofit.fullpage == TRUE) {
