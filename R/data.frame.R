@@ -993,7 +993,7 @@ tbl_markdown <- function(x,
 
 #' Automatically Transform Data Set
 #' 
-#' This function transforms a [data.frame] by guessing the right data classes and applying them, using [readr::parse_guess()].
+#' This function transforms a [data.frame] by guessing the right data classes and applying them, using [readr::parse_guess()] and `cleaner` functions such as [cleaner::clean_Date()].
 #' @param x a [data.frame]
 #' @param datenames language of the date names, such as weekdays and months
 #' @param dateformat expected date format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]
@@ -1004,8 +1004,9 @@ tbl_markdown <- function(x,
 #' @param na values to interpret as `NA`
 #' @param snake_case apply [snake case](https://en.wikipedia.org/wiki/Snake_case) to the column names
 #' @param ... not used as the time, allows for future extension
-#' @importFrom cleaner format_names format_datetime clean_Date
+#' @importFrom cleaner format_names format_datetime clean_Date clean_POSIXct clean_logical
 #' @importFrom readr parse_guess locale
+#' @importFrom hms as_hms
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -1028,11 +1029,24 @@ auto_transform <- function(x,
     x <- format_names(x, snake_case = TRUE)
   }
   
+  try_convert <- function(x, backup, col) {
+    tryCatch(x,
+             error = function(e) {
+               message("NOTE: Ignoring auto transform of column ", col, " because of error:\n  ", gsub("\n", "\n  ", e$message))
+               return(backup)
+             },
+             warning = function(e) {
+               message("NOTE: Ignoring auto transform of column ", col, " because of warning:\n  ", gsub("\n", "\n  ", e$message))
+               return(backup)
+             })
+  }
+  
   dateformat <- format_datetime(dateformat)
   timeformat <- format_datetime(timeformat)
   for (i in seq_len(ncol(x))) {
     col_data <- x[, i, drop = TRUE]
     col_data_unique <- unique(col_data)
+    col_name <- tolower(colnames(x)[i])
     if (!inherits(col_data, c("list", "matrix")) &&
         # no faeces (F) or tips (T)
         !all(unique(col_data) %in% c("T", "F"))) {
@@ -1058,30 +1072,57 @@ auto_transform <- function(x,
         col_data <- x[, i, drop = TRUE]
       }
       if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
-        x[, i] <- clean_Date(col_data, format = "dd-mm-yyyy")
+        x[, i] <- try_convert(clean_Date(col_data, format = "dd-mm-yyyy"),
+                              backup = x[, i, drop = TRUE], col = i)
+      }
+      if (all(tolower(col_data) %in% c("nee", "no", "niet", "ja", "yes", "wel"), na.rm = TRUE)) {
+        x[, i] <- try_convert(clean_logical(col_data, true = "(ja|yes|wel)", false = "(nee|no|niet)", fixed = FALSE),
+                              backup = x[, i, drop = TRUE], col = i)
       }
     }
     if (inherits(col_data, "POSIXct") && timezone == "UTC") {
-      x[, i] <- as.UTC(col_data)
+      x[, i] <- try_convert(as.UTC(col_data),
+                            backup = x[, i, drop = TRUE], col = i)
     }
     
-    if (inherits(col_data, c("factor", "character"))) {
+    if (inherits(x[, i, drop = TRUE], c("factor", "character"))) {
       # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
       x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {
                            warning(e$message)
                            return(col_data)})
     }
+    
+    # set times/dates
+    if (col_name %like% "_(tijd|time)$") {
+      x[, i] <- try_convert(as_hms(col_data),
+                            backup = x[, i, drop = TRUE], col = i)
+    } else if (col_name %like% "_(datum|date)$") {
+      x[, i] <- try_convert(clean_Date(col_data, guess_each = TRUE),
+                            backup = x[, i, drop = TRUE], col = i)
+    } else if (col_name %like% "_(timestamp|tijd.?stempel|datum.?tijd)$") {
+      x[, i] <- try_convert(clean_POSIXct(col_data),
+                            backup = x[, i, drop = TRUE], col = i)
+    }
+    
     if ("AMR" %in% rownames(utils::installed.packages())) {
       # check for RSI
-      if (inherits(col_data, c("factor", "character")) &&
-          !all(col_data_unique[!is.na(col_data_unique)] == "") &&
-          all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S"))) {
-        x[, i] <- AMR::as.rsi(col_data)
+      if (col_name %like% "_rsi$" ||
+          (inherits(col_data, c("factor", "character")) &&
+           !all(col_data_unique[!is.na(col_data_unique)] == "") &&
+           all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S")))) {
+        x[, i] <- try_convert(AMR::as.rsi(col_data),
+                              backup = x[, i, drop = TRUE], col = i)
       }
       # set Minimum Inhibitory Concentration (MIC)
-      if (colnames(x)[i] %like% "_mic$") {
-        x[, i] <- AMR::as.mic(col_data)
+      if (col_name %like% "_mic$") {
+        x[, i] <- try_convert(AMR::as.mic(col_data),
+                              backup = x[, i, drop = TRUE], col = i)
+      }
+      # set disk diffusion values
+      if (col_name %like% "_disk$") {
+        x[, i] <- try_convert(AMR::as.disk(col_data),
+                              backup = x[, i, drop = TRUE], col = i)
       }
     }
   }
