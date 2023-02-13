@@ -1044,6 +1044,11 @@ auto_transform <- function(x,
   dateformat <- format_datetime(dateformat)
   timeformat <- format_datetime(timeformat)
   for (i in seq_len(ncol(x))) {
+    # 2023-02-13 fix for Diver, logicals/booleans seem corrupt
+    if (is.logical(x[, i, drop = TRUE])) {
+      x[, i] <- as.logical(as.character(x[, i, drop = TRUE]))
+    }
+    
     col_data <- x[, i, drop = TRUE]
     col_data_unique <- unique(col_data)
     col_name <- tolower(colnames(x)[i])
