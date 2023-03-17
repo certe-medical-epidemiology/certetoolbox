@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.6.2
+Version: 1.6.3
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -40,7 +40,7 @@ Imports:
 Suggests: 
   certeplot2,
   certemail,
-  AMR (>= 1.8.1),
+  AMR (>= 2.0.0),
   arrow (>= 7.0.0),
   cbsodataR (>= 0.5.1),
   clipr (>= 0.7.1),
@@ -58,5 +58,5 @@ Suggests:
 License: GPL-2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Config/testthat/edition: 2

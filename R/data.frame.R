@@ -1111,12 +1111,12 @@ auto_transform <- function(x,
     }
     
     if ("AMR" %in% rownames(utils::installed.packages())) {
-      # check for RSI
-      if (col_name %like% "_rsi$" ||
+      # check for SIR
+      if (col_name %like% "_(rsi|sir)$" ||
           (inherits(col_data, c("factor", "character")) &&
            !all(col_data_unique[!is.na(col_data_unique)] == "") &&
            all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S")))) {
-        x[, i] <- try_convert(AMR::as.rsi(col_data),
+        x[, i] <- try_convert(AMR::as.sir(col_data),
                               backup = x[, i, drop = TRUE], col = i)
       }
       # set Minimum Inhibitory Concentration (MIC)
