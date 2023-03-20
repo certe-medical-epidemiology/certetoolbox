@@ -1133,3 +1133,108 @@ auto_transform <- function(x,
   }
   x
 }
+
+#' Create a Confusion Matrix
+#' 
+#' Transform a data set into an *n* x *m* table, e.g. to be used in [caret::confusionMatrix()].
+#' @param df a [data.frame]
+#' @param identifier a column name to use as identifier, such as a patient ID or an order ID
+#' @param compare a column name for the two axes of the table: the labels between the outcomes must be compared
+#' @param outcome a column name containing the outcome values to compare
+#' @param positive a [regex] to match the values in `outcome` that must be considered as the Positive class, use `FALSE` to not use a Positive class
+#' @param negative a [regex] to match the values in `outcome` that must be considered as the Negative class, use `FALSE` to not use a Negative class
+#' @param ... manual [regex]es for classes if not using `positive` and `negative`, such as `Class1 = "c1", Class2 = "c2", Class3 = "c3"`
+#' @param ignore_case a [logical] to indicate whether the case in the values of `positive`, `negative` and `...` must be ignored
+#' @importFrom dplyr mutate case_when select pull
+#' @importFrom tidyr pivot_wider
+#' @examples 
+#' df <- data.frame(
+#'   order_nr = sort(rep(LETTERS[1:20], 2)),
+#'   test_type = rep(c("Culture", "PCR"), 20),
+#'   result = sample(c("pos", "neg"),
+#'                   size = 40,
+#'                   replace = TRUE,
+#'                   prob = c(0.3, 0.9))
+#' )
+#' head(df)
+#' 
+#' out <- df |> create_confusionmatrix(order_nr, test_type, result)
+#' out
+#' 
+#' 
+#' df$result <- gsub("pos", "#p", df$result)
+#' df$result <- gsub("neg", "#n", df$result)
+#' head(df)
+#' # gives a warning that pattern matching failed:
+#' df |> create_confusionmatrix(order_nr, test_type, result)
+#' 
+#' # define the pattern yourself in such case:
+#' df |> create_confusionmatrix(order_nr, test_type, result,
+#'                              positive = "#p",
+#'                              negative = "#n")
+#'                              
+#'                              
+#' # defining classes manually, can be more than 2:
+#' df |> create_confusionmatrix(order_nr, test_type, result,
+#'                              ClassA = "#p", Hello = "#n")
+#'                              
+#' if ("caret" %in% rownames(utils::installed.packages())) {
+#'   # confusionMatrix() is also re-exported by certestats
+#'   caret::confusionMatrix(out)
+#' }
+create_confusionmatrix <- function(df,
+                                   identifier,
+                                   compare,
+                                   outcome,
+                                   positive = "^pos.*",
+                                   negative = "^neg.*",
+                                   ...,
+                                   ignore_case = TRUE) {
+  
+  dots <- list(...)
+  
+  out <- df |> 
+    transmute(id_col = {{ identifier }},
+              names_col = {{ compare }},
+              values_col = {{ outcome }})
+  
+  if (length(dots) == 0) {
+    # use default 'positive' and 'negative' arguments
+    out <- out |> 
+      mutate(values_col = case_when(grepl(pattern = positive, x = values_col, ignore.case = ignore_case) ~ "Positive",
+                                    grepl(pattern = negative, x = values_col, ignore.case = ignore_case) ~ "Negative",
+                                    TRUE ~ NA_character_))
+    if (!all(c("Positive", "Negative") %in% out$values_col, na.rm = TRUE)) {
+      warning("Check the regular expressions in the 'positive' and 'negative' arguments - they are not both matched",
+              call. = FALSE)
+    }
+    out <- out |> 
+      mutate(values_col = factor(values_col, levels = c("Positive", "Negative"), ordered = TRUE))
+    
+  } else {
+    # use manual list
+    if (is.null(names(dots)) || any(names(dots) == "")) {
+      stop("All manual classes in ... must be named")
+    }
+    if (!missing(positive)) {
+      warning("ignoring argument 'positive' since manual values are defined: ", paste0(names(dots), collapse = ", "), call. = FALSE)
+    }
+    if (!missing(negative)) {
+      warning("ignoring argument 'negative' since manual values are defined: ", paste0(names(dots), collapse = ", "), call. = FALSE)
+    }
+    # reverse the list so we will end with the top one
+    values <- out$values_col
+    out$values_col <- NA_character_
+    for (i in rev(seq_len(length(dots)))) {
+      out$values_col <- ifelse(grepl(pattern = dots[[i]], x = values, ignore.case = ignore_case),
+                               names(dots)[i],
+                               out$values_col)
+    }
+  }
+  
+  out |> 
+    pivot_wider(id_cols = id_col, names_from = names_col, values_from = values_col) |> 
+    select(-id_col) |> 
+    table()
+}
+
