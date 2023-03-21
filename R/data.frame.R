@@ -271,18 +271,18 @@ tbl_flextable <- function(x,
     .eval_list_of_exprs <- get(".eval_list_of_exprs", envir = asNamespace("gtsummary"))
     x <- .eval_list_of_exprs(gt_flex)
     if (length(unique(gt$table_styling$header$spanning_header)) > 1) {
-    # fix for double header
-    x <- x |>
-      border(i = 1:2, j = 1,
-             border.bottom = fp_border_default(NA),
-             border.top = fp_border_default(NA),
-             part = "header") |>
-      border(i = 1, j = 1,
-             border.top = fp_border_default(width = 2),
-             part = "header") |>
-      border(i = 2, j = 1,
-             border.bottom = fp_border_default(width = 2),
-             part = "header")
+      # fix for double header
+      x <- x |>
+        border(i = 1:2, j = 1,
+               border.bottom = fp_border_default(NA),
+               border.top = fp_border_default(NA),
+               part = "header") |>
+        border(i = 1, j = 1,
+               border.top = fp_border_default(width = 2),
+               part = "header") |>
+        border(i = 2, j = 1,
+               border.bottom = fp_border_default(width = 2),
+               part = "header")
     }
   }
   
@@ -1134,7 +1134,7 @@ auto_transform <- function(x,
   x
 }
 
-#' Create a Confusion Matrix
+#' Create a Crosstab
 #' 
 #' Transform a data set into an *n* x *m* table, e.g. to be used in [caret::confusionMatrix()].
 #' @param df a [data.frame]
@@ -1144,6 +1144,7 @@ auto_transform <- function(x,
 #' @param positive a [regex] to match the values in `outcome` that must be considered as the Positive class, use `FALSE` to not use a Positive class
 #' @param negative a [regex] to match the values in `outcome` that must be considered as the Negative class, use `FALSE` to not use a Negative class
 #' @param ... manual [regex]es for classes if not using `positive` and `negative`, such as `Class1 = "c1", Class2 = "c2", Class3 = "c3"`
+#' @param na.rm a [logical] to indicate whether empty values must be removed before forming the table
 #' @param ignore_case a [logical] to indicate whether the case in the values of `positive`, `negative` and `...` must be ignored
 #' @importFrom dplyr mutate case_when select pull
 #' @importFrom tidyr pivot_wider
@@ -1158,7 +1159,7 @@ auto_transform <- function(x,
 #' )
 #' head(df)
 #' 
-#' out <- df |> create_confusionmatrix(order_nr, test_type, result)
+#' out <- df |> crosstab(order_nr, test_type, result)
 #' out
 #' 
 #' 
@@ -1166,30 +1167,31 @@ auto_transform <- function(x,
 #' df$result <- gsub("neg", "#n", df$result)
 #' head(df)
 #' # gives a warning that pattern matching failed:
-#' df |> create_confusionmatrix(order_nr, test_type, result)
+#' df |> crosstab(order_nr, test_type, result)
 #' 
 #' # define the pattern yourself in such case:
-#' df |> create_confusionmatrix(order_nr, test_type, result,
-#'                              positive = "#p",
-#'                              negative = "#n")
+#' df |> crosstab(order_nr, test_type, result,
+#'                positive = "#p",
+#'                negative = "#n")
 #'                              
 #'                              
 #' # defining classes manually, can be more than 2:
-#' df |> create_confusionmatrix(order_nr, test_type, result,
-#'                              ClassA = "#p", Hello = "#n")
+#' df |> crosstab(order_nr, test_type, result,
+#'                ClassA = "#p", Hello = "#n")
 #'                              
 #' if ("caret" %in% rownames(utils::installed.packages())) {
 #'   # confusionMatrix() is also re-exported by certestats
 #'   caret::confusionMatrix(out)
 #' }
-create_confusionmatrix <- function(df,
-                                   identifier,
-                                   compare,
-                                   outcome,
-                                   positive = "^pos.*",
-                                   negative = "^neg.*",
-                                   ...,
-                                   ignore_case = TRUE) {
+crosstab <- function(df,
+                     identifier,
+                     compare,
+                     outcome,
+                     positive = "^pos.*",
+                     negative = "^neg.*",
+                     ...,
+                     na.rm = TRUE,
+                     ignore_case = TRUE) {
   
   dots <- list(...)
   
@@ -1235,6 +1237,6 @@ create_confusionmatrix <- function(df,
   out |> 
     pivot_wider(id_cols = id_col, names_from = names_col, values_from = values_col) |> 
     select(-id_col) |> 
-    table()
+    table(useNA = ifelse(isTRUE(na.rm), "no", "always"))
 }
 
