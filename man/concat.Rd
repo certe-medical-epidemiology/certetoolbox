@@ -2,9 +2,12 @@
 % Please edit documentation in R/universal.R
 \name{concat}
 \alias{concat}
+\alias{collapse}
 \title{Paste Character Vectors Together}
 \usage{
 concat(..., sep = "")
+
+collapse(x, sep = "")
 }
 \arguments{
 \item{...}{elements to be pasted together, can also be vectors}
@@ -12,10 +15,19 @@ concat(..., sep = "")
 \item{sep}{separator character, will also be used for collapsing}
 }
 \description{
-This function is at default identical to \code{paste(c(...), sep = "", collapse = "")}.
+The \code{\link[=concat]{concat()}} function is at default identical to \code{paste(c(...), sep = "", collapse = "")}.
+
+The \code{\link[=collapse]{collapse()}} function is at default identical to \code{paste(x, sep = "", collapse = "")}.
+}
+\details{
+\verb{[collapse()]}
 }
 \examples{
 concat("a", "b", "c")
 
 concat(c("a", "b"), "c")
+collapse(c("a", "b"), "c")
+
+concat(letters[1:5], "-")
+collapse(letters[1:5], "-")
 }

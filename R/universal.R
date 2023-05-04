@@ -142,17 +142,32 @@ like <- function(x, pattern, ignore.case = TRUE) {
 
 #' Paste Character Vectors Together
 #'
-#' This function is at default identical to `paste(c(...), sep = "", collapse = "")`.
+#' @description
+#' The [concat()] function is at default identical to `paste(c(...), sep = "", collapse = "")`.
+#' 
+#' The [collapse()] function is at default identical to `paste(x, sep = "", collapse = "")`.
 #' @param ... elements to be pasted together, can also be vectors
 #' @param sep separator character, will also be used for collapsing
+#' @details `[collapse()]` 
+#' @rdname concat
 #' @export
 #' @examples 
 #' concat("a", "b", "c")
 #' 
 #' concat(c("a", "b"), "c")
+#' collapse(c("a", "b"), "c")
+#' 
+#' concat(letters[1:5], "-")
+#' collapse(letters[1:5], "-")
 concat <- function(..., sep = "") {
   paste(c(...), collapse = sep, sep = sep)
 }
+#' @rdname concat
+#' @export
+collapse <- function(x, sep = "") {
+  paste(x, collapse = sep, sep = "")
+}
+
 #' Read Certe Secret From File
 #' 
 #' This function reads from a local or remote YAML file, as set in the environmental variable `"secrets_file"`.

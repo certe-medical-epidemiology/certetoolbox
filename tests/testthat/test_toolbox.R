@@ -358,6 +358,11 @@ test_that("universal works", {
   expect_true("a" %unlike_case% "A")
 })
 
+test_that("concat works", {
+  expect_identical(concat(letters[1:5], "-"), "abcde-")
+  expect_identical(collapse(letters[1:5], "-"), "a-b-c-d-e")
+})
+
 test_that("vctrs work", {
   library(dplyr, warn.conflicts = FALSE)
   expect_identical(iris |> 
