@@ -148,7 +148,6 @@ like <- function(x, pattern, ignore.case = TRUE) {
 #' The [collapse()] function is at default identical to `paste(x, sep = "", collapse = "")`.
 #' @param ...,x element(s) to be pasted together, can also be vectors
 #' @param sep separator character, will also be used for collapsing
-#' @details `[collapse()]` 
 #' @rdname concat
 #' @export
 #' @examples 

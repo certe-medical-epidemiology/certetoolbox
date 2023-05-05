@@ -19,9 +19,6 @@ The \code{\link[=concat]{concat()}} function is at default identical to \code{pa
 
 The \code{\link[=collapse]{collapse()}} function is at default identical to \code{paste(x, sep = "", collapse = "")}.
 }
-\details{
-\verb{[collapse()]}
-}
 \examples{
 concat("a", "b", "c")
 
