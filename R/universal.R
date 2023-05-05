@@ -146,7 +146,7 @@ like <- function(x, pattern, ignore.case = TRUE) {
 #' The [concat()] function is at default identical to `paste(c(...), sep = "", collapse = "")`.
 #' 
 #' The [collapse()] function is at default identical to `paste(x, sep = "", collapse = "")`.
-#' @param ... elements to be pasted together, can also be vectors
+#' @param ...,x element(s) to be pasted together, can also be vectors
 #' @param sep separator character, will also be used for collapsing
 #' @details `[collapse()]` 
 #' @rdname concat

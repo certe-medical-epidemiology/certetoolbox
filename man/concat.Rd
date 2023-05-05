@@ -10,7 +10,7 @@ concat(..., sep = "")
 collapse(x, sep = "")
 }
 \arguments{
-\item{...}{elements to be pasted together, can also be vectors}
+\item{..., x}{element(s) to be pasted together, can also be vectors}
 
 \item{sep}{separator character, will also be used for collapsing}
 }
