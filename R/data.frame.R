@@ -242,6 +242,9 @@ tbl_flextable <- function(x,
   if (any(c("rows.fill.picker", "values.colour.picker", "values.fill.picker", "columns.fill.picker", "vline.border") %in% names(list(...)))) {
     stop("Set a tbl_flextable() theme now with the arguments `theme` or `colours`.", call. = FALSE)
   }
+  if (identical(row.names, as.character(seq_len(nrow(x)))) || isFALSE(row.names)) {
+    row.names <- FALSE
+  }
   
   if (theme == "white") {
     colours <- list(
@@ -896,7 +899,7 @@ tbl_gtsummary <- function(x,
 #' @examples 
 #' tbl_markdown(mtcars[1:6, 1:6], padding = 1)
 tbl_markdown <- function(x,
-                         row.names = !is.null(rownames(x)),
+                         row.names = rownames(x),
                          column.names = colnames(x),
                          align = NULL,
                          padding = 2,
@@ -915,6 +918,9 @@ tbl_markdown <- function(x,
                          newlines.trailing = 2,
                          print = TRUE) {
   
+  if (identical(row.names, as.character(seq_len(nrow(x)))) || isFALSE(row.names)) {
+    row.names <- FALSE
+  }
   if (inherits(x, "gtsummary")) {
     # first transform to flextable
     x <- tbl_flextable(x)

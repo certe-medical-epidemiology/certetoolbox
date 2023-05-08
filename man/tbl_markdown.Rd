@@ -6,7 +6,7 @@
 \usage{
 tbl_markdown(
   x,
-  row.names = !is.null(rownames(x)),
+  row.names = rownames(x),
   column.names = colnames(x),
   align = NULL,
   padding = 2,
