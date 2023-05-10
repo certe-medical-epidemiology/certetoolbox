@@ -242,8 +242,10 @@ tbl_flextable <- function(x,
   if (any(c("rows.fill.picker", "values.colour.picker", "values.fill.picker", "columns.fill.picker", "vline.border") %in% names(list(...)))) {
     stop("Set a tbl_flextable() theme now with the arguments `theme` or `colours`.", call. = FALSE)
   }
-  if (identical(row.names, as.character(seq_len(nrow(x)))) || isFALSE(row.names)) {
+  if (identical(row.names, as.character(seq_len(NROW(x)))) || is.null(row.names)) {
     row.names <- FALSE
+  } else if (isTRUE(row.names)) {
+    row.names <- as.character(seq_len(NROW(x)))
   }
   
   if (theme == "white") {
@@ -321,17 +323,17 @@ tbl_flextable <- function(x,
     
     x <- as.data.frame(x, stringsAsFactors = FALSE)
     
-    if (identical(row.names, as.character(c(seq_len(nrow(x))))) & missing(row.names)) {
+    if (identical(row.names, as.character(c(seq_len(NROW(x))))) & missing(row.names)) {
       # rownames not set, are thus 1:nrow(x)
       row.names <- FALSE
     }
     
     if (!isFALSE(row.names)) {
       if (isTRUE(row.names)) {
-        row.names <- seq_len(nrow(x))
+        row.names <- seq_len(NROW(x))
       } else if (length(row.names) == 1) {
-        row.names <- rep(row.names, nrow(x))
-      } else if (length(row.names) != nrow(x)) {
+        row.names <- rep(row.names, NROW(x))
+      } else if (length(row.names) != NROW(x)) {
         stop("length of row.names is not equal to number of rows")
       }
       row.names <- as.character(row.names)
@@ -502,7 +504,7 @@ tbl_flextable <- function(x,
                        colwidths = row.total.widths)
       if (row.total.bold == TRUE) {
         ft <- ft |>
-          bold(part = "footer", i = nrow(ft$footer$dataset))
+          bold(part = "footer", i = NROW(ft$footer$dataset))
       }
     }
   }
@@ -530,7 +532,7 @@ tbl_flextable <- function(x,
   # format specific values
   if (!is.null(values.colour)) {
     ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
-    for (row in seq_len(nrow(ind))) {
+    for (row in seq_len(NROW(ind))) {
       ft <- ft |> color(i = ind[row, "row"],
                         j = ind[row, "col"],
                         color = colourpicker(colours$values.colour))
@@ -538,7 +540,7 @@ tbl_flextable <- function(x,
   }
   if (!is.null(values.fill)) {
     ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
-    for (row in seq_len(nrow(ind))) {
+    for (row in seq_len(NROW(ind))) {
       ft <- ft |> bg(i = ind[row, "row"],
                      j = ind[row, "col"],
                      bg = colourpicker(colours$values.fill))
@@ -546,14 +548,14 @@ tbl_flextable <- function(x,
   }
   if (!is.null(values.bold)) {
     ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
-    for (row in seq_len(nrow(ind))) {
+    for (row in seq_len(NROW(ind))) {
       ft <- ft |> bold(i = ind[row, "row"],
                        j = ind[row, "col"])
     }
   }
   if (!is.null(values.italic)) {
     ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
-    for (row in seq_len(nrow(ind))) {
+    for (row in seq_len(NROW(ind))) {
       ft <- ft |> italic(i = ind[row, "row"],
                          j = ind[row, "col"])
     }
@@ -598,7 +600,7 @@ tbl_flextable <- function(x,
   
   # zebra print
   if (isTRUE(rows.zebra)) {
-    rows.fill <- seq_len(nrow(x))
+    rows.fill <- seq_len(NROW(x))
   }
   if (isTRUE(columns.zebra)) {
     columns.fill <- seq(2, ncol(x), 2)
@@ -674,10 +676,10 @@ tbl_flextable <- function(x,
   # set height
   if (!is.null(rows.height)) {
     if (length(rows.height) == 1) {
-      rows.height <- rep(rows.height, nrow(x))
+      rows.height <- rep(rows.height, NROW(x))
     }
     rows.height <- rows.height / 2.54
-    for (i in seq_len(nrow(x))) {
+    for (i in seq_len(NROW(x))) {
       ft <- ft |> height(i = i, height = rows.height[i])
     }
   }
@@ -918,7 +920,7 @@ tbl_markdown <- function(x,
                          newlines.trailing = 2,
                          print = TRUE) {
   
-  if (identical(row.names, as.character(seq_len(nrow(x)))) || isFALSE(row.names)) {
+  if (identical(row.names, as.character(seq_len(NROW(x)))) || is.null(row.names)) {
     row.names <- FALSE
   }
   if (inherits(x, "gtsummary")) {
