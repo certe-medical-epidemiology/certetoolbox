@@ -920,9 +920,6 @@ tbl_markdown <- function(x,
                          newlines.trailing = 2,
                          print = TRUE) {
   
-  if (identical(row.names, as.character(seq_len(NROW(x)))) || is.null(row.names)) {
-    row.names <- FALSE
-  }
   if (inherits(x, "gtsummary")) {
     # first transform to flextable
     x <- tbl_flextable(x)
@@ -933,8 +930,11 @@ tbl_markdown <- function(x,
   }
   
   x <- as.data.frame(x, stringsAsFactors = FALSE)
-  
   x_name <- deparse(substitute(x))
+  
+  if (identical(row.names, as.character(seq_len(NROW(x)))) || is.null(row.names)) {
+    row.names <- FALSE
+  }
   if (caption == "") {
     caption <- NULL
   }
