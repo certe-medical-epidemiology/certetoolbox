@@ -18,6 +18,9 @@
 \alias{last_year}
 \alias{this_year}
 \alias{next_year}
+\alias{last_n_years}
+\alias{last_5_years}
+\alias{last_10_years}
 \alias{start_of_last_week}
 \alias{end_of_last_week}
 \alias{start_of_this_week}
@@ -82,6 +85,12 @@ last_year(ref = today(), only_start_end = FALSE)
 this_year(ref = today(), only_start_end = FALSE)
 
 next_year(ref = today(), only_start_end = FALSE)
+
+last_n_years(n, ref = end_of_last_year(), only_start_end = FALSE)
+
+last_5_years(ref = end_of_last_year(), only_start_end = FALSE)
+
+last_10_years(ref = end_of_last_year(), only_start_end = FALSE)
 
 start_of_last_week(ref = today(), day = 1)
 
@@ -150,9 +159,9 @@ week2resp_season(wk, remove_outside_season = FALSE)
 
 \item{only_start_end}{logical to indicate whether only the first and last value of the resulting vector should be returned}
 
-\item{day}{day to return (0 are 7 are Sunday, 1 is Monday, etc.)}
-
 \item{n}{relative number of weeks}
+
+\item{day}{day to return (0 are 7 are Sunday, 1 is Monday, etc.)}
 
 \item{wk}{week to search for}
 
@@ -161,9 +170,7 @@ week2resp_season(wk, remove_outside_season = FALSE)
 \item{remove_outside_season}{a \link{logical} to remove week numbers in the range 21-39}
 }
 \description{
-Dates around Today
-
-Determine week based on ISO 8601
+These are convenience functions to get certain dates relatively to today.
 }
 \details{
 All functions return a vector of dates, except for \code{\link[=yesterday]{yesterday()}}, \code{\link[=today]{today()}}, \code{\link[=tomorrow]{tomorrow()}}, \code{\link[=week2date]{week2date()}}, and the \verb{start_of_*()}, \verb{end_of_*()} and \verb{nth_*()} functions; these return 1 date.
@@ -172,9 +179,12 @@ Week ranges always start on Mondays and end on Sundays.
 
 \code{\link[=year]{year()}} always returns an \link{integer}.
 
+The \code{\link[=last_n_years]{last_n_years()}}, \code{\link[=last_5_years]{last_5_years()}} and \code{\link[=last_10_years]{last_10_years()}} functions have their reference date set to \code{\link[=end_of_last_year]{end_of_last_year()}} at default.
+
 \code{\link[=week2resp_season]{week2resp_season()}} transforms week numbers to an ordered \link{factor}, in a range 40-53, 1:39 (or, if \code{remove_outside_season = TRUE}, 40-53, 1:20). This function is useful for plotting.
 }
 \examples{
+today()
 today() \%in\% this_month()
 
 next_week()
@@ -182,6 +192,16 @@ next_week(only_start_end = TRUE)
 
 # 2nd Monday of last month:
 last_month() |> nth_monday(2)
+
+# last_*_years() will have 1 Jan to 31 Dec at default:
+last_5_years(only_start_end = TRUE)
+last_5_years(today(), only_start_end = TRUE)
+\dontrun{
+
+  # great for certedb functions:
+  certedb::get_diver_data(last_5_years(),
+                          Bepaling == "ACBDE")
+}
 
 df <- data.frame(date = sample(seq.Date(start_of_last_year(),
                                         end_of_this_year(),

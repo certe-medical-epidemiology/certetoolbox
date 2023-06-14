@@ -56,20 +56,20 @@ as.UTC.default <- function(x, ...) {
 
 #' Dates around Today
 #'
+#' These are convenience functions to get certain dates relatively to today.
 #' @param ref reference date (defaults to today)
 #' @param only_start_end logical to indicate whether only the first and last value of the resulting vector should be returned
 #' @param day day to return (0 are 7 are Sunday, 1 is Monday, etc.)
 #' @details All functions return a vector of dates, except for [yesterday()], [today()], [tomorrow()], [week2date()], and the `start_of_*()`, `end_of_*()` and `nth_*()` functions; these return 1 date.
 #' 
 #' Week ranges always start on Mondays and end on Sundays.
-#'
-#' [year()] always returns an [integer].
 #' @rdname days_around_today
 #' @name days_around_today
 #' @importFrom dplyr filter
 #' @importFrom lubridate as_date dweeks dmonths dyears floor_date ceiling_date year
 #' @export
 #' @examples
+#' today()
 #' today() %in% this_month()
 #' 
 #' next_week()
@@ -77,6 +77,16 @@ as.UTC.default <- function(x, ...) {
 #' 
 #' # 2nd Monday of last month:
 #' last_month() |> nth_monday(2)
+#' 
+#' # last_*_years() will have 1 Jan to 31 Dec at default:
+#' last_5_years(only_start_end = TRUE)
+#' last_5_years(today(), only_start_end = TRUE)
+#' \dontrun{
+#' 
+#'   # great for certedb functions:
+#'   certedb::get_diver_data(last_5_years(),
+#'                           Bepaling == "ACBDE")
+#' }
 #'
 #' df <- data.frame(date = sample(seq.Date(start_of_last_year(),
 #'                                         end_of_this_year(),
@@ -112,7 +122,6 @@ tomorrow <- function(ref = today()) {
   ref + 1
 }
 
-#' Determine week based on ISO 8601
 #' @rdname days_around_today
 #' @importFrom lubridate isoweek
 #' @export
@@ -121,6 +130,7 @@ week <- function(ref = today()) {
 }
 
 #' @rdname days_around_today
+#' @details [year()] always returns an [integer].
 #' @export
 year <- function(ref = today()) {
   as.integer(lubridate::year(ref))
@@ -278,6 +288,36 @@ next_year <- function(ref = today(), only_start_end = FALSE) {
   } else {
     out
   }
+}
+
+#' @rdname days_around_today
+#' @details The [last_n_years()], [last_5_years()] and [last_10_years()] functions have their reference date set to [end_of_last_year()] at default.
+#' @importFrom lubridate as_date `year<-`
+#' @export
+last_n_years <- function(n, ref = end_of_last_year(), only_start_end = FALSE) {
+  ref <- as_date(ref)
+  from <- ref
+  year(from) <- year(from) - n
+  out <- seq(from = from + 1,
+             to = ref,
+             by = "1 day")
+  if (only_start_end == TRUE) {
+    c(out[1], out[length(out)])
+  } else {
+    out
+  }
+}
+
+#' @rdname days_around_today
+#' @export
+last_5_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
+  last_n_years(ref = ref, n = 5, only_start_end = only_start_end)
+}
+
+#' @rdname days_around_today
+#' @export
+last_10_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
+  last_n_years(ref = ref, n = 10, only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
