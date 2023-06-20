@@ -202,7 +202,8 @@ import_mail_attachment(
   search_attachment = NULL,
   n = 5,
   sort = "received desc",
-  account = NULL,
+  account = certemail::outlook_connect(email = read_secret("mail.auto_from"), force =
+    FALSE),
   auto_transform = TRUE,
   sep = ",",
   ...
@@ -261,7 +262,7 @@ import_mail_attachment(
 
 \item{sort}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
 
-\item{account}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{account}{the Microsoft 365 Outlook account object, e.g. as returned by \code{\link[certemail:outlook_connect]{outlook_connect()}}}
 }
 \description{
 These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.

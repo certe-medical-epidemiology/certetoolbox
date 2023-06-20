@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.8.0
+Version: 1.8.1
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -39,7 +39,7 @@ Imports:
   yaml (>= 2.2.0)
 Suggests: 
   certeplot2,
-  certemail,
+  certemail (>= 1.4.0),
   AMR (>= 2.0.0),
   arrow (>= 7.0.0),
   cbsodataR (>= 0.5.1),

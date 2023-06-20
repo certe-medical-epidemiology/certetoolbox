@@ -111,8 +111,9 @@ import_clipboard <- function(sep = "\t",
 #' @param search_when see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @param search_attachment see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @param n see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @inheritParams certemail::outlook_connect
 #' @param sort see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param account see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+# @param account see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @export
 import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_subject = NULL,
@@ -121,14 +122,12 @@ import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_attachment = NULL,
                                    n = 5,
                                    sort = "received desc",
-                                   account = NULL,
+                                   account = certemail::outlook_connect(email = read_secret("mail.auto_from"),
+                                                                        force = FALSE),
                                    auto_transform = TRUE,
                                    sep = ",",
                                    ...) {
   check_is_installed("certemail")
-  if (missing(account)) {
-    account <- certemail::connect_outlook365()
-  }
   path <- suppressMessages(certemail::download_mail_attachment(
     path = tempdir(),
     filename = "{original}",
