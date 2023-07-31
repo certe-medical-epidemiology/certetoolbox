@@ -985,7 +985,7 @@ tbl_markdown <- function(x,
   cat(strrep("\n", newlines.leading))
   print(kable(
     x,
-    table.attr = paste0("id=\"", x_name, "\""),
+    table.attr = ifelse(type == "html", "", paste0("id=\"", x_name, "\"")),
     col.names = column.names,
     row.names = !isFALSE(row.names),
     align = align,
