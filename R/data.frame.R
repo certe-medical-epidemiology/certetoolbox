@@ -800,6 +800,11 @@ tbl_gtsummary <- function(x,
                           big.mark = big_mark()) {
   check_is_installed("gtsummary")
   
+  if (isTRUE(add_ci) && isTRUE(add_overall)) {
+    message("'add_ci' and 'add_overall' cannot both be true, ignoring 'add_overall'")
+    add_overall <- FALSE
+  }
+  
   # set the theme with the chosen decimal marks
   theme_old <- gtsummary::get_gtsummary_theme()
   gtsummary::theme_gtsummary_language(language = language,
@@ -866,6 +871,7 @@ tbl_gtsummary <- function(x,
     out <- out |> 
       gtsummary::add_ci()
   }
+  
   if (isTRUE(add_p)) {
     out <- out |> 
       gtsummary::add_p()
@@ -1063,18 +1069,43 @@ auto_transform <- function(x,
     if (!inherits(col_data, c("list", "matrix")) &&
         # no faeces (F) or tips (T)
         !all(unique(col_data) %in% c("T", "F"))) {
-      x[, i] <- parse_guess(x = as.character(col_data),
-                            na = na,
-                            guess_integer = TRUE,
-                            trim_ws = TRUE,
-                            locale = locale(date_names = datenames,
-                                            date_format = dateformat,
-                                            time_format = timeformat,
-                                            decimal_mark = decimal.mark,
-                                            grouping_mark = big.mark,
-                                            encoding = "UTF-8",
-                                            tz = timezone,
-                                            asciify = FALSE))
+      parsed <- NULL
+      if (length(col_data_unique) > 5000) {
+        # check if there's no difference for the first 5000 unique values
+        parsed <- parse_guess(x = as.character(col_data_unique)[1:5000],
+                              na = na,
+                              guess_integer = TRUE,
+                              trim_ws = TRUE,
+                              locale = locale(date_names = datenames,
+                                              date_format = dateformat,
+                                              time_format = timeformat,
+                                              decimal_mark = decimal.mark,
+                                              grouping_mark = big.mark,
+                                              encoding = "UTF-8",
+                                              tz = timezone,
+                                              asciify = FALSE))
+        if (!any(class(parsed) %in% class(col_data))) {
+          # class is different - it has to run for all values unfortunately
+          parsed <- NULL
+        }
+      }
+      if (is.null(parsed)) {
+        # run for all unique values
+        parsed_unique <- parse_guess(x = as.character(col_data_unique),
+                                     na = na,
+                                     guess_integer = TRUE,
+                                     trim_ws = TRUE,
+                                     locale = locale(date_names = datenames,
+                                                     date_format = dateformat,
+                                                     time_format = timeformat,
+                                                     decimal_mark = decimal.mark,
+                                                     grouping_mark = big.mark,
+                                                     encoding = "UTF-8",
+                                                     tz = timezone,
+                                                     asciify = FALSE))
+        # insert into data
+        x[, i] <- parsed_unique[match(col_data, col_data_unique)]
+      }
       if (is.double(col_data) && !is.double(x[, i, drop = TRUE]) && decimal.mark != ".") {
         # exception for csv2 (semi-colon separated) export and import
         x[, i] <- parse_guess(x = as.character(col_data), guess_integer = TRUE)
@@ -1084,11 +1115,11 @@ auto_transform <- function(x,
       if (!is.double(col_data) && is.double(x[, i, drop = TRUE]) && decimal.mark == ".") {
         col_data <- x[, i, drop = TRUE]
       }
-      if (all(col_data %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
+      if (all(col_data_unique %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
         x[, i] <- try_convert(clean_Date(col_data, format = "dd-mm-yyyy"),
                               backup = x[, i, drop = TRUE], col = i)
       }
-      if (all(tolower(col_data) %in% c("nee", "no", "niet", "ja", "yes", "wel"), na.rm = TRUE)) {
+      if (all(tolower(col_data_unique) %in% c("nee", "no", "niet", "ja", "yes", "wel"), na.rm = TRUE)) {
         x[, i] <- try_convert(clean_logical(col_data, true = "(ja|yes|wel)", false = "(nee|no|niet)", fixed = FALSE),
                               backup = x[, i, drop = TRUE], col = i)
       }
@@ -1097,8 +1128,9 @@ auto_transform <- function(x,
       x[, i] <- try_convert(as.UTC(col_data),
                             backup = x[, i, drop = TRUE], col = i)
     }
-    
-    if (inherits(x[, i, drop = TRUE], c("factor", "character"))) {
+    col_data <- x[, i, drop = TRUE]
+    col_data_unique <- unique(col_data)
+    if (inherits(col_data, c("factor", "character"))) {
       # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
       x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {

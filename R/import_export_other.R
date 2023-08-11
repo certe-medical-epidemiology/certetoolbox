@@ -111,9 +111,8 @@ import_clipboard <- function(sep = "\t",
 #' @param search_when see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @param search_attachment see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @param n see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @inheritParams certemail::outlook_connect
+#' @inheritParams certemail::download_mail_attachment
 #' @param sort see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-# @param account see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @export
 import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_subject = NULL,
@@ -122,8 +121,7 @@ import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_attachment = NULL,
                                    n = 5,
                                    sort = "received desc",
-                                   account = certemail::outlook_connect(email = read_secret("mail.auto_from"),
-                                                                        force = FALSE),
+                                   account = certemail::connect_outlook(),
                                    auto_transform = TRUE,
                                    sep = ",",
                                    ...) {
