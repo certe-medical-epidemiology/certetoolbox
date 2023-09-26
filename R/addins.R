@@ -59,6 +59,45 @@ addin_insert_like <- function() {
   }
 }
 
+#' @importFrom rstudioapi getActiveDocumentContext insertText modifyRange document_range document_position
+addin_insert_pipe <- function() {
+  # we want Shift + Ctrl/Cmd + M to iterate over |>, %>%, %$%
+  
+  context <- getActiveDocumentContext()
+  current_row <- context$selection[[1]]$range$end[1]
+  current_col <- context$selection[[1]]$range$end[2]
+  current_row_txt <- context$contents[current_row]
+  if (is.null(current_row) || current_row_txt %unlike% "(|>|%>%|%\\$%)") {
+    insertText(" |> ")
+    return(invisible())
+  }
+  
+  pos_preceded_by <- function(txt) {
+    if (tryCatch(substr(current_row_txt, current_col - nchar(trimws(txt, which = "right")), current_col) == trimws(txt, which = "right"),
+                 error = function(e) FALSE)) {
+      return(TRUE)
+    }
+    tryCatch(substr(current_row_txt, current_col - nchar(txt), current_col) %like% paste0("^", gsub("$", "\\$", txt, fixed = TRUE)),
+             error = function(e) FALSE)
+  }
+  replace_pos <- function(old, with) {
+    modifyRange(document_range(document_position(current_row, current_col - nchar(old)),
+                               document_position(current_row, current_col)),
+                text = with,
+                id = context$id)
+  }
+  
+  if (pos_preceded_by(" |> ")) {
+    replace_pos(" |> ", with = " %>% ")
+  } else if (pos_preceded_by(" %>% ")) {
+    replace_pos(" %>% ", with = " %$% ")
+  } else if (pos_preceded_by(" %$% ")) {
+    replace_pos(" %$% ", with = " |> ")
+  } else {
+    insertText(" |> ")
+  }
+}
+
 # No export, no Rd
 #' @importFrom rstudioapi insertText
 addin_insert_in <- function() {

@@ -2,6 +2,10 @@ Name: ⚙️ Insert %like% or %unlike%
 Binding: addin_insert_like
 Interactive: false
 
+Name: ⚙️ Insert pipe: |>, %>% or %$%
+Binding: addin_insert_pipe
+Interactive: false
+
 Name: ⚙️ Insert %in%
 Binding: addin_insert_in
 Interactive: false
