@@ -13,9 +13,10 @@
 \alias{import_spss}
 \alias{import_feather}
 \alias{import_parquet}
-\alias{import_url}
 \alias{import_clipboard}
 \alias{import_mail_attachment}
+\alias{import_url}
+\alias{import_teams}
 \title{Import Data Sets}
 \usage{
 import(
@@ -164,21 +165,6 @@ import_parquet(
   ...
 )
 
-import_url(
-  url,
-  auto_transform = TRUE,
-  sep = ",",
-  datenames = "en",
-  dateformat = "yyyy-mm-dd",
-  timeformat = "HH:MM",
-  decimal.mark = ".",
-  big.mark = "",
-  timezone = "UTC",
-  na = c("", "NULL", "NA", "<NA>"),
-  skip = 0,
-  ...
-)
-
 import_clipboard(
   sep = "\\t",
   header = TRUE,
@@ -206,6 +192,36 @@ import_mail_attachment(
   auto_transform = TRUE,
   sep = ",",
   ...
+)
+
+import_url(
+  url,
+  auto_transform = TRUE,
+  sep = ",",
+  datenames = "en",
+  dateformat = "yyyy-mm-dd",
+  timeformat = "HH:MM",
+  decimal.mark = ".",
+  big.mark = "",
+  timezone = "UTC",
+  na = c("", "NULL", "NA", "<NA>"),
+  skip = 0,
+  ...
+)
+
+import_teams(
+  teams_path = NULL,
+  account = connect_teams(),
+  auto_transform = TRUE,
+  sep = ",",
+  datenames = "en",
+  dateformat = "yyyy-mm-dd",
+  timeformat = "HH:MM",
+  decimal.mark = ".",
+  big.mark = "",
+  timezone = "UTC",
+  na = c("", "NULL", "NA", "<NA>"),
+  skip = 0
 )
 }
 \arguments{
@@ -241,8 +257,6 @@ import_mail_attachment(
 
 \item{col_select}{columns to select, supports the \link[tidyselect:language]{tidyselect language})}
 
-\item{url}{remote location of any data set, can also be a (non-raw) GitHub/GitLab link}
-
 \item{header}{use first row as header}
 
 \item{startrow}{first row to start importing}
@@ -261,7 +275,11 @@ import_mail_attachment(
 
 \item{sort}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
 
-\item{account}{a Microsoft 365 account to use for searching the mails. This has to be an object as returned by \code{\link[certemail:connect_outlook]{connect_outlook()}} or \code{\link[Microsoft365R:client]{Microsoft365R::get_business_outlook()}}.}
+\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect]{certeprojects::connect_teams()}}}
+
+\item{url}{remote location of any data set, can also be a (non-raw) GitHub/GitLab link}
+
+\item{teams_path}{a full path in Teams, \strong{including the Team name and the channel name}. Leave blank to use interactive mode, which allows file picking from a list in the console.}
 }
 \description{
 These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
@@ -277,11 +295,13 @@ Importing a Feather file using \code{\link[=import_feather]{import_feather()}} r
 
 Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
-The \code{\link[=import_url]{import_url()}} tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
-
 Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
 Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
+
+The \code{\link[=import_url]{import_url()}} function tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
+
+The \code{\link[=import_teams]{import_teams()}} function provides an interactive way to select a file in any Team, any channel. It then tries to download the file, after which it will be imported using the appropriate \verb{import_*()} function.
 }
 \examples{
 export_csv(iris)

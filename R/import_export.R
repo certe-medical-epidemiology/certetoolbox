@@ -112,7 +112,7 @@ export_exec <- function(object,
   invisible(object)
 }
 
-#' @importFrom readr read_delim locale
+#' @importFrom readr read_delim locale problems
 #' @importFrom dplyr select
 #' @importFrom certeprojects project_get_file
 import_exec <- function(filename,
@@ -181,6 +181,10 @@ import_exec <- function(filename,
                                      grouping_mark = list(...)$big.mark,
                                      encoding = "UTF-8"),
                      show_col_types = FALSE)
+    probs <- problems(df)
+    if (nrow(probs) > 0) {
+      warning("Contents of `readr::problems()`:\n", paste0(format(probs), collapse = "\n"), call. = FALSE)
+    }
     if (isTRUE(auto_transform)) {
       df <- auto_transform(df, decimal.mark = ".", big.mark = "")
       auto_transform <- FALSE
@@ -1270,40 +1274,4 @@ import_parquet <- function(filename,
               card_number = card_number,
               auto_transform = FALSE,
               col_select = col_select)
-}
-
-#' @rdname import
-#' @param url remote location of any data set, can also be a (non-raw) GitHub/GitLab link
-#' @details The [import_url()] tries to download the file first, after which it will be imported using the appropriate `import_*()` function.
-#' @export
-import_url <- function(url,
-                       auto_transform = TRUE,
-                       sep = ",",
-                       datenames = "en",
-                       dateformat = "yyyy-mm-dd",
-                       timeformat = "HH:MM",
-                       decimal.mark = ".",
-                       big.mark = "",
-                       timezone = "UTC",
-                       na = c("", "NULL", "NA", "<NA>"),
-                       skip = 0,
-                       ...) {
-  url <- url[1]
-  if (url %unlike% "://") {
-    url <- paste0("http://", url)
-  }
-  import_exec(url,
-              filename_deparse = deparse(substitute(url)),
-              extension = gsub(".+[.](.*)$", "\\1", basename(url)),
-              sep = sep,
-              card_number = NULL,
-              auto_transform = auto_transform,
-              datenames = datenames,
-              dateformat = dateformat,
-              timeformat = timeformat,
-              decimal.mark = decimal.mark,
-              big.mark = big.mark,
-              timezone = timezone,
-              na = na,
-              skip = skip)
 }
