@@ -210,7 +210,7 @@ import_url(
 )
 
 import_teams(
-  teams_path = NULL,
+  full_teams_path = NULL,
   account = connect_teams(),
   auto_transform = TRUE,
   sep = ",",
@@ -279,7 +279,7 @@ import_teams(
 
 \item{url}{remote location of any data set, can also be a (non-raw) GitHub/GitLab link}
 
-\item{teams_path}{a full path in Teams, \strong{including the Team name and the channel name}. Leave blank to use interactive mode, which allows file picking from a list in the console.}
+\item{full_teams_path}{a full path in Teams, \strong{including the Team name and the channel name}. Leave blank to use interactive mode, which allows file/folder picking from a list in the console.}
 }
 \description{
 These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
@@ -301,7 +301,7 @@ Importing mail attachments using \code{\link[=import_mail_attachment]{import_mai
 
 The \code{\link[=import_url]{import_url()}} function tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
 
-The \code{\link[=import_teams]{import_teams()}} function provides an interactive way to select a file in any Team, any channel. It then tries to download the file, after which it will be imported using the appropriate \verb{import_*()} function.
+The \code{\link[=import_teams]{import_teams()}} function uses \code{\link[certeprojects:teams]{certeprojects::teams_download_file()}} to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate \verb{import_*()} function.
 }
 \examples{
 export_csv(iris)

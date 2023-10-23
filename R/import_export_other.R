@@ -172,7 +172,7 @@ import_url <- function(url,
   }
   import_exec(url,
               filename_deparse = deparse(substitute(url)),
-              extension = gsub(".+[.](.*)$", "\\1", basename(url)),
+              extension = tools::file_ext(url),
               sep = sep,
               card_number = NULL,
               auto_transform = auto_transform,
@@ -187,13 +187,12 @@ import_url <- function(url,
 }
 
 #' @rdname import
-#' @param teams_path a full path in Teams, **including the Team name and the channel name**. Leave blank to use interactive mode, which allows file picking from a list in the console.
 #' @param account a Teams account from Azure or an `AzureAuth` Microsoft 365 token, e.g. retrieved with [certeprojects::connect_teams()]
-#' @importFrom certeprojects connect_teams
-#' @importFrom dplyr case_when
-#' @details The [import_teams()] function provides an interactive way to select a file in any Team, any channel. It then tries to download the file, after which it will be imported using the appropriate `import_*()` function.
+#' @inheritParams certeprojects::teams_download_file
+#' @importFrom certeprojects teams_download_file connect_teams
+#' @details The [import_teams()] function uses [certeprojects::teams_download_file()] to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate `import_*()` function.
 #' @export
-import_teams <- function(teams_path = NULL,
+import_teams <- function(full_teams_path = NULL,
                          account = connect_teams(),
                          auto_transform = TRUE,
                          sep = ",",
@@ -205,123 +204,16 @@ import_teams <- function(teams_path = NULL,
                          timezone = "UTC",
                          na = c("", "NULL", "NA", "<NA>"),
                          skip = 0) {
-  if (inherits(account, "ms_team")) {
-    token <- account$token
-  } else if (inherits(account, "AzureToken")) {
-    token <- account
-  }
-  if (!inherits(token, "AzureToken")) {
-    stop("Class of `token` is not 'AzureToken'")
-  }
   
-  if (!is.null(teams_path)) {
-    path_parts <- strsplit(teams_path, split = "/", fixed = TRUE)[[1]]
-    message("Retrieving Team '", path_parts[1], "'...", appendLF = FALSE)
-    login <- AzureGraph::create_graph_login(token = token)
-    group <- login$get_group(name = path_parts[1])
-    drive <- group$get_drive()
-    item <<- drive$get_item(paste0(path_parts[2:length(path_parts)], collapse = "/"))
-    message("OK.")
-    message("Downloading file '", item$properties$name, "' (", size_humanreadable(item$properties$size), ") to temporary folder...", appendLF = FALSE)
-    filename <- paste0(tempdir(), "/", path_parts[length(path_parts)])
-    drive$download_file(srcid = item$properties$id, dest = filename, overwrite = TRUE)
-    message("OK.")
-    
-  } else {
-    
-    if (!interactive()) {
-      stop("File picking only works in interactive mode. Set `teams_path` in non-interactive mode")
-    }
-    
-    message("Retrieving list of Teams within ", token$tenant, "...", appendLF = FALSE)
-    login <- AzureGraph::create_graph_login(token = token)
-    groups <- login$list_groups()
-    groups_names <- sapply(groups, function(g) g$properties$displayName)
-    message("OK, n = ", length(groups), ".")
-    continue <- FALSE
-    while (!isTRUE(continue)) {
-      searchterm <- readline("Search for Team name (allows regex): ")
-      found_groups <- which(groups_names %like% searchterm)
-      if (length(found_groups) == 0) {
-        levensthein <- as.double(adist(searchterm, groups_names, counts = FALSE, ignore.case = TRUE))
-        found_groups <- order(levensthein)[1]
-      }
-      continue <- utils::askYesNo(paste0("Found Team '", groups_names[found_groups[1]], "'. Continue?"))
-      if (is.na(continue)) {
-        # has chosen 'cancel'
-        return(invisible())
-      }
-    }
-    get_icon <- function(ff) {
-      case_when(ff$isdir ~ "🗂️",  # "📁",
-                ff$name %like% "xlsx?$" ~ "📊",
-                ff$name %like% "(docx?|pdf)$" ~ "📝",
-                ff$name %like% "pptx?$" ~ "📉",
-                ff$name %like% "csv$" ~ "🧾",
-                ff$name %like% "zip$" ~ "📦",
-                ff$name %like% "(jpe?g|bmp|png|gif)$" ~ "🖼️",
-                ff$name %like% "(eml|msg)$" ~ "✉️️",
-                TRUE ~ "📄")
-    }
-    message("Retrieving file list...", appendLF = FALSE)
-    group <- groups[[found_groups[1]]]
-    drive <- group$get_drive()
-    files <- drive$list_files() 
-    file_choices <- paste0(get_icon(files), " ",
-                           trimws(files$name),
-                           " (", size_humanreadable(files$size, decimal.mark = "."), ")")
-    message("OK.")
-    picked <- utils::menu(choices = file_choices,
-                          graphics = FALSE,
-                          title = "Choose a file or folder (0 to Cancel):")
-    if (picked == 0) {
-      return(invisible())
-    }
-    picked <- files[picked, ]
-    dive_levels <- picked$name
-    is_file <- !picked$isdir
-    
-    while (!is_file) {
-      cat("Current folder:\n  ", groups_names[found_groups[1]], sep = "")
-      if (length(dive_levels) > 0) {
-        cat(paste0("\n", strrep("   ", seq_len(length(dive_levels))), "↳ ", dive_levels), "\n\n")
-      } else {
-        cat("\n\n")
-      }
-      searchpath <- paste0(dive_levels, collapse = "/")
-      files <- drive$list_files(searchpath) 
-      file_choices <- paste0(get_icon(files), " ",
-                             trimws(files$name),
-                             " (", size_humanreadable(files$size, decimal.mark = "."), ")")
-      if (searchpath != "") {
-        file_choices <- c(file_choices, "↩ Go back to previous folder...")
-      }
-      picked <- utils::menu(choices = file_choices,
-                            graphics = FALSE,
-                            title = "Choose a file or folder (0 to Cancel):")
-      if (picked == 0) {
-        # has chosen Cancel
-        return(invisible())
-      }
-      if (searchpath != "" && picked == length(file_choices)) {
-        # return one level
-        dive_levels <- dive_levels[seq_len(length(dive_levels) - 1)]
-      } else {
-        picked <- files[picked, ]
-        dive_levels <- c(dive_levels, picked$name)
-        is_file <- !picked$isdir
-      }
-    }
-    message("Full path for reference: ", paste0(groups_names[found_groups[1]], "/", paste0(dive_levels, collapse = "/")))
-    message("Downloading file '",  picked$name, "' (", size_humanreadable(picked$size), ") to temporary folder...", appendLF = FALSE)
-    filename <- paste0(tempdir(), "/", picked$name)
-    drive$download_file(srcid = picked$id, dest = filename, overwrite = TRUE)
-    message("OK.")
-  }
+  temp <- paste0(tempfile(), "/")
+  dir.create(temp)
+  
+  teams_download_file(full_teams_path = full_teams_path, account = account, destination_dir = temp, overwrite = TRUE)
+  filename <- list.files(temp, full.names = TRUE)[1]
   
   import_exec(filename,
               filename_deparse = basename(filename),
-              extension = gsub(".+[.](.*)$", "\\1", basename(filename)),
+              extension = tools::file_ext(filename),
               sep = sep,
               card_number = NULL,
               auto_transform = auto_transform,
