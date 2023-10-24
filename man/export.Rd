@@ -173,7 +173,13 @@ export_clipboard(
   ...
 )
 
-export_teams(object, full_teams_path = NULL, account = connect_teams(), ...)
+export_teams(
+  object,
+  filename = NULL,
+  full_teams_path = NULL,
+  account = connect_teams(),
+  ...
+)
 }
 \arguments{
 \item{object, plot}{the \R object to export}
@@ -254,7 +260,7 @@ Exporting to an HTML file using \code{\link[=export_html]{export_html()}} requir
 
 Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard()}} requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) to be exported to the clipboard and is only limited to the available amount of RAM memory.
 
-Exporting to Microsoft Teams using \code{\link[=export_teams]{export_teams()}} requires the \code{AzureGraph} package to be installed. The function allows any object (also other than \link{data.frame}s) to be exported to any Team channel. The object will be saved as an \link[=saveRDS]{RDS file} first.
+Exporting to Microsoft Teams using \code{\link[=export_teams]{export_teams()}} requires the \code{AzureGraph} package to be installed. The function allows any object (also other than \link{data.frame}s) to be exported to any Team channel. The filename set in \code{filename} will determine the exported file type and defaults to an \link[=saveRDS]{RDS file}.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -284,6 +290,33 @@ import("starwars.feather",
 file.remove("whole_file.rds")
 file.remove("first_ten_rows.xlsx")
 file.remove("starwars.feather")
+
+\dontrun{
+
+# ---- Microsoft Teams support -------------------------------------------
+
+# IMPORTING
+
+# import from Teams by picking a folder interactively from any Team
+x <- import_teams()
+
+# to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+x <- import_teams(full_teams_path = "MyTeam/MyChannel/MyFolder/MyFile.xlsx")
+
+
+# EXPORTING
+
+# export to Teams by picking a folder interactively from any Team
+mtcars |> export_teams()
+
+# the default is RDS, but you can set `filename` to specify yourself
+mtcars |> export_teams("mtcars.xlsx")
+
+# to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+mtcars |> export_teams("mtcars.xlsx", full_teams_path = "MyTeam/MyChannel/MyFolder")
+mtcars |> export_teams(full_teams_path = "MyTeam/MyChannel/MyFolder")
+
+}
 }
 \seealso{
 \code{\link[=import]{import()}}

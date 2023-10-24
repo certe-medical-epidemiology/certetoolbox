@@ -109,7 +109,7 @@ export_exec <- function(object,
   if (file.exists(filename_old)) {
     try(file.remove(filename_old), silent = TRUE)
   }
-  invisible(object)
+  invisible(structure(object, filename = tools::file_path_as_absolute(filename)))
 }
 
 #' @importFrom readr read_delim locale problems

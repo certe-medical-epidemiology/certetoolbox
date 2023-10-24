@@ -330,6 +330,33 @@ import("starwars.feather",
 file.remove("iris.csv")
 file.remove("mtcars.csv")
 file.remove("starwars.feather")
+
+\dontrun{
+
+# ---- Microsoft Teams support -------------------------------------------
+
+# IMPORTING
+
+# import from Teams by picking a folder interactively from any Team
+x <- import_teams()
+
+# to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+x <- import_teams(full_teams_path = "MyTeam/MyChannel/MyFolder/MyFile.xlsx")
+
+
+# EXPORTING
+
+# export to Teams by picking a folder interactively from any Team
+mtcars |> export_teams()
+
+# the default is RDS, but you can set `filename` to specify yourself
+mtcars |> export_teams("mtcars.xlsx")
+
+# to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+mtcars |> export_teams("mtcars.xlsx", full_teams_path = "MyTeam/MyChannel/MyFolder")
+mtcars |> export_teams(full_teams_path = "MyTeam/MyChannel/MyFolder")
+
+}
 }
 \seealso{
 \code{\link[=export]{export()}}

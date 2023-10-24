@@ -50,26 +50,79 @@ export_clipboard <- function(object,
   message(paste0("Exported object (",
                  format2(NROW(object)), "x", format2(NCOL(object)),
                  ") to clipboard."))
+  return(invisible(object))
 }
 
 #' @rdname export
 #' @param full_teams_path path in Teams to export object to. Can be left blank to use interactive folder picking mode in the console.
 #' @param account a Teams account from Azure or an `AzureAuth` Microsoft 365 token, e.g. retrieved with [certeprojects::connect_teams()]
-#' @details `r doc_requirement("Microsoft Teams", "export_teams", "AzureGraph")`. The function allows any object (also other than [data.frame]s) to be exported to any Team channel. The object will be saved as an [RDS file][saveRDS()] first.
+#' @details `r doc_requirement("Microsoft Teams", "export_teams", "AzureGraph")`. The function allows any object (also other than [data.frame]s) to be exported to any Team channel. The filename set in `filename` will determine the exported file type and defaults to an [RDS file][saveRDS()].
 #' @importFrom certeprojects teams_upload_file connect_teams
 #' @importFrom certestyle format2
 #' @export
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' # ---- Microsoft Teams support -------------------------------------------
+#' 
+#' # IMPORTING
+#' 
+#' # import from Teams by picking a folder interactively from any Team
+#' x <- import_teams()
+#' 
+#' # to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+#' x <- import_teams(full_teams_path = "MyTeam/MyChannel/MyFolder/MyFile.xlsx")
+#' 
+#' 
+#' # EXPORTING
+#' 
+#' # export to Teams by picking a folder interactively from any Team
+#' mtcars |> export_teams()
+#' 
+#' # the default is RDS, but you can set `filename` to specify yourself
+#' mtcars |> export_teams("mtcars.xlsx")
+#' 
+#' # to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+#' mtcars |> export_teams("mtcars.xlsx", full_teams_path = "MyTeam/MyChannel/MyFolder")
+#' mtcars |> export_teams(full_teams_path = "MyTeam/MyChannel/MyFolder")
+#' 
+#' }
 export_teams <- function(object,
+                         filename = NULL,
                          full_teams_path = NULL,
                          account = connect_teams(),
                          ...) {
-  teams_upload_file(file_path = object,
+  if (!is.null(filename)) {
+    ext <- tools::file_ext(filename)
+    filename <- paste0(tempdir(), "/", filename)
+  } else {
+    ext <- "rds"
+    if (deparse(substitute(object)) == ".") {
+      filename <- paste0(tempdir(), "/tbl.rds")
+    } else {
+      filename <- paste0(tempdir(), "/", deparse(substitute(object)))
+    }
+  }
+  out <- export_exec(object, ext,
+                     filename = filename,
+                     filename_deparse = deparse(substitute(object)),
+                     card_number = NULL,
+                     overwrite = TRUE,
+                     ...)
+  file_path <- attributes(out)$filename
+  if (!file.exists(file_path)) {
+    stop("Object not exported to Microsoft Teams.")
+  }
+  
+  teams_upload_file(file_path = file_path,
                     full_teams_path = full_teams_path,
                     account = account,
-                    file_name = deparse(substitute(object)))
+                    file_name = basename(file_path))
   message(paste0("Exported object (",
                  format2(NROW(object)), "x", format2(NCOL(object)),
                  ") to Microsoft Teams."))
+  return(invisible(structure(object, filename = tools::file_path_as_absolute(file_path))))
 }
 
 #' @rdname import
@@ -208,6 +261,34 @@ import_url <- function(url,
 #' @importFrom certeprojects teams_download_file connect_teams
 #' @details The [import_teams()] function uses [certeprojects::teams_download_file()] to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate `import_*()` function.
 #' @export
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' # ---- Microsoft Teams support -------------------------------------------
+#' 
+#' # IMPORTING
+#' 
+#' # import from Teams by picking a folder interactively from any Team
+#' x <- import_teams()
+#' 
+#' # to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+#' x <- import_teams(full_teams_path = "MyTeam/MyChannel/MyFolder/MyFile.xlsx")
+#' 
+#' 
+#' # EXPORTING
+#' 
+#' # export to Teams by picking a folder interactively from any Team
+#' mtcars |> export_teams()
+#' 
+#' # the default is RDS, but you can set `filename` to specify yourself
+#' mtcars |> export_teams("mtcars.xlsx")
+#' 
+#' # to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`
+#' mtcars |> export_teams("mtcars.xlsx", full_teams_path = "MyTeam/MyChannel/MyFolder")
+#' mtcars |> export_teams(full_teams_path = "MyTeam/MyChannel/MyFolder")
+#' 
+#' }
 import_teams <- function(full_teams_path = NULL,
                          account = connect_teams(),
                          auto_transform = TRUE,
