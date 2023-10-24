@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.1</span>
       </span>
     </div>
 
@@ -229,7 +229,13 @@
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">export_teams</span><span class="op">(</span><span class="va">object</span>, full_teams_path <span class="op">=</span> <span class="cn">NULL</span>, account <span class="op">=</span> <span class="fu">connect_teams</span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">export_teams</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  full_teams_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  account <span class="op">=</span> <span class="fu">connect_teams</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -348,7 +354,7 @@
 <p>Exporting to a PNG file using <code>export_png()</code> requires the <code>ggplot2</code> and <code>showtext</code> packages to be installed.</p>
 <p>Exporting to an HTML file using <code>export_html()</code> requires the <code>ggplot2</code> and <code>htmltools</code> packages to be installed. The arguments put in <code>...</code> will be passed on to <code>plotly::layout()</code> if <code>plot</code> is not yet a Plotly object (but rather a <code>ggplot2</code> object), which of course then requires the <code>plotly</code> package to be installed as well.</p>
 <p>Exporting to the clipboard using <code>export_clipboard()</code> requires the <code>clipr</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) to be exported to the clipboard and is only limited to the available amount of RAM memory.</p>
-<p>Exporting to Microsoft Teams using <code>export_teams()</code> requires the <code>AzureGraph</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) to be exported to any Team channel. The object will be saved as an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS file</a> first.</p>
+<p>Exporting to Microsoft Teams using <code>export_teams()</code> requires the <code>AzureGraph</code> package to be installed. The function allows any object (also other than <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a>s) to be exported to any Team channel. The filename set in <code>filename</code> will determine the exported file type and defaults to an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS file</a>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -364,8 +370,8 @@
 <span class="r-in"><span>  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/Rtmp0NySiu/file192324f7b417/reference/whole_file.rds' (3.5 kB).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10x14) to '/tmp/Rtmp0NySiu/file192324f7b417/reference/first_ten_rows.xlsx' (8.8 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpObjCwh/file19265a2af58f/reference/whole_file.rds' (3.5 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10x14) to '/tmp/RtmpObjCwh/file19265a2af58f/reference/first_ten_rows.xlsx' (8.8 kB).</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># starwars |&gt;</span></span></span>
@@ -377,7 +383,7 @@
 <span class="r-in"><span><span class="co"># Apache's Feather and Parquet formats are column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for cross-language specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu">export_feather</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/Rtmp0NySiu/file192324f7b417/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpObjCwh/file19265a2af58f/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu"><a href="import.html">import</a></span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -397,6 +403,33 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="st">"starwars.feather"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ---- Microsoft Teams support -------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># IMPORTING</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># import from Teams by picking a folder interactively from any Team</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.html">import_teams</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.html">import_teams</a></span><span class="op">(</span>full_teams_path <span class="op">=</span> <span class="st">"MyTeam/MyChannel/MyFolder/MyFile.xlsx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># EXPORTING</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># export to Teams by picking a folder interactively from any Team</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">export_teams</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the default is RDS, but you can set `filename` to specify yourself</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">export_teams</span><span class="op">(</span><span class="st">"mtcars.xlsx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># to NOT pick a Teams folder (e.g. in non-interactive mode), set `full_teams_path`</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">export_teams</span><span class="op">(</span><span class="st">"mtcars.xlsx"</span>, full_teams_path <span class="op">=</span> <span class="st">"MyTeam/MyChannel/MyFolder"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">export_teams</span><span class="op">(</span>full_teams_path <span class="op">=</span> <span class="st">"MyTeam/MyChannel/MyFolder"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
