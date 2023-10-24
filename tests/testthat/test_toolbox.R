@@ -206,7 +206,7 @@ test_that("import_export works", {
       new_df[, i] <- vct
     }
     # clean up:
-    unlink(templocation)
+    file.remove(templocation)
     # test:
     same <- identical(old_df, new_df)
     if (!isTRUE(same)) {
@@ -270,8 +270,8 @@ test_that("import_export works", {
                  import_feather(col_select = dplyr::matches("d")) |> 
                  dim(),
                c(32, 2))
-  unlink("iris.feather")
-  unlink("mtcars.feather")
+  file.remove("iris.feather")
+  file.remove("mtcars.feather")
   
   # check overwrite function
   export_csv(iris, "iris_overwrite")
@@ -286,8 +286,8 @@ test_that("import_export works", {
   export_csv(iris, "iris_overwrite", overwrite = TRUE)
   mtime_new <- file.mtime("iris_overwrite.csv")
   expect_lt(mtime_old, mtime_new)
-  unlink("iris_overwrite.csv")
-  unlink("iris_overwrite*.csv")
+  file.remove("iris_overwrite.csv")
+  file.remove("iris_overwrite*.csv")
   
   # remote files
   expect_equal(dim(import_url("https://filesamples.com/samples/document/csv/sample1.csv")), c(8, 13))
@@ -300,23 +300,23 @@ test_that("import_export works", {
   
   if (Sys.info()["sysname"] %in% c("Windows", "Linux")) {
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a1"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a2"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a3"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a4"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a5"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a6"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a7"))))
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a999"))))
     temp_png <- tempfile(fileext = ".png")
     expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
@@ -324,11 +324,11 @@ test_that("import_export works", {
     temp_html <- tempfile(fileext = ".html")
     expect_true(file.exists(suppressMessages(export_html(p, filename = temp_html))))
     
-    unlink(temp_pdf)
+    file.remove(temp_pdf)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
-    unlink(temp_png)
+    file.remove(temp_png)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
-    unlink(temp_html)
+    file.remove(temp_html)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_html))))
   }
   
@@ -338,10 +338,10 @@ test_that("import_export works", {
   expect_identical(rownames(import_csv(temp_csv)), rownames(mtcars))
   
   # test manual export function
-  unlink(temp_csv)
+  file.remove(temp_csv)
   suppressWarnings(export(mtcars, temp_csv, fn = utils::write.table))
   expect_true(file.exists(temp_csv))
-  unlink(temp_csv)
+  file.remove(temp_csv)
   suppressWarnings(export(mtcars, temp_csv, fn = "utils::write.table"))
   expect_true(file.exists(temp_csv))
   expect_error(export(mtcars, temp_csv, fn = "non-existing-function"))

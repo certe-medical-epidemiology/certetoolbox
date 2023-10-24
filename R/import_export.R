@@ -107,7 +107,7 @@ export_exec <- function(object,
     }
   }
   if (file.exists(filename_old)) {
-    try(unlink(filename_old), silent = TRUE)
+    try(file.remove(filename_old), silent = TRUE)
   }
   invisible(object)
 }
@@ -238,7 +238,7 @@ import_exec <- function(filename,
     } else {
       file_src <- filename_url
       # try to remove downloaded file
-      try(unlink(filename), silent = TRUE)
+      try(file.remove(filename), silent = TRUE)
     }
     message(
       paste0(
@@ -321,7 +321,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
       # so the file exists - create a backup so it can be reverted back if export fails
       file.copy(from = filename, to = paste0(filename, ".certetoolbox_export"))
       # and remove the existing file
-      try(unlink(filename, force = TRUE), silent = TRUE)
+      try(file.remove(filename, force = TRUE), silent = TRUE)
     }
     return(isTRUE(q))
   } else {
@@ -329,7 +329,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
     filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
     file.copy(from = filename, to = filename_new)
     # and remove the existing file
-    try(unlink(filename, force = TRUE), silent = TRUE)
+    try(file.remove(filename, force = TRUE), silent = TRUE)
     message("Original file ", filename, " existed, this file was renamed to ", filename_new, " before overwriting the original file.")
     return(TRUE)
   }
@@ -349,7 +349,7 @@ plot_export_result <- function(filename) {
     warning("Error while saving `", filename, "`.", call. = FALSE)
   }
   
-  try(unlink(filename_old, force = TRUE), silent = TRUE)
+  try(file.remove(filename_old, force = TRUE), silent = TRUE)
   if (file.exists(filename)) {
     return(invisible(tools::file_path_as_absolute(filename)))
   } else {
@@ -362,11 +362,11 @@ plot_export_result <- function(filename) {
 
 #' Export Data Sets and Plots
 #' 
-#' These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions [export_pdf()], [export_png()] and [export_html()]). The functions work closely together with the `certeprojects` package to support Trello card numbers.
+#' These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions [export_pdf()], [export_png()] and [export_html()]). The functions work closely together with the `certeprojects` package to support Microsoft Planner project numbers.
 #' @param object,plot the \R object to export
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
-#' @param card_number a Trello card number
+#' @param card_number a Microsoft Planner project number
 #' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
@@ -398,9 +398,9 @@ plot_export_result <- function(filename) {
 #'   
 #' 
 #' # (cleanup)
-#' unlink("whole_file.rds")
-#' unlink("first_ten_rows.xlsx")
-#' unlink("starwars.feather")
+#' file.remove("whole_file.rds")
+#' file.remove("first_ten_rows.xlsx")
+#' file.remove("starwars.feather")
 export <- function(object,
                    filename = NULL,
                    card_number = project_get_current_id(ask = FALSE),
@@ -930,10 +930,10 @@ export_html <- function(plot,
 
 #' Import Data Sets
 #' 
-#' These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the `certeprojects` package and support Trello card numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
+#' These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the `certeprojects` package to support Microsoft Planner project numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
 #' @param filename the full path of the file to be imported, will be parsed to a [character], can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)
 #' @param auto_transform transform the imported data with [auto_transform()]
-#' @param card_number a Trello card number
+#' @param card_number a Microsoft Planner project number
 #' @param ... arguments passed on to methods
 #' @details `r doc_requirement("any unlisted filetype", "import", "rio")`.
 #' @rdname import
@@ -944,7 +944,7 @@ export_html <- function(plot,
 #' import_csv("iris") |> head()
 #' 
 #' # the above is equal to:
-#' # export(iris.csv)
+#' # export(iris, "iris.csv")
 #' # import("iris.csv") |> head()
 #' 
 #' 
@@ -963,9 +963,9 @@ export_html <- function(plot,
 #'   
 #' 
 #' # (cleanup)
-#' unlink("iris.csv")
-#' unlink("mtcars.csv")
-#' unlink("starwars.feather")
+#' file.remove("iris.csv")
+#' file.remove("mtcars.csv")
+#' file.remove("starwars.feather")
 import <- function(filename,
                    card_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,

@@ -17,6 +17,7 @@
 \alias{export_png}
 \alias{export_html}
 \alias{export_clipboard}
+\alias{export_teams}
 \title{Export Data Sets and Plots}
 \usage{
 export(
@@ -171,13 +172,15 @@ export_clipboard(
   decimal.mark = dec_mark(),
   ...
 )
+
+export_teams(object, full_teams_path = NULL, account = connect_teams(), ...)
 }
 \arguments{
 \item{object, plot}{the \R object to export}
 
 \item{filename}{the full path of the exported file}
 
-\item{card_number}{a Trello card number}
+\item{card_number}{a Microsoft Planner project number}
 
 \item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to \code{filename_datetime.ext} before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.}
 
@@ -218,9 +221,13 @@ export_clipboard(
 \item{quote}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use quotation marks (default: \code{FALSE})}
 
 \item{decimal.mark}{(for \code{\link[=export_clipboard]{export_clipboard()}}) character to use for decimal numbers, defaults to \code{\link[=dec_mark]{dec_mark()}}}
+
+\item{full_teams_path}{path in Teams to export object to. Can be left blank to use interactive folder picking mode in the console.}
+
+\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect]{certeprojects::connect_teams()}}}
 }
 \description{
-These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} and \code{\link[=export_html]{export_html()}}). The functions work closely together with the \code{certeprojects} package to support Trello card numbers.
+These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} and \code{\link[=export_html]{export_html()}}). The functions work closely together with the \code{certeprojects} package to support Microsoft Planner project numbers.
 }
 \details{
 The \code{\link[=export]{export()}} function can export to any file format, also with a manually set export function when passed on to the \code{fn} argument. This function \code{fn} has to have the object as first argument and the future file location as second argument. If \code{fn} is left blank, the \verb{export_*} function will be used based on the filename.
@@ -245,7 +252,9 @@ Exporting to a PNG file using \code{\link[=export_png]{export_png()}} requires t
 
 Exporting to an HTML file using \code{\link[=export_html]{export_html()}} requires the \code{ggplot2} and \code{htmltools} packages to be installed. The arguments put in \code{...} will be passed on to \code{\link[plotly:layout]{plotly::layout()}} if \code{plot} is not yet a Plotly object (but rather a \code{ggplot2} object), which of course then requires the \code{plotly} package to be installed as well.
 
-Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard()}} requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) and is only limited to the available amount of RAM memory.
+Exporting to the clipboard using \code{\link[=export_clipboard]{export_clipboard()}} requires the \code{clipr} package to be installed. The function allows any object (also other than \link{data.frame}s) to be exported to the clipboard and is only limited to the available amount of RAM memory.
+
+Exporting to Microsoft Teams using \code{\link[=export_teams]{export_teams()}} requires the \code{AzureGraph} package to be installed. The function allows any object (also other than \link{data.frame}s) to be exported to any Team channel. The object will be saved as an \link[=saveRDS]{RDS file} first.
 }
 \examples{
 library(dplyr, warn.conflicts = FALSE)
@@ -272,9 +281,9 @@ import("starwars.feather",
   
 
 # (cleanup)
-unlink("whole_file.rds")
-unlink("first_ten_rows.xlsx")
-unlink("starwars.feather")
+file.remove("whole_file.rds")
+file.remove("first_ten_rows.xlsx")
+file.remove("starwars.feather")
 }
 \seealso{
 \code{\link[=import]{import()}}

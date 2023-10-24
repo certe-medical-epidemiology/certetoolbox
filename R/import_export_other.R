@@ -22,7 +22,7 @@
 #' @param header (for [export_clipboard()]) use column names as header (default: `TRUE`)
 #' @param quote (for [export_clipboard()]) use quotation marks (default: `FALSE`)
 #' @param decimal.mark (for [export_clipboard()]) character to use for decimal numbers, defaults to [dec_mark()]
-#' @details `r doc_requirement("the clipboard", "export_clipboard", "clipr")`. The function allows any object (also other than [data.frame]s) and is only limited to the available amount of RAM memory.
+#' @details `r doc_requirement("the clipboard", "export_clipboard", "clipr")`. The function allows any object (also other than [data.frame]s) to be exported to the clipboard and is only limited to the available amount of RAM memory.
 #' @importFrom certestyle format2
 #' @export
 export_clipboard <- function(object,
@@ -47,13 +47,29 @@ export_clipboard <- function(object,
                     dec = decimal.mark,
                     allow_non_interactive = TRUE,
                     quote = isTRUE(quote))
-  message(
-    paste0(
-      "Object exported to clipboard: ",
-      format2(NROW(object)), "x", format2(NCOL(object)),
-      " (", size_humanreadable(utils::object.size(object)), ")"
-    )
-  )
+  message(paste0("Exported object (",
+                 format2(NROW(object)), "x", format2(NCOL(object)),
+                 ") to clipboard."))
+}
+
+#' @rdname export
+#' @param full_teams_path path in Teams to export object to. Can be left blank to use interactive folder picking mode in the console.
+#' @param account a Teams account from Azure or an `AzureAuth` Microsoft 365 token, e.g. retrieved with [certeprojects::connect_teams()]
+#' @details `r doc_requirement("Microsoft Teams", "export_teams", "AzureGraph")`. The function allows any object (also other than [data.frame]s) to be exported to any Team channel. The object will be saved as an [RDS file][saveRDS()] first.
+#' @importFrom certeprojects teams_upload_file connect_teams
+#' @importFrom certestyle format2
+#' @export
+export_teams <- function(object,
+                         full_teams_path = NULL,
+                         account = connect_teams(),
+                         ...) {
+  teams_upload_file(file_path = object,
+                    full_teams_path = full_teams_path,
+                    account = account,
+                    file_name = deparse(substitute(object)))
+  message(paste0("Exported object (",
+                 format2(NROW(object)), "x", format2(NCOL(object)),
+                 ") to Microsoft Teams."))
 }
 
 #' @rdname import

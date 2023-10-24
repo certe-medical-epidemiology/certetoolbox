@@ -227,7 +227,7 @@ import_teams(
 \arguments{
 \item{filename}{the full path of the file to be imported, will be parsed to a \link{character}, can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)}
 
-\item{card_number}{a Trello card number}
+\item{card_number}{a Microsoft Planner project number}
 
 \item{auto_transform}{transform the imported data with \code{\link[=auto_transform]{auto_transform()}}}
 
@@ -282,7 +282,7 @@ import_teams(
 \item{full_teams_path}{a full path in Teams, \strong{including the Team name and the channel name}. Leave blank to use interactive mode, which allows file/folder picking from a list in the console.}
 }
 \description{
-These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package and support Trello card numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
+These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the \code{certeprojects} package to support Microsoft Planner project numbers. To support row names and older R versions, \verb{import_*()} functions return plain \link{data.frame}s, not e.g. \link[tibble:tibble]{tibble}s.
 }
 \details{
 Importing any unlisted filetype using \code{\link[=import]{import()}} requires the \code{rio} package to be installed.
@@ -308,7 +308,7 @@ export_csv(iris)
 import_csv("iris") |> head()
 
 # the above is equal to:
-# export(iris.csv)
+# export(iris, "iris.csv")
 # import("iris.csv") |> head()
 
 
@@ -327,9 +327,9 @@ import("starwars.feather",
   
 
 # (cleanup)
-unlink("iris.csv")
-unlink("mtcars.csv")
-unlink("starwars.feather")
+file.remove("iris.csv")
+file.remove("mtcars.csv")
+file.remove("starwars.feather")
 }
 \seealso{
 \code{\link[=export]{export()}}
