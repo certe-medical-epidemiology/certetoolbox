@@ -21,16 +21,16 @@
 \usage{
 import(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   ...
 )
 
-import_rds(filename, card_number = project_get_current_id(ask = FALSE), ...)
+import_rds(filename, project_number = project_get_current_id(ask = FALSE), ...)
 
 import_xlsx(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   sheet = 1,
   range = NULL,
   auto_transform = TRUE,
@@ -47,7 +47,7 @@ import_xlsx(
 
 import_excel(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   sheet = 1,
   range = NULL,
   auto_transform = TRUE,
@@ -64,7 +64,7 @@ import_excel(
 
 import_csv(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
@@ -79,7 +79,7 @@ import_csv(
 
 import_csv2(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
@@ -94,7 +94,7 @@ import_csv2(
 
 import_tsv(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   datenames = "nl",
   dateformat = "yyyy-mm-dd",
@@ -109,7 +109,7 @@ import_tsv(
 
 import_txt(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   sep = "\\t",
   datenames = "nl",
@@ -125,7 +125,7 @@ import_txt(
 
 import_sav(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   datenames = "en",
   dateformat = "yyyy-mm-dd",
@@ -139,7 +139,7 @@ import_sav(
 
 import_spss(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   datenames = "en",
   dateformat = "yyyy-mm-dd",
@@ -153,14 +153,14 @@ import_spss(
 
 import_feather(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   col_select = everything(),
   ...
 )
 
 import_parquet(
   filename,
-  card_number = project_get_current_id(ask = FALSE),
+  project_number = project_get_current_id(ask = FALSE),
   col_select = everything(),
   ...
 )
@@ -227,7 +227,7 @@ import_teams(
 \arguments{
 \item{filename}{the full path of the file to be imported, will be parsed to a \link{character}, can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)}
 
-\item{card_number}{a Microsoft Planner project number}
+\item{project_number}{a Microsoft Planner project number}
 
 \item{auto_transform}{transform the imported data with \code{\link[=auto_transform]{auto_transform()}}}
 

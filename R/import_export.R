@@ -23,7 +23,7 @@ export_exec <- function(object,
                         needed_extension,
                         filename,
                         filename_deparse,
-                        card_number,
+                        project_number,
                         overwrite,
                         fn = NULL,
                         ...) {
@@ -45,7 +45,7 @@ export_exec <- function(object,
   needed_extension <- tolower(needed_extension)
   filename <- parse_file_location(filename,
                                   needed_extension = needed_extension,
-                                  card_number = card_number)
+                                  project_number = project_number)
   filename_old <- paste0(filename, ".certetoolbox_export")
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(object))
@@ -118,7 +118,7 @@ export_exec <- function(object,
 import_exec <- function(filename,
                         filename_deparse,
                         extension,
-                        card_number,
+                        project_number,
                         auto_transform,
                         ...) {
   extension <- extension[1L]
@@ -153,9 +153,9 @@ import_exec <- function(filename,
     # does not have extension yet
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
   }
-  if (!file.exists(filename) && !is.null(card_number)) {
+  if (!file.exists(filename) && !is.null(project_number)) {
     # try project file using the 'certeprojects' package
-    filename <- project_get_file(filename, card_number = card_number)
+    filename <- project_get_file(filename, project_number = project_number)
   }
   
   if (!file.exists(filename)) {
@@ -253,9 +253,9 @@ import_exec <- function(filename,
 }
 
 #' @importFrom certeprojects project_set_file
-parse_file_location <- function(filename, needed_extension, card_number) {
-  if (is.null(card_number) || is.na(card_number) || isFALSE(card_number) || card_number %in% c(0, "")) {
-    card_number <- NULL
+parse_file_location <- function(filename, needed_extension, project_number) {
+  if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
+    project_number <- NULL
   }
   needed_extension <- gsub("^[.]", "", needed_extension[1L])
   if (filename == ".") {
@@ -264,9 +264,9 @@ parse_file_location <- function(filename, needed_extension, card_number) {
   if (needed_extension != "" & filename %unlike% paste0("[.](", paste0(needed_extension, collapse = "|"), ")$")) {
     filename <- paste0(filename, ".", needed_extension[1L])
   }
-  if (!is.null(card_number) && filename %unlike% paste0("p", card_number, "|[A-Z]:/")) {
-    # has no valid location yet, so include card number
-    filename_proj <- project_set_file(filename, card_number = card_number)
+  if (!is.null(project_number) && filename %unlike% paste0("p", project_number, "|[A-Z]:/")) {
+    # has no valid location yet, so include project number
+    filename_proj <- project_set_file(filename, project_number = project_number)
     if (!is.na(filename_proj)) {
       filename <- filename_proj
     }
@@ -366,7 +366,7 @@ plot_export_result <- function(filename) {
 #' @param object,plot the \R object to export
 #' @param fn a manual export function, such as `haven::write_sas` to write SAS files. This function has to have the object as first argument and the future file location as second argument.
 #' @param filename the full path of the exported file
-#' @param card_number a Microsoft Planner project number
+#' @param project_number a Microsoft Planner project number
 #' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
@@ -403,7 +403,7 @@ plot_export_result <- function(filename) {
 #' file.remove("starwars.feather")
 export <- function(object,
                    filename = NULL,
-                   card_number = project_get_current_id(ask = FALSE),
+                   project_number = project_get_current_id(ask = FALSE),
                    overwrite = NULL,
                    fn = NULL,
                    ...) {
@@ -420,7 +420,7 @@ export <- function(object,
                 needed_extension = NULL,
                 filename = filename,
                 filename_deparse = deparse(substitute(filename)),
-                card_number = card_number,
+                project_number = project_number,
                 overwrite = overwrite,
                 fn = fn,
                 ...)
@@ -431,67 +431,67 @@ export <- function(object,
     if (filename %like% "[.]rds$") {
       export_rds(object = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]csv$") {
       export_csv(object = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]tsv$") {
       export_tsv(object = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]txt$") {
       export_txt(object = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]xlsx?$") {
       export_xlsx(object = object,
                   filename = filename,
-                  card_number = card_number,
+                  project_number = project_number,
                   overwrite = overwrite,
                   ...)
     } else if (filename %like% "[.]sav$") {
       export_sav(object = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]feather$") {
       export_feather(object = object,
                      filename = filename,
-                     card_number = card_number,
+                     project_number = project_number,
                      overwrite = overwrite,
                      ...)
     } else if (filename %like% "[.]parquet$") {
       export_parquet(object = object,
                      filename = filename,
-                     card_number = card_number,
+                     project_number = project_number,
                      overwrite = overwrite,
                      ...)
     } else if (filename %like% "[.]pdf$") {
       export_pdf(plot = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]png$") {
       export_png(plot = object,
                  filename = filename,
-                 card_number = card_number,
+                 project_number = project_number,
                  overwrite = overwrite,
                  ...)
     } else if (filename %like% "[.]html$") {
       export_html(plot = object,
                   filename = filename,
-                  card_number = card_number,
+                  project_number = project_number,
                   overwrite = overwrite,
                   ...)
     } else {
@@ -505,13 +505,13 @@ export <- function(object,
 #' @export
 export_rds <- function(object,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        ...) {
   export_exec(object, "rds",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               compress = "gzip",
               ascii = FALSE,
@@ -524,7 +524,7 @@ export_rds <- function(object,
 #' @export
 export_xlsx <- function(...,
                         filename = NULL,
-                        card_number = project_get_current_id(ask = FALSE),
+                        project_number = project_get_current_id(ask = FALSE),
                         overwrite = NULL,
                         sheet_names = NULL,
                         autofilter = TRUE,
@@ -536,20 +536,20 @@ export_xlsx <- function(...,
   object <- list(...)
   if (length(object) > 1) {
     # check if second value is filename
-    if ( is.null(filename) && is.character(object[[2]]) && length(object[[2]]) == 1) {
+    if (is.null(filename) && is.character(object[[2]]) && length(object[[2]]) == 1) {
       filename <- object[[2]]
       object <- object[-2]
     }
-    # check if third value is card number
-    if (length(object) > 1 && is.null(card_number) && is.numeric(object[[length(object)]]) && length(object[[length(object)]]) == 1) {
-      card_number <- object[[length(object)]]
+    # check if third value is project number
+    if (length(object) > 1 && is.null(project_number) && is.numeric(object[[length(object)]]) && length(object[[length(object)]]) == 1) {
+      project_number <- object[[length(object)]]
       object <- object[-length(object)]
     }
   }
   export_exec(object = object, "xlsx",
               filename = filename,
               filename_deparse = ".",
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               sheet_names = sheet_names,
               autofilter = autofilter,
@@ -570,14 +570,14 @@ export_excel <- export_xlsx
 #' @export
 export_csv <- function(object,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        na = "",
                        ...) {
   export_exec(object, "csv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
@@ -595,14 +595,14 @@ export_csv <- function(object,
 #' @export
 export_csv2 <- function(object,
                         filename = NULL,
-                        card_number = project_get_current_id(ask = FALSE),
+                        project_number = project_get_current_id(ask = FALSE),
                         overwrite = NULL,
                         na = "",
                         ...) {
   export_exec(object, "csv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
@@ -620,14 +620,14 @@ export_csv2 <- function(object,
 #' @export
 export_tsv <- function(object,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        na = "",
                        ...) {
   export_exec(object, "tsv",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
@@ -647,7 +647,7 @@ export_tsv <- function(object,
 #' @export
 export_txt <- function(object,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        sep = "\t",
                        na = "",
@@ -655,7 +655,7 @@ export_txt <- function(object,
   export_exec(object, "txt",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               append = FALSE,
               quote = TRUE,
@@ -674,14 +674,14 @@ export_txt <- function(object,
 #' @export
 export_sav <- function(object,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        ...) {
   check_is_installed("haven")
   export_exec(object, "sav",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               compress = FALSE)
 }
@@ -695,14 +695,14 @@ export_spss <- export_sav
 #' @export
 export_feather <- function(object,
                            filename = NULL,
-                           card_number = project_get_current_id(ask = FALSE),
+                           project_number = project_get_current_id(ask = FALSE),
                            overwrite = NULL,
                            ...) {
   check_is_installed("arrow")
   export_exec(object, "feather",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               ...)
 }
@@ -712,14 +712,14 @@ export_feather <- function(object,
 #' @export
 export_parquet <- function(object,
                            filename = NULL,
-                           card_number = project_get_current_id(ask = FALSE),
+                           project_number = project_get_current_id(ask = FALSE),
                            overwrite = NULL,
                            ...) {
   check_is_installed("arrow")
   export_exec(object, "parquet",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
-              card_number = card_number,
+              project_number = project_number,
               overwrite = overwrite,
               ...)
 }
@@ -732,7 +732,7 @@ export_parquet <- function(object,
 #' @export
 export_pdf <- function(plot,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        size = "A5",
                        portrait = FALSE,
@@ -755,7 +755,7 @@ export_pdf <- function(plot,
   }
   filename <- parse_file_location(filename,
                                   needed_extension = "pdf",
-                                  card_number = card_number)
+                                  project_number = project_number)
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -826,7 +826,7 @@ export_pdf <- function(plot,
 #' @export
 export_png <- function(plot,
                        filename = NULL,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        width = 1000,
                        height = 800,
@@ -851,7 +851,7 @@ export_png <- function(plot,
   }
   filename <- parse_file_location(filename,
                                   needed_extension = "png",
-                                  card_number = card_number)
+                                  project_number = project_number)
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -883,7 +883,7 @@ export_png <- function(plot,
 #' @export
 export_html <- function(plot,
                         filename = NULL,
-                        card_number = project_get_current_id(ask = FALSE),
+                        project_number = project_get_current_id(ask = FALSE),
                         overwrite = NULL,
                         ...) {
   check_is_installed(c("ggplot2", "htmltools"))
@@ -904,7 +904,7 @@ export_html <- function(plot,
   }
   filename <- parse_file_location(filename,
                                   needed_extension = "html",
-                                  card_number = card_number)
+                                  project_number = project_number)
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -933,7 +933,7 @@ export_html <- function(plot,
 #' These functions can be used to import data, from local or remote paths, or from the internet. They work closely with the `certeprojects` package to support Microsoft Planner project numbers. To support row names and older R versions, `import_*()` functions return plain [data.frame]s, not e.g. [tibble][tibble::tibble()]s.
 #' @param filename the full path of the file to be imported, will be parsed to a [character], can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)
 #' @param auto_transform transform the imported data with [auto_transform()]
-#' @param card_number a Microsoft Planner project number
+#' @param project_number a Microsoft Planner project number
 #' @param ... arguments passed on to methods
 #' @details `r doc_requirement("any unlisted filetype", "import", "rio")`.
 #' @rdname import
@@ -967,7 +967,7 @@ export_html <- function(plot,
 #' file.remove("mtcars.csv")
 #' file.remove("starwars.feather")
 import <- function(filename,
-                   card_number = project_get_current_id(ask = FALSE),
+                   project_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
                    ...) {
   if (!is.character(filename)) {
@@ -975,50 +975,50 @@ import <- function(filename,
   }
   if (filename %like% "[.]rds$") {
     import_rds(filename = filename,
-               card_number = card_number,
+               project_number = project_number,
                ...)
   } else if (filename %like% "[.]csv$" && (is.null(list(...)$sep) || identical(list(...)$sep, ","))) {
     import_csv(filename = filename,
-               card_number = card_number,
+               project_number = project_number,
                auto_transform = auto_transform,
                ...)
   } else if (filename %like% "[.]csv$" && identical(list(...)$sep, ";")) {
     import_csv2(filename = filename,
-                card_number = card_number,
+                project_number = project_number,
                 auto_transform = auto_transform,
                 ...)
   } else if (filename %like% "[.]tsv$") {
     import_tsv(filename = filename,
-               card_number = card_number,
+               project_number = project_number,
                auto_transform = auto_transform,
                ...)
   } else if (filename %like% "[.]txt$") {
     import_txt(filename = filename,
-               card_number = card_number,
+               project_number = project_number,
                auto_transform = auto_transform,
                ...)
   } else if (filename %like% "[.]xlsx?$") {
     import_xlsx(filename = filename,
-                card_number = card_number,
+                project_number = project_number,
                 auto_transform = auto_transform,
                 ...)
   } else if (filename %like% "[.]sav$") {
     import_sav(filename = filename,
-               card_number = card_number,
+               project_number = project_number,
                auto_transform = auto_transform,
                ...)
   } else if (filename %like% "[.]feather$") {
     import_feather(filename = filename,
-                   card_number = card_number,
+                   project_number = project_number,
                    ...)
   } else if (filename %like% "[.]parquet$") {
     import_parquet(filename = filename,
-                   card_number = card_number,
+                   project_number = project_number,
                    ...)
   } else {
     import_exec(filename,
                 extension = "",
-                card_number = card_number,
+                project_number = project_number,
                 auto_transform = auto_transform,
                 ...)
   }
@@ -1027,12 +1027,12 @@ import <- function(filename,
 #' @rdname import
 #' @export
 import_rds <- function(filename,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "rds",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = FALSE)
 }
 
@@ -1045,7 +1045,7 @@ import_rds <- function(filename,
 #' @importFrom cleaner format_datetime
 #' @export
 import_xlsx <- function(filename,
-                        card_number = project_get_current_id(ask = FALSE),
+                        project_number = project_get_current_id(ask = FALSE),
                         sheet = 1,
                         range = NULL,
                         auto_transform = TRUE,
@@ -1065,7 +1065,7 @@ import_xlsx <- function(filename,
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = ifelse(filename %like% "[.]xls$", "xls", "xlsx"),
-              card_number = card_number,
+              project_number = project_number,
               sheet = sheet,
               range = range,
               auto_transform = auto_transform,
@@ -1087,7 +1087,7 @@ import_excel <- import_xlsx
 #' @importFrom cleaner format_datetime
 #' @export
 import_csv <- function(filename,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        datenames = "nl",
                        dateformat = "yyyy-mm-dd",
@@ -1102,7 +1102,7 @@ import_csv <- function(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "csv",
               sep = ",",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -1118,7 +1118,7 @@ import_csv <- function(filename,
 #' @importFrom cleaner format_datetime
 #' @export
 import_csv2 <- function(filename,
-                        card_number = project_get_current_id(ask = FALSE),
+                        project_number = project_get_current_id(ask = FALSE),
                         auto_transform = TRUE,
                         datenames = "nl",
                         dateformat = "yyyy-mm-dd",
@@ -1133,7 +1133,7 @@ import_csv2 <- function(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "csv",
               sep = ";",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -1149,7 +1149,7 @@ import_csv2 <- function(filename,
 #' @importFrom cleaner format_datetime
 #' @export
 import_tsv <- function(filename,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        datenames = "nl",
                        dateformat = "yyyy-mm-dd",
@@ -1164,7 +1164,7 @@ import_tsv <- function(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "tsv",
               sep = "\t",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -1180,7 +1180,7 @@ import_tsv <- function(filename,
 #' @importFrom cleaner format_datetime
 #' @export
 import_txt <- function(filename,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        sep = "\t",
                        datenames = "nl",
@@ -1196,7 +1196,7 @@ import_txt <- function(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "txt",
               sep = sep,
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = format_datetime(dateformat),
@@ -1212,7 +1212,7 @@ import_txt <- function(filename,
 #' @details `r doc_requirement("an SPSS file", c("import_sav", "import_spss"), "haven")`.
 #' @export
 import_sav <- function(filename,
-                       card_number = project_get_current_id(ask = FALSE),
+                       project_number = project_get_current_id(ask = FALSE),
                        auto_transform = TRUE,
                        datenames = "en",
                        dateformat = "yyyy-mm-dd",
@@ -1226,7 +1226,7 @@ import_sav <- function(filename,
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "sav",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = auto_transform,
               datenames = datenames,
               dateformat = dateformat,
@@ -1247,14 +1247,14 @@ import_spss <- import_sav
 #' @importFrom dplyr everything
 #' @export
 import_feather <- function(filename,
-                           card_number = project_get_current_id(ask = FALSE),
+                           project_number = project_get_current_id(ask = FALSE),
                            col_select = everything(),
                            ...) {
   check_is_installed("arrow")
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "feather",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = FALSE,
               col_select = col_select)
 }
@@ -1264,14 +1264,14 @@ import_feather <- function(filename,
 #' @importFrom dplyr everything
 #' @export
 import_parquet <- function(filename,
-                           card_number = project_get_current_id(ask = FALSE),
+                           project_number = project_get_current_id(ask = FALSE),
                            col_select = everything(),
                            ...) {
   check_is_installed("arrow")
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "parquet",
-              card_number = card_number,
+              project_number = project_number,
               auto_transform = FALSE,
               col_select = col_select)
 }

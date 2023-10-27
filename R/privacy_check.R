@@ -64,7 +64,7 @@ privacy_check <- function(path = getwd(),
   for (i in seq_len(nrow(to_check))) {
     f <- to_check[i, "file", drop = TRUE]
     
-    df <- tryCatch(suppressWarnings(suppressMessages(import(filename = f, card_number = NULL, auto_transform = FALSE))),
+    df <- tryCatch(suppressWarnings(suppressMessages(import(filename = f, project_number = NULL, auto_transform = FALSE))),
                    error = function(x) NULL)
     
     if (!is.null(df)) {
