@@ -321,7 +321,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
       # so the file exists - create a backup so it can be reverted back if export fails
       file.copy(from = filename, to = paste0(filename, ".certetoolbox_export"))
       # and remove the existing file
-      try(file.remove2(filename, force = TRUE), silent = TRUE)
+      try(file.remove2(filename), silent = TRUE)
     }
     return(isTRUE(q))
   } else {
@@ -329,7 +329,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
     filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
     file.copy(from = filename, to = filename_new)
     # and remove the existing file
-    try(file.remove2(filename, force = TRUE), silent = TRUE)
+    try(file.remove2(filename), silent = TRUE)
     message("Original file ", filename, " existed, this file was renamed to ", filename_new, " before overwriting the original file.")
     return(TRUE)
   }
@@ -349,7 +349,7 @@ plot_export_result <- function(filename) {
     warning("Error while saving `", filename, "`.", call. = FALSE)
   }
   
-  try(file.remove2(filename_old, force = TRUE), silent = TRUE)
+  try(file.remove2(filename_old), silent = TRUE)
   if (file.exists(filename)) {
     return(invisible(tools::file_path_as_absolute(filename)))
   } else {

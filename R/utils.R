@@ -31,7 +31,7 @@ globalVariables(c(".",
 pkg_env <- new.env(hash = FALSE)
 pkg_env$temp <- list()
 
-file.remove2 <- function(x) {
+file.remove2 <- function(x, ...) {
   if (file.exists(x)) {
     file.remove(x)
   }
