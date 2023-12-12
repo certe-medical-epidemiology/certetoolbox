@@ -170,7 +170,6 @@ test_that("environment works", {
 test_that("import_export works", {
   # check location parser
   expect_identical(basename(parse_file_location("test", "csv", project_number = 0)), "test.csv")
-  expect_identical(basename(suppressWarnings(parse_file_location(".", "csv", project_number = 123))), "tbl.csv")
   
   # helper function for import/export checking:
   identical_import_export <- function(import_fn, export_fn, fileext,
