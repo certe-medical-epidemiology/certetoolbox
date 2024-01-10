@@ -54,7 +54,7 @@ tbl_flextable(
   autofit.fullpage.width = 16,
   vline = NULL,
   vline.part = c("body", "footer"),
-  theme = "certeblauw",
+  theme = current_markdown_colour(),
   colours = list(rows.fill.even = paste0(theme, "6"), rows.fill.odd = paste0(theme, "5"),
     columns.fill = paste0(theme, "5"), values.fill = paste0(theme, "3"), values.colour =
     theme, vline.colour = theme, hline.colour = theme, header.fill = theme, header.colour
@@ -156,7 +156,7 @@ tbl_flextable(
 
 \item{vline.part}{part of the table where the vertical lines should be placed ("all", "header", "body", "footer")}
 
-\item{theme}{a Certe colour theme, such as \code{"certeblauw"} (default), \code{"certeroze"} or \code{"certegroen"}. This will set the list in \code{colours} and will be ignored if \code{colours} is set manually. Can be set to "white" for a clean look.}
+\item{theme}{a Certe colour theme, defaults to \code{\link[certestyle:current_markdown_colour]{current_markdown_colour()}} which determines the Certe colour based on a markdown YAML header and defaults to \code{"certeblauw"}. Can also be \code{"certeroze"}, \code{"certegroen"}, etc. This will set the list in \code{colours} and will be ignored if \code{colours} is set manually. Can be set to "white" for a clean look.}
 
 \item{colours}{a \link{list} with the following named character values: \code{rows.fill.even}, \code{rows.fill.odd}, \code{columns.fill}, \code{values.fill}, and \code{values.colour}. All values will be evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}.}
 
@@ -173,7 +173,7 @@ Format a \link{data.frame} as \code{\link[=flextable]{flextable()}} with Certe s
 \details{
 Run \code{\link[=tbl_markdown]{tbl_markdown()}} on a \code{flextable} object to transform it into markdown for use in Quarto or R Markdown reports. If \code{print = TRUE} in non-interactive sessions (Quarto or R Markdown), the \code{flextable} object will also be printed in markdown.
 
-Use \code{theme} to set a colour theme, defaults to \code{"certeblauw"}:
+The value for \code{theme} is dependent on whether a colour is set in the markdown YAML header. Otherwise, use \code{theme} to set a Certe colour theme, defaults to \code{"certeblauw"}:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# from the example below
 tbl_flextable(df)

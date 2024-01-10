@@ -67,12 +67,12 @@
 #' @param columns.percent display the column indices as percentages using [`format2()`][certestyle::format2()] - example: `columns.percent = c(2, 3)`
 #' @param round.numbers number of decimal places to round up for numbers
 #' @param round.percent number of decimal places to round to when using `columns.percent`
-#' @param theme a Certe colour theme, such as `"certeblauw"` (default), `"certeroze"` or `"certegroen"`. This will set the list in `colours` and will be ignored if `colours` is set manually. Can be set to "white" for a clean look.
+#' @param theme a Certe colour theme, defaults to [`current_markdown_colour()`][certestyle::current_markdown_colour()] which determines the Certe colour based on a markdown YAML header and defaults to `"certeblauw"`. Can also be `"certeroze"`, `"certegroen"`, etc. This will set the list in `colours` and will be ignored if `colours` is set manually. Can be set to "white" for a clean look.
 #' @param colours a [list] with the following named character values: `rows.fill.even`, `rows.fill.odd`, `columns.fill`, `values.fill`, and `values.colour`. All values will be evaluated with [`colourpicker()`][certestyle::colourpicker()].
 #' @param print forced printing (required in a `for`` loop)
 #' @details Run [tbl_markdown()] on a `flextable` object to transform it into markdown for use in Quarto or R Markdown reports. If `print = TRUE` in non-interactive sessions (Quarto or R Markdown), the `flextable` object will also be printed in markdown.
 #' 
-#' Use `theme` to set a colour theme, defaults to `"certeblauw"`:
+#' The value for `theme` is dependent on whether a colour is set in the markdown YAML header. Otherwise, use `theme` to set a Certe colour theme, defaults to `"certeblauw"`:
 #' 
 #' ```r
 #' # from the example below
@@ -95,7 +95,7 @@
 #' @seealso [flextable()]
 #' @return [flextable] object
 #' @rdname tbl_flextable
-#' @importFrom certestyle colourpicker format2
+#' @importFrom certestyle colourpicker format2 current_markdown_colour
 #' @importFrom dplyr bind_cols pull
 #' @importFrom flextable flextable border fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline flextable_to_rmd add_header_row set_flextable_defaults hline_top hline_bottom
 #' @importFrom cleaner as.percentage
@@ -224,7 +224,7 @@ tbl_flextable <- function(x,
                           autofit.fullpage.width = 16,
                           vline = NULL,
                           vline.part = c("body", "footer"),
-                          theme = "certeblauw",
+                          theme = current_markdown_colour(),
                           colours = list(
                             rows.fill.even = paste0(theme, "6"),
                             rows.fill.odd = paste0(theme, "5"),
@@ -250,19 +250,26 @@ tbl_flextable <- function(x,
   
   if (theme == "white") {
     colours <- list(
-      rows.fill.even = "certeroze5",
+      rows.fill.even = "#eeeeee",
       rows.fill.odd = "white",
-      columns.fill = "certeroze5",
-      values.fill = "certeroze3",
-      values.colour = "certeroze",
+      columns.fill = "#eeeeee",
+      values.fill = "#cccccc",
+      values.colour = "#999999",
       vline.colour = "black",
       hline.colour = "black",
       header.fill = "white",
       header.colour = "black",
       vline.header.colour = "black")
     if (missing(rows.zebra)) {
+      # default zebra rows FALSE
       rows.zebra <- FALSE
     }
+  } else if (theme %unlike% "^certe[a-z]+$") {
+    stop("`theme` cannot be \"", theme, "\" - it must be \"white\" or a Certe colour theme, either ",
+         toString(paste0('"', unique(gsub("[^a-z]" , "", names(certestyle::certe.colours))), '"')),
+         call. = FALSE)
+  } else if (theme %in% c("certegeel", "certezachtlila") && missing(colours)) {
+    colours$header.colour <- "black"
   }
   
   if (inherits(x, "gtsummary")) {
