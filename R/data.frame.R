@@ -749,6 +749,18 @@ tbl_flextable <- function(x,
   }
 }
 
+#' @importFrom knitr knit_print
+#' @method knit_print flextable
+#' @export
+knit_print.flextable <- function(x, ...) {
+  if (interactive()) {
+    print(x)
+  } else {
+    # not interactive like in R Markdown - print as markdown table
+    flextable_to_rmd(x, print = TRUE)
+  }
+}
+
 #' Summarise Table as `gtsummary`
 #'
 #' Summarise a [data.frame] as [`gtsummary`][gtsummary::tbl_summary()] with Dutch defaults. These objects are based on the `gt` package by RStudio. To provide Certe style and compatibility with MS Word, use [tbl_flextable()] to transform the [`gtsummary`][gtsummary::tbl_summary()] object.
