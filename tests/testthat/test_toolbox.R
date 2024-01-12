@@ -45,6 +45,12 @@ test_that("character works", {
 })
 
 test_that("data.frame works", {
+  
+  expect_true("knitr_update_properties" %in% ls(envir = asNamespace("flextable")))
+  expect_true("is_in_bookdown" %in% ls(envir = asNamespace("flextable")))
+  expect_true("is_in_quarto" %in% ls(envir = asNamespace("flextable")))
+  expect_true("knit_to_latex" %in% ls(envir = asNamespace("flextable")))
+  
   expect_s3_class(tbl_flextable("test"), "flextable")
   expect_s3_class(tbl_flextable(mtcars), "flextable")
   expect_s3_class(tbl_flextable(mtcars, rows.height = 2), "flextable")

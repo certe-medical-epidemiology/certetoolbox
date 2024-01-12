@@ -804,15 +804,13 @@ export_pdf <- function(plot,
     width <- height.bak
   }
   
-  suppressWarnings(
-    ggplot2::ggsave(filename = filename,
-                    device = grDevices::cairo_pdf,
-                    width = width,
-                    height = height,
-                    units = "mm",
-                    plot = plot,
-                    ...)
-  )
+  ggplot2::ggsave(filename = filename,
+                  device = grDevices::cairo_pdf,
+                  width = width,
+                  height = height,
+                  units = "mm",
+                  plot = plot,
+                  ...)
   
   plot_export_result(filename)
 }

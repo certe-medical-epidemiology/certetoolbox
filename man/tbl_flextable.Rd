@@ -59,6 +59,7 @@ tbl_flextable(
     columns.fill = paste0(theme, "5"), values.fill = paste0(theme, "3"), values.colour =
     theme, vline.colour = theme, hline.colour = theme, header.fill = theme, header.colour
     = "white", vline.header.colour = "white"),
+  split.across.pages = FALSE,
   print = FALSE,
   ...
 )
@@ -159,6 +160,8 @@ tbl_flextable(
 \item{theme}{a Certe colour theme, defaults to \code{\link[certestyle:current_markdown_colour]{current_markdown_colour()}} which determines the Certe colour based on a markdown YAML header and defaults to \code{"certeblauw"}. Can also be \code{"certeroze"}, \code{"certegroen"}, etc. This will set the list in \code{colours} and will be ignored if \code{colours} is set manually. Can be set to "white" for a clean look.}
 
 \item{colours}{a \link{list} with the following named character values: \code{rows.fill.even}, \code{rows.fill.odd}, \code{columns.fill}, \code{values.fill}, and \code{values.colour}. All values will be evaluated with \code{\link[certestyle:colourpicker]{colourpicker()}}.}
+
+\item{split.across.pages}{a \link{logical} whether tables are allowed to split across page. This argument only has effect for PDF output.}
 
 \item{print}{forced printing (required in a `for`` loop)}
 
