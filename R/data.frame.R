@@ -766,8 +766,9 @@ knit_print.flextable <- function(x, ...) {
 }
 
 #' @importFrom flextable flextable_to_rmd
+#' @importFrom knitr is_latex_output asis_output opts_chunk raw_latex
 manual_flextable_print <- function(x) {
-  if (knitr::is_latex_output()) {
+  if (is_latex_output()) {
     knitr_update_properties <- get("knitr_update_properties", envir = asNamespace("flextable"))
     is_in_bookdown <- get("is_in_bookdown", envir = asNamespace("flextable"))
     is_in_quarto <- get("is_in_quarto", envir = asNamespace("flextable"))
@@ -783,9 +784,9 @@ manual_flextable_print <- function(x) {
     if (!isTRUE(attributes(x)$split.across.pages) && grepl("longtable", paste(out, collapse = ""))) {
       # this replace flextable's longtable to tabular
       if (grepl("endfirsthead", out)) {
-        out <- gsub("[\\]begin[{]longtable[}][[]c[]](.*?)[}][}].*[\\]endfirsthead", "\\\\begin{table}[H]\n\\\\centering\n\\\\begin{tabular}\\1}}", out)
+        out <- gsub("[\\]begin[{]longtable[}][[].[]](.*?)[}][}].*[\\]endfirsthead", "\\\\begin{table}[H]\n\\\\centering\n\\\\begin{tabular}\\1}}", out)
       } else {
-        out <- gsub("\\begin{longtable}[c]", "\\begin{table}[H]\n\\centering\n\\begin{tabular}", out, fixed = TRUE)
+        out <- gsub("[\\]begin[{]longtable[}][[].[]]", "\\\\begin{table}[H]\n\\\\centering\n\\\\begin{tabular}", out, fixed = TRUE)
       }
       out <- gsub("\\end{longtable}", "\\end{tabular}\n\\end{table}", out, fixed = TRUE)
       out <- gsub("\\endhead", "", out, fixed = TRUE)
@@ -794,10 +795,15 @@ manual_flextable_print <- function(x) {
       out <- gsub("\\endlastfoot", "", out, fixed = TRUE)
     }
     
-    knitr::asis_output(out)
+    if (opts_chunk$get("results") == "asis") {
+      cat(raw_latex(out))
+      return(invisible(""))
+    } else {
+      return(asis_output(out))
+    }
     
   } else {
-    x |> flextable_to_rmd()
+    return(flextable_to_rmd(x))
   }
 }
 
@@ -990,7 +996,7 @@ tbl_markdown <- function(x,
   }
   
   if (inherits(x, "flextable")) {
-    return(invisible(flextable_to_rmd(x, print = print)))
+    return(invisible(manual_flextable_print(x)))
   }
   
   x <- as.data.frame(x, stringsAsFactors = FALSE)

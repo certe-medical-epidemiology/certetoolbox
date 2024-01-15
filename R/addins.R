@@ -67,7 +67,10 @@ addin_insert_pipe <- function() {
   current_row <- context$selection[[1]]$range$end[1]
   current_col <- context$selection[[1]]$range$end[2]
   current_row_txt <- context$contents[current_row]
-  if (is.null(current_row) || current_row_txt %unlike% "(|>|%>%|%\\$%)") {
+  if (is.null(current_row) || current_row_txt %unlike% paste0("(", 
+                                                              "[|][>]", "|",
+                                                              "[%][>][%]", "|",
+                                                              "[%][\\][$%]", ")")) {
     insertText(" |> ")
     return(invisible())
   }
