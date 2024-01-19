@@ -766,7 +766,7 @@ knit_print.flextable <- function(x, ...) {
 }
 
 #' @importFrom flextable flextable_to_rmd
-#' @importFrom knitr is_latex_output asis_output opts_chunk raw_latex
+#' @importFrom knitr is_latex_output asis_output opts_chunk opts_current raw_latex
 manual_flextable_print <- function(x) {
   if (is_latex_output()) {
     knitr_update_properties <- get("knitr_update_properties", envir = asNamespace("flextable"))
@@ -796,6 +796,9 @@ manual_flextable_print <- function(x) {
     }
     
     if (opts_chunk$get("results") == "asis") {
+      cat(raw_latex(out))
+      return(invisible(""))
+    } else if (opts_current$get("results") == "asis") {
       cat(raw_latex(out))
       return(invisible(""))
     } else {
