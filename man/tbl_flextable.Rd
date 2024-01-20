@@ -60,7 +60,7 @@ tbl_flextable(
     theme, vline.colour = theme, hline.colour = theme, header.fill = theme, header.colour
     = "white", vline.header.colour = "white"),
   split.across.pages = FALSE,
-  print = FALSE,
+  print = !interactive(),
   ...
 )
 }
@@ -163,7 +163,7 @@ tbl_flextable(
 
 \item{split.across.pages}{a \link{logical} whether tables are allowed to split across page. This argument only has effect for PDF output.}
 
-\item{print}{forced printing (required in a `for`` loop)}
+\item{print}{forced printing (required in a \code{for} loop), default is \code{TRUE} in non-interactive sessions}
 
 \item{...}{not used}
 }

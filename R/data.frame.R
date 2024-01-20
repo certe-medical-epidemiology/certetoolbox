@@ -70,7 +70,7 @@
 #' @param theme a Certe colour theme, defaults to [`current_markdown_colour()`][certestyle::current_markdown_colour()] which determines the Certe colour based on a markdown YAML header and defaults to `"certeblauw"`. Can also be `"certeroze"`, `"certegroen"`, etc. This will set the list in `colours` and will be ignored if `colours` is set manually. Can be set to "white" for a clean look.
 #' @param colours a [list] with the following named character values: `rows.fill.even`, `rows.fill.odd`, `columns.fill`, `values.fill`, and `values.colour`. All values will be evaluated with [`colourpicker()`][certestyle::colourpicker()].
 #' @param split.across.pages a [logical] whether tables are allowed to split across page. This argument only has effect for PDF output.
-#' @param print forced printing (required in a `for`` loop)
+#' @param print forced printing (required in a `for` loop), default is `TRUE` in non-interactive sessions
 #' @details Run [tbl_markdown()] on a `flextable` object to transform it into markdown for use in Quarto or R Markdown reports. If `print = TRUE` in non-interactive sessions (Quarto or R Markdown), the `flextable` object will also be printed in markdown.
 #' 
 #' The value for `theme` is dependent on whether a colour is set in the markdown YAML header. Otherwise, use `theme` to set a Certe colour theme, defaults to `"certeblauw"`:
@@ -238,7 +238,7 @@ tbl_flextable <- function(x,
                             header.colour = "white",
                             vline.header.colour = "white"),
                           split.across.pages = FALSE,
-                          print = FALSE,
+                          print = !interactive(),
                           ...) {
   
   if (any(c("rows.fill.picker", "values.colour.picker", "values.fill.picker", "columns.fill.picker", "vline.border") %in% names(list(...)))) {
@@ -753,18 +753,6 @@ tbl_flextable <- function(x,
   }
 }
 
-#' @importFrom knitr knit_print
-#' @method knit_print flextable
-#' @export
-knit_print.flextable <- function(x, ...) {
-  if (interactive()) {
-    print(x)
-  } else {
-    # not interactive like in R Markdown - print as markdown table
-    manual_flextable_print(x)
-  }
-}
-
 #' @importFrom flextable flextable_to_rmd
 #' @importFrom knitr is_latex_output asis_output opts_chunk opts_current raw_latex
 manual_flextable_print <- function(x) {
@@ -799,6 +787,7 @@ manual_flextable_print <- function(x) {
       cat(raw_latex(out))
       return(invisible(""))
     } else if (opts_current$get("results") == "asis") {
+      # required for Quarto
       cat(raw_latex(out))
       return(invisible(""))
     } else {
