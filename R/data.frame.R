@@ -237,7 +237,7 @@ tbl_flextable <- function(x,
                             header.fill = theme,
                             header.colour = "white",
                             vline.header.colour = "white"),
-                          split.across.pages = FALSE,
+                          split.across.pages = NROW(x) > 37,
                           print = !interactive(),
                           ...) {
   
