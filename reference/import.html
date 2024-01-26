@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.12</span>
       </span>
     </div>
 
@@ -416,9 +416,15 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (150x5) to '/tmp/RtmpWACojl/file18714ac3831b/reference/iris.csv' (3.9 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># export(iris, "iris.csv")</span></span></span>
@@ -427,32 +433,43 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># row names are also supported</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Row names added as first column 'rownames'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (32x12) to '/tmp/RtmpWACojl/file18714ac3831b/reference/mtcars.csv' (1.7 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Row names restored from first column.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apache's Feather and Parquet formats are column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu"><a href="export.html">export_feather</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87x14) to '/tmp/RtmpWACojl/file18714ac3831b/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu">import</span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (path %unlike% "p[0-9]+") {    path &lt;- NULL}:</span> argument is of length zero</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   height  hair_color homeworld</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    172       blond  Tatooine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    167        &lt;NA&gt;  Tatooine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     96        &lt;NA&gt;     Naboo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    202        none  Tatooine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    150       brown  Alderaan</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    178 brown, grey  Tatooine</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># (cleanup)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="st">"iris.csv"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot remove file 'iris.csv', reason 'No such file or directory'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="st">"mtcars.csv"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot remove file 'mtcars.csv', reason 'No such file or directory'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="st">"starwars.feather"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot remove file 'starwars.feather', reason 'No such file or directory'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
