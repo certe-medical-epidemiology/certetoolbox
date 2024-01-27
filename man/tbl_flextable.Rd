@@ -59,7 +59,7 @@ tbl_flextable(
     columns.fill = paste0(theme, "5"), values.fill = paste0(theme, "3"), values.colour =
     theme, vline.colour = theme, hline.colour = theme, header.fill = theme, header.colour
     = "white", vline.header.colour = "white"),
-  split.across.pages = FALSE,
+  split.across.pages = NROW(x) > 37,
   print = !interactive(),
   ...
 )
