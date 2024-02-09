@@ -1196,7 +1196,10 @@ auto_transform <- function(x,
     
     # set times/dates
     if (col_name %like% "_(tijd|time)$") {
-      x[, i] <- try_convert(as_hms(col_data),
+      hms_data <- col_data
+      # hms::as_hms() only supports HH:MM:SS since recent versions, but we want to keep support for HH:MM, so:
+      hms_data[hms_data %like% "^[0-9]?[0-9]:[0-9][0-9]$"] <- paste0(hms_data[hms_data %like% "^[0-9]?[0-9]:[0-9][0-9]$"], ":00")
+      x[, i] <- try_convert(as_hms(hms_data),
                             backup = x[, i, drop = TRUE], col = i)
     } else if (col_name %like% "_(datum|date)$") {
       x[, i] <- try_convert(clean_Date(col_data, guess_each = TRUE),
