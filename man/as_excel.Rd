@@ -14,6 +14,7 @@ as_excel(
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
   table_style = "TableStyleMedium2",
+  creator = Sys.info()["user"],
   align = "center"
 )
 
@@ -35,6 +36,8 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 \item{freeze_top_row}{freeze the first row of the sheet}
 
 \item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
+\item{creator}{name of the creator of the document}
 
 \item{align}{horizontal alignment of text}
 

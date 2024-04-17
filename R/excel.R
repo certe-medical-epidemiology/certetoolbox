@@ -28,13 +28,14 @@
 #' @param cols_zebra create banded columns
 #' @param freeze_top_row freeze the first row of the sheet
 #' @param table_style style(s) for each table, see below. This can also be a vector with the same length as `...`.
+#' @param creator name of the creator of the document
 #' @param align horizontal alignment of text
 #' @section Supported Table Styles:
 #' For the argument `table_style`, use one or more of these table styles as character input. The default is **TableStyleMedium2**.
 #' 
 #' ![table styles](tablestyles.png)
 #' @rdname as_excel
-#' @importFrom openxlsx createStyle loadWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths removeWorksheet
+#' @importFrom openxlsx createStyle loadWorkbook modifyBaseFont addWorksheet writeDataTable addStyle freezePane setColWidths removeWorksheet addCreator
 #' @importFrom tibble rownames_to_column
 #' @importFrom certestyle format2
 #' @export
@@ -66,6 +67,7 @@ as_excel <- function(...,
                      cols_zebra = FALSE,
                      freeze_top_row = TRUE,
                      table_style = "TableStyleMedium2",
+                     creator = Sys.info()["user"],
                      align = "center") {
   dots <- list(...)
   if (length(dots) == 1 && is.list(dots[[1]]) && !is.data.frame(dots[[1]])) {
@@ -121,7 +123,7 @@ as_excel <- function(...,
       }
       col_widths[col] <- min(255,
                              max(c(8, nchar(c(colnames(df)[col],
-                                              as.character(df[, col, drop = TRUE]))) * 1.2),
+                                              as.character(df[, col, drop = TRUE]))) * 1.25),
                                  na.rm = TRUE),
                              na.rm = TRUE)
     }
@@ -129,7 +131,7 @@ as_excel <- function(...,
                  sheetName = names(dots)[i])
     writeDataTable(wb = wb,
                    x = df,
-                   tableName = paste0("tabel_", i),
+                   tableName = paste0("Tabel", i),
                    sheet = i + 1, # since template sheet is #1
                    withFilter = isTRUE(autofilter),
                    bandedRows = isTRUE(rows_zebra),
@@ -161,6 +163,9 @@ as_excel <- function(...,
   
   # remove template worksheet
   removeWorksheet(wb, "exceltemplate")
+  
+  # set creator
+  addCreator(wb, creator)
   
   wb
 }

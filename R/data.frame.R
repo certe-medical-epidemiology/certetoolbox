@@ -89,10 +89,29 @@
 #' ![tbl_flextable_certeroze](flextableroze.png)
 #' 
 #' ```r
+#' tbl_flextable(df, theme = "certegeel")
+#' ````
+#' 
+#' ![tbl_flextable_certegeel](flextablegeel.png)
+#' 
+#' ```r
 #' tbl_flextable(df, theme = "certegroen", vline = c(2:3))
 #' ````
 #' 
 #' ![tbl_flextable_certegroen](flextablegroen.png)
+#' 
+#' ```r
+#' tbl_flextable(
+#'   df,
+#'   theme = "certelila",
+#'   row.total = TRUE,
+#'   row.total.function = median,
+#'   round.numbers = 4,
+#'   row.extra.header = list(values = LETTERS[1:5])
+#' )
+#' ```
+#' 
+#' ![tbl_flextable_certelila](flextablelila.png)
 #' @seealso [flextable()]
 #' @return [flextable] object
 #' @rdname tbl_flextable

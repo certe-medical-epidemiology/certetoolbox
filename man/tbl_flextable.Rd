@@ -189,10 +189,27 @@ tbl_flextable(df)
 
 \figure{flextableroze.png}
 
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl_flextable(df, theme = "certegeel")
+}\if{html}{\out{</div>}}
+
+\figure{flextablegeel.png}
+
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl_flextable(df, theme = "certegroen", vline = c(2:3))
 }\if{html}{\out{</div>}}
 
 \figure{flextablegroen.png}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl_flextable(
+  df,
+  theme = "certelila",
+  row.total = TRUE,
+  row.total.function = median,
+  round.numbers = 4,
+  row.extra.header = list(values = LETTERS[1:5])
+)
+}\if{html}{\out{</div>}}
+
+\figure{flextablelila.png}
 }
 \examples{
 # generate a data.frame
