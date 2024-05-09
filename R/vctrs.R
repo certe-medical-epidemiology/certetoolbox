@@ -56,6 +56,24 @@ vec_cast.integer.character <- function(x, to, ...) {
   as.integer(x)
 }
 
+#' @method vec_cast.double integer
+#' @importFrom vctrs vec_cast.double
+#' @noRd
+#' @export
+vec_cast.double.integer <- function(x, to, ...) {
+  warning("Coercing <integer> to <double>", call. = FALSE)
+  as.double(x)
+}
+
+#' @method vec_cast.integer double
+#' @importFrom vctrs vec_cast.integer
+#' @noRd
+#' @export
+vec_cast.integer.double <- function(x, to, ...) {
+  warning("Coercing <double> to <integer>", call. = FALSE)
+  as.integer(x)
+}
+
 #' @method vec_ptype2.character double
 #' @importFrom vctrs vec_ptype2.character
 #' @noRd
@@ -89,5 +107,23 @@ vec_ptype2.character.integer <- function(x, y, ...) {
 #' @export
 vec_ptype2.integer.character <- function(x, y, ...) {
   # vec_cast() makes sure this character will be become an integer
+  x
+}
+
+#' @method vec_ptype2.double integer
+#' @importFrom vctrs vec_ptype2.double
+#' @noRd
+#' @export
+vec_ptype2.double.integer <- function(x, y, ...) {
+  # vec_cast() makes sure this integer will be become a double
+  x
+}
+
+#' @method vec_ptype2.integer double
+#' @importFrom vctrs vec_ptype2.integer
+#' @noRd
+#' @export
+vec_ptype2.integer.double <- function(x, y, ...) {
+  # vec_cast() makes sure this double will be become an integer
   x
 }

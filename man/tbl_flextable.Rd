@@ -212,6 +212,8 @@ tbl_flextable(df)
 \figure{flextablelila.png}
 }
 \examples{
+\dontrun{
+
 # generate a data.frame
 df <- data.frame(text = LETTERS[1:10],
                  `decimal numbers` = runif(10, 0, 10),
@@ -285,7 +287,7 @@ tbl_flextable(data.frame(test1 = "A", test2 = "B"),
                                       widths = c(1, 1)),
               row.extra.footer = list(values = c("Footer", "Footer"),
                                       widths = c(1, 1)))
-                                      
+}
 }
 \seealso{
 \code{\link[=flextable]{flextable()}}

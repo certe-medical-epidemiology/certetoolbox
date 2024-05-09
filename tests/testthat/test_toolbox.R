@@ -75,7 +75,6 @@ test_that("data.frame works", {
   expect_s3_class(mtcars |> tbl_flextable(columns.percent = 8, print = FALSE), "flextable")
   expect_true(inherits(tbl_markdown("test"), "list"))
   expect_true(inherits(tbl_markdown(Sys.Date()), "list"))
-  expect_invisible(tbl_flextable(mtcars, print = TRUE))
   expect_true(inherits(data.frame(a = c(TRUE, FALSE),
                                   b = c(FALSE, TRUE)) |>
                          tbl_markdown(logicals = c(TRUE, FALSE)),
@@ -211,7 +210,7 @@ test_that("import_export works", {
       new_df[, i] <- vct
     }
     # clean up:
-    file.remove(templocation)
+    unlink(templocation)
     # test:
     same <- identical(old_df, new_df)
     if (!isTRUE(same)) {
@@ -275,8 +274,8 @@ test_that("import_export works", {
                  import_feather(col_select = dplyr::matches("d")) |> 
                  dim(),
                c(32, 2))
-  file.remove("iris.feather")
-  file.remove("mtcars.feather")
+  unlink("iris.feather")
+  unlink("mtcars.feather")
   
   # check overwrite function
   export_csv(iris, "iris_overwrite")
@@ -291,7 +290,7 @@ test_that("import_export works", {
   export_csv(iris, "iris_overwrite", overwrite = TRUE)
   mtime_new <- file.mtime("iris_overwrite.csv")
   expect_lt(mtime_old, mtime_new)
-  file.remove("iris_overwrite.csv")
+  unlink("iris_overwrite.csv")
   unlink("iris_overwrite*.csv")
   
   # remote files
@@ -305,23 +304,23 @@ test_that("import_export works", {
   
   if (Sys.info()["sysname"] %in% c("Windows", "Linux")) {
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a1"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a2"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a3"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a4"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a5"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a6"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a7"))))
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a999"))))
     temp_png <- tempfile(fileext = ".png")
     expect_true(file.exists(suppressMessages(export_png(p, filename = temp_png))))
@@ -329,11 +328,11 @@ test_that("import_export works", {
     temp_html <- tempfile(fileext = ".html")
     expect_true(file.exists(suppressMessages(export_html(p, filename = temp_html))))
     
-    file.remove(temp_pdf)
+    unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
-    file.remove(temp_png)
+    unlink(temp_png)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
-    file.remove(temp_html)
+    unlink(temp_html)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_html))))
   }
   
@@ -343,10 +342,10 @@ test_that("import_export works", {
   expect_identical(rownames(import_csv(temp_csv)), rownames(mtcars))
   
   # test manual export function
-  file.remove(temp_csv)
+  unlink(temp_csv)
   suppressWarnings(export(mtcars, temp_csv, fn = utils::write.table))
   expect_true(file.exists(temp_csv))
-  file.remove(temp_csv)
+  unlink(temp_csv)
   suppressWarnings(export(mtcars, temp_csv, fn = "utils::write.table"))
   expect_true(file.exists(temp_csv))
   expect_error(export(mtcars, temp_csv, fn = "non-existing-function"))

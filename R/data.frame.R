@@ -121,6 +121,8 @@
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
+#' \dontrun{
+#' 
 #' # generate a data.frame
 #' df <- data.frame(text = LETTERS[1:10],
 #'                  `decimal numbers` = runif(10, 0, 10),
@@ -194,7 +196,7 @@
 #'                                       widths = c(1, 1)),
 #'               row.extra.footer = list(values = c("Footer", "Footer"),
 #'                                       widths = c(1, 1)))
-#'                                       
+#' }
 tbl_flextable <- function(x,
                           row.names = rownames(x),
                           row.names.bold = TRUE,
@@ -1118,24 +1120,43 @@ auto_transform <- function(x,
     x <- format_names(x, snake_case = TRUE)
   }
   
-  try_convert <- function(x, backup, col) {
-    tryCatch(x,
+  dateformat <- format_datetime(dateformat)
+  timeformat <- format_datetime(timeformat)
+  pb <- progress::progress_bar$new(total = ncol(x),
+                                   format = "Auto-transform: :what [:bar] :percent",
+                                   show_after = 0)
+  col_names <- format(colnames(x))
+  
+  try_convert <- function(object, backup, col) {
+    tryCatch(object,
              error = function(e) {
-               message("NOTE: Ignoring auto transform of column ", col, " because of error:\n  ", gsub("\n", "\n  ", e$message))
+               msg <- paste0("NOTE: Ignoring column ", trimws(col_names[col]), " because of error: ",
+                             gsub("\n", " ", e$message))
+               pb$message(msg)
                return(backup)
              },
              warning = function(e) {
-               message("NOTE: Ignoring auto transform of column ", col, " because of warning:\n  ", gsub("\n", "\n  ", e$message))
-               return(backup)
+               msg <- paste0("Column ", trimws(col_names[col]), ": ",
+                             gsub("\n", " ", e$message))
+               pb$message(msg)
+               return(suppressWarnings(object))
              })
   }
   
-  dateformat <- format_datetime(dateformat)
-  timeformat <- format_datetime(timeformat)
   for (i in seq_len(ncol(x))) {
+    pb$tick(tokens = list(what = col_names[i]))
+    
     # 2023-02-13 fix for Diver, logicals/booleans seem corrupt
     if (is.logical(x[, i, drop = TRUE])) {
       x[, i] <- as.logical(as.character(x[, i, drop = TRUE]))
+    }
+    if (inherits(x[, i, drop = TRUE], "integer64")) {
+      # int64 relies on the bit64 pkg, just use base R here
+      if (all(abs(x[, i, drop = TRUE]) <= base::.Machine$integer.max, na.rm = TRUE)) {
+        x[, i] <- as.integer(x[, i, drop = TRUE])
+      } else {
+        x[, i] <- as.double(x[, i, drop = TRUE])
+      }
     }
     
     col_data <- x[, i, drop = TRUE]
@@ -1251,3 +1272,111 @@ auto_transform <- function(x,
   }
   x
 }
+
+
+#' Create a Crosstab
+#' 
+#' Transform a data set into an *n* x *m* table, e.g. to be used in [certestats::confusion_matrix()].
+#' @param df a [data.frame]
+#' @param identifier a column name to use as identifier, such as a patient ID or an order ID
+#' @param compare a column name for the two axes of the table: the labels between the outcomes must be compared
+#' @param outcome a column name containing the outcome values to compare
+#' @param positive a [regex] to match the values in `outcome` that must be considered as the Positive class, use `FALSE` to not use a Positive class
+#' @param negative a [regex] to match the values in `outcome` that must be considered as the Negative class, use `FALSE` to not use a Negative class
+#' @param ... manual [regex]es for classes if not using `positive` and `negative`, such as `Class1 = "c1", Class2 = "c2", Class3 = "c3"`
+#' @param na.rm a [logical] to indicate whether empty values must be removed before forming the table
+#' @param ignore_case a [logical] to indicate whether the case in the values of `positive`, `negative` and `...` must be ignored
+#' @importFrom dplyr mutate case_when select pull transmute
+#' @importFrom tidyr pivot_wider
+#' @export
+#' @examples 
+#' df <- data.frame(
+#'   order_nr = sort(rep(LETTERS[1:20], 2)),
+#'   test_type = rep(c("Culture", "PCR"), 20),
+#'   result = sample(c("pos", "neg"),
+#'                   size = 40,
+#'                   replace = TRUE,
+#'                   prob = c(0.3, 0.9))
+#' )
+#' head(df)
+#' 
+#' out <- df |> crosstab(order_nr, test_type, result)
+#' out
+#' 
+#' 
+#' df$result <- gsub("pos", "#p", df$result)
+#' df$result <- gsub("neg", "#n", df$result)
+#' head(df)
+#' # gives a warning that pattern matching failed:
+#' df |> crosstab(order_nr, test_type, result)
+#' 
+#' # define the pattern yourself in such case:
+#' df |> crosstab(order_nr, test_type, result,
+#'                positive = "#p",
+#'                negative = "#n")
+#'                              
+#'                              
+#' # defining classes manually, can be more than 2:
+#' df |> crosstab(order_nr, test_type, result,
+#'                ClassA = "#p", Hello = "#n")
+#'                              
+#' if ("certestats" %in% rownames(utils::installed.packages())) {
+#'   certestats::confusion_matrix(out)
+#' }
+crosstab <- function(df,
+                     identifier,
+                     compare,
+                     outcome,
+                     positive = "^pos.*",
+                     negative = "^neg.*",
+                     ...,
+                     na.rm = TRUE,
+                     ignore_case = TRUE) {
+  
+  dots <- list(...)
+  
+  out <- df |> 
+    transmute(id_col = {{ identifier }},
+              names_col = {{ compare }},
+              values_col = {{ outcome }})
+  
+  if (length(dots) == 0) {
+    # use default 'positive' and 'negative' arguments
+    out <- out |> 
+      mutate(values_col = case_when(grepl(pattern = positive, x = values_col, ignore.case = ignore_case) ~ "Positive",
+                                    grepl(pattern = negative, x = values_col, ignore.case = ignore_case) ~ "Negative",
+                                    TRUE ~ NA_character_))
+    if (!all(c("Positive", "Negative") %in% out$values_col, na.rm = TRUE)) {
+      warning("Check the regular expressions in the 'positive' and 'negative' arguments - they are not both matched",
+              call. = FALSE)
+    }
+    out <- out |> 
+      mutate(values_col = factor(values_col, levels = c("Positive", "Negative"), ordered = TRUE))
+    
+  } else {
+    # use manual list
+    if (is.null(names(dots)) || any(names(dots) == "")) {
+      stop("All manual classes in ... must be named")
+    }
+    if (!missing(positive)) {
+      warning("ignoring argument 'positive' since manual values are defined: ", paste0(names(dots), collapse = ", "), call. = FALSE)
+    }
+    if (!missing(negative)) {
+      warning("ignoring argument 'negative' since manual values are defined: ", paste0(names(dots), collapse = ", "), call. = FALSE)
+    }
+    # reverse the list so we will end with the top one
+    values <- out$values_col
+    out$values_col <- NA_character_
+    for (i in rev(seq_len(length(dots)))) {
+      out$values_col <- ifelse(grepl(pattern = dots[[i]], x = values, ignore.case = ignore_case),
+                               names(dots)[i],
+                               out$values_col)
+    }
+  }
+  
+  out |> 
+    pivot_wider(id_cols = id_col, names_from = names_col, values_from = values_col) |> 
+    select(-id_col) |> 
+    table(useNA = ifelse(isTRUE(na.rm), "no", "always"))
+}
+

@@ -20,13 +20,17 @@
 globalVariables(c(".",
                   ".row_index",
                   ".row_original",
+                  "id_col",
                   "Identifier",
                   "last_checked",
                   "modified",
+                  "names_col",
                   "SearchPriority",
                   "ShortTitle",
                   "Summary",
-                  "Title"))
+                  "Title",
+                  "transmute",
+                  "values_col"))
 
 pkg_env <- new.env(hash = FALSE)
 pkg_env$temp <- list()
