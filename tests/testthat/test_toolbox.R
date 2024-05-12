@@ -262,8 +262,8 @@ test_that("import_export works", {
   # Apache
   expect_true(identical_import_export(import_feather, export_feather, "feather"))
   expect_true(identical_import_export(import, export, "feather"))
-  expect_true(identical_import_export(import_parquet, export_parquet, "parquet"))
-  expect_true(identical_import_export(import, export, "parquet"))
+  # expect_true(identical_import_export(import_parquet, export_parquet, "parquet"))
+  # expect_true(identical_import_export(import, export, "parquet"))
   export_feather(iris)
   export_feather(mtcars)
   expect_equal("iris" |> 

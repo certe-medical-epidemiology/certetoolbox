@@ -12,7 +12,6 @@
 \alias{import_sav}
 \alias{import_spss}
 \alias{import_feather}
-\alias{import_parquet}
 \alias{import_clipboard}
 \alias{import_mail_attachment}
 \alias{import_url}
@@ -158,13 +157,6 @@ import_feather(
   ...
 )
 
-import_parquet(
-  filename,
-  project_number = project_get_current_id(ask = FALSE),
-  col_select = everything(),
-  ...
-)
-
 import_clipboard(
   sep = "\\t",
   header = TRUE,
@@ -293,8 +285,6 @@ Importing an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\l
 
 Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
-Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
-
 Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
 Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
@@ -317,7 +307,7 @@ export_csv(mtcars)
 import_csv("mtcars") |> head()
 
 
-# Apache's Feather and Parquet formats are column-based
+# Apache's Feather format is column-based
 # and allow for specific and fast file reading
 library(dplyr, warn.conflicts = FALSE)
 starwars |> export_feather()

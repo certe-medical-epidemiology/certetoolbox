@@ -2,6 +2,7 @@
 % Please edit documentation in R/data.frame.R
 \name{tbl_flextable}
 \alias{tbl_flextable}
+\alias{print.certetoolbox_flextable}
 \title{Format Data Set as Flextable}
 \usage{
 tbl_flextable(
@@ -63,6 +64,8 @@ tbl_flextable(
   print = !interactive(),
   ...
 )
+
+\method{print}{certetoolbox_flextable}(x, use_knitr = interactive(), ...)
 }
 \arguments{
 \item{x}{a \link{data.frame} or a \code{\link[flextable:flextable]{flextable}} object or a \code{\link[gtsummary:tbl_summary]{gtsummary}} object}
@@ -166,6 +169,8 @@ tbl_flextable(
 \item{print}{forced printing (required in a \code{for} loop), default is \code{TRUE} in non-interactive sessions}
 
 \item{...}{not used}
+
+\item{use_knitr}{use the \code{knitr} package (otherwise an internal certetoolbox function will be used to prevent LaTeX \code{longtable} that would print across multiple PDF pages)}
 }
 \value{
 \link{flextable} object

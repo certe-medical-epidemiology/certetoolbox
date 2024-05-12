@@ -68,10 +68,11 @@ export_exec <- function(object,
     # Apache's Feather format
     object <- rownames_1st_column(object)
     arrow::write_feather(x = object, sink = filename, ...)
-  } else if (needed_extension == "parquet") {
-    # Apache's Parquet format
-    object <- rownames_1st_column(object)
-    arrow::write_parquet(x = object, sink = filename, ...)
+  # } else if (needed_extension == "parquet") {
+  #   # Apache's Parquet format
+  #   object <- rownames_1st_column(object)
+  #   arrow::write_parquet()
+  #   arrow::write_parquet(x = object, sink = filename, ...)
   } else if (needed_extension == "xlsx") {
     xl_object <- object
     # Excel format
@@ -200,7 +201,8 @@ import_exec <- function(filename,
                              range = list(...)$range,
                              na = list(...)$na,
                              skip = list(...)$skip)
-  } else if (extension %in% c("feather", "parquet")) {
+  # } else if (extension %in% c("feather", "parquet")) {
+  } else if (extension == "feather") {
     # Apache's Feather and Parquet format
     fun <- eval(parse(text = paste0("read_", extension)),
                 envir = asNamespace("arrow"))
@@ -389,7 +391,7 @@ plot_export_result <- function(filename) {
 #' #   export("first_ten_rows.xlsx")
 #' 
 #' 
-#' # Apache's Feather and Parquet formats are column-based
+#' # Apache's Feather format is column-based
 #' # and allow for cross-language specific and fast file reading
 #' starwars |> export_feather()
 #' import("starwars.feather",
@@ -470,12 +472,12 @@ export <- function(object,
                      project_number = project_number,
                      overwrite = overwrite,
                      ...)
-    } else if (filename %like% "[.]parquet$") {
-      export_parquet(object = object,
-                     filename = filename,
-                     project_number = project_number,
-                     overwrite = overwrite,
-                     ...)
+    # } else if (filename %like% "[.]parquet$") {
+    #   export_parquet(object = object,
+    #                  filename = filename,
+    #                  project_number = project_number,
+    #                  overwrite = overwrite,
+    #                  ...)
     } else if (filename %like% "[.]pdf$") {
       export_pdf(plot = object,
                  filename = filename,
@@ -707,22 +709,22 @@ export_feather <- function(object,
               ...)
 }
 
-#' @rdname export
-#' @details `r doc_requirement("a Parquet file", "export_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval.
-#' @export
-export_parquet <- function(object,
-                           filename = NULL,
-                           project_number = project_get_current_id(ask = FALSE),
-                           overwrite = NULL,
-                           ...) {
-  check_is_installed("arrow")
-  export_exec(object, "parquet",
-              filename = filename,
-              filename_deparse = deparse(substitute(object)),
-              project_number = project_number,
-              overwrite = overwrite,
-              ...)
-}
+#' #' @rdname export
+#' #' @details `r doc_requirement("a Parquet file", "export_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval.
+#' #' @export
+#' export_parquet <- function(object,
+#'                            filename = NULL,
+#'                            project_number = project_get_current_id(ask = FALSE),
+#'                            overwrite = NULL,
+#'                            ...) {
+#'   check_is_installed("arrow")
+#'   export_exec(object, "parquet",
+#'               filename = filename,
+#'               filename_deparse = deparse(substitute(object)),
+#'               project_number = project_number,
+#'               overwrite = overwrite,
+#'               ...)
+#' }
 
 #' @rdname export
 #' @param size paper size, defaults to A5. Can be A0 to A7.
@@ -951,7 +953,7 @@ export_html <- function(plot,
 #' import_csv("mtcars") |> head()
 #' 
 #' 
-#' # Apache's Feather and Parquet formats are column-based
+#' # Apache's Feather format is column-based
 #' # and allow for specific and fast file reading
 #' library(dplyr, warn.conflicts = FALSE)
 #' starwars |> export_feather()
@@ -1009,10 +1011,10 @@ import <- function(filename,
     import_feather(filename = filename,
                    project_number = project_number,
                    ...)
-  } else if (filename %like% "[.]parquet$") {
-    import_parquet(filename = filename,
-                   project_number = project_number,
-                   ...)
+  # } else if (filename %like% "[.]parquet$") {
+  #   import_parquet(filename = filename,
+  #                  project_number = project_number,
+  #                  ...)
   } else {
     import_exec(filename,
                 extension = "",
@@ -1257,19 +1259,19 @@ import_feather <- function(filename,
               col_select = col_select)
 }
 
-#' @rdname import
-#' @details `r doc_requirement("a Parquet file", "import_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
-#' @importFrom dplyr everything
-#' @export
-import_parquet <- function(filename,
-                           project_number = project_get_current_id(ask = FALSE),
-                           col_select = everything(),
-                           ...) {
-  check_is_installed("arrow")
-  import_exec(filename,
-              filename_deparse = deparse(substitute(filename)),
-              extension = "parquet",
-              project_number = project_number,
-              auto_transform = FALSE,
-              col_select = col_select)
-}
+#' #' @rdname import
+#' #' @details `r doc_requirement("a Parquet file", "import_parquet", "arrow")`. [Apache Parquet](https://parquet.apache.org) is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
+#' #' @importFrom dplyr everything
+#' #' @export
+#' import_parquet <- function(filename,
+#'                            project_number = project_get_current_id(ask = FALSE),
+#'                            col_select = everything(),
+#'                            ...) {
+#'   check_is_installed("arrow")
+#'   import_exec(filename,
+#'               filename_deparse = deparse(substitute(filename)),
+#'               extension = "parquet",
+#'               project_number = project_number,
+#'               auto_transform = FALSE,
+#'               col_select = col_select)
+#' }

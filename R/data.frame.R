@@ -770,12 +770,24 @@ tbl_flextable <- function(x,
       manual_flextable_print(ft)
     }
   } else {
-    ft
+    structure(ft, class = c("certetoolbox_flextable", class(ft)))
   }
 }
 
-#' @importFrom flextable flextable_to_rmd
-#' @importFrom knitr is_latex_output asis_output opts_chunk opts_current raw_latex
+#' @param use_knitr use the `knitr` package (otherwise an internal certetoolbox function will be used to prevent LaTeX `longtable` that would print across multiple PDF pages)
+#' @rdname tbl_flextable
+#' @export
+#' @importFrom knitr knit_print
+print.certetoolbox_flextable <- function(x, use_knitr = interactive(), ...) {
+  class(x) <- class(x)[!class(x) == "certetoolbox_flextable"]
+  if (use_knitr == TRUE) {
+    knit_print(x, ...)
+  } else {
+    manual_flextable_print(x)
+  }
+}
+
+#' @importFrom knitr is_latex_output asis_output opts_chunk opts_current raw_latex knit_print
 manual_flextable_print <- function(x) {
   if (is_latex_output()) {
     knitr_update_properties <- get("knitr_update_properties", envir = asNamespace("flextable"))
@@ -816,7 +828,7 @@ manual_flextable_print <- function(x) {
     }
     
   } else {
-    return(flextable_to_rmd(x))
+    return(knit_print(x))
   }
 }
 
@@ -1098,6 +1110,7 @@ tbl_markdown <- function(x,
 #' @importFrom cleaner format_names format_datetime clean_Date clean_POSIXct clean_logical
 #' @importFrom readr parse_guess locale
 #' @importFrom hms as_hms
+#' @importFrom progress progress_bar
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -1122,9 +1135,10 @@ auto_transform <- function(x,
   
   dateformat <- format_datetime(dateformat)
   timeformat <- format_datetime(timeformat)
-  pb <- progress::progress_bar$new(total = ncol(x),
-                                   format = "Auto-transform: :what [:bar] :percent",
-                                   show_after = 0)
+  cat("\n") # will otherwise overwrite existing line in console, such as in certedb
+  pb <- progress_bar$new(total = ncol(x),
+                         format = "Auto-transform: :what [:bar] :percent",
+                         show_after = 0)
   col_names <- format(colnames(x))
   
   try_convert <- function(object, backup, col) {
