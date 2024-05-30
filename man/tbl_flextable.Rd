@@ -65,7 +65,7 @@ tbl_flextable(
   ...
 )
 
-\method{print}{certetoolbox_flextable}(x, use_knitr = interactive(), ...)
+\method{print}{certetoolbox_flextable}(x, use_knitr = !is_latex_output(), ...)
 }
 \arguments{
 \item{x}{a \link{data.frame} or a \code{\link[flextable:flextable]{flextable}} object or a \code{\link[gtsummary:tbl_summary]{gtsummary}} object}
@@ -170,7 +170,7 @@ tbl_flextable(
 
 \item{...}{not used}
 
-\item{use_knitr}{use the \code{knitr} package (otherwise an internal certetoolbox function will be used to prevent LaTeX \code{longtable} that would print across multiple PDF pages)}
+\item{use_knitr}{use the \code{knitr} package for printing. Ignored when in an interactive session. If \code{FALSE}, an internal certetoolbox function will be used to convert the LaTeX \code{longtable} that would print across multiple PDF pages. If in a non-interactive session where the output is non-LaTeX, the \code{knitr} package will always be used.}
 }
 \value{
 \link{flextable} object

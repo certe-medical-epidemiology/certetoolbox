@@ -761,35 +761,31 @@ tbl_flextable <- function(x,
   }
   
   attr(ft, "split.across.pages") <- isTRUE(split.across.pages)
+  ft <- structure(ft, class = c("certetoolbox_flextable", class(ft)))
   
   if (isTRUE(print)) {
-    if (interactive()) {
-      print(ft)
-    } else {
-      # not interactive like in R Markdown - print as markdown table
-      manual_flextable_print(ft)
-    }
+    # run print.certetoolbox_flextable()
+    print(ft)
   } else {
-    structure(ft, class = c("certetoolbox_flextable", class(ft)))
+    ft
   }
 }
 
-#' @param use_knitr use the `knitr` package (otherwise an internal certetoolbox function will be used to prevent LaTeX `longtable` that would print across multiple PDF pages)
+#' @param use_knitr use the `knitr` package for printing. Ignored when in an interactive session. If `FALSE`, an internal certetoolbox function will be used to convert the LaTeX `longtable` that would print across multiple PDF pages. If in a non-interactive session where the output is non-LaTeX, the `knitr` package will always be used.
 #' @rdname tbl_flextable
 #' @export
-#' @importFrom knitr knit_print
-print.certetoolbox_flextable <- function(x, use_knitr = interactive(), ...) {
-  class(x) <- class(x)[!class(x) == "certetoolbox_flextable"]
-  if (use_knitr == TRUE) {
-    knit_print(x, ...)
-  } else {
-    manual_flextable_print(x)
-  }
-}
-
 #' @importFrom knitr is_latex_output asis_output opts_chunk opts_current raw_latex knit_print
-manual_flextable_print <- function(x) {
-  if (is_latex_output()) {
+print.certetoolbox_flextable <- function(x, use_knitr = !is_latex_output(), ...) {
+  class(x) <- class(x)[!class(x) == "certetoolbox_flextable"]
+  
+  if (interactive()) {
+    # use flextable:::print.flextable()
+    print(x, ...)
+    
+  } else if (isTRUE(use_knitr) || isFALSE(is_latex_output())) {
+    knit_print(x, ...)
+    
+  } else {
     knitr_update_properties <- get("knitr_update_properties", envir = asNamespace("flextable"))
     is_in_bookdown <- get("is_in_bookdown", envir = asNamespace("flextable"))
     is_in_quarto <- get("is_in_quarto", envir = asNamespace("flextable"))
@@ -826,9 +822,6 @@ manual_flextable_print <- function(x) {
     } else {
       return(asis_output(out))
     }
-    
-  } else {
-    return(knit_print(x))
   }
 }
 
