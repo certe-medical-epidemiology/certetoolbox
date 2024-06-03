@@ -76,9 +76,9 @@ export_exec <- function(object,
   } else if (needed_extension == "xlsx") {
     xl_object <- object
     # Excel format
-    if (!inherits(xl_object, "Workbook")) {
-      # not yet an openxlsx object (but rather e.g. a data frame)
-      xl_object <- suppressMessages(as_excel(xl_object, ...))
+    if (!inherits(xl_object, class(wb_workbook()))) {
+      # not yet an openxlsx2 object (but rather e.g. a data frame)
+      xl_object <- suppressMessages(as_excel(xl_object, project_number = project_number, ...))
     }
     suppressMessages(save_excel(xl = xl_object, filename = filename, overwrite = TRUE))
     if (is.list(object)) {
@@ -537,6 +537,7 @@ export_xlsx <- function(...,
                         align = "center") {
   object <- list(...)
   if (length(object) > 1) {
+    object_name <- "."
     # check if second value is filename
     if (is.null(filename) && is.character(object[[2]]) && length(object[[2]]) == 1) {
       filename <- object[[2]]
@@ -547,10 +548,12 @@ export_xlsx <- function(...,
       project_number <- object[[length(object)]]
       object <- object[-length(object)]
     }
+  } else if (length(object) == 1) {
+    object_name <- tryCatch(paste0(trimws(deparse(substitute(...))), collapse = ""), error = function(x) ".")
   }
   export_exec(object = object, "xlsx",
               filename = filename,
-              filename_deparse = ".",
+              filename_deparse = object_name,
               project_number = project_number,
               overwrite = overwrite,
               sheet_names = sheet_names,

@@ -1013,8 +1013,8 @@ tbl_markdown <- function(x,
     x <- tbl_flextable(x)
   }
   
-  if (inherits(x, "flextable")) {
-    return(invisible(manual_flextable_print(x)))
+  if (inherits(x, "certetoolbox_flextable")) {
+    return(invisible(print(x)))
   }
   
   x <- as.data.frame(x, stringsAsFactors = FALSE)

@@ -13,9 +13,11 @@ as_excel(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
+  align = "center",
   table_style = "TableStyleMedium2",
   creator = Sys.info()["user"],
-  align = "center"
+  department = read_secret("department.name"),
+  project_number = project_get_current_id(ask = FALSE)
 )
 
 save_excel(xl, filename = NULL, overwrite = FALSE)
@@ -35,20 +37,24 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 
 \item{freeze_top_row}{freeze the first row of the sheet}
 
-\item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
-
-\item{creator}{name of the creator of the document}
-
 \item{align}{horizontal alignment of text}
 
-\item{xl}{Excel object, as created with \code{\link[=as_excel]{as_excel()}} (or manually with the \code{openxlsx} package)}
+\item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
+
+\item{creator}{name of the creator of the workbook}
+
+\item{department}{name of the department of the workbook}
+
+\item{project_number}{project number, to add project ID as the subject of the workbook}
+
+\item{xl}{Excel object, as created with \code{\link[=as_excel]{as_excel()}} (or manually with the \code{openxlsx2} package)}
 
 \item{filename}{file location to save Excel document to, defaults to a random filename in the current folder}
 
 \item{overwrite}{overwrite existing file}
 }
 \description{
-The \code{\link[=as_excel]{as_excel()}} function relies on the \code{openxlsx} package for creating an Excel Workbook object in R. These objects can be saved using \code{\link[=save_excel]{save_excel()}} or \code{\link[=export_xlsx]{export_xlsx()}}.
+The \code{\link[=as_excel]{as_excel()}} function relies on the \code{openxlsx2} package for creating an Excel Workbook object in R. These objects can be saved using \code{\link[=save_excel]{save_excel()}} or \code{\link[=export_xlsx]{export_xlsx()}}.
 }
 \section{Supported Table Styles}{
 
@@ -63,18 +69,5 @@ xl <- as_excel("this is a sheet" = mtcars,
                "another sheet" = anscombe)
 xl
 
-# save it with save_excel() or export_xlsx()
-
-library(openxlsx)
-# add a new empty sheet
-addWorksheet(wb = xl,
-             sheetName = "new sheet")
-             
-some_style <- createStyle(fontColour = "#9C0006", bgFill = "#FFC7CE")
-addStyle(wb = xl,
-         sheet = 3,
-         style = some_style,
-         rows = 2:6,
-         cols = 1:6,
-         gridExpand = TRUE)
+# then save it with save_excel() or export_xlsx()
 }
