@@ -115,7 +115,8 @@ as_excel <- function(...,
                         with_filter = isTRUE(autofilter),
                         banded_rows = isTRUE(rows_zebra),
                         banded_cols = isTRUE(cols_zebra),
-                        table_style = table_style[i]) |> 
+                        table_style = table_style[i],
+                        na.strings = "") |> 
       wb_add_cell_style(sheet = i + 1, # since template sheet is #1
                         dims = wb_dims(rows = seq_len(NROW(df) + 1),
                                        cols = seq_len(NCOL(df))),
