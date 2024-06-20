@@ -59,9 +59,23 @@ addin_insert_like <- function() {
   }
 }
 
-#' @importFrom rstudioapi getActiveDocumentContext insertText modifyRange document_range document_position
+#' @importFrom rstudioapi getActiveDocumentContext insertText modifyRange document_range document_position readRStudioPreference getActiveProject
+#' @importFrom yaml read_yaml
 addin_insert_pipe <- function() {
   # we want Shift + Ctrl/Cmd + M to iterate over |>, %>%, %$%
+  
+  # general RStudio option to test for 'native pipe' checkbox
+  uses_native_pipe <- readRStudioPreference("insert_native_pipe_operator", TRUE)
+  if (!is.null(getActiveProject())) {
+    # project-specific option could be different, read the Rproj file as YAML
+    project_file <- list.files(".", pattern = "[.]Rproj$")[1L]
+    if (!is.na(project_file)) {
+      project_properties <- read_yaml(project_file)
+      if ("UseNativePipeOperator" %in% names(project_properties)) {
+        uses_native_pipe <- isTRUE(project_properties$UseNativePipeOperator)
+      }
+    }
+  }
   
   context <- getActiveDocumentContext()
   current_row <- context$selection[[1]]$range$end[1]
@@ -71,7 +85,11 @@ addin_insert_pipe <- function() {
                                                               "[|][>]", "|",
                                                               "[%][>][%]", "|",
                                                               "[%][\\][$%]", ")")) {
-    insertText(" |> ")
+    if (uses_native_pipe == TRUE) {
+      insertText(" |> ")
+    } else {
+      insertText(" %>% ")
+    }
     return(invisible())
   }
   
@@ -90,12 +108,16 @@ addin_insert_pipe <- function() {
                 id = context$id)
   }
   
-  if (pos_preceded_by(" |> ")) {
+  if (pos_preceded_by(" |> ") && uses_native_pipe == TRUE) {
     replace_pos(" |> ", with = " %>% ")
   } else if (pos_preceded_by(" %>% ")) {
     replace_pos(" %>% ", with = " %$% ")
-  } else if (pos_preceded_by(" %$% ")) {
+  } else if (pos_preceded_by(" %$% ") && uses_native_pipe == TRUE) {
     replace_pos(" %$% ", with = " |> ")
+  } else if (pos_preceded_by(" %$% ") && uses_native_pipe == FALSE) {
+    replace_pos(" %$% ", with = " %>% ")
+  } else if (uses_native_pipe == FALSE) {
+    insertText(" %>% ")
   } else {
     insertText(" |> ")
   }
