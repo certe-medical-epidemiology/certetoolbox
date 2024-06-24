@@ -1122,6 +1122,8 @@ auto_transform <- function(x,
     return(x)
   }
   
+  col_names.bak <- colnames(x)
+  
   if (isTRUE(snake_case)) {
     x <- format_names(x, snake_case = TRUE)
   }
@@ -1258,10 +1260,10 @@ auto_transform <- function(x,
     
     if ("AMR" %in% rownames(utils::installed.packages())) {
       # check for SIR
-      if (col_name %like% "_(rsi|sir)$" ||
+      if (col_name %like% "_(rsi|sir)$" || col_names.bak[i] %like_case% "^[A-Z]{3}$" ||
           (inherits(col_data, c("factor", "character")) &&
-           !all(col_data_unique[!is.na(col_data_unique)] == "") &&
-           all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S")))) {
+           !all(col_data_unique[!is.na(col_data_unique)] %in% c("", "-")) &&
+           all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S", "-")))) {
         x[, i] <- try_convert(AMR::as.sir(col_data),
                               backup = x[, i, drop = TRUE], col = i)
       }
@@ -1276,6 +1278,11 @@ auto_transform <- function(x,
                               backup = x[, i, drop = TRUE], col = i)
       }
     }
+    
+    if (col_name %like% "(monster|order)(nummer|nr)") {
+      x[, i] <- as.character(col_data)
+    }
+    
   }
   x
 }
