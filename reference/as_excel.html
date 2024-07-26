@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.4</span>
       </span>
     </div>
 
@@ -25,35 +25,35 @@
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
     Home
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
     <span class="fa fa-book-open"></span>
-     
+
     Manual
   </a>
 </li>
 <li>
   <a href="https://github.com/certe-medical-epidemiology/certetoolbox" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Source Code
   </a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/certe-medical-epidemiology" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Certe Med Epi
   </a>
 </li>
 <li>
   <a href="https://certe.nl" class="external-link">
     <span class="fa fa-flask"></span>
-     
+
     Certe Website
   </a>
 </li>
@@ -61,13 +61,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create Excel Workbook Object</h1>
-    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/HEAD/R/excel.R" class="external-link"><code>R/excel.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/main/R/excel.R" class="external-link"><code>R/excel.R</code></a></small>
     <div class="hidden name"><code>as_excel.Rd</code></div>
     </div>
 
@@ -81,9 +81,11 @@
 <span>  sheet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  autofilter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  autowidth <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  widths <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rows_zebra <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cols_zebra <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  freeze_top_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  align <span class="op">=</span> <span class="st">"center"</span>,</span>
 <span>  table_style <span class="op">=</span> <span class="st">"TableStyleMedium2"</span>,</span>
 <span>  creator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"user"</span><span class="op">]</span>,</span>
@@ -96,69 +98,79 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>...</dt>
+
+
+<dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>data sets, use named items for multiple tabs (see <em>Examples</em>)</p></dd>
 
 
-<dt>sheet_names</dt>
+<dt id="arg-sheet-names">sheet_names<a class="anchor" aria-label="anchor" href="#arg-sheet-names"></a></dt>
 <dd><p>sheet names</p></dd>
 
 
-<dt>autofilter</dt>
+<dt id="arg-autofilter">autofilter<a class="anchor" aria-label="anchor" href="#arg-autofilter"></a></dt>
 <dd><p>create autofilter on columns in first row</p></dd>
 
 
-<dt>autowidth</dt>
+<dt id="arg-autowidth">autowidth<a class="anchor" aria-label="anchor" href="#arg-autowidth"></a></dt>
 <dd><p>automatically adjust columns widths</p></dd>
 
 
-<dt>rows_zebra</dt>
+<dt id="arg-widths">widths<a class="anchor" aria-label="anchor" href="#arg-widths"></a></dt>
+<dd><p>width of columns, must be length 1 or <code><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol()</a></code> of the data set. If set, overrides <code>autowidth</code>.</p></dd>
+
+
+<dt id="arg-rows-zebra">rows_zebra<a class="anchor" aria-label="anchor" href="#arg-rows-zebra"></a></dt>
 <dd><p>create banded rows</p></dd>
 
 
-<dt>cols_zebra</dt>
+<dt id="arg-cols-zebra">cols_zebra<a class="anchor" aria-label="anchor" href="#arg-cols-zebra"></a></dt>
 <dd><p>create banded columns</p></dd>
 
 
-<dt>freeze_top_row</dt>
+<dt id="arg-freeze-top-row">freeze_top_row<a class="anchor" aria-label="anchor" href="#arg-freeze-top-row"></a></dt>
 <dd><p>freeze the first row of the sheet</p></dd>
 
 
-<dt>align</dt>
+<dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
+<dd><p>number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to <code>NULL</code> for no rounding</p></dd>
+
+
+<dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
 <dd><p>horizontal alignment of text</p></dd>
 
 
-<dt>table_style</dt>
+<dt id="arg-table-style">table_style<a class="anchor" aria-label="anchor" href="#arg-table-style"></a></dt>
 <dd><p>style(s) for each table, see below. This can also be a vector with the same length as <code>...</code>.</p></dd>
 
 
-<dt>creator</dt>
+<dt id="arg-creator">creator<a class="anchor" aria-label="anchor" href="#arg-creator"></a></dt>
 <dd><p>name of the creator of the workbook</p></dd>
 
 
-<dt>department</dt>
+<dt id="arg-department">department<a class="anchor" aria-label="anchor" href="#arg-department"></a></dt>
 <dd><p>name of the department of the workbook</p></dd>
 
 
-<dt>project_number</dt>
+<dt id="arg-project-number">project_number<a class="anchor" aria-label="anchor" href="#arg-project-number"></a></dt>
 <dd><p>project number, to add project ID as the subject of the workbook</p></dd>
 
 
-<dt>xl</dt>
+<dt id="arg-xl">xl<a class="anchor" aria-label="anchor" href="#arg-xl"></a></dt>
 <dd><p>Excel object, as created with <code>as_excel()</code> (or manually with the <code>openxlsx2</code> package)</p></dd>
 
 
-<dt>filename</dt>
+<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
 <dd><p>file location to save Excel document to, defaults to a random filename in the current folder</p></dd>
 
 
-<dt>overwrite</dt>
+<dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
 <dd><p>overwrite existing file</p></dd>
 
 </dl></div>
     <div id="supported-table-styles">
     <h2>Supported Table Styles</h2>
-    
+
 
 <p>For the argument <code>table_style</code>, use one or more of these table styles as character input. The default is <strong>TableStyleMedium2</strong>.</p>
 <p><img src="figures/tablestyles.png" alt=""></p>
@@ -169,8 +181,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># creates a Workbook object</span></span></span>
 <span class="r-in"><span><span class="va">xl</span> <span class="op">&lt;-</span> <span class="fu">as_excel</span><span class="op">(</span><span class="st">"this is a sheet"</span> <span class="op">=</span> <span class="va">mtcars</span>,</span></span>
 <span class="r-in"><span>               <span class="st">"another sheet"</span> <span class="op">=</span> <span class="va">anscombe</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Row names for object 1 (32x11, sheet 'this is a sheet') added as first column 'rownames'</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Row names for object 1 (32 × 11, sheet 'this is a sheet') added as first column 'rownames'</span>
 <span class="r-in"><span><span class="va">xl</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A Workbook object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
@@ -193,15 +205,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

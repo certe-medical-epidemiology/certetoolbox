@@ -1,90 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/404.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/index.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/as.UTC.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/as_excel.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/auto_transform.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/cbs.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/certetoolbox-package.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/concat.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/crosstab.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/days_around_today.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/export.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/generate_identifier.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/hospital_name.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/import.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/like.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/p_symbol.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/privacy_check.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/read_secret.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/ref_dir.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/remember_recall.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/size_humanreadable.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_flextable.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_gtsummary.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_markdown.html</loc>
-  </url>
-  <url>
-    <loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/update.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/404.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/LICENSE.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/authors.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/index.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/as.UTC.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/as_excel.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/auto_transform.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/cbs.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/certetoolbox-package.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/concat.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/crosstab.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/days_around_today.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/export.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/generate_identifier.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/hospital_name.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/import.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/index.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/like.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/p_symbol.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/privacy_check.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/read_secret.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/reexports.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/ref_dir.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/remember_recall.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/size_humanreadable.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_flextable.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_gtsummary.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/tbl_markdown.html</loc></url>
+<url><loc>https://certe-medical-epidemiology.github.io/certetoolbox/reference/update.html</loc></url>
 </urlset>
+

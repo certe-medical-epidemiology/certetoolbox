@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.4</span>
       </span>
     </div>
 
@@ -25,35 +25,35 @@
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
     Home
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
     <span class="fa fa-book-open"></span>
-     
+
     Manual
   </a>
 </li>
 <li>
   <a href="https://github.com/certe-medical-epidemiology/certetoolbox" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Source Code
   </a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/certe-medical-epidemiology" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Certe Med Epi
   </a>
 </li>
 <li>
   <a href="https://certe.nl" class="external-link">
     <span class="fa fa-flask"></span>
-     
+
     Certe Website
   </a>
 </li>
@@ -61,13 +61,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Format Data Set as Flextable</h1>
-    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/HEAD/R/data.frame.R" class="external-link"><code>R/data.frame.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/main/R/data.frame.R" class="external-link"><code>R/data.frame.R</code></a></small>
     <div class="hidden name"><code>tbl_flextable.Rd</code></div>
     </div>
 
@@ -114,7 +114,7 @@
 <span>  format.dates <span class="op">=</span> <span class="st">"d mmm yyyy"</span>,</span>
 <span>  decimal.mark <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">dec_mark</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  big.mark <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">big_mark</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  font.family <span class="op">=</span> <span class="st">"Calibri"</span>,</span>
+<span>  font.family <span class="op">=</span> <span class="st">"Source Sans Pro"</span>,</span>
 <span>  font.size <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>  font.size.header <span class="op">=</span> <span class="va">font.size</span> <span class="op">+</span> <span class="fl">1</span>,</span>
 <span>  values.colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -136,225 +136,225 @@
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for certetoolbox_flextable</span></span>
+<span><span class="co"># S3 method for class 'certetoolbox_flextable'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, use_knitr <span class="op">=</span> <span class="op">!</span><span class="fu">is_latex_output</span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> or a <code><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></code> object or a <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">gtsummary</a></code> object</p></dd>
 
 
-<dt>row.names</dt>
+<dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
 <dd><p>row names to be displayed. Will be <code>1:nrow(x)</code> if set to TRUE, but can be a vector of values.</p></dd>
 
 
-<dt>row.names.bold</dt>
+<dt id="arg-row-names-bold">row.names.bold<a class="anchor" aria-label="anchor" href="#arg-row-names-bold"></a></dt>
 <dd><p>display row names in bold</p></dd>
 
 
-<dt>rows.italic</dt>
+<dt id="arg-rows-italic">rows.italic<a class="anchor" aria-label="anchor" href="#arg-rows-italic"></a></dt>
 <dd><p>column indexes of rows in italics</p></dd>
 
 
-<dt>rows.bold</dt>
+<dt id="arg-rows-bold">rows.bold<a class="anchor" aria-label="anchor" href="#arg-rows-bold"></a></dt>
 <dd><p>column indexes of rows in bold</p></dd>
 
 
-<dt>rows.height</dt>
+<dt id="arg-rows-height">rows.height<a class="anchor" aria-label="anchor" href="#arg-rows-height"></a></dt>
 <dd><p>height of the rows in centimetres</p></dd>
 
 
-<dt>rows.fill</dt>
+<dt id="arg-rows-fill">rows.fill<a class="anchor" aria-label="anchor" href="#arg-rows-fill"></a></dt>
 <dd><p>the column indices of rows to be shaded</p></dd>
 
 
-<dt>rows.zebra</dt>
+<dt id="arg-rows-zebra">rows.zebra<a class="anchor" aria-label="anchor" href="#arg-rows-zebra"></a></dt>
 <dd><p>banded rows in the body - equivalent to <code>rows.fill = seq(2, nrow(x), 2)</code></p></dd>
 
 
-<dt>row.total</dt>
+<dt id="arg-row-total">row.total<a class="anchor" aria-label="anchor" href="#arg-row-total"></a></dt>
 <dd><p>add a row total (at the bottom of the table)</p></dd>
 
 
-<dt>row.total.name</dt>
+<dt id="arg-row-total-name">row.total.name<a class="anchor" aria-label="anchor" href="#arg-row-total-name"></a></dt>
 <dd><p>name of the row total</p></dd>
 
 
-<dt>row.total.function</dt>
+<dt id="arg-row-total-function">row.total.function<a class="anchor" aria-label="anchor" href="#arg-row-total-function"></a></dt>
 <dd><p>function used to calculate all numeric values per column (non-numeric columns are skipped)</p></dd>
 
 
-<dt>row.total.widths</dt>
+<dt id="arg-row-total-widths">row.total.widths<a class="anchor" aria-label="anchor" href="#arg-row-total-widths"></a></dt>
 <dd><p>cell width in row total</p></dd>
 
 
-<dt>row.total.bold</dt>
+<dt id="arg-row-total-bold">row.total.bold<a class="anchor" aria-label="anchor" href="#arg-row-total-bold"></a></dt>
 <dd><p>bold formatting of row total</p></dd>
 
 
-<dt>row.extra.header</dt>
+<dt id="arg-row-extra-header">row.extra.header<a class="anchor" aria-label="anchor" href="#arg-row-extra-header"></a></dt>
 <dd><p>an extra header to be displayed above the table</p></dd>
 
 
-<dt>row.extra.footer</dt>
+<dt id="arg-row-extra-footer">row.extra.footer<a class="anchor" aria-label="anchor" href="#arg-row-extra-footer"></a></dt>
 <dd><p>an extra footer to show below the table</p></dd>
 
 
-<dt>column.names</dt>
+<dt id="arg-column-names">column.names<a class="anchor" aria-label="anchor" href="#arg-column-names"></a></dt>
 <dd><p>column names to be displayed. Can also be a named vector where the names are existing columns, or indices of columns. When this vector is smaller than <code>ncol(x)</code>, only the first <code>length(column.names)</code> are replaced. When this vector is longer than <code>ncol(x)</code>, all column names are replaced</p></dd>
 
 
-<dt>column.names.bold</dt>
+<dt id="arg-column-names-bold">column.names.bold<a class="anchor" aria-label="anchor" href="#arg-column-names-bold"></a></dt>
 <dd><p>display column names in bold</p></dd>
 
 
-<dt>columns.width</dt>
+<dt id="arg-columns-width">columns.width<a class="anchor" aria-label="anchor" href="#arg-columns-width"></a></dt>
 <dd><p>width of columns. For <code>autofit.fullpage = TRUE</code>, these are proportions to <code>autofit.fullpage.width</code>. For <code>autofit.fullpage = FALSE</code>, these are centimeters</p></dd>
 
 
-<dt>columns.percent</dt>
+<dt id="arg-columns-percent">columns.percent<a class="anchor" aria-label="anchor" href="#arg-columns-percent"></a></dt>
 <dd><p>display the column indices as percentages using <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code> - example: <code>columns.percent = c(2, 3)</code></p></dd>
 
 
-<dt>columns.italic</dt>
+<dt id="arg-columns-italic">columns.italic<a class="anchor" aria-label="anchor" href="#arg-columns-italic"></a></dt>
 <dd><p>column indices of columns to be displayed in italics</p></dd>
 
 
-<dt>columns.bold</dt>
+<dt id="arg-columns-bold">columns.bold<a class="anchor" aria-label="anchor" href="#arg-columns-bold"></a></dt>
 <dd><p>column indices of columns in bold</p></dd>
 
 
-<dt>columns.fill</dt>
+<dt id="arg-columns-fill">columns.fill<a class="anchor" aria-label="anchor" href="#arg-columns-fill"></a></dt>
 <dd><p>the column indices of rows to be shaded</p></dd>
 
 
-<dt>columns.zebra</dt>
+<dt id="arg-columns-zebra">columns.zebra<a class="anchor" aria-label="anchor" href="#arg-columns-zebra"></a></dt>
 <dd><p>banded columns - equivalent to <code>columns.fill = seq(2, ncol(x), 2)</code></p></dd>
 
 
-<dt>column.total</dt>
+<dt id="arg-column-total">column.total<a class="anchor" aria-label="anchor" href="#arg-column-total"></a></dt>
 <dd><p>adding a column total (to the right of the table)</p></dd>
 
 
-<dt>column.total.name</dt>
+<dt id="arg-column-total-name">column.total.name<a class="anchor" aria-label="anchor" href="#arg-column-total-name"></a></dt>
 <dd><p>name of the column total</p></dd>
 
 
-<dt>column.total.function</dt>
+<dt id="arg-column-total-function">column.total.function<a class="anchor" aria-label="anchor" href="#arg-column-total-function"></a></dt>
 <dd><p>function used to calculate all numeric values per row</p></dd>
 
 
-<dt>column.total.bold</dt>
+<dt id="arg-column-total-bold">column.total.bold<a class="anchor" aria-label="anchor" href="#arg-column-total-bold"></a></dt>
 <dd><p>bold formatting of column total</p></dd>
 
 
-<dt>align</dt>
+<dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
 <dd><p>default is "c", which aligns everything centrally. Use "r", "l", "c" and "j"/"u" (justify/align) to change alignment. Can be a vector or a character (like "lrrrcc")</p></dd>
 
 
-<dt>align.part</dt>
+<dt id="arg-align-part">align.part<a class="anchor" aria-label="anchor" href="#arg-align-part"></a></dt>
 <dd><p>part of the table where the alignment should take place ("all", "header", "body", "footer")</p></dd>
 
 
-<dt>caption</dt>
+<dt id="arg-caption">caption<a class="anchor" aria-label="anchor" href="#arg-caption"></a></dt>
 <dd><p>table caption</p></dd>
 
 
-<dt>na</dt>
+<dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
 <dd><p>text for missing values</p></dd>
 
 
-<dt>logicals</dt>
+<dt id="arg-logicals">logicals<a class="anchor" aria-label="anchor" href="#arg-logicals"></a></dt>
 <dd><p>vector with two values that replace <code>TRUE</code> and <code>FALSE</code></p></dd>
 
 
-<dt>round.numbers</dt>
+<dt id="arg-round-numbers">round.numbers<a class="anchor" aria-label="anchor" href="#arg-round-numbers"></a></dt>
 <dd><p>number of decimal places to round up for numbers</p></dd>
 
 
-<dt>round.percent</dt>
+<dt id="arg-round-percent">round.percent<a class="anchor" aria-label="anchor" href="#arg-round-percent"></a></dt>
 <dd><p>number of decimal places to round to when using <code>columns.percent</code></p></dd>
 
 
-<dt>format.dates</dt>
+<dt id="arg-format-dates">format.dates<a class="anchor" aria-label="anchor" href="#arg-format-dates"></a></dt>
 <dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code></p></dd>
 
 
-<dt>decimal.mark</dt>
+<dt id="arg-decimal-mark">decimal.mark<a class="anchor" aria-label="anchor" href="#arg-decimal-mark"></a></dt>
 <dd><p>decimal separator, defaults to <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">dec_mark()</a></code></p></dd>
 
 
-<dt>big.mark</dt>
+<dt id="arg-big-mark">big.mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
 <dd><p>thousands separator, defaults to <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">big_mark()</a></code></p></dd>
 
 
-<dt>font.family</dt>
+<dt id="arg-font-family">font.family<a class="anchor" aria-label="anchor" href="#arg-font-family"></a></dt>
 <dd><p>table font family</p></dd>
 
 
-<dt>font.size</dt>
+<dt id="arg-font-size">font.size<a class="anchor" aria-label="anchor" href="#arg-font-size"></a></dt>
 <dd><p>table font size</p></dd>
 
 
-<dt>font.size.header</dt>
+<dt id="arg-font-size-header">font.size.header<a class="anchor" aria-label="anchor" href="#arg-font-size-header"></a></dt>
 <dd><p>font size of header</p></dd>
 
 
-<dt>values.colour, values.fill, values.bold, values.italic</dt>
+<dt id="arg-values-colour-values-fill-values-bold-values-italic">values.colour, values.fill, values.bold, values.italic<a class="anchor" aria-label="anchor" href="#arg-values-colour-values-fill-values-bold-values-italic"></a></dt>
 <dd><p>values to be formatted</p></dd>
 
 
-<dt>autofit</dt>
+<dt id="arg-autofit">autofit<a class="anchor" aria-label="anchor" href="#arg-autofit"></a></dt>
 <dd><p>format table in width automatically. This will apply <code><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">autofit()</a></code>.</p></dd>
 
 
-<dt>autofit.fullpage</dt>
+<dt id="arg-autofit-fullpage">autofit.fullpage<a class="anchor" aria-label="anchor" href="#arg-autofit-fullpage"></a></dt>
 <dd><p>display table across width of page</p></dd>
 
 
-<dt>autofit.fullpage.width</dt>
+<dt id="arg-autofit-fullpage-width">autofit.fullpage.width<a class="anchor" aria-label="anchor" href="#arg-autofit-fullpage-width"></a></dt>
 <dd><p>set number of centimetres to width of table</p></dd>
 
 
-<dt>vline</dt>
+<dt id="arg-vline">vline<a class="anchor" aria-label="anchor" href="#arg-vline"></a></dt>
 <dd><p>indices of columns to have a vertical line to their right</p></dd>
 
 
-<dt>vline.part</dt>
+<dt id="arg-vline-part">vline.part<a class="anchor" aria-label="anchor" href="#arg-vline-part"></a></dt>
 <dd><p>part of the table where the vertical lines should be placed ("all", "header", "body", "footer")</p></dd>
 
 
-<dt>theme</dt>
+<dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
 <dd><p>a Certe colour theme, defaults to <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/current_markdown_colour.html" class="external-link">current_markdown_colour()</a></code> which determines the Certe colour based on a markdown YAML header and defaults to <code>"certeblauw"</code>. Can also be <code>"certeroze"</code>, <code>"certegroen"</code>, etc. This will set the list in <code>colours</code> and will be ignored if <code>colours</code> is set manually. Can be set to "white" for a clean look.</p></dd>
 
 
-<dt>colours</dt>
+<dt id="arg-colours">colours<a class="anchor" aria-label="anchor" href="#arg-colours"></a></dt>
 <dd><p>a <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> with the following named character values: <code>rows.fill.even</code>, <code>rows.fill.odd</code>, <code>columns.fill</code>, <code>values.fill</code>, and <code>values.colour</code>. All values will be evaluated with <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/colourpicker.html" class="external-link">colourpicker()</a></code>.</p></dd>
 
 
-<dt>split.across.pages</dt>
+<dt id="arg-split-across-pages">split.across.pages<a class="anchor" aria-label="anchor" href="#arg-split-across-pages"></a></dt>
 <dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> whether tables are allowed to split across page. This argument only has effect for PDF output.</p></dd>
 
 
-<dt>print</dt>
+<dt id="arg-print">print<a class="anchor" aria-label="anchor" href="#arg-print"></a></dt>
 <dd><p>forced printing (required in a <code>for</code> loop), default is <code>TRUE</code> in non-interactive sessions</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>not used</p></dd>
 
 
-<dt>use_knitr</dt>
+<dt id="arg-use-knitr">use_knitr<a class="anchor" aria-label="anchor" href="#arg-use-knitr"></a></dt>
 <dd><p>use the <code>knitr</code> package for printing. Ignored when in an interactive session. If <code>FALSE</code>, an internal certetoolbox function will be used to convert the LaTeX <code>longtable</code> that would print across multiple PDF pages. If in a non-interactive session where the output is non-LaTeX, the <code>knitr</code> package will always be used.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>flextable object</p>
+    <p>flextable object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -386,7 +386,7 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># generate a data.frame</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span></span>
@@ -461,7 +461,7 @@
 <span class="r-in"><span>                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              row.extra.footer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Footer"</span>, <span class="st">"Footer"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                      widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -476,15 +476,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.4</span>
       </span>
     </div>
 
@@ -25,35 +25,35 @@
       <ul class="nav navbar-nav"><li>
   <a href="../index.html">
     <span class="fa fa-home"></span>
-     
+
     Home
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
     <span class="fa fa-book-open"></span>
-     
+
     Manual
   </a>
 </li>
 <li>
   <a href="https://github.com/certe-medical-epidemiology/certetoolbox" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Source Code
   </a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/certe-medical-epidemiology" class="external-link">
     <span class="fab fa-github"></span>
-     
+
     Certe Med Epi
   </a>
 </li>
 <li>
   <a href="https://certe.nl" class="external-link">
     <span class="fa fa-flask"></span>
-     
+
     Certe Website
   </a>
 </li>
@@ -61,13 +61,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Print Table as Markdown, LaTeX of HTML</h1>
-    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/HEAD/R/data.frame.R" class="external-link"><code>R/data.frame.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/certe-medical-epidemiology/certetoolbox/blob/main/R/data.frame.R" class="external-link"><code>R/data.frame.R</code></a></small>
     <div class="hidden name"><code>tbl_markdown.Rd</code></div>
     </div>
 
@@ -101,87 +101,87 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x</dt>
+
+
+<dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> or a <code><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></code> object or a <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">gtsummary</a></code> object</p></dd>
 
 
-<dt>row.names</dt>
+<dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
 <dd><p>row names to be displayed</p></dd>
 
 
-<dt>column.names</dt>
+<dt id="arg-column-names">column.names<a class="anchor" aria-label="anchor" href="#arg-column-names"></a></dt>
 <dd><p>column names to be displayed</p></dd>
 
 
-<dt>align</dt>
+<dt id="arg-align">align<a class="anchor" aria-label="anchor" href="#arg-align"></a></dt>
 <dd><p>alignment of columns (default: numbers to the right, others to the left)</p></dd>
 
 
-<dt>padding</dt>
+<dt id="arg-padding">padding<a class="anchor" aria-label="anchor" href="#arg-padding"></a></dt>
 <dd><p>extra cell padding</p></dd>
 
 
-<dt>caption</dt>
+<dt id="arg-caption">caption<a class="anchor" aria-label="anchor" href="#arg-caption"></a></dt>
 <dd><p>caption of table</p></dd>
 
 
-<dt>na</dt>
+<dt id="arg-na">na<a class="anchor" aria-label="anchor" href="#arg-na"></a></dt>
 <dd><p>text for missing values (default: <code>""</code>)</p></dd>
 
 
-<dt>type</dt>
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>type of formatting the table - valid options are <code>"latex"</code>, <code>"html"</code>, <code>"markdown"</code>, <code>"pandoc"</code> and <code>"rst"</code></p></dd>
 
 
-<dt>format.dates</dt>
+<dt id="arg-format-dates">format.dates<a class="anchor" aria-label="anchor" href="#arg-format-dates"></a></dt>
 <dd><p>formatting of dates, will be evaluated with <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code></p></dd>
 
 
-<dt>decimal.mark</dt>
+<dt id="arg-decimal-mark">decimal.mark<a class="anchor" aria-label="anchor" href="#arg-decimal-mark"></a></dt>
 <dd><p>decimal separator, defaults to <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">dec_mark()</a></code></p></dd>
 
 
-<dt>big.mark</dt>
+<dt id="arg-big-mark">big.mark<a class="anchor" aria-label="anchor" href="#arg-big-mark"></a></dt>
 <dd><p>thousands separator, defaults to <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/dec_mark.html" class="external-link">big_mark()</a></code></p></dd>
 
 
-<dt>logicals</dt>
+<dt id="arg-logicals">logicals<a class="anchor" aria-label="anchor" href="#arg-logicals"></a></dt>
 <dd><p>vector with two values that replace <code>TRUE</code> and <code>FALSE</code></p></dd>
 
 
-<dt>columns.percent</dt>
+<dt id="arg-columns-percent">columns.percent<a class="anchor" aria-label="anchor" href="#arg-columns-percent"></a></dt>
 <dd><p>display the column indices as percentages using <code><a href="https://certe-medical-epidemiology.github.io/certestyle/reference/format2.html" class="external-link">format2()</a></code> - example: <code>columns.percent = c(2, 3)</code></p></dd>
 
 
-<dt>column.names.bold</dt>
+<dt id="arg-column-names-bold">column.names.bold<a class="anchor" aria-label="anchor" href="#arg-column-names-bold"></a></dt>
 <dd><p>display column names in bold</p></dd>
 
 
-<dt>round.numbers</dt>
+<dt id="arg-round-numbers">round.numbers<a class="anchor" aria-label="anchor" href="#arg-round-numbers"></a></dt>
 <dd><p>number of decimal places to round up for numbers</p></dd>
 
 
-<dt>round.percent</dt>
+<dt id="arg-round-percent">round.percent<a class="anchor" aria-label="anchor" href="#arg-round-percent"></a></dt>
 <dd><p>number of decimal places to round to when using <code>columns.percent</code></p></dd>
 
 
-<dt>newlines.leading</dt>
+<dt id="arg-newlines-leading">newlines.leading<a class="anchor" aria-label="anchor" href="#arg-newlines-leading"></a></dt>
 <dd><p>number of white lines to print before the table</p></dd>
 
 
-<dt>newlines.trailing</dt>
+<dt id="arg-newlines-trailing">newlines.trailing<a class="anchor" aria-label="anchor" href="#arg-newlines-trailing"></a></dt>
 <dd><p>number of white lines to print after the table</p></dd>
 
 
-<dt>print</dt>
+<dt id="arg-print">print<a class="anchor" aria-label="anchor" href="#arg-print"></a></dt>
 <dd><p>only useful when input is a Flextable: force printing</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>character</p>
+    <p>character</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -221,15 +221,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
