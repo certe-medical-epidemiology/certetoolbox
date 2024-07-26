@@ -10,9 +10,11 @@ as_excel(
   sheet_names = NULL,
   autofilter = TRUE,
   autowidth = TRUE,
+  widths = NULL,
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
+  digits = NULL,
   align = "center",
   table_style = "TableStyleMedium2",
   creator = Sys.info()["user"],
@@ -31,11 +33,15 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 
 \item{autowidth}{automatically adjust columns widths}
 
+\item{widths}{width of columns, must be length 1 or \code{ncol()} of the data set. If set, overrides \code{autowidth}.}
+
 \item{rows_zebra}{create banded rows}
 
 \item{cols_zebra}{create banded columns}
 
 \item{freeze_top_row}{freeze the first row of the sheet}
+
+\item{digits}{number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to \code{NULL} for no rounding}
 
 \item{align}{horizontal alignment of text}
 

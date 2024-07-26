@@ -23,26 +23,19 @@ tbl_gtsummary(
 \arguments{
 \item{x}{a \link{data.frame}}
 
-\item{by}{A column name (quoted or unquoted) in \code{data}.
-Summary statistics will be calculated separately for each level of the \code{by}
-variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations. To stratify a table by two or more
-variables, use \code{tbl_strata()}}
+\item{by}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
+A single column from \code{data}. Summary statistics will be stratified by this variable.
+Default is \code{NULL}.}
 
-\item{label}{List of formulas specifying variables labels,
-e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
-variable's label is not specified here, the label attribute
-(\code{attr(data$age, "label")}) is used.  If
-attribute label is \code{NULL}, the variable name will be used.}
+\item{label}{(\code{\link[gtsummary:syntax]{formula-list-selector}})\cr
+Used to override default labels in summary table, e.g. \code{list(age = "Age, years")}.
+The default for each variable is the column label attribute, \code{attr(., 'label')}.
+If no label has been set, the column name is used.}
 
-\item{digits}{List of formulas specifying the number of decimal
-places to round summary statistics. If not specified,
-\code{tbl_summary} guesses an appropriate number of decimals to round statistics.
-When multiple statistics are displayed for a single variable, supply a vector
-rather than an integer.  For example, if the
-statistic being calculated is \code{"{mean} ({sd})"} and you want the mean rounded
-to 1 decimal place, and the SD to 2 use \code{digits = list(age ~ c(1, 2))}. User
-may also pass a styling function: \code{digits = age ~ style_sigfig}}
+\item{digits}{(\code{\link[gtsummary:syntax]{formula-list-selector}})\cr
+Specifies how summary statistics are rounded. Values may be either integer(s)
+or function(s). If not specified, default formatting is assigned
+via \code{assign_summary_digits()}. See below for details.}
 
 \item{...}{Arguments passed on to \code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}}
 

@@ -234,7 +234,7 @@ tbl_flextable <- function(x,
                           format.dates = "d mmm yyyy",
                           decimal.mark = dec_mark(),
                           big.mark = big_mark(),
-                          font.family = "Calibri",
+                          font.family = "Source Sans Pro",
                           font.size = 9,
                           font.size.header = font.size + 1,
                           values.colour = NULL,
@@ -882,6 +882,7 @@ tbl_gtsummary <- function(x,
                           decimal.mark = dec_mark(),
                           big.mark = big_mark()) {
   check_is_installed("gtsummary")
+  check_is_installed("cardx")
   
   if (isTRUE(add_ci) && isTRUE(add_overall)) {
     message("'add_ci' and 'add_overall' cannot both be true, ignoring 'add_overall'")
@@ -896,7 +897,7 @@ tbl_gtsummary <- function(x,
                                       iqr.sep = "\u2009\u2013\u2009", # small space, 'en' dash, small space
                                       ci.sep = "\u2009\u2013\u2009",
                                       set_theme = FALSE) |>
-    gtsummary::set_gtsummary_theme(quiet = TRUE)
+    gtsummary::set_gtsummary_theme()
   
   # determine the 'by'
   by_select <- x |>

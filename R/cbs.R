@@ -66,7 +66,7 @@ cbs_search <- function(topic, max_print = 25) {
   for (i in seq_len(min(max_print, nrow(topics)))) {
     cat(paste0(i, ". ", crayon::bold(topics[i, ]$Title), " (", crayon::red(topics[i, ]$Identifier), ")\n",
                "Periode: ", topics[i, ]$Period, "\n",
-               "Grootte: ", format2(topics[i, ]$RecordCount), " x ", topics[i, ]$ColumnCount, "\n",
+               "Grootte: ", format2(topics[i, ]$RecordCount), pkg_env$cross_icon, topics[i, ]$ColumnCount, "\n",
                "Aangepast: ", format2(topics[i, ]$Modified, " dddd d mmmm yyyy"), "\n",
                topics[i, ]$Summary, "\n\n"))
   }

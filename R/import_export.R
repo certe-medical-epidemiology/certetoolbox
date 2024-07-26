@@ -96,7 +96,7 @@ export_exec <- function(object,
   }
   if (file.exists(filename)) {
     message(paste0("Exported data set (",
-                   format2(NROW(object)), "x", format2(NCOL(object)),
+                   format2(NROW(object)), pkg_env$cross_icon, format2(NCOL(object)),
                    ") to '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
@@ -245,7 +245,7 @@ import_exec <- function(filename,
     message(
       paste0(
         "Imported data set (",
-        format2(NROW(df)), "x", format2(NCOL(df)), ") from '",
+        format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from '",
         file_src, "'"
       )
     )

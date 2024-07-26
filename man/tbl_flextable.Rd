@@ -43,7 +43,7 @@ tbl_flextable(
   format.dates = "d mmm yyyy",
   decimal.mark = dec_mark(),
   big.mark = big_mark(),
-  font.family = "Calibri",
+  font.family = "Source Sans Pro",
   font.size = 9,
   font.size.header = font.size + 1,
   values.colour = NULL,

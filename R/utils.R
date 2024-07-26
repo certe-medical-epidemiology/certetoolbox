@@ -34,6 +34,7 @@ globalVariables(c(".",
 
 pkg_env <- new.env(hash = FALSE)
 pkg_env$temp <- list()
+pkg_env$cross_icon <- if (isTRUE(base::l10n_info()$`UTF-8`)) " \u00d7 " else " x "
 
 file.remove2 <- function(x, ...) {
   if (file.exists(x)) {

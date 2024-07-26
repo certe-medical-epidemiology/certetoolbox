@@ -48,7 +48,7 @@ export_clipboard <- function(object,
                     allow_non_interactive = TRUE,
                     quote = isTRUE(quote))
   message(paste0("Exported object (",
-                 format2(NROW(object)), "x", format2(NCOL(object)),
+                 format2(NROW(object)), pkg_env$cross_icon, format2(NCOL(object)),
                  ") to clipboard."))
   return(invisible(object))
 }
@@ -120,7 +120,7 @@ export_teams <- function(object,
                     account = account,
                     file_name = basename(file_path))
   message(paste0("Exported object (",
-                 format2(NROW(object)), "x", format2(NCOL(object)),
+                 format2(NROW(object)), pkg_env$cross_icon, format2(NCOL(object)),
                  ") to Microsoft Teams."))
   return(invisible(structure(object, filename = tools::file_path_as_absolute(file_path))))
 }
@@ -167,7 +167,7 @@ import_clipboard <- function(sep = "\t",
   message(
     paste0(
       "Imported data set (",
-      format2(NROW(df)), "x", format2(NCOL(df)), ") from clipboard")
+      format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from clipboard")
   )
   df
 }
