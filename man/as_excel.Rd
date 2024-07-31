@@ -14,7 +14,7 @@ as_excel(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
-  digits = NULL,
+  digits = 2,
   align = "center",
   table_style = "TableStyleMedium2",
   creator = Sys.info()["user"],

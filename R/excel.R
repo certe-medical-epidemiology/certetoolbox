@@ -60,7 +60,7 @@ as_excel <- function(...,
                      rows_zebra = TRUE,
                      cols_zebra = FALSE,
                      freeze_top_row = TRUE,
-                     digits = NULL,
+                     digits = 2,
                      align = "center",
                      table_style = "TableStyleMedium2",
                      creator = Sys.info()["user"],
@@ -107,7 +107,10 @@ as_excel <- function(...,
     }
     if (nchar(names(dots)[i]) >= 32) {
       # Sheet names can only have 31 characters. Yes, really.
-      names(dots)[i] <- paste0(substr(names(dots)[i], 1, 30), i)
+      warning(paste0("The name of sheet ", i, " (",  names(dots)[i], ") is too long and was cut to 30 characters and its sheet number."),
+              call. = FALSE,
+              immediate. = TRUE)
+      names(dots)[i] <- paste0(substr(names(dots)[i], 1, 30), "#", i)
     }
     wb <- wb |> 
       wb_add_worksheet(sheet = names(dots)[i]) |> 
@@ -127,13 +130,14 @@ as_excel <- function(...,
                         vertical = "center",
                         wrap_text = TRUE)
     
-    if (!is.null(digits)) {
+    if (!is.null(digits) && !isFALSE(digits) && !is.infinite(digits)) {
       if (any(vapply(FUN.VALUE = logical(1), df, is.numeric))) {
+        cols_to_update <- vapply(FUN.VALUE = logical(1), df, function(x) is.numeric(x) && !all(x == ceiling(x), na.rm = TRUE))
         # all numbers as numbers with set decimals
         wb <- wb |>
           wb_add_numfmt(sheet = i,
                         dims = wb_dims(x = df,
-                                       cols = df |> select(where(is.numeric)) |> colnames()),
+                                       cols = names(cols_to_update)[cols_to_update]),
                         numfmt = paste0("0.", strrep("0", times = digits)))
       }
     }
