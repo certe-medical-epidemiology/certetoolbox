@@ -136,17 +136,18 @@ as_excel <- function(...,
         # all numbers as numbers with set decimals
         wb <- wb |>
           wb_add_numfmt(sheet = i,
-                        dims = wb_dims(x = df,
-                                       cols = names(cols_to_update)[cols_to_update]),
+                        dims = wb_dims(rows = 2:(NROW(df) + 1),
+                                       cols = which(cols_to_update)),
                         numfmt = paste0("0.", strrep("0", times = digits)))
       }
     }
     if (any(vapply(FUN.VALUE = logical(1), df, is.integer))) {
       # all integers as numbers with zero decimals
+      cols_to_update <- vapply(FUN.VALUE = logical(1), df, is.integer)
       wb <- wb |> 
         wb_add_numfmt(sheet = i,
-                      dims = wb_dims(x = df,
-                                     cols = df |> select(where(is.integer)) |> colnames()),
+                      dims = wb_dims(rows = 2:(NROW(df) + 1),
+                                     cols = which(cols_to_update)),
                       numfmt = "0")
     }
     
