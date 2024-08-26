@@ -178,6 +178,7 @@ import_mail_attachment(
   search_from = NULL,
   search_when = NULL,
   search_attachment = NULL,
+  folder = certemail::get_inbox_name(account = account),
   n = 5,
   sort = "received desc",
   account = certemail::connect_outlook(),
@@ -253,19 +254,21 @@ import_teams(
 
 \item{startrow}{first row to start importing}
 
-\item{search}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{search}{an ODATA filter, ignores \code{sort} and defaults to search only mails with attachments}
 
-\item{search_subject}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{search_subject}{a \link{character}, equal to \code{search = "subject:(search_subject)"}, case-insensitive}
 
-\item{search_from}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{search_from}{a \link{character}, equal to \code{search = "from:(search_from)"}, case-insensitive}
 
-\item{search_when}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{search_when}{a \link{Date} vector of size 1 or 2, equal to \code{search = "received:date1..date2"}, see \emph{Examples}}
 
-\item{search_attachment}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{search_attachment}{a \link{character} to use a regular expression for attachment file names}
 
-\item{n}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{folder}{email folder name to search in, defaults to Inbox of the current user by calling \code{\link[certemail:get_inbox_name]{get_inbox_name()}}}
 
-\item{sort}{see \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}}}
+\item{n}{maximum number of emails to search}
+
+\item{sort}{initial sorting}
 
 \item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect]{certeprojects::connect_teams()}}}
 
@@ -287,7 +290,7 @@ Importing a Feather file using \code{\link[=import_feather]{import_feather()}} r
 
 Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
-Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder.
+Importing mail attachments using \code{\link[=import_mail_attachment]{import_mail_attachment()}} requires the \code{certemail} package to be installed. It calls \code{\link[certemail:download_mail_attachment]{download_mail_attachment()}} internally and saves the attachment to a temporary folder. For all folder names, run: \code{sapply(certemail::connect_outlook()$list_folders(), function(x) x$properties$displayName)}.
 
 The \code{\link[=import_url]{import_url()}} function tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
 
