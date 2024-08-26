@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.13.7</span>
       </span>
     </div>
 
@@ -236,6 +236,7 @@
 <span>  search_from <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  search_when <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  search_attachment <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  folder <span class="op">=</span> <span class="fu">certemail</span><span class="fu">::</span><span class="fu"><a href="https://certe-medical-epidemiology.github.io/certemail/reference/account_properties.html" class="external-link">get_inbox_name</a></span><span class="op">(</span>account <span class="op">=</span> <span class="va">account</span><span class="op">)</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  sort <span class="op">=</span> <span class="st">"received desc"</span>,</span>
 <span>  account <span class="op">=</span> <span class="fu">certemail</span><span class="fu">::</span><span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/connect.html" class="external-link">connect_outlook</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -352,31 +353,35 @@
 
 
 <dt id="arg-search">search<a class="anchor" aria-label="anchor" href="#arg-search"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>an ODATA filter, ignores <code>sort</code> and defaults to search only mails with attachments</p></dd>
 
 
 <dt id="arg-search-subject">search_subject<a class="anchor" aria-label="anchor" href="#arg-search-subject"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a>, equal to <code>search = "subject:(search_subject)"</code>, case-insensitive</p></dd>
 
 
 <dt id="arg-search-from">search_from<a class="anchor" aria-label="anchor" href="#arg-search-from"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a>, equal to <code>search = "from:(search_from)"</code>, case-insensitive</p></dd>
 
 
 <dt id="arg-search-when">search_when<a class="anchor" aria-label="anchor" href="#arg-search-when"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/Dates.html" class="external-link">Date</a> vector of size 1 or 2, equal to <code>search = "received:date1..date2"</code>, see <em>Examples</em></p></dd>
 
 
 <dt id="arg-search-attachment">search_attachment<a class="anchor" aria-label="anchor" href="#arg-search-attachment"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/character.html" class="external-link">character</a> to use a regular expression for attachment file names</p></dd>
+
+
+<dt id="arg-folder">folder<a class="anchor" aria-label="anchor" href="#arg-folder"></a></dt>
+<dd><p>email folder name to search in, defaults to Inbox of the current user by calling <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/account_properties.html" class="external-link">get_inbox_name()</a></code></p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>maximum number of emails to search</p></dd>
 
 
 <dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
-<dd><p>see <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code></p></dd>
+<dd><p>initial sorting</p></dd>
 
 
 <dt id="arg-account">account<a class="anchor" aria-label="anchor" href="#arg-account"></a></dt>
@@ -398,7 +403,7 @@
 <p>Importing an SPSS file using <code>import_sav()</code> or <code>import_spss()</code> requires the <code>haven</code> package to be installed.</p>
 <p>Importing a Feather file using <code>import_feather()</code> requires the <code>arrow</code> package to be installed. <a href="https://arrow.apache.org/docs/python/feather.html" class="external-link">Apache Feather</a> provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the <code>col_select</code> argument (which supports the <a href="https://tidyselect.r-lib.org/reference/language.html" class="external-link">tidyselect language</a>) for specific data selection to improve importing speed.</p>
 <p>Importing the clipboard using <code>import_clipboard()</code> requires the <code>clipr</code> package to be installed.</p>
-<p>Importing mail attachments using <code>import_mail_attachment()</code> requires the <code>certemail</code> package to be installed. It calls <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code> internally and saves the attachment to a temporary folder.</p>
+<p>Importing mail attachments using <code>import_mail_attachment()</code> requires the <code>certemail</code> package to be installed. It calls <code><a href="https://certe-medical-epidemiology.github.io/certemail/reference/download_mail_attachment.html" class="external-link">download_mail_attachment()</a></code> internally and saves the attachment to a temporary folder. For all folder names, run: <code>sapply(certemail::connect_outlook()$list_folders(), function(x) x$properties$displayName)</code>.</p>
 <p>The <code>import_url()</code> function tries to download the file first, after which it will be imported using the appropriate <code>import_*()</code> function.</p>
 <p>The <code>import_teams()</code> function uses <code><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/teams.html" class="external-link">certeprojects::teams_download_file()</a></code> to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate <code>import_*()</code> function.</p>
     </div>
@@ -410,7 +415,7 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (150 × 5) to '/tmp/RtmpfvuMPP/file176b5201c5f7/reference/iris.csv' (3.9 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (150 × 5) to '/tmp/Rtmpbcf9tK/file198d35df2419/reference/iris.csv' (3.9 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
@@ -429,7 +434,7 @@
 <span class="r-in"><span><span class="co"># row names are also supported</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Row names added as first column 'rownames'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (32 × 12) to '/tmp/RtmpfvuMPP/file176b5201c5f7/reference/mtcars.csv' (1.7 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (32 × 12) to '/tmp/Rtmpbcf9tK/file198d35df2419/reference/mtcars.csv' (1.7 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Row names restored from first column.</span>
@@ -446,7 +451,7 @@
 <span class="r-in"><span><span class="co"># and allow for specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu"><a href="export.html">export_feather</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpfvuMPP/file176b5201c5f7/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmpbcf9tK/file198d35df2419/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu">import</span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
