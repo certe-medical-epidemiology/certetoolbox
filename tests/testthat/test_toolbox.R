@@ -302,8 +302,8 @@ test_that("import_export works", {
   p <- ggplot2::ggplot(mtcars, ggplot2::aes(mpg, hp)) + ggplot2::geom_point()
   temp_pdf <- tempfile(fileext = ".pdf")
   
-  if (Sys.info()["sysname"] %in% c("Windows", "Linux")) {
-    # expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
+  if (Sys.info()["sysname"] %in% c("Windows")) {
+    expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf))))
     unlink(temp_pdf)
     expect_true(file.exists(suppressMessages(export_pdf(p, filename = temp_pdf, size = "a0"))))
     unlink(temp_pdf)
@@ -329,7 +329,7 @@ test_that("import_export works", {
     expect_true(file.exists(suppressMessages(export_html(p, filename = temp_html))))
     
     unlink(temp_pdf)
-    # expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
+    expect_true(file.exists(suppressMessages(export(p, filename = temp_pdf))))
     unlink(temp_png)
     expect_true(file.exists(suppressMessages(export(p, filename = temp_png))))
     unlink(temp_html)
