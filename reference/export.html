@@ -263,19 +263,19 @@
 
 
 <dt id="arg-autofilter">autofilter<a class="anchor" aria-label="anchor" href="#arg-autofilter"></a></dt>
-<dd><p>create autofilter on columns in first row</p></dd>
+<dd><p>create autofilter on columns in first row. This can also be a vector with the same length as <code>...</code>.</p></dd>
 
 
 <dt id="arg-rows-zebra">rows_zebra<a class="anchor" aria-label="anchor" href="#arg-rows-zebra"></a></dt>
-<dd><p>create banded rows</p></dd>
+<dd><p>create banded rows. This can also be a vector with the same length as <code>...</code>.</p></dd>
 
 
 <dt id="arg-cols-zebra">cols_zebra<a class="anchor" aria-label="anchor" href="#arg-cols-zebra"></a></dt>
-<dd><p>create banded columns</p></dd>
+<dd><p>create banded columns. This can also be a vector with the same length as <code>...</code>.</p></dd>
 
 
 <dt id="arg-freeze-top-row">freeze_top_row<a class="anchor" aria-label="anchor" href="#arg-freeze-top-row"></a></dt>
-<dd><p>freeze the first row of the sheet</p></dd>
+<dd><p>freeze the first row of the sheet. This can also be a vector with the same length as <code>...</code>.</p></dd>
 
 
 <dt id="arg-table-style">table_style<a class="anchor" aria-label="anchor" href="#arg-table-style"></a></dt>
@@ -363,9 +363,9 @@
 <span class="r-in"><span>  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmpu947j8/file17d361a25e2f/reference/whole_file.rds' (3.5 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpHcE9s5/file18ae3f0c80fb/reference/whole_file.rds' (3.5 kB).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10 × 14) to '/tmp/Rtmpu947j8/file17d361a25e2f/reference/first_ten_rows.xlsx' (7.9 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10 × 14) to '/tmp/RtmpHcE9s5/file18ae3f0c80fb/reference/first_ten_rows.xlsx' (7.9 kB).</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># starwars |&gt;</span></span></span>
@@ -377,7 +377,7 @@
 <span class="r-in"><span><span class="co"># Apache's Feather format is column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for cross-language specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu">export_feather</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmpu947j8/file17d361a25e2f/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpHcE9s5/file18ae3f0c80fb/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu"><a href="import.html">import</a></span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
