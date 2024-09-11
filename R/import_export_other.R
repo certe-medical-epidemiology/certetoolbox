@@ -173,21 +173,15 @@ import_clipboard <- function(sep = "\t",
 }
 
 #' @rdname import
-#' @details `r doc_requirement("mail attachments", "import_mail_attachment", "certemail")`. It calls [`download_mail_attachment()`][certemail::download_mail_attachment()] internally and saves the attachment to a temporary folder.
-#' @param search see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param search_subject see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param search_from see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param search_when see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param search_attachment see [`download_mail_attachment()`][certemail::download_mail_attachment()]
-#' @param n see [`download_mail_attachment()`][certemail::download_mail_attachment()]
+#' @details `r doc_requirement("mail attachments", "import_mail_attachment", "certemail")`. It calls [`download_mail_attachment()`][certemail::download_mail_attachment()] internally and saves the attachment to a temporary folder. For all folder names, run: `sapply(certemail::connect_outlook()$list_folders(), function(x) x$properties$displayName)`.
 #' @inheritParams certemail::download_mail_attachment
-#' @param sort see [`download_mail_attachment()`][certemail::download_mail_attachment()]
 #' @export
 import_mail_attachment <- function(search = "hasattachment:yes",
                                    search_subject = NULL,
                                    search_from = NULL,
                                    search_when = NULL,
                                    search_attachment = NULL,
+                                   folder = certemail::get_inbox_name(account = account),
                                    n = 5,
                                    sort = "received desc",
                                    account = certemail::connect_outlook(),
@@ -195,20 +189,25 @@ import_mail_attachment <- function(search = "hasattachment:yes",
                                    sep = ",",
                                    ...) {
   check_is_installed("certemail")
-  path <- suppressMessages(certemail::download_mail_attachment(
-    path = tempdir(),
-    filename = "{original}",
-    search = search,
-    search_subject = search_subject,
-    search_from = search_from,
-    search_when = search_when,
-    search_attachment = search_attachment,
-    n = n,
-    sort = sort,
-    overwrite = TRUE,
-    account = account))
+  path <- suppressMessages(
+    certemail::download_mail_attachment(
+      path = tempdir(),
+      filename = "{original}",
+      search = search,
+      search_subject = search_subject,
+      search_from = search_from,
+      search_when = search_when,
+      search_attachment = search_attachment,
+      folder = folder,
+      n = n,
+      sort = sort,
+      overwrite = TRUE,
+      account = account)
+  )
   
-  if (file.exists(path)) {
+  if (is.null(path)) {
+    return(data.frame())
+  } else if (file.exists(path)) {
     if (path %like% "[.]csv$") {
       import(path, auto_transform = auto_transform, sep = sep, ...)
     } else {

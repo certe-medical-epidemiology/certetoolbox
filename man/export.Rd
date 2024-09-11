@@ -187,13 +187,13 @@ export_teams(
 
 \item{sheet_names}{sheet names}
 
-\item{autofilter}{create autofilter on columns in first row}
+\item{autofilter}{create autofilter on columns in first row. This can also be a vector with the same length as \code{...}.}
 
-\item{rows_zebra}{create banded rows}
+\item{rows_zebra}{create banded rows. This can also be a vector with the same length as \code{...}.}
 
-\item{cols_zebra}{create banded columns}
+\item{cols_zebra}{create banded columns. This can also be a vector with the same length as \code{...}.}
 
-\item{freeze_top_row}{freeze the first row of the sheet}
+\item{freeze_top_row}{freeze the first row of the sheet. This can also be a vector with the same length as \code{...}.}
 
 \item{table_style}{style(s) for each table, see below. This can also be a vector with the same length as \code{...}.}
 

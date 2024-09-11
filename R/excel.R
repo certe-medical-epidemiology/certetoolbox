@@ -22,12 +22,12 @@
 #' The [as_excel()] function relies on the `openxlsx2` package for creating an Excel Workbook object in R. These objects can be saved using [save_excel()] or [export_xlsx()].
 #' @param ... data sets, use named items for multiple tabs (see *Examples*)
 #' @param sheet_names sheet names
-#' @param autofilter create autofilter on columns in first row
-#' @param autowidth automatically adjust columns widths
-#' @param rows_zebra create banded rows
-#' @param cols_zebra create banded columns
-#' @param freeze_top_row freeze the first row of the sheet
-#' @param digits number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to `NULL` for no rounding
+#' @param autofilter create autofilter on columns in first row. This can also be a vector with the same length as `...`.
+#' @param autowidth automatically adjust columns widths. This can also be a vector with the same length as `...`.
+#' @param rows_zebra create banded rows. This can also be a vector with the same length as `...`.
+#' @param cols_zebra create banded columns. This can also be a vector with the same length as `...`.
+#' @param freeze_top_row freeze the first row of the sheet. This can also be a vector with the same length as `...`.
+#' @param digits number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to `2`
 #' @param table_style style(s) for each table, see below. This can also be a vector with the same length as `...`.
 #' @param align horizontal alignment of text
 #' @param widths width of columns, must be length 1 or `ncol()` of the data set. If set, overrides `autowidth`.
@@ -60,7 +60,7 @@ as_excel <- function(...,
                      rows_zebra = TRUE,
                      cols_zebra = FALSE,
                      freeze_top_row = TRUE,
-                     digits = NULL,
+                     digits = 2,
                      align = "center",
                      table_style = "TableStyleMedium2",
                      creator = Sys.info()["user"],
@@ -80,9 +80,19 @@ as_excel <- function(...,
   name_missing <- which(names(dots) == "")
   names(dots)[names(dots) == ""] <- paste0("Blad", name_missing)
   
-  if (length(table_style) == 1 && length(dots) > 1) {
-    table_style <- rep(table_style, length(dots))
+  
+  multiply_if_multiple <- function(arg, reference) {
+    if (length(arg) == 1 && length(reference) > 1) {
+      arg <- rep(arg, length(reference))
+    }
+    return(arg)
   }
+  autofilter <- multiply_if_multiple(autofilter, dots)
+  autowidth <- multiply_if_multiple(autowidth, dots)
+  rows_zebra <- multiply_if_multiple(rows_zebra, dots)
+  cols_zebra <- multiply_if_multiple(cols_zebra, dots)
+  freeze_top_row <- multiply_if_multiple(freeze_top_row, dots)
+  table_style <- multiply_if_multiple(table_style, dots)
   
   wb <- wb_workbook(creator = creator,
                     company = department,
@@ -107,16 +117,19 @@ as_excel <- function(...,
     }
     if (nchar(names(dots)[i]) >= 32) {
       # Sheet names can only have 31 characters. Yes, really.
-      names(dots)[i] <- paste0(substr(names(dots)[i], 1, 30), i)
+      warning(paste0("The name of sheet ", i, " (",  names(dots)[i], ") is too long and was cut to 30 characters and its sheet number."),
+              call. = FALSE,
+              immediate. = TRUE)
+      names(dots)[i] <- paste0(substr(names(dots)[i], 1, 30), "#", i)
     }
     wb <- wb |> 
       wb_add_worksheet(sheet = names(dots)[i]) |> 
       wb_add_data_table(x = df,
                         table_name = paste0("Tabel", i),
                         sheet = i,
-                        with_filter = isTRUE(autofilter),
-                        banded_rows = isTRUE(rows_zebra),
-                        banded_cols = isTRUE(cols_zebra),
+                        with_filter = isTRUE(autofilter[i]),
+                        banded_rows = isTRUE(rows_zebra[i]),
+                        banded_cols = isTRUE(cols_zebra[i]),
                         table_style = table_style[i],
                         na.strings = "") |> 
       wb_add_cell_style(sheet = i,
@@ -127,26 +140,32 @@ as_excel <- function(...,
                         vertical = "center",
                         wrap_text = TRUE)
     
-    if (!is.null(digits)) {
+    if (!is.null(digits) && !isFALSE(digits) && !is.infinite(digits)) {
       if (any(vapply(FUN.VALUE = logical(1), df, is.numeric))) {
         # all numbers as numbers with set decimals
-        wb <- wb |>
-          wb_add_numfmt(sheet = i,
-                        dims = wb_dims(x = df,
-                                       cols = df |> select(where(is.numeric)) |> colnames()),
-                        numfmt = paste0("0.", strrep("0", times = digits)))
+        cols_to_update <- vapply(FUN.VALUE = logical(1), df, function(x) is.numeric(x) && !all(x == ceiling(x), na.rm = TRUE))
+        if (any(cols_to_update)) {
+          wb <- wb |>
+            wb_add_numfmt(sheet = i,
+                          dims = wb_dims(rows = 2:(NROW(df) + 1),
+                                         cols = which(cols_to_update)),
+                          numfmt = paste0("0.", strrep("0", times = digits)))
+        }
       }
     }
     if (any(vapply(FUN.VALUE = logical(1), df, is.integer))) {
       # all integers as numbers with zero decimals
-      wb <- wb |> 
-        wb_add_numfmt(sheet = i,
-                      dims = wb_dims(x = df,
-                                     cols = df |> select(where(is.integer)) |> colnames()),
-                      numfmt = "0")
+      cols_to_update <- vapply(FUN.VALUE = logical(1), df, is.integer)
+      if (any(cols_to_update)) {
+        wb <- wb |> 
+          wb_add_numfmt(sheet = i,
+                        dims = wb_dims(rows = 2:(NROW(df) + 1),
+                                       cols = which(cols_to_update)),
+                        numfmt = "0")
+      }
     }
     
-    if (isTRUE(freeze_top_row)) {
+    if (isTRUE(freeze_top_row[i])) {
       wb <- wb |> 
         wb_freeze_pane(sheet = i,
                        first_row = TRUE)
@@ -163,9 +182,9 @@ as_excel <- function(...,
       }
     }
     
-    if (isTRUE(autowidth) || !is.null(width)) {
+    if (isTRUE(autowidth[i]) || !is.null(width)) {
       # wb_set_col_widths() can take `widths = "auto"` as input, but it is not even close to auto-resizing in Excel manually
-      if (isTRUE(autowidth)) {
+      if (isTRUE(autowidth[i])) {
         width <- double(NCOL(df))
         for (col in seq_len(ncol(df))) {
           width[col] <- min(100,

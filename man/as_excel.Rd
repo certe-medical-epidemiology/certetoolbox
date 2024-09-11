@@ -14,7 +14,7 @@ as_excel(
   rows_zebra = TRUE,
   cols_zebra = FALSE,
   freeze_top_row = TRUE,
-  digits = NULL,
+  digits = 2,
   align = "center",
   table_style = "TableStyleMedium2",
   creator = Sys.info()["user"],
@@ -29,19 +29,19 @@ save_excel(xl, filename = NULL, overwrite = FALSE)
 
 \item{sheet_names}{sheet names}
 
-\item{autofilter}{create autofilter on columns in first row}
+\item{autofilter}{create autofilter on columns in first row. This can also be a vector with the same length as \code{...}.}
 
-\item{autowidth}{automatically adjust columns widths}
+\item{autowidth}{automatically adjust columns widths. This can also be a vector with the same length as \code{...}.}
 
 \item{widths}{width of columns, must be length 1 or \code{ncol()} of the data set. If set, overrides \code{autowidth}.}
 
-\item{rows_zebra}{create banded rows}
+\item{rows_zebra}{create banded rows. This can also be a vector with the same length as \code{...}.}
 
-\item{cols_zebra}{create banded columns}
+\item{cols_zebra}{create banded columns. This can also be a vector with the same length as \code{...}.}
 
-\item{freeze_top_row}{freeze the first row of the sheet}
+\item{freeze_top_row}{freeze the first row of the sheet. This can also be a vector with the same length as \code{...}.}
 
-\item{digits}{number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to \code{NULL} for no rounding}
+\item{digits}{number of digits for numeric values (integer values will always be rounded to whole numbers), defaults to \code{2}}
 
 \item{align}{horizontal alignment of text}
 
