@@ -71,6 +71,10 @@ as_excel <- function(...,
     # was passed on as a list, e.g. from export_xlsx()
     dots <- dots[[1]]
   }
+  if (is.list(dots) && !is.data.frame(dots) && is.data.frame(dots[[1]][[1]])) {
+    # try again
+    dots <- dots[[1]]
+  }
   if (!is.null(sheet_names)) {
     names(dots) <- sheet_names
   }
