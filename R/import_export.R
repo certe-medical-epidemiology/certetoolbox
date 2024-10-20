@@ -122,7 +122,7 @@ import_exec <- function(filename,
                         project_number,
                         auto_transform,
                         ...) {
-  extension <- extension[1L]
+  extension <- tolower(extension[1L])
   
   if (!is.character(filename)) {
     filename <- filename_deparse
@@ -135,6 +135,9 @@ import_exec <- function(filename,
     if (filename_url %like% "git(hub|lab)[.]com/.*/blob/") {
       # get GitHub/GitLab raw URL
       filename_url <- gsub("/blob/", "/raw/", filename_url, fixed = TRUE)
+    }
+    if (extension == "") {
+      extension <- tools::file_ext(basename(filename_url))
     }
     filename <- tempfile(pattern = "import_", fileext = paste0(".", extension))
     if (.Platform$OS.type == "windows") {
@@ -166,6 +169,11 @@ import_exec <- function(filename,
   if (extension == "rds") {
     # R format
     df <- base::readRDS(file = filename)
+  } else if (extension == "rda") {
+    env <- new.env()
+    load(filename, envir = env)
+    df <- get(names(env), envir = env)
+    rm(env)
   } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
     df <- read_delim(file = filename,
@@ -221,8 +229,11 @@ import_exec <- function(filename,
     df <- rio::import(file = filename, ...)
   }
   
-  # force data.frame
-  df <- as.data.frame(df, stringsAsFactors = FALSE)
+  if (!inherits(df, "sf")) {
+    # force plain data.frame if type is not map data
+    df <- as.data.frame(df, stringsAsFactors = FALSE)
+  }
+  
   # if row names were saved as first col, set back to row names
   if (colnames(df)[1L] %like% "row.?names?") {
     rownames(df) <- df[, 1, drop = TRUE]

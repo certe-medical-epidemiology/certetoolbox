@@ -1127,6 +1127,9 @@ auto_transform <- function(x,
   
   if (isTRUE(snake_case)) {
     x <- format_names(x, snake_case = TRUE)
+    if (!is.null(attributes(x)$sf_column)) {
+      attributes(x)$sf_column <- colnames(x)[which(vapply(FUN.VALUE = logical(1), x, inherits, "sfc"))][1]
+    }
   }
   
   dateformat <- format_datetime(dateformat)
@@ -1155,6 +1158,11 @@ auto_transform <- function(x,
   
   for (i in seq_len(ncol(x))) {
     pb$tick(tokens = list(what = col_names[i]))
+    
+    if (inherits(x[, i, drop = TRUE], c("sfc", "disk", "sir", "mic"))) {
+      # do not convert sf colums
+      next
+    }
     
     # 2023-02-13 fix for Diver, logicals/booleans seem corrupt
     if (is.logical(x[, i, drop = TRUE])) {
@@ -1194,6 +1202,10 @@ auto_transform <- function(x,
           # class is different - it has to run for all values unfortunately
           parsed <- NULL
         }
+      }
+      if (inherits(parsed, "numeric") && inherits(col_data, "integer")) {
+        # if original is integer and now numeric, that's an error - skip to next
+        next
       }
       if (is.null(parsed)) {
         # run for all unique values
