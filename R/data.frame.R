@@ -1145,13 +1145,13 @@ auto_transform <- function(x,
              error = function(e) {
                msg <- paste0("NOTE: Ignoring column ", trimws(col_names[col]), " because of error: ",
                              gsub("\n", " ", e$message))
-               pb$message(msg)
+               try(pb$message(msg), silent = TRUE)
                return(backup)
              },
              warning = function(e) {
                msg <- paste0("Column ", trimws(col_names[col]), ": ",
                              gsub("\n", " ", e$message))
-               pb$message(msg)
+               try(pb$message(msg), silent = TRUE)
                return(suppressWarnings(object))
              })
   }
