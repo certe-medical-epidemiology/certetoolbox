@@ -107,7 +107,8 @@ as_excel <- function(...,
     # openxlsx2 does not support lists
     df <- df |>
       ungroup() |> 
-      mutate_if(is.list, function(x) unname(paste0(unlist(x), collapse = ", ")))
+      mutate_if(is.list, function(x) unname(paste0(unlist(x), collapse = ", "))) |>
+      mutate_if(function(x) inherits(x, c("mo", "ab", "sir", "mic")), as.character)
     if (!is.data.frame(df)) {
       stop("Object ", i, " (sheet '", names(dots)[i], "') must be a data.frame, not class ", paste0(class(df), collapse = "/"), call. = FALSE)
     }
