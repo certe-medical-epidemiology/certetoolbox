@@ -1160,7 +1160,7 @@ auto_transform <- function(x,
     pb$tick(tokens = list(what = col_names[i]))
     
     if (inherits(x[, i, drop = TRUE], c("sfc", "disk", "sir", "mic"))) {
-      # do not convert sf colums
+      # do not convert sf or sir/mic columns
       next
     }
     
