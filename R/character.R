@@ -155,3 +155,35 @@ p_symbol <- function(p, emptychar = " ") {
   
   s
 }
+
+#' Microorganisms Code from GLIMS10
+#' 
+#' This function is analogous to all `mo_*` functions of the AMR package, see [AMR::mo_property()].
+#' @inheritParams AMR::mo_property
+#' @export
+#' @examples
+#' mo_glims("E. coli")
+#' 
+#' library(dplyr, warn.conflicts = FALSE)
+#' data.frame(mo = c("ESCCOL", "Staph aureus")) |>
+#'   mutate(glims = mo_glims())
+#'   
+#' # even works for non-existing entries in AMR package
+#' mo_glims("Streptococcus mitis/oralis")
+#' AMR::as.mo("Streptococcus mitis/oralis")
+#' AMR::mo_genus("Streptococcus mitis/oralis")
+#' AMR::mo_gramstain("Streptococcus mitis/oralis")
+mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOption("AMR_keep_synonyms", FALSE), ...) {
+  nm <- AMR::mo_name(x, language = language, keep_synonyms = keep_synonyms, ...)
+  mo_table_glims$mnemonic[match(nm, mo_table_glims$fullname)]
+  
+  # updaten van mo_table_glims:
+  # mo_table_glims <- readxl::read_excel("mo-tabel-2023-07-21-TOTAAL-MB.xlsx") |>
+  #   filter(genus != "") |>
+  #   mutate(fullname = gsub(" species", "", naam)) |>
+  #   select(fullname, mnemonic, genus, species, subspecies) |>
+  #   distinct() |>
+  #   mutate(manual_add = !fullname %in% AMR::microorganisms$fullname) |>
+  #   mutate_all(cleaner::na_replace)
+  # usethis::use_data(mo_table_glims, internal = TRUE, overwrite = TRUE)
+}
