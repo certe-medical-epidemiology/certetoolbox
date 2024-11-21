@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.14.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.15.0</span>
       </span>
     </div>
 
@@ -113,6 +113,16 @@
 <span><span class="fu">last_5_years</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu">end_of_last_year</span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">last_10_years</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu">end_of_last_year</span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">last_n_months</span><span class="op">(</span><span class="va">n</span>, ref <span class="op">=</span> <span class="fu">end_of_last_month</span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">last_3_months</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu">end_of_last_month</span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">last_6_months</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu">end_of_last_month</span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">year_to_date</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">year_since_date</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">start_of_last_week</span><span class="op">(</span>ref <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span>, day <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -215,13 +225,14 @@
 <p>Week ranges always start on Mondays and end on Sundays.</p>
 <p><code>year()</code> always returns an <a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a>.</p>
 <p>The <code>last_n_years()</code>, <code>last_5_years()</code> and <code>last_10_years()</code> functions have their reference date set to <code>end_of_last_year()</code> at default.</p>
+<p>The <code>last_n_months()</code>, <code>last_5_months()</code> and <code>last_10_month()</code> functions have their reference date set to <code>end_of_last_month()</code> at default.</p>
 <p><code>week2resp_season()</code> transforms week numbers to an ordered <a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a>, in a range 40-53, 1:39 (or, if <code>remove_outside_season = TRUE</code>, 40-53, 1:20). This function is useful for plotting.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-11-18"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-11-21"</span>
 <span class="r-in"><span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu">this_month</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
@@ -239,7 +250,14 @@
 <span class="r-in"><span><span class="fu">last_5_years</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-01-01" "2023-12-31"</span>
 <span class="r-in"><span><span class="fu">last_5_years</span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span>, only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-11-19" "2024-11-18"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2019-11-22" "2024-11-21"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">last_3_months</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-08-01" "2024-10-31"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">year_to_date</span><span class="op">(</span>only_start_end <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2024-01-01" "2024-11-21"</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># great for certedb functions:</span></span></span>
