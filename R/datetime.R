@@ -81,6 +81,11 @@ as.UTC.default <- function(x, ...) {
 #' # last_*_years() will have 1 Jan to 31 Dec at default:
 #' last_5_years(only_start_end = TRUE)
 #' last_5_years(today(), only_start_end = TRUE)
+#' 
+#' last_3_months(only_start_end = TRUE)
+#' 
+#' year_to_date(only_start_end = TRUE)
+#' 
 #' \dontrun{
 #' 
 #'   # great for certedb functions:
@@ -318,6 +323,61 @@ last_5_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
 #' @export
 last_10_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
   last_n_years(ref = ref, n = 10, only_start_end = only_start_end)
+}
+
+#' @rdname days_around_today
+#' @details The [last_n_months()], [last_5_months()] and [last_10_month()] functions have their reference date set to [end_of_last_month()] at default.
+#' @importFrom lubridate as_date `year<-`
+#' @export
+last_n_months <- function(n, ref = end_of_last_month(), only_start_end = FALSE) {
+  ref <- as_date(ref)
+  from <- as_date(start_of_this_month(start_of_this_month(ref + 1) - dmonths(n)))
+  out <- seq(from = from,
+             to = ref,
+             by = "1 day")
+  if (only_start_end == TRUE) {
+    c(out[1], out[length(out)])
+  } else {
+    out
+  }
+}
+
+#' @rdname days_around_today
+#' @export
+last_3_months <- function(ref = end_of_last_month(), only_start_end = FALSE) {
+  last_n_months(ref = ref, n = 3, only_start_end = only_start_end)
+}
+
+#' @rdname days_around_today
+#' @export
+last_6_months <- function(ref = end_of_last_month(), only_start_end = FALSE) {
+  last_n_months(ref = ref, n = 6, only_start_end = only_start_end)
+}
+
+#' @rdname days_around_today
+#' @export
+year_to_date <- function(ref = today(), only_start_end = FALSE) {
+  out <- seq(from = start_of_this_year(ref),
+             to = ref,
+             by = "1 day")
+  if (only_start_end == TRUE) {
+    c(out[1], out[length(out)])
+  } else {
+    out
+  }
+}
+
+#' @rdname days_around_today
+#' @export
+year_since_date <- function(ref = today(), only_start_end = FALSE) {
+  out <- seq(from = ref,
+             to = end_of_this_year(ref),
+             by = "1 day")
+  if (only_start_end == TRUE) {
+    c(out[1], out[length(out)])
+  } else {
+    out
+  }
 }
 
 #' @rdname days_around_today

@@ -21,6 +21,11 @@
 \alias{last_n_years}
 \alias{last_5_years}
 \alias{last_10_years}
+\alias{last_n_months}
+\alias{last_3_months}
+\alias{last_6_months}
+\alias{year_to_date}
+\alias{year_since_date}
 \alias{start_of_last_week}
 \alias{end_of_last_week}
 \alias{start_of_this_week}
@@ -91,6 +96,16 @@ last_n_years(n, ref = end_of_last_year(), only_start_end = FALSE)
 last_5_years(ref = end_of_last_year(), only_start_end = FALSE)
 
 last_10_years(ref = end_of_last_year(), only_start_end = FALSE)
+
+last_n_months(n, ref = end_of_last_month(), only_start_end = FALSE)
+
+last_3_months(ref = end_of_last_month(), only_start_end = FALSE)
+
+last_6_months(ref = end_of_last_month(), only_start_end = FALSE)
+
+year_to_date(ref = today(), only_start_end = FALSE)
+
+year_since_date(ref = today(), only_start_end = FALSE)
 
 start_of_last_week(ref = today(), day = 1)
 
@@ -181,6 +196,8 @@ Week ranges always start on Mondays and end on Sundays.
 
 The \code{\link[=last_n_years]{last_n_years()}}, \code{\link[=last_5_years]{last_5_years()}} and \code{\link[=last_10_years]{last_10_years()}} functions have their reference date set to \code{\link[=end_of_last_year]{end_of_last_year()}} at default.
 
+The \code{\link[=last_n_months]{last_n_months()}}, \code{\link[=last_5_months]{last_5_months()}} and \code{\link[=last_10_month]{last_10_month()}} functions have their reference date set to \code{\link[=end_of_last_month]{end_of_last_month()}} at default.
+
 \code{\link[=week2resp_season]{week2resp_season()}} transforms week numbers to an ordered \link{factor}, in a range 40-53, 1:39 (or, if \code{remove_outside_season = TRUE}, 40-53, 1:20). This function is useful for plotting.
 }
 \examples{
@@ -196,6 +213,11 @@ last_month() |> nth_monday(2)
 # last_*_years() will have 1 Jan to 31 Dec at default:
 last_5_years(only_start_end = TRUE)
 last_5_years(today(), only_start_end = TRUE)
+
+last_3_months(only_start_end = TRUE)
+
+year_to_date(only_start_end = TRUE)
+
 \dontrun{
 
   # great for certedb functions:
