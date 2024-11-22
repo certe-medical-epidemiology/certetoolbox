@@ -196,7 +196,7 @@ Week ranges always start on Mondays and end on Sundays.
 
 The \code{\link[=last_n_years]{last_n_years()}}, \code{\link[=last_5_years]{last_5_years()}} and \code{\link[=last_10_years]{last_10_years()}} functions have their reference date set to \code{\link[=end_of_last_year]{end_of_last_year()}} at default.
 
-The \code{\link[=last_n_months]{last_n_months()}}, \code{\link[=last_5_months]{last_5_months()}} and \code{\link[=last_10_month]{last_10_month()}} functions have their reference date set to \code{\link[=end_of_last_month]{end_of_last_month()}} at default.
+The \code{\link[=last_n_months]{last_n_months()}}, \code{\link[=last_3_months]{last_3_months()}} and \code{\link[=last_6_months]{last_6_months()}} functions have their reference date set to \code{\link[=end_of_last_month]{end_of_last_month()}} at default.
 
 \code{\link[=week2resp_season]{week2resp_season()}} transforms week numbers to an ordered \link{factor}, in a range 40-53, 1:39 (or, if \code{remove_outside_season = TRUE}, 40-53, 1:20). This function is useful for plotting.
 }

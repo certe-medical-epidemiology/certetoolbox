@@ -326,7 +326,7 @@ last_10_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
 }
 
 #' @rdname days_around_today
-#' @details The [last_n_months()], [last_5_months()] and [last_10_month()] functions have their reference date set to [end_of_last_month()] at default.
+#' @details The [last_n_months()], [last_3_months()] and [last_6_months()] functions have their reference date set to [end_of_last_month()] at default.
 #' @importFrom lubridate as_date `year<-`
 #' @export
 last_n_months <- function(n, ref = end_of_last_month(), only_start_end = FALSE) {
