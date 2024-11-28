@@ -327,7 +327,7 @@ last_10_years <- function(ref = end_of_last_year(), only_start_end = FALSE) {
 
 #' @rdname days_around_today
 #' @details The [last_n_months()], [last_3_months()] and [last_6_months()] functions have their reference date set to [end_of_last_month()] at default.
-#' @importFrom lubridate as_date `year<-`
+#' @importFrom lubridate as_date
 #' @export
 last_n_months <- function(n, ref = end_of_last_month(), only_start_end = FALSE) {
   ref <- as_date(ref)
@@ -352,6 +352,23 @@ last_3_months <- function(ref = end_of_last_month(), only_start_end = FALSE) {
 #' @export
 last_6_months <- function(ref = end_of_last_month(), only_start_end = FALSE) {
   last_n_months(ref = ref, n = 6, only_start_end = only_start_end)
+}
+
+#' @rdname days_around_today
+#' @details The [last_n_weeks()] function has its reference date set to [end_of_last_week()] at default.
+#' @importFrom lubridate as_date
+#' @export
+last_n_weeks <- function(n, ref = end_of_last_week(), only_start_end = FALSE) {
+  ref <- as_date(ref)
+  from <- ref - 7 * n
+  out <- seq(from = from + 1,
+             to = ref,
+             by = "1 day")
+  if (only_start_end == TRUE) {
+    c(out[1], out[length(out)])
+  } else {
+    out
+  }
 }
 
 #' @rdname days_around_today
