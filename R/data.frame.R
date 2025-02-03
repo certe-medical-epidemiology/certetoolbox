@@ -1407,3 +1407,136 @@ crosstab <- function(df,
     table(useNA = ifelse(isTRUE(na.rm), "no", "always"))
 }
 
+#' Wikipedia Daily Page Views
+#' 
+#' Download Wikipedia daily page views for any language, using the [Wikimedia REST API](https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/examples/page-metrics.html#page-views).
+#' @param articles Titles of Wikipedia articles
+#' @param date_range defaults to [last_6_months()]
+#' @param language defaults to `"nl"` for the Dutch Wikipedia
+#' @param platform defaults to `"all-access"`. More reliable for epidemic trends might be `"mobile-web"`.
+#' @param agent defaults to `"all-agents"`
+#' @importFrom httr GET status_code content
+#' @importFrom dplyr bind_rows as_tibble
+#' @details
+#' Zie voor een voorbeeld: <https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A>
+#' @export
+#' @examples
+#' wikipedia_pageviews("Griep")
+#' 
+#' articles <- c("Griep", "Koorts", "Hoest", "Verkoudheid", "Influenzavirus A",
+#'               "Respiratoir syncytieel virus", "Keelpijn", "SARS-CoV-2")
+#' 
+#' if (require("certeplot2") && require("certestats") && require("dplyr")) {
+#'   articles |>
+#'     wikipedia_pageviews(c("2024-07-01", "2025-02-01")) |>
+#'     group_by(article) |>
+#'     mutate(z = z_score(views),
+#'            z_ma = moving_average(z, w = 7, side = "left")) |>
+#'     plot2(
+#'       x = date,
+#'       y = z_ma,
+#'       category = article,
+#'       type = "line",
+#'       category.sort = "freq-asc",
+#'       legend.position = "right",
+#'       y.title = "7-daagse Z-score",
+#'       x.title = "",
+#'       title = "Wikipedia bezochte pagina's",
+#'       subtitle = "Z-scores respiratoire seizoen")
+#' }
+wikipedia_pageviews <- function(articles,
+                                date_range = last_6_months(),
+                                language = "nl",
+                                platform = c("all-access", "mobile-web", "mobile-app", "desktop"),
+                                agent = c("all-agents", "user", "spider", "automated")) {
+  date_range <- as.Date(date_range)
+  if (length(date_range) == 1) {
+    date_range <- as.Date(c(date_range, date_range))
+  } else if (length(date_range) > 2) {
+    date_range <- as.Date(c(min(date_range, na.rm = TRUE), max(date_range, na.rm = TRUE)))
+  }
+  
+  platform <- platform[1]
+  agent <- agent[1]
+  
+  out <- data.frame(article = character(),
+                    date = Sys.Date()[0],
+                    views = integer())
+  
+  for (i in seq_len(length(articles))) {
+    response <- GET(
+      url = paste0(
+        "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article",
+        "/", language, ".wikipedia.org/", platform,"/", agent, "/",
+        utils::URLencode(articles[i]),
+        "/daily/",
+        format(date_range[1], "%Y%m%d"),
+        "/", 
+        format(date_range[2], "%Y%m%d")
+      )
+    )
+    
+    if (status_code(response) == 404) {
+      stop("Article does not exist on ", language, ".wikipedia.org: '", articles[i], "'")
+    } else if (status_code(response) == 200) {
+      data <- content(response, "parsed")
+      sapply(data$items, function(x) {
+        out <<- rbind(out,
+                      data.frame(article = articles[i],
+                                 date = as.Date(substr(x$timestamp, 1, 8), format = "%Y%m%d"),
+                                 views = x$views))
+      })
+    } else {
+      stop("Failed to retrieve data: ", status_code(response))
+    }
+  }
+  as_tibble(out[order(out$date), ])
+}
+
+# 
+# library(jsonlite)
+# library(dplyr)
+# 
+# # Define articles, start date, and end date
+# articles <- c("Kat_(dier)", "Hond")
+# start_date <- "2024-10-07"   # in YYYY-MM-DD
+# end_date   <- "2024-11-14"
+# 
+# # Helper function to get pageviews for one article
+# get_pageviews <- function(article, start_date, end_date) {
+#   # API requires YYYYMMDD format
+#   start_str <- gsub("-", "", start_date)
+#   end_str   <- gsub("-", "", end_date)
+#   
+#   # Build the API URL
+#   url <- sprintf(
+#     "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/nl.wikipedia/all-access/all-agents/%s/daily/%s/%s",
+#     article, start_str, end_str
+#   )
+#   
+#   # Download and parse JSON
+#   res <- jsonlite::fromJSON(url)
+#   if (!"items" %in% names(res)) {
+#     return(NULL) # No data found or an error occurred
+#   }
+#   
+#   # Extract relevant data
+#   df <- as.data.frame(res$items)
+#   df <- df %>%
+#     transmute(
+#       article      = article,
+#       date         = as.Date(timestamp, format = "%Y%m%d00"),
+#       views        = views
+#     )
+#   
+#   return(df)
+# }
+# 
+# # Retrieve data for each article, then combine
+# df_all <- do.call(rbind, lapply(articles, get_pageviews))
+# 
+# # Save to CSV if desired
+# write.csv(df_all, "pageviews_data.csv", row.names = FALSE)
+# 
+# # Preview
+# head(df_all)
