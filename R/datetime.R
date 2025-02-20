@@ -399,34 +399,30 @@ year_since_date <- function(ref = today(), only_start_end = FALSE) {
 
 #' @rdname days_around_today
 #' @export
-start_of_last_week <- function(ref = today(), day = 1) {
+start_of_last_week <- function(ref = today()) {
   ref <- as_date(ref)
-  if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 7) - 7 + day
+  last_week(ref)[1]
 }
 
 #' @rdname days_around_today
 #' @export
-end_of_last_week <- function(ref = today(), day = 7) {
+end_of_last_week <- function(ref = today()) {
   ref <- as_date(ref)
-  if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 7) - 7 + day
+  last_week(ref)[7]
 }
 
 #' @rdname days_around_today
 #' @export
-start_of_this_week <- function(ref = today(), day = 1) {
+start_of_this_week <- function(ref = today()) {
   ref <- as_date(ref)
-  if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 7) + day
+  this_week(ref)[1]
 }
 
 #' @rdname days_around_today
 #' @export
-end_of_this_week <- function(ref = today(), day = 7) {
+end_of_this_week <- function(ref = today()) {
   ref <- as_date(ref)
-  if (day == 0) day <- 7
-  floor_date(ref, unit = "week", week_start = 7) + day
+  this_week(ref)[7]
 }
 
 #' @rdname days_around_today

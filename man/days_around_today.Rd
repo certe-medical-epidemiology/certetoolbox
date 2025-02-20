@@ -110,13 +110,13 @@ year_to_date(ref = today(), only_start_end = FALSE)
 
 year_since_date(ref = today(), only_start_end = FALSE)
 
-start_of_last_week(ref = today(), day = 1)
+start_of_last_week(ref = today())
 
-end_of_last_week(ref = today(), day = 7)
+end_of_last_week(ref = today())
 
-start_of_this_week(ref = today(), day = 1)
+start_of_this_week(ref = today())
 
-end_of_this_week(ref = today(), day = 7)
+end_of_this_week(ref = today())
 
 start_of_last_month(ref = today())
 
@@ -179,11 +179,11 @@ week2resp_season(wk, remove_outside_season = FALSE)
 
 \item{n}{relative number of weeks}
 
-\item{day}{day to return (0 are 7 are Sunday, 1 is Monday, etc.)}
-
 \item{wk}{week to search for}
 
 \item{yr}{year to search for, defaults to current year}
+
+\item{day}{day to return (0 are 7 are Sunday, 1 is Monday, etc.)}
 
 \item{remove_outside_season}{a \link{logical} to remove week numbers in the range 21-39}
 }
