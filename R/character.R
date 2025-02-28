@@ -195,9 +195,9 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
   # usethis::use_data(mo_table_glims, internal = TRUE, overwrite = TRUE)
 }
 
-#' Retrieve AGD Property
+#' Retrieve AGB Property
 #' 
-#' Download properties from the [AGB-register](https://www.vektis.nl/agb-register).
+#' Download properties from the [AGB Register](https://www.vektis.nl/agb-register).
 #' @param agb_codes AGB codes
 #' @param property property of the AGB code. Will return a [data.frame] if left blank.
 #' @importFrom certestyle toproper
@@ -205,6 +205,10 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
 #' @importFrom rvest read_html html_node html_text2
 #' @importFrom cleaner clean_Date
 #' @rdname agb_property
+#' @details
+#' The AGB (Algemeen GegevensBeheer) register is a national database in the Netherlands that assigns a unique AGB code to healthcare providers and institutions. This code is used for identification and administration within the healthcare sector, such as for billing insurance companies, contracting, and data exchange between healthcare providers.
+#' 
+#' The AGB code is managed by VECOZO and plays a crucial role in ensuring transparency and efficiency in Dutch healthcare administration.
 #' @export
 #' @examples
 #' agb_property(03033048)

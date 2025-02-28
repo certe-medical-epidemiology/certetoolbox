@@ -2,7 +2,7 @@
 % Please edit documentation in R/character.R
 \name{agb_property}
 \alias{agb_property}
-\title{Retrieve AGD Property}
+\title{Retrieve AGB Property}
 \usage{
 agb_property(agb_codes, property = NULL)
 }
@@ -12,7 +12,12 @@ agb_property(agb_codes, property = NULL)
 \item{property}{property of the AGB code. Will return a \link{data.frame} if left blank.}
 }
 \description{
-Download properties from the \href{https://www.vektis.nl/agb-register}{AGB-register}.
+Download properties from the \href{https://www.vektis.nl/agb-register}{AGB Register}.
+}
+\details{
+The AGB (Algemeen GegevensBeheer) register is a national database in the Netherlands that assigns a unique AGB code to healthcare providers and institutions. This code is used for identification and administration within the healthcare sector, such as for billing insurance companies, contracting, and data exchange between healthcare providers.
+
+The AGB code is managed by VECOZO and plays a crucial role in ensuring transparency and efficiency in Dutch healthcare administration.
 }
 \examples{
 agb_property(03033048)
