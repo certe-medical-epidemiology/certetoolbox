@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.17.1
+Version: 1.18.0
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -35,6 +35,7 @@ Imports:
   progress (>= 1.2.0),
   readr (>= 2.0.0),
   rstudioapi (>= 0.10),
+  rvest (>= 1.0.0),
   stringr (>= 1.4.0),
   tibble (>= 3.0.0),
   tidyr (>= 1.2.0),

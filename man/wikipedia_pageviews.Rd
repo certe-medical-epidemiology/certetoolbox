@@ -13,7 +13,7 @@ wikipedia_pageviews(
 )
 }
 \arguments{
-\item{articles}{Titles of Wikipedia articles}
+\item{articles}{Wikipedia article title(s)}
 
 \item{date_range}{defaults to \code{\link[=last_6_months]{last_6_months()}}}
 
@@ -52,5 +52,12 @@ if (require("certeplot2") && require("certestats") && require("dplyr")) {
       x.title = "",
       title = "Wikipedia bezochte pagina's",
       subtitle = "Z-scores respiratoire seizoen")
+}
+
+if (require("certeplot2")) {
+  wikipedia_pageviews("Dog",
+                      language = "en",
+                      date_range = last_5_years()) |>
+    plot2(x = date, y = views)
 }
 }

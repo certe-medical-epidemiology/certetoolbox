@@ -16,7 +16,7 @@ mo_glims(
 
 \item{language}{language to translate text like "no growth", which defaults to the system language (see \code{\link[AMR:get_AMR_locale]{get_AMR_locale()}})}
 
-\item{keep_synonyms}{a \link{logical} to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is \code{FALSE}, which will return a note if old taxonomic names were processed. The default can be set with the \link[AMR:AMR-options]{package option} \code{\link[AMR:AMR-options]{AMR_keep_synonyms}}, i.e. \code{options(AMR_keep_synonyms = TRUE)} or \code{options(AMR_keep_synonyms = FALSE)}.}
+\item{keep_synonyms}{a \link{logical} to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is \code{FALSE}, which will return a note if old taxonomic names were processed. The default can be set with the package option \code{\link[AMR:AMR-options]{AMR_keep_synonyms}}, i.e. \code{options(AMR_keep_synonyms = TRUE)} or \code{options(AMR_keep_synonyms = FALSE)}.}
 
 \item{...}{other arguments passed on to \code{\link[AMR:as.mo]{as.mo()}}, such as 'minimum_matching_score', 'ignore_pattern', and 'remove_from_input'}
 }
@@ -32,7 +32,14 @@ data.frame(mo = c("ESCCOL", "Staph aureus")) |>
   
 # even works for non-existing entries in AMR package
 mo_glims("Streptococcus mitis/oralis")
-AMR::as.mo("Streptococcus mitis/oralis")
-AMR::mo_genus("Streptococcus mitis/oralis")
-AMR::mo_gramstain("Streptococcus mitis/oralis")
+
+if (require(AMR, warn.conflicts = FALSE)) {
+  as.mo("Streptococcus mitis/oralis")
+}
+if (require("AMR")) {
+  mo_genus("Streptococcus mitis/oralis")
+}
+if (require("AMR")) {
+  mo_gramstain("Streptococcus mitis/oralis")
+}
 }

@@ -170,9 +170,16 @@ p_symbol <- function(p, emptychar = " ") {
 #'   
 #' # even works for non-existing entries in AMR package
 #' mo_glims("Streptococcus mitis/oralis")
-#' AMR::as.mo("Streptococcus mitis/oralis")
-#' AMR::mo_genus("Streptococcus mitis/oralis")
-#' AMR::mo_gramstain("Streptococcus mitis/oralis")
+#' 
+#' if (require(AMR, warn.conflicts = FALSE)) {
+#'   as.mo("Streptococcus mitis/oralis")
+#' }
+#' if (require("AMR")) {
+#'   mo_genus("Streptococcus mitis/oralis")
+#' }
+#' if (require("AMR")) {
+#'   mo_gramstain("Streptococcus mitis/oralis")
+#' }
 mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOption("AMR_keep_synonyms", FALSE), ...) {
   nm <- AMR::mo_name(x, language = language, keep_synonyms = keep_synonyms, ...)
   mo_table_glims$mnemonic[match(nm, mo_table_glims$fullname)]
@@ -187,3 +194,86 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
   #   mutate_all(cleaner::na_replace)
   # usethis::use_data(mo_table_glims, internal = TRUE, overwrite = TRUE)
 }
+
+#' Retrieve AGD Property
+#' 
+#' Download properties from the [AGB-register](https://www.vektis.nl/agb-register).
+#' @param agb_codes AGB codes
+#' @param property property of the AGB code. Will return a [data.frame] if left blank.
+#' @importFrom certestyle toproper
+#' @importFrom dplyr tibble bind_rows
+#' @importFrom rvest read_html html_node html_text2
+#' @importFrom cleaner clean_Date
+#' @rdname agb_property
+#' @export
+#' @examples
+#' agb_property(03033048)
+#' agb_property(c(03033048, 01102504))
+#' 
+#' agb_property(03033048, property = "last_name")
+#' agb_property(c(03033048, 01102504), "specialty")
+agb_property <- function(agb_codes, property = NULL) {
+  properties <- tibble()
+  
+  agb_codes <- formatC(as.integer(agb_codes), width = 8, flag = "0", format = "d")
+  
+  for (a in agb_codes) {
+    url <- paste0("https://www.vektis.nl/agb-register/zorgverlener-", a)
+    page <- read_html(url)
+    
+    personal <- page |> html_node(".basic-info") |> html_text2()
+    personal <- paste0(personal, "\n")
+    full_name <- gsub(".*Naam.*?\n(.*?)\n.*", "\\1", personal)
+    initials <- gsub("^([A-Z][.])+ .*", "\\1", full_name)
+    last_name <- toproper(gsub("^([A-Z][.])+ (.*)", "\\2", full_name))
+    sex <- gsub(".*Geslacht.*?\n(.*?)\n.*", "\\1", personal)
+    sex <- toupper(substr(sex, 1, 1))
+    title <- gsub(".*Academische titel.*?\n(.*?)\n.*", "\\1", personal)
+    if (tolower(title) == "doctor") {
+      title <- "dr."
+    } else if (tolower(title) == "doctorandus") {
+      title <- "drs."
+    } else {
+      # can also be "Bachelor", we'll ignore that
+      title <- ""
+    }
+    full_name <- trimws(paste(toproper(title, every_word = TRUE), full_name))
+    
+    competences <- page |> html_node(".competence-list") |> html_text2()
+    specialty <- trimws(gsub("^(.*?)[0-9]+.*", "\\1", competences))
+    specialty_start <- gsub(".*Start\n(.*)\nEinde.*", "\\1", competences)
+    specialty_start <- clean_Date(specialty_start, format = "dd-mm-yyyy")
+    specialty_end <- gsub(".*\nEinde\n([0-9-]+).*", "\\1", competences)
+    specialty_end <- clean_Date(specialty_end, format = "dd-mm-yyyy")
+    
+    properties <- properties |>
+      bind_rows(tibble(title = title,
+                       initials = initials,
+                       last_name = last_name,
+                       full_name = full_name,
+                       sex = sex,
+                       specialty = specialty,
+                       specialty_start = specialty_start,
+                       specialty_end = specialty_end))
+  }
+  
+  if (!is.null(property)) {
+    properties[[property]]
+  } else {
+    properties
+  }
+}
+
+#' #' @rdname agb_property
+#' #' @details [agb_lookup()] looks up the AGB code, and returns a [menu][utils::menu()] in an interactive session, and the first hit in a non-interactive session.
+#' #' @export
+#' agb_lookup <- function(search_term) {
+#'   url <- "https://www.vektis.nl/agb-register/zoeken"
+#'   form <- url |> rvest::read_html() |> rvest::html_node("main form") |> rvest::html_form()
+#'   form <- form |> rvest::html_form_set(agbcode = "Jansen",
+#'                                        zorgpartijtype = "zorgverlener",
+#'                                        zorgsoort = "00 - Alle zorgsoorten")
+#'   click <- form |> rvest::html_form_submit(submit = 3)
+#'   s <- rvest::session(url)
+#'   click2 <- rvest::session_submit(s, form, submit = 2)
+#' }

@@ -1410,7 +1410,7 @@ crosstab <- function(df,
 #' Wikipedia Daily Page Views
 #' 
 #' Download Wikipedia daily page views for any language, using the [Wikimedia REST API](https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/examples/page-metrics.html#page-views).
-#' @param articles Titles of Wikipedia articles
+#' @param articles Wikipedia article title(s)
 #' @param date_range defaults to [last_6_months()]
 #' @param language defaults to `"nl"` for the Dutch Wikipedia
 #' @param platform defaults to `"all-access"`. More reliable for epidemic trends might be `"mobile-web"`.
@@ -1443,6 +1443,13 @@ crosstab <- function(df,
 #'       x.title = "",
 #'       title = "Wikipedia bezochte pagina's",
 #'       subtitle = "Z-scores respiratoire seizoen")
+#' }
+#' 
+#' if (require("certeplot2")) {
+#'   wikipedia_pageviews("Dog",
+#'                       language = "en",
+#'                       date_range = last_5_years()) |>
+#'     plot2(x = date, y = views)
 #' }
 wikipedia_pageviews <- function(articles,
                                 date_range = last_6_months(),
@@ -1492,51 +1499,3 @@ wikipedia_pageviews <- function(articles,
   }
   as_tibble(out[order(out$date), ])
 }
-
-# 
-# library(jsonlite)
-# library(dplyr)
-# 
-# # Define articles, start date, and end date
-# articles <- c("Kat_(dier)", "Hond")
-# start_date <- "2024-10-07"   # in YYYY-MM-DD
-# end_date   <- "2024-11-14"
-# 
-# # Helper function to get pageviews for one article
-# get_pageviews <- function(article, start_date, end_date) {
-#   # API requires YYYYMMDD format
-#   start_str <- gsub("-", "", start_date)
-#   end_str   <- gsub("-", "", end_date)
-#   
-#   # Build the API URL
-#   url <- sprintf(
-#     "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/nl.wikipedia/all-access/all-agents/%s/daily/%s/%s",
-#     article, start_str, end_str
-#   )
-#   
-#   # Download and parse JSON
-#   res <- jsonlite::fromJSON(url)
-#   if (!"items" %in% names(res)) {
-#     return(NULL) # No data found or an error occurred
-#   }
-#   
-#   # Extract relevant data
-#   df <- as.data.frame(res$items)
-#   df <- df %>%
-#     transmute(
-#       article      = article,
-#       date         = as.Date(timestamp, format = "%Y%m%d00"),
-#       views        = views
-#     )
-#   
-#   return(df)
-# }
-# 
-# # Retrieve data for each article, then combine
-# df_all <- do.call(rbind, lapply(articles, get_pageviews))
-# 
-# # Save to CSV if desired
-# write.csv(df_all, "pageviews_data.csv", row.names = FALSE)
-# 
-# # Preview
-# head(df_all)
