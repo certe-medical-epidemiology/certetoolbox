@@ -198,11 +198,11 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
 #' Retrieve AGB Property
 #' 
 #' Download properties from the [AGB Register](https://www.vektis.nl/agb-register).
-#' @param agb_codes AGB codes
+#' @param agb_code AGB codes
 #' @param property property of the AGB code. Will return a [data.frame] if left blank.
 #' @importFrom certestyle toproper
-#' @importFrom dplyr tibble bind_rows
-#' @importFrom rvest read_html html_node html_text2
+#' @importFrom dplyr tibble bind_rows summarise_all
+#' @importFrom rvest read_html html_node html_text2 html_elements html_table
 #' @importFrom cleaner clean_Date
 #' @rdname agb_property
 #' @details
@@ -216,20 +216,20 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
 #' 
 #' agb_property(03033048, property = "last_name")
 #' agb_property(c(03033048, 01102504), "specialty")
-agb_property <- function(agb_codes, property = NULL) {
+agb_property <- function(agb_code, property = NULL) {
   properties <- tibble()
   
-  agb_codes <- formatC(as.integer(agb_codes), width = 8, flag = "0", format = "d")
+  agb_code <- formatC(as.integer(agb_code), width = 8, flag = "0", format = "d")
   
-  for (a in agb_codes) {
+  for (a in agb_code) {
     url <- paste0("https://www.vektis.nl/agb-register/zorgverlener-", a)
     page <- read_html(url)
     
     personal <- page |> html_node(".basic-info") |> html_text2()
     personal <- paste0(personal, "\n")
     full_name <- gsub(".*Naam.*?\n(.*?)\n.*", "\\1", personal)
-    initials <- gsub("^([A-Z][.])+ .*", "\\1", full_name)
-    last_name <- toproper(gsub("^([A-Z][.])+ (.*)", "\\2", full_name))
+    initials <- gsub(" .*", "", full_name)
+    last_name <- toproper(gsub("^[A-Z.]+ ", "", full_name))
     sex <- gsub(".*Geslacht.*?\n(.*?)\n.*", "\\1", personal)
     sex <- toupper(substr(sex, 1, 1))
     title <- gsub(".*Academische titel.*?\n(.*?)\n.*", "\\1", personal)
@@ -250,15 +250,30 @@ agb_property <- function(agb_codes, property = NULL) {
     specialty_end <- gsub(".*\nEinde\n([0-9-]+).*", "\\1", competences)
     specialty_end <- clean_Date(specialty_end, format = "dd-mm-yyyy")
     
+    employer <- page |> html_elements(css = ".card-table") |> html_table()
+    employer_int <- which(vapply(FUN.VALUE = logical(1), employer, function(x) any(x$`AGB-code` %like% "[0-9]+", na.rm = TRUE)))
+    employer <- employer[[employer_int[1]]]
+    employer$Start <- clean_Date(employer$Start, format = "dd-mm-yyyy")
+    employer$Einde <- clean_Date(employer$Einde, format = "dd-mm-yyyy")
+    if (NROW(employer) > 1) {
+      employer <- employer |> summarise_all(paste, collapse = "; ")
+    }
+    
     properties <- properties |>
-      bind_rows(tibble(title = title,
+      bind_rows(tibble(agb = a,
+                       title = title,
                        initials = initials,
                        last_name = last_name,
                        full_name = full_name,
                        sex = sex,
                        specialty = specialty,
-                       specialty_start = specialty_start,
-                       specialty_end = specialty_end))
+                       specialty_since = specialty_start,
+                       specialty_until = specialty_end,
+                       employed_by = employer$Naam,
+                       employer_agb = employer$`AGB-code`,
+                       employee_since = employer$Start,
+                       employee_until = employer$Einde,
+                       ))
   }
   
   if (!is.null(property)) {

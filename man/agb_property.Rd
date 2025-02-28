@@ -4,10 +4,10 @@
 \alias{agb_property}
 \title{Retrieve AGB Property}
 \usage{
-agb_property(agb_codes, property = NULL)
+agb_property(agb_code, property = NULL)
 }
 \arguments{
-\item{agb_codes}{AGB codes}
+\item{agb_code}{AGB codes}
 
 \item{property}{property of the AGB code. Will return a \link{data.frame} if left blank.}
 }
