@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.18.0</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
 
 
 <dt id="arg-keep-synonyms">keep_synonyms<a class="anchor" aria-label="anchor" href="#arg-keep-synonyms"></a></dt>
-<dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is <code>FALSE</code>, which will return a note if old taxonomic names were processed. The default can be set with the <a href="https://msberends.github.io/AMR/reference/AMR-options.html" class="external-link">package option</a> <code><a href="https://msberends.github.io/AMR/reference/AMR-options.html" class="external-link">AMR_keep_synonyms</a></code>, i.e. <code>options(AMR_keep_synonyms = TRUE)</code> or <code>options(AMR_keep_synonyms = FALSE)</code>.</p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is <code>FALSE</code>, which will return a note if old taxonomic names were processed. The default can be set with the package option <code><a href="https://msberends.github.io/AMR/reference/AMR-options.html" class="external-link">AMR_keep_synonyms</a></code>, i.e. <code>options(AMR_keep_synonyms = TRUE)</code> or <code>options(AMR_keep_synonyms = FALSE)</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -121,12 +121,20 @@
 <span class="r-in"><span><span class="co"># even works for non-existing entries in AMR package</span></span></span>
 <span class="r-in"><span><span class="fu">mo_glims</span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Strpmi/or"</span>
-<span class="r-in"><span><span class="fu">AMR</span><span class="fu">::</span><span class="fu"><a href="https://msberends.github.io/AMR/reference/as.mo.html" class="external-link">as.mo</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://msberends.github.io/AMR/" class="external-link">AMR</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://msberends.github.io/AMR/reference/as.mo.html" class="external-link">as.mo</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: AMR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Class 'mo'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] CUSTOM615_STRPT_MTS/</span>
-<span class="r-in"><span><span class="fu">AMR</span><span class="fu">::</span><span class="fu"><a href="https://msberends.github.io/AMR/reference/mo_property.html" class="external-link">mo_genus</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://msberends.github.io/AMR/" class="external-link">"AMR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://msberends.github.io/AMR/reference/mo_property.html" class="external-link">mo_genus</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Streptococcus"</span>
-<span class="r-in"><span><span class="fu">AMR</span><span class="fu">::</span><span class="fu"><a href="https://msberends.github.io/AMR/reference/mo_property.html" class="external-link">mo_gramstain</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://msberends.github.io/AMR/" class="external-link">"AMR"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://msberends.github.io/AMR/reference/mo_property.html" class="external-link">mo_gramstain</a></span><span class="op">(</span><span class="st">"Streptococcus mitis/oralis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Gram-positive"</span>
 </code></pre></div>
     </div>

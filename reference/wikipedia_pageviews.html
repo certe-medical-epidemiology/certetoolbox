@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.17.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.18.0</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
 
 
 <dl><dt id="arg-articles">articles<a class="anchor" aria-label="anchor" href="#arg-articles"></a></dt>
-<dd><p>Titles of Wikipedia articles</p></dd>
+<dd><p>Wikipedia article title(s)</p></dd>
 
 
 <dt id="arg-date-range">date_range<a class="anchor" aria-label="anchor" href="#arg-date-range"></a></dt>
@@ -173,6 +173,18 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">x.date_breaks = "2 months"</span> based on data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">x.date_labels = "mmm yyyy"</span> based on data</span>
 <span class="r-plt img"><img src="wikipedia_pageviews-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://certe-medical-epidemiology.github.io/certeplot2" class="external-link">"certeplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">wikipedia_pageviews</span><span class="op">(</span><span class="st">"Dog"</span>,</span></span>
+<span class="r-in"><span>                      language <span class="op">=</span> <span class="st">"en"</span>,</span></span>
+<span class="r-in"><span>                      date_range <span class="op">=</span> <span class="fu"><a href="days_around_today.html">last_5_years</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://msberends.github.io/plot2/reference/plot2.html" class="external-link">plot2</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">views</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">x.date_breaks = "1 year"</span> based on data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using <span style="color: #0000BB;">x.date_labels = "mmm yyyy"</span> based on data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Omitting printing of 1827 datalabels - use <span style="color: #0000BB;">datalabels = TRUE</span> to force</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> printing</span>
+<span class="r-plt img"><img src="wikipedia_pageviews-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
