@@ -257,6 +257,11 @@ agb_property <- function(agb_code, property = NULL) {
     employer$Einde <- clean_Date(employer$Einde, format = "dd-mm-yyyy")
     if (NROW(employer) > 1) {
       employer <- employer |> summarise_all(paste, collapse = "; ")
+      if (NROW(properties) > 0) {
+        properties$employer_agb <- as.character(properties$employer_agb)
+        properties$employee_since <- as.character(properties$employee_since)
+        properties$employee_until <- as.character(properties$employee_until)
+      }
     }
     
     properties <- properties |>
