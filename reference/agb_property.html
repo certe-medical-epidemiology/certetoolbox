@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.18.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.18.3</span>
       </span>
     </div>
 
@@ -107,12 +107,18 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: specialty_until &lt;date&gt;, employed_by &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   employer_agb &lt;int&gt;, employee_since &lt;date&gt;, employee_until &lt;date&gt;</span></span>
 <span class="r-in"><span><span class="fu">agb_property</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">03033048</span>, <span class="fl">01102504</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in bind_rows(properties, tibble(agb = a, title = title, initials = initials,     last_name = last_name, full_name = full_name, sex = sex,     specialty = specialty, specialty_since = specialty_start,     specialty_until = specialty_end, employed_by = employer$Naam,     employer_agb = employer$`AGB-code`, employee_since = employer$Start,     employee_until = employer$Einde, )):</span> Can't combine `..1$employee_since` &lt;date&gt; and `..2$employee_since` &lt;character&gt;.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   agb      title  initials last_name full_name   sex   specialty specialty_since</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 03033048 <span style="color: #949494;">""</span>     A.       Jansen    A. Jansen   M     Chirurgi… 1994-10-01     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 01102504 <span style="color: #949494;">"</span>drs.<span style="color: #949494;">"</span> A.A.     Jansen    Drs. A.A. … M     Huisarts  2018-01-01     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: specialty_until &lt;date&gt;, employed_by &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   employer_agb &lt;chr&gt;, employee_since &lt;chr&gt;, employee_until &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">agb_property</span><span class="op">(</span><span class="fl">03033048</span>, property <span class="op">=</span> <span class="st">"last_name"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Jansen"</span>
 <span class="r-in"><span><span class="fu">agb_property</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">03033048</span>, <span class="fl">01102504</span><span class="op">)</span>, <span class="st">"specialty"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in bind_rows(properties, tibble(agb = a, title = title, initials = initials,     last_name = last_name, full_name = full_name, sex = sex,     specialty = specialty, specialty_since = specialty_start,     specialty_until = specialty_end, employed_by = employer$Naam,     employer_agb = employer$`AGB-code`, employee_since = employer$Start,     employee_until = employer$Einde, )):</span> Can't combine `..1$employee_since` &lt;date&gt; and `..2$employee_since` &lt;character&gt;.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Chirurgie (Heelkunde)" "Huisarts"             </span>
 </code></pre></div>
     </div>
   </div>
