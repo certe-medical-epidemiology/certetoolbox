@@ -73,6 +73,7 @@ import_csv(
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
   skip = 0,
+  encoding = "UTF-8",
   ...
 )
 
@@ -88,6 +89,7 @@ import_csv2(
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
   skip = 0,
+  encoding = "UTF-8",
   ...
 )
 
@@ -103,6 +105,7 @@ import_tsv(
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
   skip = 0,
+  encoding = "UTF-8",
   ...
 )
 
@@ -119,6 +122,7 @@ import_txt(
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
   skip = 0,
+  encoding = "UTF-8",
   ...
 )
 
@@ -245,6 +249,8 @@ import_teams(
 \item{na}{values to interpret as \code{NA}}
 
 \item{skip}{number of first rows to skip}
+
+\item{encoding}{Default encoding. This only affects how the file is read.}
 
 \item{sep}{character to separate values in a row}
 

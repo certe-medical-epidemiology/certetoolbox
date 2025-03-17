@@ -188,7 +188,7 @@ import_exec <- function(filename,
                                      tz = list(...)$timezone,
                                      decimal_mark = list(...)$decimal.mark,
                                      grouping_mark = list(...)$big.mark,
-                                     encoding = "UTF-8"),
+                                     encoding = list(...)$encoding),
                      show_col_types = FALSE)
     probs <- problems(df)
     if (nrow(probs) > 0) {
@@ -1090,7 +1090,8 @@ import_xlsx <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
@@ -1098,6 +1099,7 @@ import_xlsx <- function(filename,
 import_excel <- import_xlsx
 
 #' @rdname import
+#' @param encoding Default encoding. This only affects how the file is read.
 #' @importFrom cleaner format_datetime
 #' @export
 import_csv <- function(filename,
@@ -1111,6 +1113,7 @@ import_csv <- function(filename,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        skip = 0,
+                       encoding = "UTF-8",
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -1125,7 +1128,8 @@ import_csv <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
@@ -1142,6 +1146,7 @@ import_csv2 <- function(filename,
                         timezone = "UTC",
                         na = c("", "NULL", "NA", "<NA>"),
                         skip = 0,
+                        encoding = "UTF-8",
                         ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -1156,7 +1161,8 @@ import_csv2 <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
@@ -1173,6 +1179,7 @@ import_tsv <- function(filename,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        skip = 0,
+                       encoding = "UTF-8",
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -1187,7 +1194,8 @@ import_tsv <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
@@ -1205,6 +1213,7 @@ import_txt <- function(filename,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        skip = 0,
+                       encoding = "UTF-8",
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
@@ -1219,7 +1228,8 @@ import_txt <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
