@@ -1090,8 +1090,7 @@ import_xlsx <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip,
-              encoding = encoding)
+              skip = skip)
 }
 
 #' @rdname import

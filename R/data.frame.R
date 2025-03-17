@@ -294,7 +294,6 @@ tbl_flextable <- function(x,
   } else if (theme %in% c("certegeel", "certezachtlila") && missing(colours)) {
     colours$header.colour <- "black"
   }
-  
   if (inherits(x, "gtsummary")) {
     check_is_installed("gtsummary")
     gt <- x
@@ -305,19 +304,19 @@ tbl_flextable <- function(x,
     # apply to gtsummary object
     .eval_list_of_exprs <- get(".eval_list_of_exprs", envir = asNamespace("gtsummary"))
     x <- .eval_list_of_exprs(gt_flex)
-    if (length(unique(gt$table_styling$header$spanning_header)) > 1) {
-    # fix for double header
-    x <- x |>
-      border(i = 1:2, j = 1,
-             border.bottom = fp_border_default(NA),
-             border.top = fp_border_default(NA),
-             part = "header") |>
-      border(i = 1, j = 1,
-             border.top = fp_border_default(width = 2),
-             part = "header") |>
-      border(i = 2, j = 1,
-             border.bottom = fp_border_default(width = 2),
-             part = "header")
+    if (!is.null(gt$table_styling$header$spanning_header) && length(unique(gt$table_styling$header$spanning_header)) > 1) {
+      # fix for double header
+      x <- x |>
+        border(i = 1:2, j = 1,
+               border.bottom = fp_border_default(NA),
+               border.top = fp_border_default(NA),
+               part = "header") |>
+        border(i = 1, j = 1,
+               border.top = fp_border_default(width = 2),
+               part = "header") |>
+        border(i = 2, j = 1,
+               border.bottom = fp_border_default(width = 2),
+               part = "header")
     }
   }
   
@@ -896,8 +895,7 @@ tbl_gtsummary <- function(x,
                                       big.mark = big.mark,
                                       iqr.sep = "\u2009\u2013\u2009", # small space, 'en' dash, small space
                                       ci.sep = "\u2009\u2013\u2009",
-                                      set_theme = FALSE) |>
-    gtsummary::set_gtsummary_theme()
+                                      set_theme = FALSE)
   
   # determine the 'by'
   by_select <- x |>
