@@ -233,6 +233,7 @@ import_url <- function(url,
                        timezone = "UTC",
                        na = c("", "NULL", "NA", "<NA>"),
                        skip = 0,
+                       encoding = "UTF-8",
                        ...) {
   url <- url[1]
   if (url %unlike% "://") {
@@ -251,7 +252,8 @@ import_url <- function(url,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }
 
 #' @rdname import
@@ -299,7 +301,8 @@ import_teams <- function(full_teams_path = NULL,
                          big.mark = "",
                          timezone = "UTC",
                          na = c("", "NULL", "NA", "<NA>"),
-                         skip = 0) {
+                         skip = 0,
+                         encoding = "UTF-8") {
   
   temp <- paste0(tempfile(), "/")
   dir.create(temp)
@@ -320,5 +323,6 @@ import_teams <- function(full_teams_path = NULL,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              encoding = encoding)
 }

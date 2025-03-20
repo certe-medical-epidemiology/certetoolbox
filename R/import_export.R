@@ -983,6 +983,7 @@ export_html <- function(plot,
 import <- function(filename,
                    project_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
+                   encoding = "UTF-8",
                    ...) {
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))

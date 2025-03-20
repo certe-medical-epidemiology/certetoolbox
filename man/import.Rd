@@ -22,6 +22,7 @@ import(
   filename,
   project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
+  encoding = "UTF-8",
   ...
 )
 
@@ -203,6 +204,7 @@ import_url(
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
   skip = 0,
+  encoding = "UTF-8",
   ...
 )
 
@@ -218,7 +220,8 @@ import_teams(
   big.mark = "",
   timezone = "UTC",
   na = c("", "NULL", "NA", "<NA>"),
-  skip = 0
+  skip = 0,
+  encoding = "UTF-8"
 )
 }
 \arguments{
@@ -227,6 +230,8 @@ import_teams(
 \item{project_number}{a Microsoft Planner project number}
 
 \item{auto_transform}{transform the imported data with \code{\link[=auto_transform]{auto_transform()}}}
+
+\item{encoding}{Default encoding. This only affects how the file is read.}
 
 \item{...}{arguments passed on to methods}
 
@@ -249,8 +254,6 @@ import_teams(
 \item{na}{values to interpret as \code{NA}}
 
 \item{skip}{number of first rows to skip}
-
-\item{encoding}{Default encoding. This only affects how the file is read.}
 
 \item{sep}{character to separate values in a row}
 
