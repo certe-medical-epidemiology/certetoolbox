@@ -1271,10 +1271,7 @@ auto_transform <- function(x,
     
     if ("AMR" %in% rownames(utils::installed.packages())) {
       # check for SIR
-      if (col_name %like% "_(rsi|sir)$" || col_names.bak[i] %like_case% "^[A-Z]{3}$" ||
-          (inherits(col_data, c("factor", "character")) &&
-           !all(col_data_unique[!is.na(col_data_unique)] %in% c("", "-")) &&
-           all(col_data_unique[!is.na(col_data_unique)] %in% c("", "I", "I;I", "R", "R;R", "S", "S;S", "-")))) {
+      if (AMR::is_sir_eligible(col_data)) {
         x[, i] <- try_convert(AMR::as.sir(col_data),
                               backup = x[, i, drop = TRUE], col = i)
       }
