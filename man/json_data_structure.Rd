@@ -2,20 +2,30 @@
 % Please edit documentation in R/data.frame.R
 \name{json_data_structure}
 \alias{json_data_structure}
-\title{JSON Dataset Structure}
+\title{JSON Dataset Structure with Metadata}
 \usage{
-json_data_structure(dataset, dataset_name = NULL, output_file = NULL)
+json_data_structure(
+  dataset,
+  dataset_name = NULL,
+  n_first = 100,
+  cols_exclude = "(bsn|id$|num[mb]er)",
+  output_file = NULL
+)
 }
 \arguments{
-\item{dataset}{\link{data.frame}}
+\item{dataset}{\link{data.frame} Input dataset.}
 
-\item{dataset_name}{name of \code{dataset}, can be left blank to auto-guess}
+\item{dataset_name}{Optional name of dataset, used in JSON root.}
 
-\item{output_file}{path to the output JSON file.}
+\item{n_first}{Maximum number of unique values to include.}
+
+\item{cols_exclude}{Regular expression of column names to exclude values from.}
+
+\item{output_file}{Output path for JSON file.}
 }
 \value{
-Invisibly returns the named list written to JSON.
+Invisibly returns the structured list written to JSON.
 }
 \description{
-Generates a JSON representation of a dataset’s structure, capturing unique values for each column unless the column appears to be an identifier (i.e., has as many unique values as rows) or is a date/time column. All columns are included in the output.
+Generates a JSON representation of a dataset’s structure. Each column includes class, number of unique values, and optionally a truncated list of values unless excluded by type or pattern. All columns are retained in the output.
 }

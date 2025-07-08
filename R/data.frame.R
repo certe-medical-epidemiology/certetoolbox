@@ -1495,17 +1495,22 @@ wikipedia_pageviews <- function(articles,
   as_tibble(out[order(out$date), ])
 }
 
-#' JSON Dataset Structure
+#' JSON Dataset Structure with Metadata
 #'
-#' Generates a JSON representation of a dataset’s structure, capturing unique values for each column unless the column appears to be an identifier (i.e., has as many unique values as rows) or is a date/time column. All columns are included in the output.
-#' @param dataset [data.frame]
-#' @param dataset_name name of `dataset`, can be left blank to auto-guess
-#' @param output_file path to the output JSON file.
-#' @return Invisibly returns the named list written to JSON.
+#' Generates a JSON representation of a dataset’s structure. Each column includes class, number of unique values, and optionally a truncated list of values unless excluded by type or pattern. All columns are retained in the output.
+#' @param dataset [data.frame] Input dataset.
+#' @param dataset_name Optional name of dataset, used in JSON root.
+#' @param n_first Maximum number of unique values to include.
+#' @param cols_exclude Regular expression of column names to exclude values from.
+#' @param output_file Output path for JSON file.
+#' @return Invisibly returns the structured list written to JSON.
 #' @importFrom jsonlite write_json
+#' @importFrom purrr imap
 #' @export
 json_data_structure <- function(dataset,
                                 dataset_name = NULL,
+                                n_first = 100,
+                                cols_exclude = "(bsn|id$|num[mb]er)",
                                 output_file = NULL) {
   stopifnot(is.data.frame(dataset))
   
@@ -1515,6 +1520,7 @@ json_data_structure <- function(dataset,
       dataset_name <- NULL
     }
   }
+  
   if (is.null(output_file)) {
     if (!is.null(dataset_name)) {
       output_file <- paste0(dataset_name, ".json")
@@ -1523,23 +1529,35 @@ json_data_structure <- function(dataset,
     }
   } else {
     output_file <- output_file[1]
-    if (output_file %unlike% "[.]json$") {
+    if (!grepl("[.]json$", output_file, ignore.case = TRUE)) {
       output_file <- paste0(output_file, ".json")
     }
   }
   
-  include_values <- function(x) {
-    is_id_like <- length(unique(x)) >= nrow(dataset)
-    is_date_like <- inherits(x, c("Date", "POSIXt"))
-    !(is_id_like || is_date_like)
-  }
-  
-  col_info <- lapply(dataset, function(col) {
-    if (include_values(col)) {
-      sort(unique(col))
-    } else {
-      NULL
+  col_info <- imap(dataset, function(col, name) {
+    n_unique <- length(unique(col))
+    is_id_like <- n_unique >= nrow(dataset)
+    is_values_hidden <- grepl(cols_exclude, name, ignore.case = TRUE)
+    values_hidden <- is_id_like || is_values_hidden
+    
+    entry <- list(
+      class = class(col),
+      n_unique = n_unique,
+      values_hidden = values_hidden
+    )
+    
+    if (!values_hidden) {
+      vals <- sort(unique(col))
+      if (NA %in% col) {
+        vals <- c(vals, NA)
+      }
+      if (length(vals) > n_first) {
+        vals <- vals[seq_len(n_first)]
+      }
+      entry[[paste0("first_", n_first, "_unique_values")]] <- vals
     }
+    entry$summary <- as.list(summary(col))
+    entry
   })
   
   if (!is.null(dataset_name)) {
