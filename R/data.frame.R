@@ -1413,7 +1413,7 @@ crosstab <- function(df,
 #' @importFrom httr GET status_code content
 #' @importFrom dplyr bind_rows as_tibble
 #' @details
-#' Zie voor een voorbeeld: <https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A>
+#' See example: <https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A>
 #' @export
 #' @examples
 #' wikipedia_pageviews("Griep")
@@ -1493,4 +1493,62 @@ wikipedia_pageviews <- function(articles,
     }
   }
   as_tibble(out[order(out$date), ])
+}
+
+#' JSON Dataset Structure
+#'
+#' Generates a JSON representation of a dataset’s structure, capturing unique values for each column unless the column appears to be an identifier (i.e., has as many unique values as rows) or is a date/time column. All columns are included in the output.
+#' @param dataset [data.frame]
+#' @param dataset_name name of `dataset`, can be left blank to auto-guess
+#' @param output_file path to the output JSON file.
+#' @return Invisibly returns the named list written to JSON.
+#' @importFrom jsonlite write_json
+#' @export
+json_data_structure <- function(dataset,
+                                dataset_name = NULL,
+                                output_file = NULL) {
+  stopifnot(is.data.frame(dataset))
+  
+  if (is.null(dataset_name)) {
+    dataset_name <- deparse(substitute(dataset))
+    if (dataset_name == "dataset") {
+      dataset_name <- NULL
+    }
+  }
+  if (is.null(output_file)) {
+    if (!is.null(dataset_name)) {
+      output_file <- paste0(dataset_name, ".json")
+    } else {
+      output_file <- "json_data_structure.json"
+    }
+  } else {
+    output_file <- output_file[1]
+    if (output_file %unlike% "[.]json$") {
+      output_file <- paste0(output_file, ".json")
+    }
+  }
+  
+  include_values <- function(x) {
+    is_id_like <- length(unique(x)) >= nrow(dataset)
+    is_date_like <- inherits(x, c("Date", "POSIXt"))
+    !(is_id_like || is_date_like)
+  }
+  
+  col_info <- lapply(dataset, function(col) {
+    if (include_values(col)) {
+      sort(unique(col))
+    } else {
+      NULL
+    }
+  })
+  
+  if (!is.null(dataset_name)) {
+    col_info <- list(col_info)
+    names(col_info) <- dataset_name
+  }
+  
+  write_json(col_info, output_file, pretty = TRUE, auto_unbox = TRUE)
+  
+  message("JSON structure saved to: ", output_file)
+  invisible(col_info)
 }

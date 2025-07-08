@@ -12,13 +12,13 @@ mo_glims(
 )
 }
 \arguments{
-\item{x}{any \link{character} (vector) that can be coerced to a valid microorganism code with \code{\link[AMR:as.mo]{as.mo()}}. Can be left blank for auto-guessing the column containing microorganism codes if used in a data set, see \emph{Examples}.}
+\item{x}{Any \link{character} (vector) that can be coerced to a valid microorganism code with \code{\link[AMR:as.mo]{as.mo()}}. Can be left blank for auto-guessing the column containing microorganism codes if used in a data set, see \emph{Examples}.}
 
-\item{language}{language to translate text like "no growth", which defaults to the system language (see \code{\link[AMR:get_AMR_locale]{get_AMR_locale()}})}
+\item{language}{Language to translate text like "no growth", which defaults to the system language (see \code{\link[AMR:get_AMR_locale]{get_AMR_locale()}}).}
 
-\item{keep_synonyms}{a \link{logical} to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is \code{FALSE}, which will return a note if old taxonomic names were processed. The default can be set with the package option \code{\link[AMR:AMR-options]{AMR_keep_synonyms}}, i.e. \code{options(AMR_keep_synonyms = TRUE)} or \code{options(AMR_keep_synonyms = FALSE)}.}
+\item{keep_synonyms}{A \link{logical} to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is \code{FALSE}, which will return a note if old taxonomic names were processed. The default can be set with the package option \code{\link[AMR:AMR-options]{AMR_keep_synonyms}}, i.e. \code{options(AMR_keep_synonyms = TRUE)} or \code{options(AMR_keep_synonyms = FALSE)}.}
 
-\item{...}{other arguments passed on to \code{\link[AMR:as.mo]{as.mo()}}, such as 'minimum_matching_score', 'ignore_pattern', and 'remove_from_input'}
+\item{...}{Other arguments passed on to \code{\link[AMR:as.mo]{as.mo()}}, such as 'minimum_matching_score', 'ignore_pattern', and 'remove_from_input'.}
 }
 \description{
 This function is analogous to all \verb{mo_*} functions of the AMR package, see \code{\link[AMR:mo_property]{AMR::mo_property()}}.

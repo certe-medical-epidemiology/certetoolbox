@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.18.7
+Version: 1.19.0
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -28,6 +28,7 @@ Imports:
   glue (>= 1.6.1),
   hms (>= 1.1.0),
   httr (>= 1.4.0),
+  jsonlite (>= 2.0.0),
   knitr (>= 1.32),
   lubridate (>= 1.9.0),
   magrittr (>= 2.0.0),

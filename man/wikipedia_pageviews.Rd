@@ -27,7 +27,7 @@ wikipedia_pageviews(
 Download Wikipedia daily page views for any language, using the \href{https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/examples/page-metrics.html#page-views}{Wikimedia REST API}.
 }
 \details{
-Zie voor een voorbeeld: \url{https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A}
+See example: \url{https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A}
 }
 \examples{
 wikipedia_pageviews("Griep")
