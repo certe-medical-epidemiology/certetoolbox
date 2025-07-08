@@ -1412,7 +1412,7 @@ crosstab <- function(df,
 #' @param agent defaults to `"all-agents"`
 #' @importFrom httr GET status_code content
 #' @importFrom dplyr bind_rows as_tibble
-#' @details
+#' @details 
 #' See example: <https://pageviews.wmcloud.org/?project=nl.wikipedia.org&platform=all-access&agent=all-agents&redirects=0&start=2024-06-01&end=2025-02-01&pages=Griep|Influenzavirus_A>
 #' @export
 #' @examples
