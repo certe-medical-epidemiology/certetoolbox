@@ -288,16 +288,37 @@ agb_property <- function(agb_code, property = NULL) {
   }
 }
 
-#' #' @rdname agb_property
-#' #' @details [agb_lookup()] looks up the AGB code, and returns a [menu][utils::menu()] in an interactive session, and the first hit in a non-interactive session.
-#' #' @export
-#' agb_lookup <- function(search_term) {
-#'   url <- "https://www.vektis.nl/agb-register/zoeken"
-#'   form <- url |> rvest::read_html() |> rvest::html_node("main form") |> rvest::html_form()
-#'   form <- form |> rvest::html_form_set(agbcode = "Jansen",
-#'                                        zorgpartijtype = "zorgverlener",
-#'                                        zorgsoort = "00 - Alle zorgsoorten")
-#'   click <- form |> rvest::html_form_submit(submit = 3)
-#'   s <- rvest::session(url)
-#'   click2 <- rvest::session_submit(s, form, submit = 2)
-#' }
+# #' @rdname agb_property
+# #' @details [agb_lookup()] looks up the AGB code, and returns a [menu][utils::menu()] in an interactive session, and the first hit in a non-interactive session.
+# #' @export
+# agb_lookup <- function(search_term) {
+#   url <- "https://www.vektis.nl/agb-register/zoeken"
+#   form <- url |> rvest::read_html() |> rvest::html_node("main form") |> rvest::html_form()
+#   form <- form |> rvest::html_form_set(agbcode = "Jansen",
+#                                        zorgpartijtype = "zorgverlener",
+#                                        zorgsoort = "00 - Alle zorgsoorten")
+#   click <- form |> rvest::html_form_submit(submit = 3)
+#   s <- rvest::session(url)
+#   click2 <- rvest::session_submit(s, form, submit = 2)
+# }
+
+#' Quick SHA Hash
+#' 
+#' Generates hashes with or without an extra key/salt.
+#' @param x input, will be converted to character
+#' @param key key or salt
+#' @param bits number of bits, often one of: 224, 256, 384, 512
+#' @details This function uses the [openssl::sha2()] function, but always returns a [character] vector.
+#' @export
+#' @examples
+#' generate_hash("a")
+#' generate_hash(c("a", "b", "c"))
+#' 
+#' generate_hash("a", "secret")
+#' generate_hash(c("a", "b", "c"), "secret")
+generate_hash <- function(x, key = NULL, bits = 256) {
+  check_is_installed("openssl")
+  x <- as.character(x)
+  out <- openssl::sha2(x = x, key = key[1], size = as.integer(bits[1]))
+  as.character(out)
+}
