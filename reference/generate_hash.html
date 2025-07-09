@@ -103,14 +103,18 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">generate_hash</span><span class="op">(</span><span class="st">"a"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_hash("a"):</span> could not find function "generate_hash"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"</span>
 <span class="r-in"><span><span class="fu">generate_hash</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_hash(c("a", "b", "c")):</span> could not find function "generate_hash"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "2e7d2c03a9507ae265ecf5b5356885a53393a2029d241394997265a1a25aefc6"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">generate_hash</span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"secret"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_hash("a", "secret"):</span> could not find function "generate_hash"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4048c44911916043ff626895ff78c5262764685b6cb9a03ce07886a9effb924c"</span>
 <span class="r-in"><span><span class="fu">generate_hash</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span><span class="op">)</span>, <span class="st">"secret"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_hash(c("a", "b", "c"), "secret"):</span> could not find function "generate_hash"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4048c44911916043ff626895ff78c5262764685b6cb9a03ce07886a9effb924c"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2] "8caf295837e09c876c0c5ef729581d5e75ef93adc10420ce71aab05636ac63ed"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "ef006b65b8ce49c891479554278e47e7d76735e7ddd6392fc68342322f39e3c4"</span>
 </code></pre></div>
     </div>
   </div>
