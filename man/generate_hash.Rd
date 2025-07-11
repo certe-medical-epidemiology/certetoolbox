@@ -4,20 +4,20 @@
 \alias{generate_hash}
 \title{Quick SHA Hash}
 \usage{
-generate_hash(x, key = NULL, bits = 256)
+generate_hash(x, key = TRUE, bits = 256)
 }
 \arguments{
 \item{x}{input, will be converted to character}
 
-\item{key}{key or salt}
+\item{key}{key or salt. Use \code{TRUE} (default) to use the \link[certeprojects:project_properties]{project identifier} that will be printed to the Console, or any character to use as key/salt, or use \code{NULL} or \code{FALSE} to not use a key.}
 
 \item{bits}{number of bits, often one of: 224, 256, 384, 512}
 }
 \description{
-Generates hashes with or without an extra key/salt.
+Generates hashes with or without an extra key/salt. This key defaults to the \link[certeprojects:project_properties]{project identifier}.
 }
 \details{
-This function uses the \code{\link[openssl:hash]{openssl::sha2()}} function, but always returns a \link{character} vector.
+This function uses the \code{\link[openssl:hash]{openssl::sha2()}} function for the hashing, but always returns a \link{character} vector.
 }
 \examples{
 generate_hash("a")

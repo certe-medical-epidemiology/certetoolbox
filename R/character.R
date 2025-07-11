@@ -304,11 +304,12 @@ agb_property <- function(agb_code, property = NULL) {
 
 #' Quick SHA Hash
 #' 
-#' Generates hashes with or without an extra key/salt.
+#' Generates hashes with or without an extra key/salt. This key defaults to the [project identifier][certeprojects::project_get_current_id()].
 #' @param x input, will be converted to character
-#' @param key key or salt
+#' @param key key or salt. Use `TRUE` (default) to use the [project identifier][certeprojects::project_get_current_id()] that will be printed to the Console, or any character to use as key/salt, or use `NULL` or `FALSE` to not use a key.
 #' @param bits number of bits, often one of: 224, 256, 384, 512
-#' @details This function uses the [openssl::sha2()] function, but always returns a [character] vector.
+#' @details This function uses the [openssl::sha2()] function for the hashing, but always returns a [character] vector.
+#' @importFrom certeprojects project_identifier project_get_current_id
 #' @export
 #' @examples
 #' generate_hash("a")
@@ -316,9 +317,18 @@ agb_property <- function(agb_code, property = NULL) {
 #' 
 #' generate_hash("a", "secret")
 #' generate_hash(c("a", "b", "c"), "secret")
-generate_hash <- function(x, key = NULL, bits = 256) {
+generate_hash <- function(x, key = TRUE, bits = 256) {
   check_is_installed("openssl")
   x <- as.character(x)
-  out <- openssl::sha2(x = x, key = key[1], size = as.integer(bits[1]))
+  if (is.null(key) || isFALSE(key)) {
+    key <- NULL
+  } else if (isTRUE(key)) {
+    # generate random key
+    key <- as.character(project_identifier(project_number = project_get_current_id(ask = FALSE)))
+    message("Using {certeprojects} project identifier as hash key: \"", key, "\".")
+  } else {
+    key <- paste(as.character(key), collapse = "")
+  }
+  out <- openssl::sha2(x = x, key = key, size = as.integer(bits[1]))
   as.character(out)
 }
