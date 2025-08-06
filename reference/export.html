@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.2</span>
       </span>
     </div>
 
@@ -81,6 +81,8 @@
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  project_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  encrypt <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">filename</span> <span class="op"><a href="like.html">%like%</a></span> <span class="st">"[.]rds$"</span>,</span>
+<span>  key <span class="op">=</span> <span class="fu"><a href="read_secret.html">read_secret</a></span><span class="op">(</span><span class="st">"tools.rds_encryption_password"</span><span class="op">)</span>,</span>
 <span>  fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -90,6 +92,8 @@
 <span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  project_number <span class="op">=</span> <span class="fu"><a href="https://certe-medical-epidemiology.github.io/certeprojects/reference/project_properties.html" class="external-link">project_get_current_id</a></span><span class="op">(</span>ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  encrypt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  key <span class="op">=</span> <span class="fu"><a href="read_secret.html">read_secret</a></span><span class="op">(</span><span class="st">"tools.rds_encryption_password"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -250,6 +254,14 @@
 <dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> value to indicate if an existing file must be overwritten. In <a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive mode</a>, this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to <code>filename_datetime.ext</code> before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.</p></dd>
 
 
+<dt id="arg-encrypt">encrypt<a class="anchor" aria-label="anchor" href="#arg-encrypt"></a></dt>
+<dd><p>a <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> value to indicate if the object must be encrypted before exporting using AES-GCM via <code><a href="https://jeroen.r-universe.dev/openssl/reference/aes_cbc.html" class="external-link">openssl::aes_gcm_encrypt()</a></code>, providing authenticated encryption. Default is <code>TRUE</code> for <code>rds</code> files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.</p></dd>
+
+
+<dt id="arg-key">key<a class="anchor" aria-label="anchor" href="#arg-key"></a></dt>
+<dd><p>a character to be used as the encryption key. Internally, this is converted using <code><a href="https://jeroen.r-universe.dev/openssl/reference/hash.html" class="external-link">openssl::sha256()</a></code>` to ensure a <a href="https://rdrr.io/r/base/raw.html" class="external-link">raw</a> high-entropy key of length 32, suitable for AES-GCM. The default is read_secret("tools.rds_encryption_password").</p></dd>
+
+
 <dt id="arg-fn">fn<a class="anchor" aria-label="anchor" href="#arg-fn"></a></dt>
 <dd><p>a manual export function, such as <code><a href="https://haven.tidyverse.org/reference/write_sas.html" class="external-link">haven::write_sas</a></code> to write SAS files. This function has to have the object as first argument and the future file location as second argument.</p></dd>
 
@@ -363,9 +375,11 @@
 <span class="r-in"><span>  <span class="fu">export_rds</span><span class="op">(</span><span class="st">"whole_file"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpOCnu9m/file205c359420ba/reference/whole_file.rds' (3.5 kB).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10 × 14) to '/tmp/RtmpOCnu9m/file205c359420ba/reference/first_ten_rows.xlsx' (7.9 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmpi2nXJa/file1e88ad3a717/reference/whole_file.rds' (19.5 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: This file was AES-GCM encrypted and is unreadable without the correct `key`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (1 × 1) to '/tmp/Rtmpi2nXJa/file1e88ad3a717/reference/first_ten_rows.xlsx' (7.9 kB).</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># starwars |&gt;</span></span></span>
@@ -373,11 +387,66 @@
 <span class="r-in"><span><span class="co">#   slice(1:10) |&gt;</span></span></span>
 <span class="r-in"><span><span class="co">#   export("first_ten_rows.xlsx")</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># RDS files are encrypted by default</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] d3 8f b5 fc 19 12</span>
+<span class="r-in"><span><span class="co"># use decrypt_object() for manual decryption</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.html">decrypt_object</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> AES-GCM encryption removed using provided `key`.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 14</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name      height  mass hair_color skin_color eye_color birth_year sex   gender</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Luke Sky…    172    77 blond      fair       blue            19   male  mascu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> C-3PO        167    75 <span style="color: #BB0000;">NA</span>         gold       yellow         112   none  mascu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> R2-D2         96    32 <span style="color: #BB0000;">NA</span>         white, bl… red             33   none  mascu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Darth Va…    202   136 none       white      yellow          41.9 male  mascu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Leia Org…    150    49 brown      light      brown           19   fema… femin…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> Owen Lars    178   120 brown, gr… light      blue            52   male  mascu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># this goes automatically with import_rds():</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.html">import_rds</a></span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> AES-GCM encryption removed using provided `key`.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             name height mass  hair_color  skin_color eye_color birth_year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Luke Skywalker    172   77       blond        fair      blue       19.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          C-3PO    167   75        &lt;NA&gt;        gold    yellow      112.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          R2-D2     96   32        &lt;NA&gt; white, blue       red       33.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    Darth Vader    202  136        none       white    yellow       41.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    Leia Organa    150   49       brown       light     brown       19.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      Owen Lars    178  120 brown, grey       light      blue       52.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      sex    gender homeworld species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   male masculine  Tatooine   Human</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   none masculine  Tatooine   Droid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   none masculine     Naboo   Droid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   male masculine  Tatooine   Human</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female  feminine  Alderaan   Human</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   male masculine  Tatooine   Human</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                       films</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                    A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 A New Hope, The Empire Strikes Back, Return of the Jedi, The Phantom Menace, Attack of the Clones, Revenge of the Sith, The Force Awakens</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                              A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                           A New Hope, The Empire Strikes Back, Return of the Jedi, Revenge of the Sith, The Force Awakens</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                                     A New Hope, Attack of the Clones, Revenge of the Sith</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             vehicles                starships</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Snowspeeder, Imperial Speeder Bike X-wing, Imperial shuttle</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                             TIE Advanced x1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5              Imperial Speeder Bike                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                            </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apache's Feather format is column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for cross-language specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu">export_feather</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpOCnu9m/file205c359420ba/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmpi2nXJa/file1e88ad3a717/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu"><a href="import.html">import</a></span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
