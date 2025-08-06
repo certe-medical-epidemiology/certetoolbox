@@ -24,6 +24,8 @@ export(
   filename = NULL,
   project_number = project_get_current_id(ask = FALSE),
   overwrite = NULL,
+  encrypt = !is.null(filename) && filename \%like\% "[.]rds$",
+  key = read_secret("tools.rds_encryption_password"),
   fn = NULL,
   ...
 )
@@ -33,6 +35,8 @@ export_rds(
   filename = NULL,
   project_number = project_get_current_id(ask = FALSE),
   overwrite = NULL,
+  encrypt = TRUE,
+  key = read_secret("tools.rds_encryption_password"),
   ...
 )
 
@@ -181,6 +185,10 @@ export_teams(
 
 \item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to \code{filename_datetime.ext} before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.}
 
+\item{encrypt}{a \link{logical} value to indicate if the object must be encrypted before exporting using AES-GCM via \code{\link[openssl:aes_cbc]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. Default is \code{TRUE} for \code{rds} files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.}
+
+\item{key}{a character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:hash]{openssl::sha256()}}` to ensure a \link{raw} high-entropy key of length 32, suitable for AES-GCM. The default is \link{read_secret("tools.rds_encryption_password")}.}
+
 \item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 
 \item{...}{arguments passed on to methods}
@@ -265,6 +273,17 @@ starwars |>
 #   export("whole_file.rds") |>
 #   slice(1:10) |>
 #   export("first_ten_rows.xlsx")
+
+# RDS files are encrypted by default
+x <- readRDS("whole_file.rds")
+head(x)
+# use decrypt_object() for manual decryption
+x <- decrypt_object(x)
+head(x)
+
+# this goes automatically with import_rds():
+x <- import_rds("whole_file.rds")
+head(x)
 
 
 # Apache's Feather format is column-based

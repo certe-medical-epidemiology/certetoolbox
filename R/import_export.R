@@ -26,6 +26,8 @@ export_exec <- function(object,
                         project_number,
                         overwrite,
                         fn = NULL,
+                        encrypt = FALSE,
+                        key = "",
                         ...) {
   if (!is.data.frame(object) && !is.list(object) && needed_extension %unlike% "xls" ) {
     # maybe it's a name of an object? Try to get it:
@@ -51,6 +53,16 @@ export_exec <- function(object,
     return(invisible(object))
   }
   
+  object.bak <- object
+  
+  if (encrypt == TRUE) {
+    check_is_installed("openssl")
+    # this openssl approach will return a <raw> vector with an attribute "iv"
+    object <- openssl::aes_gcm_encrypt(data = serialize(object, NULL),
+                                       key = openssl::sha256(charToRaw(key)),
+                                       iv = openssl::rand_bytes(12))
+  }
+  
   needed_extension <- needed_extension[1L]
   if (needed_extension == "") {
     if (filename %unlike% "[.][a-z0-9_-]+$") {
@@ -68,11 +80,11 @@ export_exec <- function(object,
     # Apache's Feather format
     object <- rownames_1st_column(object)
     arrow::write_feather(x = object, sink = filename, ...)
-  # } else if (needed_extension == "parquet") {
-  #   # Apache's Parquet format
-  #   object <- rownames_1st_column(object)
-  #   arrow::write_parquet()
-  #   arrow::write_parquet(x = object, sink = filename, ...)
+    # } else if (needed_extension == "parquet") {
+    #   # Apache's Parquet format
+    #   object <- rownames_1st_column(object)
+    #   arrow::write_parquet()
+    #   arrow::write_parquet(x = object, sink = filename, ...)
   } else if (needed_extension == "xlsx") {
     xl_object <- object
     # Excel format
@@ -96,10 +108,13 @@ export_exec <- function(object,
   }
   if (file.exists(filename)) {
     message(paste0("Exported data set (",
-                   format2(NROW(object)), pkg_env$cross_icon, format2(NCOL(object)),
+                   format2(NROW(object.bak)), pkg_env$cross_icon, format2(NCOL(object.bak)),
                    ") to '",
                    tools::file_path_as_absolute(filename), 
                    "' (", size_humanreadable(file.size(filename)), ")."))
+    if (encrypt == TRUE) {
+      message("NOTE: This file was AES-GCM encrypted and is unreadable without the correct `key`.")
+    }
   } else {
     warning("Error while exporting to `", filename, "`.", call. = FALSE)
     # revert the old existing file (see the file_can_be_overwritten() function)
@@ -110,7 +125,7 @@ export_exec <- function(object,
   if (file.exists(filename_old)) {
     try(file.remove2(filename_old), silent = TRUE)
   }
-  invisible(structure(object, filename = tools::file_path_as_absolute(filename)))
+  invisible(structure(object.bak, filename = tools::file_path_as_absolute(filename)))
 }
 
 #' @importFrom readr read_delim locale problems
@@ -121,6 +136,7 @@ import_exec <- function(filename,
                         extension,
                         project_number,
                         auto_transform,
+                        key = "",
                         ...) {
   extension <- tolower(extension[1L])
   
@@ -209,7 +225,7 @@ import_exec <- function(filename,
                              range = list(...)$range,
                              na = list(...)$na,
                              skip = list(...)$skip)
-  # } else if (extension %in% c("feather", "parquet")) {
+    # } else if (extension %in% c("feather", "parquet")) {
   } else if (extension == "feather") {
     # Apache's Feather and Parquet format
     fun <- eval(parse(text = paste0("read_", extension)),
@@ -229,13 +245,19 @@ import_exec <- function(filename,
     df <- rio::import(file = filename, ...)
   }
   
-  if (!inherits(df, "sf")) {
+  if (is.raw(df)) {
+    # object was encrypted using openssl::aes_gcm_encrypt()
+    df <- decrypt_object(df, key = key)
+  }
+  
+  if (!inherits(df, c("sf", "raw"))) {
     # force plain data.frame if type is not map data
     df <- as.data.frame(df, stringsAsFactors = FALSE)
+    auto_transform <- FALSE
   }
   
   # if row names were saved as first col, set back to row names
-  if (colnames(df)[1L] %like% "row.?names?") {
+  if (is.data.frame(df) && colnames(df)[1L] %like% "row.?names?") {
     rownames(df) <- df[, 1, drop = TRUE]
     df <- select(df, -1)
     message("Row names restored from first column.")
@@ -381,6 +403,8 @@ plot_export_result <- function(filename) {
 #' @param filename the full path of the exported file
 #' @param project_number a Microsoft Planner project number
 #' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
+#' @param encrypt a [logical] value to indicate if the object must be encrypted before exporting using AES-GCM via [openssl::aes_gcm_encrypt()], providing authenticated encryption. Default is `TRUE` for `rds` files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.
+#' @param key a character to be used as the encryption key. Internally, this is converted using [openssl::sha256()]` to ensure a [raw] high-entropy key of length 32, suitable for AES-GCM. The default is [read_secret("tools.rds_encryption_password")].
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
 #' @rdname export
@@ -401,6 +425,17 @@ plot_export_result <- function(filename) {
 #' #   slice(1:10) |>
 #' #   export("first_ten_rows.xlsx")
 #' 
+#' # RDS files are encrypted by default
+#' x <- readRDS("whole_file.rds")
+#' head(x)
+#' # use decrypt_object() for manual decryption
+#' x <- decrypt_object(x)
+#' head(x)
+#' 
+#' # this goes automatically with import_rds():
+#' x <- import_rds("whole_file.rds")
+#' head(x)
+#' 
 #' 
 #' # Apache's Feather format is column-based
 #' # and allow for cross-language specific and fast file reading
@@ -418,6 +453,8 @@ export <- function(object,
                    filename = NULL,
                    project_number = project_get_current_id(ask = FALSE),
                    overwrite = NULL,
+                   encrypt = !is.null(filename) && filename %like% "[.]rds$",
+                   key = read_secret("tools.rds_encryption_password"),
                    fn = NULL,
                    ...) {
   
@@ -446,6 +483,8 @@ export <- function(object,
                  filename = filename,
                  project_number = project_number,
                  overwrite = overwrite,
+                 encrypt = encrypt,
+                 key = key,
                  ...)
     } else if (filename %like% "[.]csv$") {
       export_csv(object = object,
@@ -483,12 +522,12 @@ export <- function(object,
                      project_number = project_number,
                      overwrite = overwrite,
                      ...)
-    # } else if (filename %like% "[.]parquet$") {
-    #   export_parquet(object = object,
-    #                  filename = filename,
-    #                  project_number = project_number,
-    #                  overwrite = overwrite,
-    #                  ...)
+      # } else if (filename %like% "[.]parquet$") {
+      #   export_parquet(object = object,
+      #                  filename = filename,
+      #                  project_number = project_number,
+      #                  overwrite = overwrite,
+      #                  ...)
     } else if (filename %like% "[.]pdf$") {
       export_pdf(plot = object,
                  filename = filename,
@@ -520,15 +559,18 @@ export_rds <- function(object,
                        filename = NULL,
                        project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
+                       encrypt = TRUE,
+                       key = read_secret("tools.rds_encryption_password"),
                        ...) {
   export_exec(object, "rds",
               filename = filename,
               filename_deparse = deparse(substitute(object)),
               project_number = project_number,
               overwrite = overwrite,
+              encrypt = encrypt,
+              key = key,
               compress = "gzip",
-              ascii = FALSE,
-              version = 2)
+              ascii = FALSE)
 }
 
 #' @rdname export
@@ -948,6 +990,7 @@ export_html <- function(plot,
 #' @param filename the full path of the file to be imported, will be parsed to a [character], can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param project_number a Microsoft Planner project number
+#' @param key a character to decrypt the file, see [export()] for explanation of `key`. For manual decryption, run [decrypt_object()].
 #' @param ... arguments passed on to methods
 #' @details `r doc_requirement("any unlisted filetype", "import", "rio")`.
 #' @rdname import
@@ -984,6 +1027,7 @@ import <- function(filename,
                    project_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
                    encoding = "UTF-8",
+                   key = read_secret("tools.rds_encryption_password"),
                    ...) {
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
@@ -991,6 +1035,7 @@ import <- function(filename,
   if (filename %like% "[.]rds$") {
     import_rds(filename = filename,
                project_number = project_number,
+               key = key,
                ...)
   } else if (filename %like% "[.]csv$" && (is.null(list(...)$sep) || identical(list(...)$sep, ","))) {
     import_csv(filename = filename,
@@ -1026,10 +1071,10 @@ import <- function(filename,
     import_feather(filename = filename,
                    project_number = project_number,
                    ...)
-  # } else if (filename %like% "[.]parquet$") {
-  #   import_parquet(filename = filename,
-  #                  project_number = project_number,
-  #                  ...)
+    # } else if (filename %like% "[.]parquet$") {
+    #   import_parquet(filename = filename,
+    #                  project_number = project_number,
+    #                  ...)
   } else {
     import_exec(filename,
                 extension = "",
@@ -1043,11 +1088,13 @@ import <- function(filename,
 #' @export
 import_rds <- function(filename,
                        project_number = project_get_current_id(ask = FALSE),
+                       key = read_secret("tools.rds_encryption_password"),
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "rds",
               project_number = project_number,
+              key = key,
               auto_transform = FALSE)
 }
 
@@ -1281,6 +1328,26 @@ import_feather <- function(filename,
               project_number = project_number,
               auto_transform = FALSE,
               col_select = col_select)
+}
+
+#' @rdname import
+#' @param object object to decrypt
+#' @export
+decrypt_object <- function(object, key = read_secret("tools.rds_encryption_password")) {
+  if (is.raw(object) && !is.null(attr(object, "iv"))) {
+    # object was encrypted using openssl::aes_gcm_encrypt() in an export_* function
+    check_is_installed("openssl")
+    object <- openssl::aes_gcm_decrypt(object,
+                                       key = openssl::sha256(charToRaw(key)),
+                                       iv = attr(object, "iv"))
+    tryCatch({
+      object <- unserialize(object)
+      message("AES-GCM encryption removed using provided `key`.")
+    }, error = function(e) {
+      warning("AES-GCM encryption could not be removed ('", conditionMessage(e), "'), returning raw vector.", call. = FALSE, immediate. = TRUE)
+    })
+  }
+  object
 }
 
 #' #' @rdname import

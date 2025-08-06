@@ -12,6 +12,7 @@
 \alias{import_sav}
 \alias{import_spss}
 \alias{import_feather}
+\alias{decrypt_object}
 \alias{import_clipboard}
 \alias{import_mail_attachment}
 \alias{import_url}
@@ -23,10 +24,16 @@ import(
   project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   encoding = "UTF-8",
+  key = read_secret("tools.rds_encryption_password"),
   ...
 )
 
-import_rds(filename, project_number = project_get_current_id(ask = FALSE), ...)
+import_rds(
+  filename,
+  project_number = project_get_current_id(ask = FALSE),
+  key = read_secret("tools.rds_encryption_password"),
+  ...
+)
 
 import_xlsx(
   filename,
@@ -162,6 +169,8 @@ import_feather(
   ...
 )
 
+decrypt_object(object, key = read_secret("tools.rds_encryption_password"))
+
 import_clipboard(
   sep = "\\t",
   header = TRUE,
@@ -233,6 +242,8 @@ import_teams(
 
 \item{encoding}{Default encoding. This only affects how the file is read.}
 
+\item{key}{a character to decrypt the file, see \code{\link[=export]{export()}} for explanation of \code{key}. For manual decryption, run \code{\link[=decrypt_object]{decrypt_object()}}.}
+
 \item{...}{arguments passed on to methods}
 
 \item{sheet}{Excel sheet to import, defaults to first sheet}
@@ -258,6 +269,8 @@ import_teams(
 \item{sep}{character to separate values in a row}
 
 \item{col_select}{columns to select, supports the \link[tidyselect:language]{tidyselect language})}
+
+\item{object}{object to decrypt}
 
 \item{header}{use first row as header}
 
