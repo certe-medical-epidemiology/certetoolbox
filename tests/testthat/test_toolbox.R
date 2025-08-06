@@ -178,7 +178,7 @@ test_that("import_export works", {
   
   # helper function for import/export checking:
   identical_import_export <- function(import_fn, export_fn, fileext,
-                                      check_factors = TRUE, check_posix = TRUE,
+                                      check_factors = TRUE, check_posix = TRUE, check_integers = TRUE,
                                       digits = Inf, ...) {
     # generate temporary file location:
     templocation <- tempfile(fileext = paste0(".", fileext))
@@ -202,6 +202,10 @@ test_that("import_export works", {
     if (!isTRUE(check_posix)) {
       new_df$dates <- as.Date(new_df$dates)
       new_df$posix <- as.Date(new_df$posix)
+    }
+    if (!isTRUE(check_integers)) {
+      new_df$doubles <- as.numeric(new_df$doubles)
+      new_df$integers <- as.integer(new_df$integers)
     }
     for (i in seq_len(ncol(new_df))) {
       # SPSS
@@ -251,14 +255,14 @@ test_that("import_export works", {
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))
   # Excel
   expect_true(identical_import_export(import_xlsx, export_xlsx, "xlsx",
-                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+                                      check_factors = FALSE, check_posix = FALSE, check_integers = FALSE, digits = 10))
   expect_true(identical_import_export(import, export, "xlsx",
-                                      check_factors = FALSE, check_posix = FALSE, digits = 10))
+                                      check_factors = FALSE, check_posix = FALSE, check_integers = FALSE, digits = 10))
   # SPSS
   expect_true(identical_import_export(import_sav, export_sav, "sav",
-                                      check_factors = FALSE, digits = 10))
+                                      check_factors = FALSE, check_integers = FALSE, digits = 10))
   expect_true(identical_import_export(import, export, "sav",
-                                      check_factors = FALSE, digits = 10))
+                                      check_factors = FALSE, check_integers = FALSE, digits = 10))
   # Apache
   expect_true(identical_import_export(import_feather, export_feather, "feather"))
   expect_true(identical_import_export(import, export, "feather"))
