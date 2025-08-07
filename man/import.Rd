@@ -24,14 +24,14 @@ import(
   project_number = project_get_current_id(ask = FALSE),
   auto_transform = TRUE,
   encoding = "UTF-8",
-  key = read_secret("tools.rds_encryption_password"),
+  key = read_secret("tools.encryption_password"),
   ...
 )
 
 import_rds(
   filename,
   project_number = project_get_current_id(ask = FALSE),
-  key = read_secret("tools.rds_encryption_password"),
+  key = read_secret("tools.encryption_password"),
   ...
 )
 
@@ -169,7 +169,7 @@ import_feather(
   ...
 )
 
-decrypt_object(object, key = read_secret("tools.rds_encryption_password"))
+decrypt_object(object, key = read_secret("tools.encryption_password"))
 
 import_clipboard(
   sep = "\\t",

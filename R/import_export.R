@@ -53,6 +53,10 @@ export_exec <- function(object,
     return(invisible(object))
   }
   
+  if (any(colnames(object) %like% "bsn|burger.*service") && encrypt == FALSE) {
+    warning("Data set might contain social security numbers (BSN) - these must never be shared.", call. = FALSE)
+  }
+  
   object.bak <- object
   
   if (encrypt == TRUE) {
@@ -184,7 +188,7 @@ import_exec <- function(filename,
   
   if (extension == "rds") {
     # R format
-    df <- base::readRDS(file = filename)
+    df <- base::readRDS(file = filename, ...)
   } else if (extension == "rda") {
     env <- new.env()
     load(filename, envir = env)
@@ -404,7 +408,7 @@ plot_export_result <- function(filename) {
 #' @param project_number a Microsoft Planner project number
 #' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
 #' @param encrypt a [logical] value to indicate if the object must be encrypted before exporting using AES-GCM via [openssl::aes_gcm_encrypt()], providing authenticated encryption. Default is `TRUE` for `rds` files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.
-#' @param key a character to be used as the encryption key. Internally, this is converted using [openssl::sha256()]` to ensure a [raw] high-entropy key of length 32, suitable for AES-GCM. The default is [read_secret("tools.rds_encryption_password")].
+#' @param key a character to be used as the encryption key. Internally, this is converted using [openssl::sha256()] to ensure a [raw] high-entropy key of length 32, suitable for AES-GCM. The default is `read_secret("tools.encryption_password")`.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
 #' @rdname export
@@ -426,7 +430,7 @@ plot_export_result <- function(filename) {
 #' #   export("first_ten_rows.xlsx")
 #' 
 #' # RDS files are encrypted by default
-#' x <- readRDS("whole_file.rds")
+#' x <- base::readRDS("whole_file.rds")
 #' head(x)
 #' # use decrypt_object() for manual decryption
 #' x <- decrypt_object(x)
@@ -454,7 +458,7 @@ export <- function(object,
                    project_number = project_get_current_id(ask = FALSE),
                    overwrite = NULL,
                    encrypt = !is.null(filename) && filename %like% "[.]rds$",
-                   key = read_secret("tools.rds_encryption_password"),
+                   key = read_secret("tools.encryption_password"),
                    fn = NULL,
                    ...) {
   
@@ -560,7 +564,7 @@ export_rds <- function(object,
                        project_number = project_get_current_id(ask = FALSE),
                        overwrite = NULL,
                        encrypt = TRUE,
-                       key = read_secret("tools.rds_encryption_password"),
+                       key = read_secret("tools.encryption_password"),
                        ...) {
   export_exec(object, "rds",
               filename = filename,
@@ -1027,7 +1031,7 @@ import <- function(filename,
                    project_number = project_get_current_id(ask = FALSE),
                    auto_transform = TRUE,
                    encoding = "UTF-8",
-                   key = read_secret("tools.rds_encryption_password"),
+                   key = read_secret("tools.encryption_password"),
                    ...) {
   if (!is.character(filename)) {
     filename <- deparse(substitute(filename))
@@ -1088,15 +1092,20 @@ import <- function(filename,
 #' @export
 import_rds <- function(filename,
                        project_number = project_get_current_id(ask = FALSE),
-                       key = read_secret("tools.rds_encryption_password"),
+                       key = read_secret("tools.encryption_password"),
                        ...) {
   import_exec(filename,
               filename_deparse = deparse(substitute(filename)),
               extension = "rds",
               project_number = project_number,
               key = key,
-              auto_transform = FALSE)
+              auto_transform = FALSE,
+              ...)
 }
+
+#' @rdname import
+#' @export
+readRDS <- import_rds
 
 #' @rdname import
 #' @param sheet Excel sheet to import, defaults to first sheet
@@ -1138,7 +1147,8 @@ import_xlsx <- function(filename,
               big.mark = big.mark,
               timezone = timezone,
               na = na,
-              skip = skip)
+              skip = skip,
+              ...)
 }
 
 #' @rdname import
@@ -1176,7 +1186,8 @@ import_csv <- function(filename,
               timezone = timezone,
               na = na,
               skip = skip,
-              encoding = encoding)
+              encoding = encoding,
+              ...)
 }
 
 #' @rdname import
@@ -1209,7 +1220,8 @@ import_csv2 <- function(filename,
               timezone = timezone,
               na = na,
               skip = skip,
-              encoding = encoding)
+              encoding = encoding,
+              ...)
 }
 
 #' @rdname import
@@ -1242,7 +1254,8 @@ import_tsv <- function(filename,
               timezone = timezone,
               na = na,
               skip = skip,
-              encoding = encoding)
+              encoding = encoding,
+              ...)
 }
 
 #' @rdname import
@@ -1276,7 +1289,8 @@ import_txt <- function(filename,
               timezone = timezone,
               na = na,
               skip = skip,
-              encoding = encoding)
+              encoding = encoding,
+              ...)
 }
 
 #' @rdname import
@@ -1305,7 +1319,8 @@ import_sav <- function(filename,
               decimal.mark = decimal.mark,
               big.mark = big.mark,
               timezone = timezone,
-              na = na)
+              na = na,
+              ...)
 }
 
 #' @rdname import
@@ -1327,13 +1342,14 @@ import_feather <- function(filename,
               extension = "feather",
               project_number = project_number,
               auto_transform = FALSE,
-              col_select = col_select)
+              col_select = col_select,
+              ...)
 }
 
 #' @rdname import
 #' @param object object to decrypt
 #' @export
-decrypt_object <- function(object, key = read_secret("tools.rds_encryption_password")) {
+decrypt_object <- function(object, key = read_secret("tools.encryption_password")) {
   if (is.raw(object) && !is.null(attr(object, "iv"))) {
     # object was encrypted using openssl::aes_gcm_encrypt() in an export_* function
     check_is_installed("openssl")
