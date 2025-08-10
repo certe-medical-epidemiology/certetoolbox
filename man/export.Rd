@@ -187,7 +187,7 @@ export_teams(
 
 \item{encrypt}{a \link{logical} value to indicate if the object must be encrypted before exporting using AES-GCM via \code{\link[openssl:aes_cbc]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. Default is \code{TRUE} for \code{rds} files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.}
 
-\item{key}{a character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:hash]{openssl::sha256()}}` to ensure a \link{raw} high-entropy key of length 32, suitable for AES-GCM. The default is \link{read_secret("tools.encryption_password")}.}
+\item{key}{a character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:hash]{openssl::sha256()}} to ensure a \link{raw} high-entropy key of length 32, suitable for AES-GCM. The default is \code{read_secret("tools.encryption_password")}.}
 
 \item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 
@@ -275,7 +275,7 @@ starwars |>
 #   export("first_ten_rows.xlsx")
 
 # RDS files are encrypted by default
-x <- readRDS("whole_file.rds")
+x <- base::readRDS("whole_file.rds")
 head(x)
 # use decrypt_object() for manual decryption
 x <- decrypt_object(x)

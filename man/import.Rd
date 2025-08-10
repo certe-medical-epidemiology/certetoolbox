@@ -3,6 +3,7 @@
 \name{import}
 \alias{import}
 \alias{import_rds}
+\alias{readRDS}
 \alias{import_xlsx}
 \alias{import_excel}
 \alias{import_csv}
@@ -29,6 +30,13 @@ import(
 )
 
 import_rds(
+  filename,
+  project_number = project_get_current_id(ask = FALSE),
+  key = read_secret("tools.encryption_password"),
+  ...
+)
+
+readRDS(
   filename,
   project_number = project_get_current_id(ask = FALSE),
   key = read_secret("tools.encryption_password"),

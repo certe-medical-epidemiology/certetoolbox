@@ -61,8 +61,12 @@ export_exec <- function(object,
   
   if (encrypt == TRUE) {
     check_is_installed("openssl")
-    # this openssl approach will return a <raw> vector with an attribute "iv"
-    object <- openssl::aes_gcm_encrypt(data = serialize(object, NULL),
+    # transform into raw vector
+    object <- serialize(object, connection = NULL, xdr = TRUE)
+    # compress vector, similar to base::saveRDS
+    object <- memCompress(object, type = "gzip")
+    # encrypt these bytes
+    object <- openssl::aes_gcm_encrypt(object,
                                        key = openssl::sha256(charToRaw(key)),
                                        iv = openssl::rand_bytes(12))
   }
@@ -573,8 +577,7 @@ export_rds <- function(object,
               overwrite = overwrite,
               encrypt = encrypt,
               key = key,
-              compress = "gzip",
-              ascii = FALSE)
+              ...)
 }
 
 #' @rdname export
@@ -1357,6 +1360,7 @@ decrypt_object <- function(object, key = read_secret("tools.encryption_password"
                                        key = openssl::sha256(charToRaw(key)),
                                        iv = attr(object, "iv"))
     tryCatch({
+      object <- memDecompress(object, type = "gzip")
       object <- unserialize(object)
       message("AES-GCM encryption removed using provided `key`.")
     }, error = function(e) {
