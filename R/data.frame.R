@@ -1101,7 +1101,6 @@ tbl_markdown <- function(x,
 #' @param ... not used as the time, allows for future extension
 #' @importFrom cleaner format_names format_datetime clean_Date clean_POSIXct clean_logical
 #' @importFrom readr parse_guess locale
-#' @importFrom progress progress_bar
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -1143,11 +1142,7 @@ auto_transform <- function(x,
                 asciify = FALSE)
   
   has_AMR <- isTRUE(requireNamespace("AMR", quietly = TRUE))
-  # progress bar (only when actually doing column work)
-  cat("\n")
-  pb <- progress_bar$new(total = ncol(x),
-                         format = "Auto-transform: :what [:bar] :percent",
-                         show_after = 0)
+  
   col_names_disp  <- format(colnames(x))
   col_names_lower <- tolower(colnames(x))
   
@@ -1157,21 +1152,19 @@ auto_transform <- function(x,
              error = function(e) {
                msg <- paste0("NOTE: Ignoring column ", trimws(col_names_disp[col]), " because of error: ",
                              gsub("\n", " ", e$message))
-               try(pb$message(msg), silent = TRUE)
+               message(msg)
                backup
              },
              warning = function(e) {
                msg <- paste0("Column ", trimws(col_names_disp[col]), ": ",
                              gsub("\n", " ", e$message))
-               try(pb$message(msg), silent = TRUE)
+               message(msg)
                suppressWarnings(object)
              }
     )
   }
   
   for (i in seq_len(ncol(x))) {
-    pb$tick(tokens = list(what = col_names_disp[i]))
-    
     col_data <- x[[i]]
     
     # Skip special S3 classes (sf/sir/mic/disk) immediately
