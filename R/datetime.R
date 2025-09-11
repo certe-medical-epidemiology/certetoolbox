@@ -615,7 +615,6 @@ nth_sunday <- function(ref = today(), n = 1) {
 #' @rdname days_around_today
 #' @param wk week to search for
 #' @param yr year to search for, defaults to current year
-#' @importFrom stringr str_detect str_match
 #' @export
 week2date <- function(wk, yr = year(today()), day = 1) {
   if (day == 0) day <- 7
@@ -623,8 +622,8 @@ week2date <- function(wk, yr = year(today()), day = 1) {
   # taken from ISOweek::ISOweek2date
   fn <- function(weekdate) {
     kPattern <- "^([0-9]{4})-W([0-9]{2})-([0-9]{1})$"
-    stopifnot(all(is.na(weekdate) | str_detect(weekdate, kPattern)))
-    wd_ywd <- str_match(weekdate, kPattern)
+    stopifnot(all(is.na(weekdate) | stringr::str_detect(weekdate, kPattern)))
+    wd_ywd <- stringr::str_match(weekdate, kPattern)
     if (all(is.na(weekdate))) {
       return(rep(as.Date(NA_character_), length.out = length(weekdate)))
     }

@@ -177,7 +177,12 @@ import_feather(
   ...
 )
 
-decrypt_object(object, key = read_secret("tools.encryption_password"))
+decrypt_object(
+  object,
+  key = read_secret("tools.encryption_password"),
+  serialised = TRUE,
+  compressed = TRUE
+)
 
 import_clipboard(
   sep = "\\t",
@@ -279,6 +284,10 @@ import_teams(
 \item{col_select}{columns to select, supports the \link[tidyselect:language]{tidyselect language})}
 
 \item{object}{object to decrypt}
+
+\item{serialised}{whether object was serialised}
+
+\item{compressed}{whether object was compressed}
 
 \item{header}{use first row as header}
 

@@ -62,35 +62,6 @@ certestyle::big_mark
 #' @export
 certeprojects::project_get_current_id
 
-#' @importFrom magrittr extract
-#' @export
-magrittr::extract
-
-#' @importFrom magrittr extract2
-#' @export
-magrittr::extract2
-
-#' @importFrom magrittr add
-#' @export
-magrittr::add
-
-#' @importFrom magrittr subtract
-#' @export
-magrittr::subtract
-
-#' @importFrom magrittr multiply_by
-#' @export
-magrittr::multiply_by
-
-#' @importFrom magrittr raise_to_power
-#' @export
-magrittr::raise_to_power
-
-#' @importFrom magrittr divide_by
-#' @export
-magrittr::divide_by
-
-
 is_installed <- function(pkgs) {
   isTRUE(check_is_installed(pkgs))
 }

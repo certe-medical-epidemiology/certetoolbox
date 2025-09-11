@@ -60,15 +60,7 @@ export_exec <- function(object,
   object.bak <- object
   
   if (encrypt == TRUE) {
-    check_is_installed("openssl")
-    # transform into raw vector
-    object <- serialize(object, connection = NULL, xdr = TRUE)
-    # compress vector, similar to base::saveRDS
-    object <- memCompress(object, type = "gzip")
-    # encrypt these bytes
-    object <- openssl::aes_gcm_encrypt(object,
-                                       key = openssl::sha256(charToRaw(key)),
-                                       iv = openssl::rand_bytes(12))
+    object <- encrypt_object(object, key = key)
   }
   
   needed_extension <- needed_extension[1L]
@@ -1349,10 +1341,33 @@ import_feather <- function(filename,
               ...)
 }
 
+#' @rdname export
+#' @param serialise whether object must be serialised
+#' @param compress whether object must be compressed
+#' @export
+encrypt_object <- function(object, key = read_secret("tools.encryption_password"), serialise = TRUE, compress = TRUE) {
+  check_is_installed("openssl")
+  if (isTRUE(serialise)) {
+    # transform into raw vector
+    object <- serialize(object, connection = NULL, xdr = TRUE)
+  }
+  if (isTRUE(compress)) {
+    # compress vector, similar to base::saveRDS
+    object <- memCompress(object, type = "gzip")
+  }
+  # encrypt these bytes
+  object <- openssl::aes_gcm_encrypt(object,
+                                     key = openssl::sha256(charToRaw(key)),
+                                     iv = openssl::rand_bytes(12))
+  object
+}
+
 #' @rdname import
 #' @param object object to decrypt
+#' @param serialised whether object was serialised
+#' @param compressed whether object was compressed
 #' @export
-decrypt_object <- function(object, key = read_secret("tools.encryption_password")) {
+decrypt_object <- function(object, key = read_secret("tools.encryption_password"), serialised = TRUE, compressed = TRUE) {
   if (is.raw(object) && !is.null(attr(object, "iv"))) {
     # object was encrypted using openssl::aes_gcm_encrypt() in an export_* function
     check_is_installed("openssl")
@@ -1360,8 +1375,12 @@ decrypt_object <- function(object, key = read_secret("tools.encryption_password"
                                        key = openssl::sha256(charToRaw(key)),
                                        iv = attr(object, "iv"))
     tryCatch({
-      object <- memDecompress(object, type = "gzip")
-      object <- unserialize(object)
+      if (isTRUE(compressed)) {
+        object <- memDecompress(object, type = "gzip")
+      }
+      if (isTRUE(serialised)) {
+        object <- unserialize(object)
+      }
       message("AES-GCM encryption removed using provided `key`.")
     }, error = function(e) {
       warning("AES-GCM encryption could not be removed ('", conditionMessage(e), "'), returning raw vector.", call. = FALSE, immediate. = TRUE)

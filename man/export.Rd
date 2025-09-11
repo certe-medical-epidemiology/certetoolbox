@@ -15,6 +15,7 @@
 \alias{export_pdf}
 \alias{export_png}
 \alias{export_html}
+\alias{encrypt_object}
 \alias{export_clipboard}
 \alias{export_teams}
 \title{Export Data Sets and Plots}
@@ -158,6 +159,13 @@ export_html(
   ...
 )
 
+encrypt_object(
+  object,
+  key = read_secret("tools.encryption_password"),
+  serialise = TRUE,
+  compress = TRUE
+)
+
 export_clipboard(
   object,
   sep = "\\t",
@@ -220,6 +228,10 @@ export_teams(
 \item{height}{required height of the PNG file in pixels}
 
 \item{dpi}{plot resolution, defaults to DPI set in \code{showtext} package}
+
+\item{serialise}{whether object must be serialised}
+
+\item{compress}{whether object must be compressed}
 
 \item{header}{(for \code{\link[=export_clipboard]{export_clipboard()}}) use column names as header (default: \code{TRUE})}
 

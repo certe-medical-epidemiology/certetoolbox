@@ -1101,7 +1101,6 @@ tbl_markdown <- function(x,
 #' @param ... not used as the time, allows for future extension
 #' @importFrom cleaner format_names format_datetime clean_Date clean_POSIXct clean_logical
 #' @importFrom readr parse_guess locale
-#' @importFrom hms as_hms
 #' @importFrom progress progress_bar
 #' @export
 auto_transform <- function(x,
@@ -1123,6 +1122,7 @@ auto_transform <- function(x,
   
   col_names.bak <- colnames(x)
   
+  # Apply snake_case renaming up front (also for 0-row data)
   if (isTRUE(snake_case)) {
     x <- format_names(x, snake_case = TRUE)
     if (!is.null(attributes(x)$sf_column)) {
@@ -1130,168 +1130,253 @@ auto_transform <- function(x,
     }
   }
   
+  # Precompute and reuse constants
   dateformat <- format_datetime(dateformat)
   timeformat <- format_datetime(timeformat)
-  cat("\n") # will otherwise overwrite existing line in console, such as in certedb
+  loc <- locale(date_names   = datenames,
+                date_format  = dateformat,
+                time_format  = timeformat,
+                decimal_mark = decimal.mark,
+                grouping_mark = big.mark,
+                encoding = "UTF-8",
+                tz = timezone,
+                asciify = FALSE)
+  
+  has_AMR <- isTRUE(requireNamespace("AMR", quietly = TRUE))
+  # progress bar (only when actually doing column work)
+  cat("\n")
   pb <- progress_bar$new(total = ncol(x),
                          format = "Auto-transform: :what [:bar] :percent",
                          show_after = 0)
-  col_names <- format(colnames(x))
+  col_names_disp  <- format(colnames(x))
+  col_names_lower <- tolower(colnames(x))
   
+  # Helper: safe convert with messaging to progress bar
   try_convert <- function(object, backup, col) {
     tryCatch(object,
              error = function(e) {
-               msg <- paste0("NOTE: Ignoring column ", trimws(col_names[col]), " because of error: ",
+               msg <- paste0("NOTE: Ignoring column ", trimws(col_names_disp[col]), " because of error: ",
                              gsub("\n", " ", e$message))
                try(pb$message(msg), silent = TRUE)
-               return(backup)
+               backup
              },
              warning = function(e) {
-               msg <- paste0("Column ", trimws(col_names[col]), ": ",
+               msg <- paste0("Column ", trimws(col_names_disp[col]), ": ",
                              gsub("\n", " ", e$message))
                try(pb$message(msg), silent = TRUE)
-               return(suppressWarnings(object))
-             })
+               suppressWarnings(object)
+             }
+    )
   }
   
   for (i in seq_len(ncol(x))) {
-    pb$tick(tokens = list(what = col_names[i]))
+    pb$tick(tokens = list(what = col_names_disp[i]))
     
-    if (inherits(x[, i, drop = TRUE], c("sfc", "disk", "sir", "mic"))) {
-      # do not convert sf or sir/mic columns
+    col_data <- x[[i]]
+    
+    # Skip special S3 classes (sf/sir/mic/disk) immediately
+    if (inherits(col_data, c("sfc", "disk", "sir", "mic"))) {
       next
     }
     
-    # 2023-02-13 fix for Diver, logicals/booleans seem corrupt
-    if (is.logical(x[, i, drop = TRUE])) {
-      x[, i] <- as.logical(as.character(x[, i, drop = TRUE]))
+    # Fixes and light coercions
+    if (is.logical(col_data)) {
+      # 2023-02-13 fix for Diver, logicals/booleans seem corrupt
+      x[[i]] <- as.logical(as.character(col_data))
+      col_data <- x[[i]]
     }
-    if (inherits(x[, i, drop = TRUE], "integer64")) {
-      # int64 relies on the bit64 pkg, just use base R here
-      if (all(abs(x[, i, drop = TRUE]) <= base::.Machine$integer.max, na.rm = TRUE)) {
-        x[, i] <- as.integer(x[, i, drop = TRUE])
+    if (inherits(col_data, "integer64")) {
+      # int64 relies on bit64 pkg, just use base R here
+      if (all(abs(col_data) <= base::.Machine$integer.max, na.rm = TRUE)) {
+        x[[i]] <- as.integer(col_data)
       } else {
-        x[, i] <- as.double(x[, i, drop = TRUE])
+        x[[i]] <- as.double(col_data)
       }
+      col_data <- x[[i]]
     }
     
-    col_data <- x[, i, drop = TRUE]
-    col_data_unique <- unique(col_data)
-    col_name <- tolower(colnames(x)[i])
-    if (!inherits(col_data, c("list", "matrix")) &&
-        # no faeces (F) or tips (T)
-        !all(unique(col_data) %in% c("T", "F"))) {
-      parsed <- NULL
-      if (length(col_data_unique) > 5000) {
-        # check if there's no difference for the first 5000 unique values
-        parsed <- parse_guess(x = as.character(col_data_unique)[1:5000],
-                              na = na,
-                              guess_integer = TRUE,
-                              trim_ws = TRUE,
-                              locale = locale(date_names = datenames,
-                                              date_format = dateformat,
-                                              time_format = timeformat,
-                                              decimal_mark = decimal.mark,
-                                              grouping_mark = big.mark,
-                                              encoding = "UTF-8",
-                                              tz = timezone,
-                                              asciify = FALSE))
-        if (!any(class(parsed) %in% class(col_data))) {
-          # class is different - it has to run for all values unfortunately
-          parsed <- NULL
+    # Skip heavy processing early for zero-length columns (already guarded by nrow, but robust)
+    if (length(col_data) == 0L) {
+      next
+    }
+    
+    # Parsing/guessing pathway (avoid work for lists/matrices)
+    if (!inherits(col_data, c("list", "matrix"))) {
+      
+      # Quickly check all-T/F case without computing full unique if possible
+      # Compute unique values lazily/once
+      col_data_unique <- NULL
+      ensure_unique <- function() {
+        if (is.null(col_data_unique)) {
+          col_data_unique <<- unique(col_data)
+        }
+        invisible(NULL)
+      }
+      
+      # If all values are exactly "T" or "F" (character), skip guessing
+      all_TF <- FALSE
+      if (is.character(col_data)) {
+        ensure_unique()
+        all_TF <- all(col_data_unique %in% c("T", "F"))
+      }
+      
+      if (!all_TF) {
+        parsed <- NULL
+        
+        # Fast path: sample first up to 5000 unique values only if many uniques
+        # Compute at most the first 5000 uniques without building all uniques up front
+        maybe_parse_sample <- function() {
+          # We need up to 5000 unique values; if there are <= 5000 uniques,
+          # defer to full unique parsing below.
+          # Using duplicated() allows early head() selection.
+          dup <- duplicated(col_data)
+          # positions of first occurrences
+          first_idx <- which(!dup)
+          if (length(first_idx) > 5000L) {
+            idx <- first_idx[seq_len(5000L)]
+            sample_uniques <- col_data[idx]
+            parsed <<- parse_guess(
+              x = as.character(sample_uniques),
+              na = na,
+              guess_integer = TRUE,
+              trim_ws = TRUE,
+              locale = loc
+            )
+            # Only keep if class actually changes; otherwise skip full pass
+            if (!any(class(parsed) %in% class(col_data))) {
+              parsed <<- NULL
+            }
+            return(invisible(TRUE))
+          }
+          invisible(FALSE)
+        }
+        
+        # Attempt sample-based class check without computing full unique set
+        did_sample <- maybe_parse_sample()
+        
+        # Protect integer -> double upcasting (if class changed to numeric)
+        if (!is.null(parsed) && inherits(parsed, "numeric") && inherits(col_data, "integer")) {
+          # class change undesired; skip further work
+          next
+        }
+        
+        # If sample was inconclusive or not performed, do full unique-based parse once
+        if (is.null(parsed)) {
+          ensure_unique()
+          if (length(col_data_unique)) {
+            parsed_unique <- parse_guess(
+              x = as.character(col_data_unique),
+              na = na,
+              guess_integer = TRUE,
+              trim_ws = TRUE,
+              locale = loc
+            )
+            # Map back to full column via match
+            x[[i]] <- parsed_unique[match(col_data, col_data_unique)]
+            col_data <- x[[i]]
+          }
+        }
+        
+        # Handle csv2-style decimals: if original was double and parsed isn't (with non-dot decimal)
+        if (is.double(col_data) && !is.double(x[[i]]) && decimal.mark != ".") {
+          x[[i]] <- parse_guess(x = as.character(col_data), guess_integer = TRUE)
+          col_data <- x[[i]]
+        } else if (inherits(col_data, "integer64")) {
+          # restore original if needed
+          x[[i]] <- col_data
+          col_data <- x[[i]]
+        }
+        
+        # If we promoted to double but decimal mark was dot, keep promoted
+        if (!is.double(col_data) && is.double(x[[i]]) && decimal.mark == ".") {
+          col_data <- x[[i]]
+        }
+        
+        # Pattern-driven date detection on values (only if we actually computed uniques)
+        if (!is.null(col_data_unique) &&
+            length(col_data_unique) &&
+            all(col_data_unique %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
+          x[[i]] <- try_convert(clean_Date(col_data, format = "dd-mm-yyyy"),
+                                backup = x[[i]], col = i)
+          col_data <- x[[i]]
+        }
+        
+        # Localised logicals
+        if (!is.null(col_data_unique) &&
+            length(col_data_unique) &&
+            all(tolower(col_data_unique) %in% c("nee", "no", "niet", "ja", "yes", "wel"), na.rm = TRUE)) {
+          x[[i]] <- try_convert(
+            clean_logical(col_data, true = "(ja|yes|wel)", false = "(nee|no|niet)", fixed = FALSE),
+            backup = x[[i]], col = i
+          )
+          col_data <- x[[i]]
         }
       }
-      if (inherits(parsed, "numeric") && inherits(col_data, "integer")) {
-        # if original is integer and now numeric, that's an error - skip to next
-        next
-      }
-      if (is.null(parsed)) {
-        # run for all unique values
-        parsed_unique <- parse_guess(x = as.character(col_data_unique),
-                                     na = na,
-                                     guess_integer = TRUE,
-                                     trim_ws = TRUE,
-                                     locale = locale(date_names = datenames,
-                                                     date_format = dateformat,
-                                                     time_format = timeformat,
-                                                     decimal_mark = decimal.mark,
-                                                     grouping_mark = big.mark,
-                                                     encoding = "UTF-8",
-                                                     tz = timezone,
-                                                     asciify = FALSE))
-        # insert into data
-        x[, i] <- parsed_unique[match(col_data, col_data_unique)]
-      }
-      if (is.double(col_data) && !is.double(x[, i, drop = TRUE]) && decimal.mark != ".") {
-        # exception for csv2 (semi-colon separated) export and import
-        x[, i] <- parse_guess(x = as.character(col_data), guess_integer = TRUE)
-      } else if (inherits(col_data, "integer64")) {
-        x[, i] <- col_data
-      }
-      if (!is.double(col_data) && is.double(x[, i, drop = TRUE]) && decimal.mark == ".") {
-        col_data <- x[, i, drop = TRUE]
-      }
-      if (all(col_data_unique %like% "[0-3][0-9]-[0-1][0-9]-[12][09][0-9][0-9]", na.rm = TRUE)) {
-        x[, i] <- try_convert(clean_Date(col_data, format = "dd-mm-yyyy"),
-                              backup = x[, i, drop = TRUE], col = i)
-      }
-      if (all(tolower(col_data_unique) %in% c("nee", "no", "niet", "ja", "yes", "wel"), na.rm = TRUE)) {
-        x[, i] <- try_convert(clean_logical(col_data, true = "(ja|yes|wel)", false = "(nee|no|niet)", fixed = FALSE),
-                              backup = x[, i, drop = TRUE], col = i)
-      }
     }
-    if (inherits(col_data, "POSIXct") && timezone == "UTC") {
-      x[, i] <- try_convert(as.UTC(col_data),
-                            backup = x[, i, drop = TRUE], col = i)
+    
+    # Time zone normalization for POSIXct
+    if (inherits(col_data, "POSIXct") && identical(timezone, "UTC")) {
+      x[[i]] <- try_convert(as.UTC(col_data),
+                            backup = x[[i]], col = i)
+      col_data <- x[[i]]
     }
-    col_data <- x[, i, drop = TRUE]
-    col_data_unique <- unique(col_data)
+    
+    # Character/factor cleanup (ASCII escape removal)
     if (inherits(col_data, c("factor", "character"))) {
-      # remove ASCII escape character: https://en.wikipedia.org/wiki/Escape_character#ASCII_escape_character
-      x[, i] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
+      x[[i]] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
                          error = function(e) {
                            warning(e$message)
-                           return(col_data)})
+                           col_data
+                         })
+      col_data <- x[[i]]
     }
     
-    # set times/dates
+    # Name-based parsers (dates/times/timestamps)
+    col_name <- col_names_lower[i]
     if (col_name %like% "_(tijd|time)$") {
       hms_data <- col_data
-      # hms::as_hms() only supports HH:MM:SS since recent versions, but we want to keep support for HH:MM, so:
-      hms_data[hms_data %like% "^[0-9]?[0-9]:[0-9][0-9]$"] <- paste0(hms_data[hms_data %like% "^[0-9]?[0-9]:[0-9][0-9]$"], ":00")
-      x[, i] <- try_convert(as_hms(hms_data),
-                            backup = x[, i, drop = TRUE], col = i)
+      # support HH:MM (add seconds)
+      sel <- hms_data %like% "^[0-9]?[0-9]:[0-9][0-9]$"
+      if (any(sel, na.rm = TRUE)) {
+        hms_data[sel] <- paste0(hms_data[sel], ":00")
+      }
+      x[[i]] <- try_convert(hms::as_hms(hms_data),
+                            backup = x[[i]], col = i)
+      col_data <- x[[i]]
     } else if (col_name %like% "_(datum|date)$") {
-      x[, i] <- try_convert(clean_Date(col_data, guess_each = TRUE),
-                            backup = x[, i, drop = TRUE], col = i)
+      x[[i]] <- try_convert(clean_Date(col_data, guess_each = TRUE),
+                            backup = x[[i]], col = i)
+      col_data <- x[[i]]
     } else if (col_name %like% "_(timestamp|tijd.?stempel|datum.?tijd)$") {
-      x[, i] <- try_convert(clean_POSIXct(col_data),
-                            backup = x[, i, drop = TRUE], col = i)
+      x[[i]] <- try_convert(clean_POSIXct(col_data),
+                            backup = x[[i]], col = i)
+      col_data <- x[[i]]
     }
     
-    if ("AMR" %in% rownames(utils::installed.packages())) {
-      # check for SIR
+    # AMR-related conversions (evaluate availability once, not per column)
+    if (has_AMR) {
       if (AMR::is_sir_eligible(col_data)) {
-        x[, i] <- try_convert(AMR::as.sir(col_data),
-                              backup = x[, i, drop = TRUE], col = i)
+        x[[i]] <- try_convert(AMR::as.sir(col_data),
+                              backup = x[[i]], col = i)
+        col_data <- x[[i]]
       }
-      # set Minimum Inhibitory Concentration (MIC)
       if (col_name %like% "_mic$") {
-        x[, i] <- try_convert(AMR::as.mic(col_data),
-                              backup = x[, i, drop = TRUE], col = i)
+        x[[i]] <- try_convert(AMR::as.mic(col_data),
+                              backup = x[[i]], col = i)
+        col_data <- x[[i]]
       }
-      # set disk diffusion values
       if (col_name %like% "_disk$") {
-        x[, i] <- try_convert(AMR::as.disk(col_data),
-                              backup = x[, i, drop = TRUE], col = i)
+        x[[i]] <- try_convert(AMR::as.disk(col_data),
+                              backup = x[[i]], col = i)
+        col_data <- x[[i]]
       }
     }
     
     if (col_name %like% "(monster|order)(nummer|nr)") {
-      x[, i] <- as.character(col_data)
+      x[[i]] <- as.character(col_data)
     }
-    
   }
+  
   x
 }
 
@@ -1505,7 +1590,6 @@ wikipedia_pageviews <- function(articles,
 #' @param output_file Output path for JSON file.
 #' @return Invisibly returns the structured list written to JSON.
 #' @importFrom jsonlite write_json
-#' @importFrom purrr imap
 #' @export
 json_data_structure <- function(dataset,
                                 dataset_name = NULL,
@@ -1534,7 +1618,7 @@ json_data_structure <- function(dataset,
     }
   }
   
-  col_info <- imap(dataset, function(col, name) {
+  col_info <- purrr::imap(dataset, function(col, name) {
     n_unique <- length(unique(col))
     is_id_like <- n_unique >= nrow(dataset)
     is_values_hidden <- grepl(cols_exclude, name, ignore.case = TRUE)
