@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.1</span>
       </span>
     </div>
 
@@ -462,9 +462,8 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (150 × 5) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/iris.csv' (3.9 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (150 × 5) to '/tmp/RtmpNBksQ2/file1e451bea734e/reference/iris.csv' (3.9 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"iris"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa</span>
@@ -481,9 +480,8 @@
 <span class="r-in"><span><span class="co"># row names are also supported</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="export.html">export_csv</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note: Row names added as first column 'rownames'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (32 × 12) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/mtcars.csv' (1.7 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (32 × 12) to '/tmp/RtmpNBksQ2/file1e451bea734e/reference/mtcars.csv' (1.7 kB).</span>
 <span class="r-in"><span><span class="fu">import_csv</span><span class="op">(</span><span class="st">"mtcars"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Row names restored from first column.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span>
@@ -498,7 +496,7 @@
 <span class="r-in"><span><span class="co"># and allow for specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu"><a href="export.html">export_feather</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpNBksQ2/file1e451bea734e/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu">import</span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
