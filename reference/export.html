@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.20.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.21.0</span>
       </span>
     </div>
 
@@ -215,6 +215,13 @@
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">encrypt_object</span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  key <span class="op">=</span> <span class="fu"><a href="read_secret.html">read_secret</a></span><span class="op">(</span><span class="st">"tools.encryption_password"</span><span class="op">)</span>,</span>
+<span>  serialise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  compress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">export_clipboard</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  sep <span class="op">=</span> <span class="st">"\t"</span>,</span>
@@ -326,6 +333,14 @@
 <dd><p>plot resolution, defaults to DPI set in <code>showtext</code> package</p></dd>
 
 
+<dt id="arg-serialise">serialise<a class="anchor" aria-label="anchor" href="#arg-serialise"></a></dt>
+<dd><p>whether object must be serialised</p></dd>
+
+
+<dt id="arg-compress">compress<a class="anchor" aria-label="anchor" href="#arg-compress"></a></dt>
+<dd><p>whether object must be compressed</p></dd>
+
+
 <dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
 <dd><p>(for <code>export_clipboard()</code>) use column names as header (default: <code>TRUE</code>)</p></dd>
 
@@ -376,10 +391,10 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">export_xlsx</span><span class="op">(</span><span class="st">"first_ten_rows"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmp1G6y8P/file1e52763c45fb/reference/whole_file.rds' (3.6 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/whole_file.rds' (3.6 kB).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: This file was AES-GCM encrypted and is unreadable without the correct `key`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10 × 14) to '/tmp/Rtmp1G6y8P/file1e52763c45fb/reference/first_ten_rows.xlsx' (7.9 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (10 × 14) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/first_ten_rows.xlsx' (7.9 kB).</span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="co"># the above is equal to:</span></span></span>
 <span class="r-in"><span><span class="co"># starwars |&gt;</span></span></span>
@@ -390,7 +405,7 @@
 <span class="r-in"><span><span class="co"># RDS files are encrypted by default</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"whole_file.rds"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] e0 fd 6b c1 1b aa</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9f cb 7c d1 11 a2</span>
 <span class="r-in"><span><span class="co"># use decrypt_object() for manual decryption</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="import.html">decrypt_object</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In read_secret(): environmental variable 'secrets_file' not set</span>
@@ -429,7 +444,7 @@
 <span class="r-in"><span><span class="co"># Apache's Feather format is column-based</span></span></span>
 <span class="r-in"><span><span class="co"># and allow for cross-language specific and fast file reading</span></span></span>
 <span class="r-in"><span><span class="va">starwars</span> <span class="op">|&gt;</span> <span class="fu">export_feather</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/Rtmp1G6y8P/file1e52763c45fb/reference/starwars.feather' (12.2 kB).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Exported data set (87 × 14) to '/tmp/RtmpxIADUd/file1e2f7b02deb0/reference/starwars.feather' (12.2 kB).</span>
 <span class="r-in"><span><span class="fu"><a href="import.html">import</a></span><span class="op">(</span><span class="st">"starwars.feather"</span>,</span></span>
 <span class="r-in"><span>       col_select <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"h"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
