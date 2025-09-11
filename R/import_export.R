@@ -33,7 +33,7 @@ export_exec <- function(object,
     # maybe it's a name of an object? Try to get it:
     object <- tryCatch(eval(parse(text = object)),
                        error = function(e) NULL)
-    if (!is.data.frame(object)) {
+    if (!is.data.frame(object) && needed_extension != "rds") {
       stop("'object' must be a data.frame", call. = FALSE)
     }
   }
@@ -79,6 +79,7 @@ export_exec <- function(object,
   } else if (needed_extension == "feather") {
     # Apache's Feather format
     object <- rownames_1st_column(object)
+    object.bak <- object
     arrow::write_feather(x = object, sink = filename, ...)
     # } else if (needed_extension == "parquet") {
     #   # Apache's Parquet format
@@ -95,10 +96,12 @@ export_exec <- function(object,
     suppressMessages(save_excel(xl = xl_object, filename = filename, overwrite = TRUE))
     if (is.list(object)) {
       object <- object[[1]]
+      object.bak <- object
     }
   } else {
     # flat data file
     object <- rownames_1st_column(object)
+    object.bak <- object
     if (needed_extension %in% c("csv", "tsv", "txt")) {
       # arguments such as 'sep' etc. are passed into '...':
       utils::write.table(object, file = filename, ...)
@@ -106,6 +109,7 @@ export_exec <- function(object,
       stop("Unknown extension method: ", needed_extension, call. = FALSE)
     }
   }
+  
   if (file.exists(filename)) {
     message(paste0("Exported data set (",
                    format2(NROW(object.bak)), pkg_env$cross_icon, format2(NCOL(object.bak)),
@@ -250,7 +254,7 @@ import_exec <- function(filename,
     df <- decrypt_object(df, key = key)
   }
   
-  if (!inherits(df, c("sf", "raw"))) {
+  if (!inherits(df, c("sf", "raw")) && !extension == "rds") {
     # force plain data.frame if type is not map data
     df <- as.data.frame(df, stringsAsFactors = FALSE)
     auto_transform <- FALSE
