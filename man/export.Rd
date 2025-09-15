@@ -12,6 +12,7 @@
 \alias{export_sav}
 \alias{export_spss}
 \alias{export_feather}
+\alias{export_parquet}
 \alias{export_pdf}
 \alias{export_png}
 \alias{export_html}
@@ -123,6 +124,14 @@ export_spss(
 )
 
 export_feather(
+  object,
+  filename = NULL,
+  project_number = project_get_current_id(ask = FALSE),
+  overwrite = NULL,
+  ...
+)
+
+export_parquet(
   object,
   filename = NULL,
   project_number = project_get_current_id(ask = FALSE),
@@ -260,6 +269,8 @@ The \code{\link[=export_txt]{export_txt()}} function exports to a tab-separated 
 Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
 Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R).
+
+Exporting to a Parquet file using \code{\link[=export_parquet]{export_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval.
 
 Exporting to a PDF file using \code{\link[=export_pdf]{export_pdf()}} requires the \code{ggplot2} package to be installed. If the filename is left blank in \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} or \code{\link[=export_html]{export_html()}}, the title of \code{plot} will be used if it's available and the \code{certeplot2} package is installed, and a timestamp otherwise. \strong{NOTE:} All export functions invisibly return \code{object} again, but the plotting functions invisibly return the file path
 

@@ -20,9 +20,11 @@ The AGB (Algemeen GegevensBeheer) register is a national database in the Netherl
 The AGB code is managed by VECOZO and plays a crucial role in ensuring transparency and efficiency in Dutch healthcare administration.
 }
 \examples{
+\dontrun{
 agb_property(03033048)
 agb_property(c(03033048, 01102504))
 
 agb_property(03033048, property = "last_name")
 agb_property(c(03033048, 01102504), "specialty")
+}
 }

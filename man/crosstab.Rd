@@ -25,11 +25,11 @@ crosstab(
 
 \item{outcome}{a column name containing the outcome values to compare}
 
-\item{positive}{a \link{regex} to match the values in \code{outcome} that must be considered as the Positive class, use \code{FALSE} to not use a Positive class}
+\item{positive}{a \link[stringr:modifiers]{stringr::regex} to match the values in \code{outcome} that must be considered as the Positive class, use \code{FALSE} to not use a Positive class}
 
-\item{negative}{a \link{regex} to match the values in \code{outcome} that must be considered as the Negative class, use \code{FALSE} to not use a Negative class}
+\item{negative}{a \link[stringr:modifiers]{stringr::regex} to match the values in \code{outcome} that must be considered as the Negative class, use \code{FALSE} to not use a Negative class}
 
-\item{...}{manual \link{regex}es for classes if not using \code{positive} and \code{negative}, such as \verb{Class1 = "c1", Class2 = "c2", Class3 = "c3"}}
+\item{...}{manual \link[stringr:modifiers]{stringr::regex}es for classes if not using \code{positive} and \code{negative}, such as \verb{Class1 = "c1", Class2 = "c2", Class3 = "c3"}}
 
 \item{na.rm}{a \link{logical} to indicate whether empty values must be removed before forming the table}
 

@@ -211,11 +211,13 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
 #' The AGB code is managed by VECOZO and plays a crucial role in ensuring transparency and efficiency in Dutch healthcare administration.
 #' @export
 #' @examples
+#' \dontrun{
 #' agb_property(03033048)
 #' agb_property(c(03033048, 01102504))
 #' 
 #' agb_property(03033048, property = "last_name")
 #' agb_property(c(03033048, 01102504), "specialty")
+#' }
 agb_property <- function(agb_code, property = NULL) {
   properties <- tibble()
   

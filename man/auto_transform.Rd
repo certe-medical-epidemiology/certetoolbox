@@ -11,7 +11,7 @@ auto_transform(
   timeformat = "HH:MM",
   decimal.mark = ".",
   big.mark = "",
-  timezone = "",
+  timezone = "Europe/Amsterdam",
   na = c("", "NULL", "NA", "<NA>"),
   snake_case = FALSE,
   ...
@@ -30,7 +30,7 @@ auto_transform(
 
 \item{big.mark}{separator for thousands}
 
-\item{timezone}{expected time zone}
+\item{timezone}{time zone to apply to all \code{POSIXct} columns}
 
 \item{na}{values to interpret as \code{NA}}
 

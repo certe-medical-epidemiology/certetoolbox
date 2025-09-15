@@ -1095,12 +1095,13 @@ tbl_markdown <- function(x,
 #' @param timeformat expected time format, will be coerced with [`format_datetime()`][cleaner::format_datetime()]
 #' @param decimal.mark separator for decimal numbers
 #' @param big.mark separator for thousands
-#' @param timezone expected time zone
+#' @param timezone time zone to apply to all `POSIXct` columns
 #' @param na values to interpret as `NA`
 #' @param snake_case apply [snake case](https://en.wikipedia.org/wiki/Snake_case) to the column names
 #' @param ... not used as the time, allows for future extension
 #' @importFrom cleaner format_names format_datetime clean_Date clean_POSIXct clean_logical
 #' @importFrom readr parse_guess locale
+#' @importFrom lubridate tz<-
 #' @export
 auto_transform <- function(x,
                            datenames = "en",
@@ -1108,7 +1109,7 @@ auto_transform <- function(x,
                            timeformat = "HH:MM",
                            decimal.mark = ".",
                            big.mark = "",
-                           timezone = "",
+                           timezone = "Europe/Amsterdam",
                            na = c("", "NULL", "NA", "<NA>"),
                            snake_case = FALSE,
                            ...) {
@@ -1306,14 +1307,7 @@ auto_transform <- function(x,
         }
       }
     }
-    
-    # Time zone normalization for POSIXct
-    if (inherits(col_data, "POSIXct") && identical(timezone, "UTC")) {
-      x[[i]] <- try_convert(as.UTC(col_data),
-                            backup = x[[i]], col = i)
-      col_data <- x[[i]]
-    }
-    
+
     # Character/factor cleanup (ASCII escape removal)
     if (inherits(col_data, c("factor", "character"))) {
       x[[i]] <- tryCatch(gsub("\033", " ", col_data, fixed = TRUE),
@@ -1341,8 +1335,14 @@ auto_transform <- function(x,
                             backup = x[[i]], col = i)
       col_data <- x[[i]]
     } else if (col_name %like% "_(timestamp|tijd.?stempel|datum.?tijd)$") {
-      x[[i]] <- try_convert(clean_POSIXct(col_data),
+      x[[i]] <- try_convert(clean_POSIXct(col_data, tz = timezone),
                             backup = x[[i]], col = i)
+      col_data <- x[[i]]
+    }
+    
+    # Time zone normalization for POSIXct
+    if (inherits(col_data, "POSIXct")) {
+      tz(x[[i]]) <- timezone
       col_data <- x[[i]]
     }
     

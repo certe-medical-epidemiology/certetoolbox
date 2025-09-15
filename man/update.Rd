@@ -12,7 +12,7 @@
 
 \item{rows}{row numbers or a \link{logical} vector}
 
-\item{...}{arguments passed on to \code{\link[=mutate]{mutate()}}}
+\item{...}{arguments passed on to \code{\link[dplyr:mutate]{dplyr::mutate()}}}
 }
 \description{
 Update a \link{data.frame} using specific integers for row numbers or a vectorised filter. Also supports dplyr groups. see \emph{Examples}.

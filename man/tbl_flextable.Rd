@@ -173,10 +173,10 @@ tbl_flextable(
 \item{use_knitr}{use the \code{knitr} package for printing. Ignored when in an interactive session. If \code{FALSE}, an internal certetoolbox function will be used to convert the LaTeX \code{longtable} that would print across multiple PDF pages. If in a non-interactive session where the output is non-LaTeX, the \code{knitr} package will always be used.}
 }
 \value{
-\link{flextable} object
+\link[flextable:flextable]{flextable::flextable} object
 }
 \description{
-Format a \link{data.frame} as \code{\link[=flextable]{flextable()}} with Certe style, bold headers and Dutch number formats. This function can also transform existing \code{flextable} and \code{gtsummary} objects to allow the formatting provided in this \code{\link[=tbl_flextable]{tbl_flextable()}} function.
+Format a \link{data.frame} as \code{\link[flextable:flextable]{flextable::flextable()}} with Certe style, bold headers and Dutch number formats. This function can also transform existing \code{flextable} and \code{gtsummary} objects to allow the formatting provided in this \code{\link[=tbl_flextable]{tbl_flextable()}} function.
 }
 \details{
 Run \code{\link[=tbl_markdown]{tbl_markdown()}} on a \code{flextable} object to transform it into markdown for use in Quarto or R Markdown reports. If \code{print = TRUE} in non-interactive sessions (Quarto or R Markdown), the \code{flextable} object will also be printed in markdown.
@@ -295,5 +295,5 @@ tbl_flextable(data.frame(test1 = "A", test2 = "B"),
 }
 }
 \seealso{
-\code{\link[=flextable]{flextable()}}
+\code{\link[flextable:flextable]{flextable::flextable()}}
 }

@@ -14,6 +14,7 @@
 \alias{import_spss}
 \alias{import_feather}
 \alias{decrypt_object}
+\alias{import_parquet}
 \alias{import_clipboard}
 \alias{import_mail_attachment}
 \alias{import_url}
@@ -184,6 +185,13 @@ decrypt_object(
   compressed = TRUE
 )
 
+import_parquet(
+  filename,
+  project_number = project_get_current_id(ask = FALSE),
+  col_select = everything(),
+  ...
+)
+
 import_clipboard(
   sep = "\\t",
   header = TRUE,
@@ -273,7 +281,7 @@ import_teams(
 
 \item{big.mark}{separator for thousands}
 
-\item{timezone}{expected time zone}
+\item{timezone}{time zone to apply to all \code{POSIXct} columns}
 
 \item{na}{values to interpret as \code{NA}}
 
@@ -326,6 +334,8 @@ Importing an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code
 Importing an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
 
 Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
+
+Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
 Importing the clipboard using \code{\link[=import_clipboard]{import_clipboard()}} requires the \code{clipr} package to be installed.
 
