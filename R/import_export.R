@@ -797,7 +797,7 @@ export_pdf <- function(plot,
                        ...) {
   check_is_installed("ggplot2")
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
-    get_plot_title <- certeplot2::get_plot_title
+    get_plot_title <- plot2::get_plot_title
   } else {
     get_plot_title <- NULL
   }
@@ -891,7 +891,7 @@ export_png <- function(plot,
   
   check_is_installed(c("ggplot2", "showtext"))
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
-    get_plot_title <- certeplot2::get_plot_title
+    get_plot_title <- plot2::get_plot_title
   } else {
     get_plot_title <- NULL
   }
@@ -944,7 +944,7 @@ export_html <- function(plot,
                         ...) {
   check_is_installed(c("ggplot2", "htmltools"))
   if ("certeplot2" %in% rownames(utils::installed.packages())) {
-    get_plot_title <- certeplot2::get_plot_title
+    get_plot_title <- plot2::get_plot_title
   } else {
     get_plot_title <- NULL
   }
