@@ -176,9 +176,13 @@ import_exec <- function(filename,
     # does not have extension yet
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
   }
-  if (!file.exists(filename) && !is.null(project_number)) {
+  if (!is.null(project_number)) {
     # try project file using the 'certeprojects' package
+    filename_existing <- filename
     filename <- project_get_file(filename, project_number = project_number)
+    if (file.exists(filename_existing) && filename_existing != filename) {
+      warning("Note: file '", filename_existing, "' exists, but project file '", filename, "' will be used", call. = FALSE)
+    }
   }
   
   if (!file.exists(filename)) {
