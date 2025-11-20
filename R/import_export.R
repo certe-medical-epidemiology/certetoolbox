@@ -45,11 +45,27 @@ export_exec <- function(object,
     filename <- filename_deparse
   }
   needed_extension <- tolower(needed_extension)
-  filename <- parse_file_location(filename,
-                                  needed_extension = needed_extension,
-                                  project_number = project_number)
+  if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
+    project_number <- NULL
+  }
+  
+  sharepoint_path <- NULL
+  if (!is.null(project_number)) {
+    # get SharePoint path
+    sharepoint_path <- parse_file_location(filename,
+                                           needed_extension = needed_extension,
+                                           project_number = project_number,
+                                           full_path = FALSE)
+    filename <- file.path(tempdir(), basename(sharepoint_path))
+    overwrite <- TRUE
+  } else {
+    filename <- parse_file_location(filename,
+                                    needed_extension = needed_extension,
+                                    project_number = project_number)
+  }
+  
   filename_old <- paste0(filename, ".certetoolbox_export")
-  if (!file_can_be_overwritten(overwrite, filename)) {
+  if (is.null(sharepoint_path) && !file_can_be_overwritten(overwrite, filename)) {
     return(invisible(object))
   }
   
@@ -89,7 +105,7 @@ export_exec <- function(object,
     xl_object <- object
     # Excel format
     if (!inherits(xl_object, class(wb_workbook()))) {
-      # not yet an openxlsx2 object (but rather e.g. a data frame)
+      # it's not yet an openxlsx2 object (but rather e.g. a data frame)
       xl_object <- suppressMessages(as_excel(xl_object, project_number = project_number, ...))
     }
     suppressMessages(save_excel(xl = xl_object, filename = filename, overwrite = TRUE))
@@ -109,12 +125,19 @@ export_exec <- function(object,
     }
   }
   
+  if (!is.null(sharepoint_path)) {
+    # upload to SharePoint
+    upload_to_sharepoint(filename, sharepoint_path)
+  }
+  
   if (file.exists(filename)) {
     message(paste0("Exported data set (",
                    format2(NROW(object.bak)), pkg_env$cross_icon, format2(NCOL(object.bak)),
-                   ") to '",
-                   tools::file_path_as_absolute(filename), 
-                   "' (", size_humanreadable(file.size(filename)), ")."))
+                   ") to ",
+                   ifelse(!is.null(sharepoint_path),
+                          paste0("SharePoint: '", sharepoint_path, "'"), 
+                          paste0("'", tools::file_path_as_absolute(filename), "'")), 
+                   " (", size_humanreadable(file.size(filename)), ")."))
     if (encrypt == TRUE) {
       message("NOTE: This file was AES-GCM encrypted and is unreadable without the correct `key`.")
     }
@@ -128,12 +151,16 @@ export_exec <- function(object,
   if (file.exists(filename_old)) {
     try(file.remove2(filename_old), silent = TRUE)
   }
-  invisible(structure(object.bak, filename = tools::file_path_as_absolute(filename)))
+  if (!is.null(sharepoint_path)) {
+    invisible(object.bak)
+  } else {
+    invisible(structure(object.bak, filename = tools::file_path_as_absolute(filename)))
+  }
 }
 
 #' @importFrom readr read_delim locale problems
 #' @importFrom dplyr select
-#' @importFrom certeprojects project_get_file
+#' @importFrom certeprojects project_get_file sharepoint_to_local_temp
 import_exec <- function(filename,
                         filename_deparse,
                         extension,
@@ -176,13 +203,13 @@ import_exec <- function(filename,
     # does not have extension yet
     filename <- paste0(filename, ".", gsub("^[.]", "", extension))
   }
+  if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
+    project_number <- NULL
+  }
   if (!is.null(project_number)) {
-    # try project file using the 'certeprojects' package
-    filename_existing <- filename
-    filename <- project_get_file(filename, project_number = project_number)
-    if (file.exists(filename_existing) && filename_existing != filename) {
-      warning("Note: file '", filename_existing, "' exists, but project file '", filename, "' will be used", call. = FALSE)
-    }
+    file_remote <- project_get_file(filename = filename, project_number = project_number)
+    # download from SharePoint to local temp folder
+    filename <- sharepoint_to_local_temp(full_path = file_remote)
   }
   
   if (!file.exists(filename)) {
@@ -273,7 +300,9 @@ import_exec <- function(filename,
   }
   
   if (interactive()) {
-    if (is.null(filename_url)) {
+    if (!is.null(project_number)) {
+      file_src <- file_remote
+    } else if (is.null(filename_url)) {
       file_src <- tools::file_path_as_absolute(filename)
     } else {
       file_src <- filename_url
@@ -283,8 +312,9 @@ import_exec <- function(filename,
     message(
       paste0(
         "Imported data set (",
-        format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from '",
-        file_src, "'"
+        format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from ",
+        ifelse(!is.null(project_number), "SharePoint file ", ""),
+        "'", file_src, "'"
       )
     )
   }
@@ -293,7 +323,7 @@ import_exec <- function(filename,
 }
 
 #' @importFrom certeprojects project_set_file
-parse_file_location <- function(filename, needed_extension, project_number) {
+parse_file_location <- function(filename, needed_extension, project_number, full_path = TRUE) {
   if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
     project_number <- NULL
   }
@@ -309,6 +339,9 @@ parse_file_location <- function(filename, needed_extension, project_number) {
     filename_proj <- project_set_file(filename, project_number = project_number)
     if (!is.na(filename_proj)) {
       filename <- filename_proj
+    }
+    if (full_path == FALSE) {
+      filename <- file.path(basename(dirname(filename)), basename(filename))
     }
   }
   # remove invalid characters
@@ -337,7 +370,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
   if (!file.exists(filename)) {
     return(TRUE)
   }
-  if (is.logical(overwrite)) {
+  if (isFALSE(overwrite)) {
     return(overwrite)
   }
   
@@ -361,7 +394,7 @@ file_can_be_overwritten <- function(overwrite, filename) {
       # so the file exists - create a backup so it can be reverted back if export fails
       file.copy(from = filename, to = paste0(filename, ".certetoolbox_export"))
       # and remove the existing file
-      try(file.remove2(filename), silent = TRUE)
+      # try(file.remove2(filename), silent = TRUE)
     }
     return(isTRUE(q))
   } else {
@@ -369,8 +402,8 @@ file_can_be_overwritten <- function(overwrite, filename) {
     filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
     file.copy(from = filename, to = filename_new)
     # and remove the existing file
-    try(file.remove2(filename), silent = TRUE)
-    message("Original file ", filename, " existed, this file was renamed to ", filename_new, " before overwriting the original file.")
+    # try(file.remove2(filename), silent = TRUE)
+    message("Original file ", filename, " existed, this file was copied to ", filename_new, " before overwriting the original file.")
     return(TRUE)
   }
 }
@@ -815,9 +848,22 @@ export_pdf <- function(plot,
   } else if (is.null(filename)) {
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
-  filename <- parse_file_location(filename,
-                                  needed_extension = "pdf",
-                                  project_number = project_number)
+  
+  sharepoint_path <- NULL
+  if (!is.null(project_number)) {
+    # get SharePoint path
+    sharepoint_path <- parse_file_location(filename,
+                                           needed_extension = "pdf",
+                                           project_number = project_number,
+                                           full_path = FALSE)
+    filename <- file.path(tempdir(), basename(sharepoint_path))
+    overwrite <- TRUE
+  } else {
+    filename <- parse_file_location(filename,
+                                    needed_extension = "pdf",
+                                    project_number = project_number)
+  }
+  
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -874,7 +920,15 @@ export_pdf <- function(plot,
                   plot = plot,
                   ...)
   
-  plot_export_result(filename)
+  if (!is.null(sharepoint_path)) {
+    # upload to SharePoint
+    upload_to_sharepoint(filename, sharepoint_path)
+    message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
+                   " (", size_humanreadable(file.size(filename)), ")."))
+    return(invisible(sharepoint_path))
+  } else {
+    plot_export_result(filename)
+  }
 }
 
 #' @rdname export
@@ -909,9 +963,20 @@ export_png <- function(plot,
   } else if (is.null(filename)) {
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
-  filename <- parse_file_location(filename,
-                                  needed_extension = "png",
-                                  project_number = project_number)
+  sharepoint_path <- NULL
+  if (!is.null(project_number)) {
+    # get SharePoint path
+    sharepoint_path <- parse_file_location(filename,
+                                           needed_extension = "png",
+                                           project_number = project_number,
+                                           full_path = FALSE)
+    filename <- file.path(tempdir(), basename(sharepoint_path))
+    overwrite <- TRUE
+  } else {
+    filename <- parse_file_location(filename,
+                                    needed_extension = "png",
+                                    project_number = project_number)
+  }
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -934,7 +999,15 @@ export_png <- function(plot,
   
   showtext::showtext_opts(dpi = dpi_old)
   
-  plot_export_result(filename)
+  if (!is.null(sharepoint_path)) {
+    # upload to SharePoint
+    upload_to_sharepoint(filename, sharepoint_path)
+    message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
+                   " (", size_humanreadable(file.size(filename)), ")."))
+    return(invisible(sharepoint_path))
+  } else {
+    plot_export_result(filename)
+  }
 }
 
 #' @rdname export
@@ -962,9 +1035,20 @@ export_html <- function(plot,
   } else if (is.null(filename)) {
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
-  filename <- parse_file_location(filename,
-                                  needed_extension = "html",
-                                  project_number = project_number)
+  sharepoint_path <- NULL
+  if (!is.null(project_number)) {
+    # get SharePoint path
+    sharepoint_path <- parse_file_location(filename,
+                                           needed_extension = "html",
+                                           project_number = project_number,
+                                           full_path = FALSE)
+    filename <- file.path(tempdir(), basename(sharepoint_path))
+    overwrite <- TRUE
+  } else {
+    filename <- parse_file_location(filename,
+                                    needed_extension = "html",
+                                    project_number = project_number)
+  }
   if (!file_can_be_overwritten(overwrite, filename)) {
     return(invisible(NULL))
   }
@@ -982,7 +1066,15 @@ export_html <- function(plot,
                          libdir = "library_do_not_delete")
   )
   
-  plot_export_result(filename)
+  if (!is.null(sharepoint_path)) {
+    # upload to SharePoint
+    upload_to_sharepoint(filename, sharepoint_path)
+    message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
+                   " (", size_humanreadable(file.size(filename)), ")."))
+    return(invisible(sharepoint_path))
+  } else {
+    plot_export_result(filename)
+  }
 }
 
 
@@ -1409,4 +1501,17 @@ import_parquet <- function(filename,
               project_number = project_number,
               auto_transform = FALSE,
               col_select = col_select)
+}
+
+#' @importFrom certeprojects teams_projects_channel
+upload_to_sharepoint <- function(filename, sharepoint_path) {
+  tryCatch({
+    cli::cli_process_start("Uploading to SharePoint...")
+    channel <- teams_projects_channel()
+    channel$upload(src = filename, dest = sharepoint_path)
+    cli::cli_process_done(msg_done = "Uploaded to SharePoint.")
+  }, error = function(e) {
+    cli::cli_process_failed(msg = "Uploading to SharePoint...")
+    stop(e)
+  })
 }

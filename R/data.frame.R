@@ -959,7 +959,7 @@ tbl_gtsummary <- function(x,
       gtsummary::add_p()
   }
   
-  gtsummary::set_gtsummary_theme(theme_old, quiet = TRUE)
+  gtsummary::set_gtsummary_theme(theme_old)
   out
 }
 
