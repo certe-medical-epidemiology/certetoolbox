@@ -19,6 +19,7 @@
 
 # Helper functions --------------------------------------------------------
 
+#' @importFrom certeprojects upload_to_sharepoint
 export_exec <- function(object,
                         needed_extension,
                         filename,
@@ -127,7 +128,7 @@ export_exec <- function(object,
   
   if (!is.null(sharepoint_path)) {
     # upload to SharePoint
-    upload_to_sharepoint(filename, sharepoint_path)
+    upload_to_sharepoint(local_file_name = filename, full_sharepoint_path = sharepoint_path)
   }
   
   if (file.exists(filename)) {
@@ -160,7 +161,7 @@ export_exec <- function(object,
 
 #' @importFrom readr read_delim locale problems
 #' @importFrom dplyr select
-#' @importFrom certeprojects project_get_file sharepoint_to_local_temp
+#' @importFrom certeprojects project_get_file download_from_sharepoint
 import_exec <- function(filename,
                         filename_deparse,
                         extension,
@@ -209,7 +210,7 @@ import_exec <- function(filename,
   if (!is.null(project_number)) {
     file_remote <- project_get_file(filename = filename, project_number = project_number)
     # download from SharePoint to local temp folder
-    filename <- sharepoint_to_local_temp(full_path = file_remote)
+    filename <- download_from_sharepoint(full_sharepoint_path = file_remote)
   }
   
   if (!file.exists(filename)) {
@@ -313,7 +314,7 @@ import_exec <- function(filename,
       paste0(
         "Imported data set (",
         format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from ",
-        ifelse(!is.null(project_number), "SharePoint file ", ""),
+        ifelse(!is.null(project_number), "SharePoint: ", ""),
         "'", file_src, "'"
       )
     )
@@ -824,6 +825,7 @@ export_parquet <- function(object,
 #' @param portrait portrait mode, defaults to `FALSE` (i.e., landscape mode)
 #' @details `r doc_requirement("a PDF file", "export_pdf", "ggplot2")`. If the filename is left blank in [export_pdf()], [export_png()] or [export_html()], the title of `plot` will be used if it's available and the `certeplot2` package is installed, and a timestamp otherwise. **NOTE:** All export functions invisibly return `object` again, but the plotting functions invisibly return the file path
 #' @importFrom certestyle format2
+#' @importFrom certeprojects upload_to_sharepoint
 #' @export
 export_pdf <- function(plot,
                        filename = NULL,
@@ -922,7 +924,7 @@ export_pdf <- function(plot,
   
   if (!is.null(sharepoint_path)) {
     # upload to SharePoint
-    upload_to_sharepoint(filename, sharepoint_path)
+    upload_to_sharepoint(local_file_name = filename, full_sharepoint_path = sharepoint_path)
     message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
                    " (", size_humanreadable(file.size(filename)), ")."))
     return(invisible(sharepoint_path))
@@ -937,6 +939,7 @@ export_pdf <- function(plot,
 #' @param dpi plot resolution, defaults to DPI set in `showtext` package
 #' @details `r doc_requirement("a PNG file", "export_png", c("ggplot2", "showtext"))`.
 #' @importFrom certestyle format2
+#' @importFrom certeprojects upload_to_sharepoint
 #' @export
 export_png <- function(plot,
                        filename = NULL,
@@ -1001,7 +1004,7 @@ export_png <- function(plot,
   
   if (!is.null(sharepoint_path)) {
     # upload to SharePoint
-    upload_to_sharepoint(filename, sharepoint_path)
+    upload_to_sharepoint(local_file_name = filename, full_sharepoint_path = sharepoint_path)
     message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
                    " (", size_humanreadable(file.size(filename)), ")."))
     return(invisible(sharepoint_path))
@@ -1013,6 +1016,7 @@ export_png <- function(plot,
 #' @rdname export
 #' @details `r doc_requirement("an HTML file", "export_html", c("ggplot2", "htmltools"))`. The arguments put in `...` will be passed on to [plotly::layout()] if `plot` is not yet a Plotly object (but rather a `ggplot2` object), which of course then requires the `plotly` package to be installed as well.
 #' @importFrom certestyle format2
+#' @importFrom certeprojects upload_to_sharepoint
 #' @export
 export_html <- function(plot,
                         filename = NULL,
@@ -1053,7 +1057,7 @@ export_html <- function(plot,
     return(invisible(NULL))
   }
   
-  if (ggplot2::is.ggplot(plot)) {
+  if (ggplot2::is_ggplot(plot)) {
     # transform to plotly first
     check_is_installed("plotly")
     plot <- plotly::layout(plotly::ggplotly(plot), ...)
@@ -1068,7 +1072,7 @@ export_html <- function(plot,
   
   if (!is.null(sharepoint_path)) {
     # upload to SharePoint
-    upload_to_sharepoint(filename, sharepoint_path)
+    upload_to_sharepoint(local_file_name = filename, full_sharepoint_path = sharepoint_path)
     message(paste0("Exported plot to '", sharepoint_path, "' in SharePoint",
                    " (", size_humanreadable(file.size(filename)), ")."))
     return(invisible(sharepoint_path))
@@ -1501,17 +1505,4 @@ import_parquet <- function(filename,
               project_number = project_number,
               auto_transform = FALSE,
               col_select = col_select)
-}
-
-#' @importFrom certeprojects teams_projects_channel
-upload_to_sharepoint <- function(filename, sharepoint_path) {
-  tryCatch({
-    cli::cli_process_start("Uploading to SharePoint...")
-    channel <- teams_projects_channel()
-    channel$upload(src = filename, dest = sharepoint_path)
-    cli::cli_process_done(msg_done = "Uploaded to SharePoint.")
-  }, error = function(e) {
-    cli::cli_process_failed(msg = "Uploading to SharePoint...")
-    stop(e)
-  })
 }
