@@ -55,8 +55,7 @@ export_exec <- function(object,
     # get SharePoint path, but not if filename is a full path (i.e., starting with drive letter)
     sharepoint_path <- parse_file_location(filename,
                                            needed_extension = needed_extension,
-                                           project_number = project_number,
-                                           full_path = FALSE)
+                                           project_number = project_number)
     filename <- file.path(tempdir(), basename(sharepoint_path))
     overwrite <- TRUE
   } else {
