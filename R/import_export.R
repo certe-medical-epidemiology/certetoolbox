@@ -207,7 +207,7 @@ import_exec <- function(filename,
   if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
     project_number <- NULL
   }
-  if (!is.null(project_number)) {
+  if (!is.null(project_number) && !file.exists(filename)) {
     file_remote <- project_get_file(filename = filename, project_number = project_number)
     # download from SharePoint to local temp folder
     filename <- download_from_sharepoint(full_sharepoint_path = file_remote)
@@ -227,20 +227,27 @@ import_exec <- function(filename,
     rm(env)
   } else if (extension %in% c("csv", "tsv", "txt")) {
     # flat files
-    df <- read_delim(file = filename,
-                     guess_max = 20000,
-                     delim = list(...)$sep,
-                     na = list(...)$na,
-                     progress = interactive(),
-                     skip = list(...)$skip,
-                     locale = locale(date_names = list(...)$datenames,
-                                     date_format = list(...)$dateformat,
-                                     time_format = list(...)$timeformat,
-                                     tz = list(...)$timezone,
-                                     decimal_mark = list(...)$decimal.mark,
-                                     grouping_mark = list(...)$big.mark,
-                                     encoding = list(...)$encoding),
-                     show_col_types = FALSE)
+    args <- c(list(...), # putting this first will overwrite any following argument
+              list(file = filename,
+                   delim = list(...)$sep,
+                   progress = interactive(),
+                   guess_max = 20000,
+                   show_col_types = FALSE,
+                   locale = locale(date_names = list(...)$datenames,
+                                   date_format = list(...)$dateformat,
+                                   time_format = list(...)$timeformat,
+                                   tz = list(...)$timezone,
+                                   decimal_mark = list(...)$decimal.mark,
+                                   grouping_mark = list(...)$big.mark,
+                                   encoding = list(...)$encoding)))
+    args <- args[unique(names(args))] # keep only unique arguments
+    unknown_args <- names(args)[!names(args) %in% names(formals(read_delim))]
+    unknown_args <- unknown_args[!unknown_args %in% c("sep", "datenames", "dateformat", "timeformat", "timezone", "decimal.mark", "big.mark", "encoding")]
+    if (length(unknown_args) > 0) {
+      warning("Ignored arguments unknown to readr::read_delim(): ", toString(unknown_args), call. = FALSE)
+    }
+    args <- args[names(args) %in% names(formals(read_delim))]
+    df <- do.call(read_delim, args)
     probs <- problems(df)
     if (nrow(probs) > 0) {
       warning("Contents of `readr::problems()`:\n", paste0(format(probs), collapse = "\n"), call. = FALSE)
