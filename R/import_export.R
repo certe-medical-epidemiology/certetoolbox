@@ -51,8 +51,8 @@ export_exec <- function(object,
   }
   
   sharepoint_path <- NULL
-  if (!is.null(project_number)) {
-    # get SharePoint path
+  if (!is.null(project_number) && filename %unlike% "^[A-Z]:") {
+    # get SharePoint path, but not if filename is a full path (i.e., starting with drive letter)
     sharepoint_path <- parse_file_location(filename,
                                            needed_extension = needed_extension,
                                            project_number = project_number,
@@ -62,7 +62,7 @@ export_exec <- function(object,
   } else {
     filename <- parse_file_location(filename,
                                     needed_extension = needed_extension,
-                                    project_number = project_number)
+                                    project_number = NULL)
   }
   
   filename_old <- paste0(filename, ".certetoolbox_export")
