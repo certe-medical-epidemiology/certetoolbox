@@ -402,16 +402,20 @@ file_can_be_overwritten <- function(overwrite, filename) {
       # so the file exists - create a backup so it can be reverted back if export fails
       file.copy(from = filename, to = paste0(filename, ".certetoolbox_export"))
       # and remove the existing file
-      # try(file.remove2(filename), silent = TRUE)
+      try(file.remove2(filename), silent = TRUE)
     }
     return(isTRUE(q))
   } else {
-    # non-interactive mode, make a permanent copy
-    filename_new <- gsub("[.]([a-zA-Z0-9_-]+)$", paste0("_", format2(now(), "yyyymmdd-HHMMSS"), ".\\1"), filename)
-    file.copy(from = filename, to = filename_new)
-    # and remove the existing file
-    # try(file.remove2(filename), silent = TRUE)
-    message("Original file ", filename, " existed, this file was copied to ", filename_new, " before overwriting the original file.")
+    if (!isTRUE(overwrite)) {
+      # non-interactive mode, make a permanent copy
+      filename_new <- paste0(tools::file_path_sans_ext(filename), 
+                             "_", format2(now(), "yyyymmdd-HHMMSS"),
+                             ".", tools::file_ext(filename))
+      file.copy(from = filename, to = filename_new)
+      # and remove the existing file
+      try(file.remove2(filename), silent = TRUE)
+      message("Original file ", filename, " existed, this file was copied to ", filename_new, " before overwriting the original file.")
+    }
     return(TRUE)
   }
 }
