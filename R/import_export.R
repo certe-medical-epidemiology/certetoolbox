@@ -206,6 +206,7 @@ import_exec <- function(filename,
   if (is.null(project_number) || is.na(project_number) || isFALSE(project_number) || project_number %in% c(0, "")) {
     project_number <- NULL
   }
+  file_remote <- NULL
   if (!is.null(project_number) && !file.exists(filename)) {
     file_remote <- project_get_file(filename = filename, project_number = project_number)
     # download from SharePoint to local temp folder
@@ -307,7 +308,7 @@ import_exec <- function(filename,
   }
   
   if (interactive()) {
-    if (!is.null(project_number)) {
+    if (!is.null(project_number) && !is.null(file_remote)) {
       file_src <- file_remote
     } else if (is.null(filename_url)) {
       file_src <- tools::file_path_as_absolute(filename)

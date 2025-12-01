@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.22.8
+Version: 1.22.9
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
