@@ -863,7 +863,7 @@ export_pdf <- function(plot,
   }
   
   sharepoint_path <- NULL
-  if (!is.null(project_number)) {
+  if (!is.null(project_number) && filename %unlike% "^[A-Z]:") {
     # get SharePoint path
     sharepoint_path <- parse_file_location(filename,
                                            needed_extension = "pdf",
@@ -978,7 +978,7 @@ export_png <- function(plot,
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
   sharepoint_path <- NULL
-  if (!is.null(project_number)) {
+  if (!is.null(project_number)  && filename %unlike% "^[A-Z]:") {
     # get SharePoint path
     sharepoint_path <- parse_file_location(filename,
                                            needed_extension = "png",
@@ -1051,7 +1051,7 @@ export_html <- function(plot,
     filename <- format2(now(), "yyyy-mm-dd-HHMMSS")
   }
   sharepoint_path <- NULL
-  if (!is.null(project_number)) {
+  if (!is.null(project_number)  && filename %unlike% "^[A-Z]:") {
     # get SharePoint path
     sharepoint_path <- parse_file_location(filename,
                                            needed_extension = "html",
