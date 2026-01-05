@@ -145,12 +145,7 @@ year <- function(ref = today()) {
 #' @export
 last_week <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_week(ref - dweeks(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_week(ref - dweeks(1), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
@@ -158,7 +153,7 @@ last_week <- function(ref = today(), only_start_end = FALSE) {
 this_week <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
   out <- seq(from = floor_date(ref, unit = "week", week_start = 1),
-             to = floor_date(ref, unit = "week", week_start = 1) + 6,
+             to = ceiling_date(ref, unit = "week", week_start = 1, change_on_boundary = TRUE) - 1,
              by = "1 day")
   if (only_start_end == TRUE) {
     c(out[1], out[length(out)])
@@ -171,24 +166,14 @@ this_week <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 next_week <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_week(ref + dweeks(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_week(ref + dweeks(1), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
 #' @export
 last_month <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_month((start_of_this_month(ref) + 7) - dmonths(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_month((start_of_this_month(ref) + 7) - dmonths(1), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
@@ -196,7 +181,7 @@ last_month <- function(ref = today(), only_start_end = FALSE) {
 this_month <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
   out <- seq(from = floor_date(ref, "month"),
-             to = ceiling_date(ref, "month") - 1,
+             to = ceiling_date(ref, "month", change_on_boundary = TRUE) - 1,
              by = "1 day")
   if (only_start_end == TRUE) {
     c(out[1], out[length(out)])
@@ -209,12 +194,7 @@ this_month <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 next_month <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_month((start_of_this_month(ref) + 7) + dmonths(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_month((start_of_this_month(ref) + 7) + dmonths(1), only_start_end = only_start_end)
 }
 
 
@@ -222,12 +202,7 @@ next_month <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 last_quarter <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_quarter((start_of_this_month(ref) + 7) - dmonths(3))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_quarter((start_of_this_month(ref) + 7) - dmonths(3), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
@@ -235,7 +210,7 @@ last_quarter <- function(ref = today(), only_start_end = FALSE) {
 this_quarter <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
   out <- seq(from = floor_date(ref, unit = "quarter"),
-             to = ceiling_date(ref, unit= "quarter") - 1,
+             to = ceiling_date(ref, unit= "quarter", change_on_boundary = TRUE) - 1,
              by = "1 day")
   if (only_start_end == TRUE) {
     c(out[1], out[length(out)])
@@ -248,12 +223,7 @@ this_quarter <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 next_quarter <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_quarter((start_of_this_month(ref) + 7) + dmonths(3))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_quarter((start_of_this_month(ref) + 7) + dmonths(3), only_start_end = only_start_end)
 }
 
 
@@ -261,12 +231,7 @@ next_quarter <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 last_year <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_year(ref - dyears(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_year((start_of_this_month(ref) + 1) - dyears(1), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
@@ -274,7 +239,7 @@ last_year <- function(ref = today(), only_start_end = FALSE) {
 this_year <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
   out <- seq(from = floor_date(ref, "year"),
-             to = ceiling_date(ref, "year") - 1,
+             to = ceiling_date(ref, "year", change_on_boundary = TRUE) - 1,
              by = "1 day")
   if (only_start_end == TRUE) {
     c(out[1], out[length(out)])
@@ -287,12 +252,7 @@ this_year <- function(ref = today(), only_start_end = FALSE) {
 #' @export
 next_year <- function(ref = today(), only_start_end = FALSE) {
   ref <- as_date(ref)
-  out <- this_year(ref + dyears(1))
-  if (only_start_end == TRUE) {
-    c(out[1], out[length(out)])
-  } else {
-    out
-  }
+  this_year((start_of_this_month(ref) + 1) + dyears(1), only_start_end = only_start_end)
 }
 
 #' @rdname days_around_today
@@ -374,6 +334,7 @@ last_n_weeks <- function(n, ref = end_of_last_week(), only_start_end = FALSE) {
 #' @rdname days_around_today
 #' @export
 year_to_date <- function(ref = today(), only_start_end = FALSE) {
+  ref <- as_date(ref)
   out <- seq(from = start_of_this_year(ref),
              to = ref,
              by = "1 day")
@@ -387,6 +348,7 @@ year_to_date <- function(ref = today(), only_start_end = FALSE) {
 #' @rdname days_around_today
 #' @export
 year_since_date <- function(ref = today(), only_start_end = FALSE) {
+  ref <- as_date(ref)
   out <- seq(from = ref,
              to = end_of_this_year(ref),
              by = "1 day")

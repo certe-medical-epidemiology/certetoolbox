@@ -321,7 +321,7 @@ import_exec <- function(filename,
       paste0(
         "Imported data set (",
         format2(NROW(df)), pkg_env$cross_icon, format2(NCOL(df)), ") from ",
-        ifelse(!is.null(project_number), "SharePoint: ", ""),
+        ifelse(!is.null(file_remote), "SharePoint: ", ""),
         "'", file_src, "'"
       )
     )
