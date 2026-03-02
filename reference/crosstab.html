@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.13</span>
       </span>
     </div>
 
@@ -198,33 +198,43 @@
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Confusion Matrix</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────────</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Positive Negative</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Predicted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Actual     Positive Negative</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        1        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        3       14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Model Metrics</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────────────</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Accuracy                               0.750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Balanced Accuracy                      0.562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  F1 Score                               0.286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  J-Index                                0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Kappa                                  0.138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Matthews Correlation Coefficient (MCC) 0.140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Negative Predictive Value (NPV)        0.824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Positive Predictive Value (PPV)        0.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Precision                              0.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Prevalence                             0.150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Recall                                 0.250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Sensitivity                            0.250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Specificity                            0.875</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Model Interpretation</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy                                       0.750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Area under the Precision Recall Curve (APRC)   0.133</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Area under the Receiver Operator Curve (AROC)  0.422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Balanced Accuracy                              0.578</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Brier Score for Classification Models (BSCM)   3.050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Costs Function for Poor Classification (CFPC)  1.450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F Measure                                      0.286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Gain Capture                                  -0.157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> J-Index                                        0.157</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Kappa                                          0.138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Matthews Correlation Coefficient (MCC)         0.140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean log Loss for Multinomial Data (MLMD)     30.637</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Negative Predictive Value (NPV)                0.875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Positive Predictive Value (PPV)                0.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Precision                                      0.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Prevalence                                     0.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Recall                                         0.333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sensitivity                                    0.333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Specificity                                    0.824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Overall performance is unacceptable. Accuracy (75.0%) and balanced accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (56.2%) indicate limited separation between classes. Agreement between</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> predicted and true classes is strong (Cohen's Kappa = 13.8%, MCC = 14.0%).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> These account for chance agreement and are robust to class imbalance. Precision</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (33.3%) exceeds recall (25.0%), meaning the model is moderately conservative:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> predictions are usually correct, but true cases are missed. The macro-averaged</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F1 score is 28.6%, indicating balanced harmonic performance across classes. The</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model's ability to rule out incorrect classes is strong, with specificity at</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87.5% and negative predictive value at 82.4%. Most misclassifications are</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> concentrated between a small number of class pairs, indicating overlap between</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> specific categories rather than random error. Class imbalance is present</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (max:minor support ratio = 5.67). While macro-averaging mitigates this, some</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> metrics may still overestimate performance on minority classes.</span>
 </code></pre></div>
     </div>
   </div>
