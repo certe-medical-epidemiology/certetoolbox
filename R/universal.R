@@ -161,11 +161,6 @@ like <- function(x, pattern, ignore.case = TRUE) {
 concat <- function(..., sep = "") {
   paste(c(...), collapse = sep, sep = sep)
 }
-#' @rdname concat
-#' @export
-collapse <- function(x, sep = "") {
-  paste(x, collapse = sep, sep = "")
-}
 
 #' Read Certe Secret From File
 #' 

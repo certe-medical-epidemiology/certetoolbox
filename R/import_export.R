@@ -342,7 +342,7 @@ parse_file_location <- function(filename, needed_extension, project_number, full
   if (needed_extension != "" & filename %unlike% paste0("[.](", paste0(needed_extension, collapse = "|"), ")$")) {
     filename <- paste0(filename, ".", needed_extension[1L])
   }
-  if (!is.null(project_number) && filename %unlike% paste0("p", project_number, "|[A-Z]:/")) {
+  if (!is.null(project_number) && filename %unlike% "^[A-Z]:") {
     # has no valid location yet, so include project number
     filename_proj <- project_set_file(filename, project_number = project_number)
     if (!is.na(filename_proj)) {
