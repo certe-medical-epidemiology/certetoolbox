@@ -1,6 +1,6 @@
 Package: certetoolbox
 Title: A Certe R Package for Miscellaneous Functions
-Version: 1.22.13
+Version: 1.23.0
 Authors@R: c(
   person(given = c("Erwin", "E.", "A."),
          family = "Hassing",
@@ -51,6 +51,7 @@ Suggests:
   clipr (>= 0.7.1),
   crayon (>= 1.4.2),
   ggplot2 (>= 3.1.0),
+  gh,
   gtsummary (>= 1.6.0),
   haven (>= 2.4.0),
   hms (>= 1.1.0),
