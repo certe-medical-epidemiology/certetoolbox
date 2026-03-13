@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.23.0</span>
       </span>
     </div>
 
@@ -143,7 +143,7 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   order_nr test_type result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        A   Culture    neg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A       PCR    neg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A       PCR    pos</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        B   Culture    neg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        B       PCR    neg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5        C   Culture    neg</span>
@@ -153,8 +153,8 @@
 <span class="r-in"><span><span class="va">out</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           PCR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Culture    Positive Negative</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        1        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        3       14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        0        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        4       14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">df</span><span class="op">$</span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"pos"</span>, <span class="st">"#p"</span>, <span class="va">df</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span></span>
@@ -162,7 +162,7 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   order_nr test_type result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        A   Culture     #n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A       PCR     #n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        A       PCR     #p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3        B   Culture     #n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4        B       PCR     #n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5        C   Culture     #n</span>
@@ -181,8 +181,8 @@
 <span class="r-in"><span>               negative <span class="op">=</span> <span class="st">"#n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           PCR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Culture    Positive Negative</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        1        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        3       14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        0        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        4       14</span>
 <span class="r-in"><span>                             </span></span>
 <span class="r-in"><span>                             </span></span>
 <span class="r-in"><span><span class="co"># defining classes manually, can be more than 2:</span></span></span>
@@ -190,8 +190,8 @@
 <span class="r-in"><span>               ClassA <span class="op">=</span> <span class="st">"#p"</span>, Hello <span class="op">=</span> <span class="st">"#n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PCR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Culture  ClassA Hello</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ClassA      1     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Hello       3    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ClassA      0     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Hello       4    14</span>
 <span class="r-in"><span>                             </span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="st">"certestats"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">certestats</span><span class="fu">::</span><span class="fu"><a href="https://certe-medical-epidemiology.github.io/certestats/reference/confusion_matrix.html" class="external-link">confusion_matrix</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></span>
@@ -201,39 +201,39 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Predicted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Actual     Positive Negative</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        1        2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        3       14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Positive        0        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Negative        4       14</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Model Metrics</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────────────</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Accuracy                               0.750</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Balanced Accuracy                      0.562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  F1 Score                               0.286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  J-Index                                0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Kappa                                  0.138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Matthews Correlation Coefficient (MCC) 0.140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Negative Predictive Value (NPV)        0.824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Positive Predictive Value (PPV)        0.333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Precision                              0.333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Prevalence                             0.150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Recall                                 0.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Sensitivity                            0.250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Specificity                            0.875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Accuracy                                0.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Balanced Accuracy                       0.438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  F1 Score                                0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  J-Index                                -0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Kappa                                  -0.154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Matthews Correlation Coefficient (MCC) -0.167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Negative Predictive Value (NPV)         0.778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Positive Predictive Value (PPV)         0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Precision                               0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Prevalence                              0.100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Recall                                  0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Sensitivity                             0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Specificity                             0.875</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Model Interpretation</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Overall performance is unacceptable. Accuracy (75.0%) and balanced accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (56.2%) indicate limited separation between classes. Agreement between</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> predicted and true classes is strong (Cohen's Kappa = 13.8%, MCC = 14.0%).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Overall performance is unacceptable. Accuracy (70.0%) and balanced accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (43.8%) indicate limited separation between classes. Agreement between</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> predicted and true classes is strong (Cohen's Kappa = -15.4%, MCC = -16.7%).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> These account for chance agreement and are robust to class imbalance. Precision</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (33.3%) exceeds recall (25.0%), meaning the model is moderately conservative:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> predictions are usually correct, but true cases are missed. The macro-averaged</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F1 score is 28.6%, indicating balanced harmonic performance across classes. The</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> and recall (both 0.0%) are perfectly aligned, indicating an ideally balanced</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> trade-off between false positives and missed true cases. The macro-averaged F1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> score is 0.0%, indicating balanced harmonic performance across classes. The</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model's ability to rule out incorrect classes is strong, with specificity at</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87.5% and negative predictive value at 82.4%. Most misclassifications are</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87.5% and negative predictive value at 77.8%. Most misclassifications are</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> concentrated between a small number of class pairs, indicating overlap between</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> specific categories rather than random error. Class imbalance is present</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (max:minor support ratio = 5.67). While macro-averaging mitigates this, some</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (max:minor support ratio = 9.00). While macro-averaging mitigates this, some</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> metrics may still overestimate performance on minority classes.</span>
 </code></pre></div>
     </div>

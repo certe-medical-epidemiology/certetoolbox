@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">certetoolbox</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.22.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.23.0</span>
       </span>
     </div>
 
@@ -97,7 +97,8 @@
 
 
 <dt id="arg-keep-synonyms">keep_synonyms<a class="anchor" aria-label="anchor" href="#arg-keep-synonyms"></a></dt>
-<dd><p>A <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> to indicate if old, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. The default is <code>FALSE</code>, which will return a note if old taxonomic names were processed. The default can be set with the package option <code><a href="https://amr-for-r.org/reference/AMR-options.html" class="external-link">AMR_keep_synonyms</a></code>, i.e. <code>options(AMR_keep_synonyms = TRUE)</code> or <code>options(AMR_keep_synonyms = FALSE)</code>.</p></dd>
+<dd><p>A <a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a> to indicate if outdated, previously valid taxonomic names must be preserved and not be corrected to currently accepted names. Do note that the term "synonym" is in this case jargon from the field of microbial taxonomy - it is not in place to denote that e.g. "Streptococcus Group A" is a synonym of <em>S. pyogenes</em>. Though this is practically the case, taxonomically it is not as "Streptococcus Group A" is not even a valid taxonomic name.</p>
+<p>The default is <code>FALSE</code>, which will return a note if outdated taxonomic names were processed. The default can be set with the package option <code><a href="https://amr-for-r.org/reference/AMR-options.html" class="external-link">AMR_keep_synonyms</a></code>, i.e. <code>options(AMR_keep_synonyms = TRUE)</code> or <code>options(AMR_keep_synonyms = FALSE)</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
