@@ -14,17 +14,17 @@ amrznn_upload(
 )
 }
 \arguments{
-\item{local_file}{\code{character} - Path to the local file to upload.}
+\item{local_file}{Path to the local file to upload.}
 
-\item{repo_path}{\code{character} - Target path within the repository, e.g. \code{"umcg/weekly_resistance.csv"}. Forward slashes only.}
+\item{repo_path}{Target path within the repository, e.g. \code{"umcg/weekly_resistance.csv"}. Forward slashes only.}
 
-\item{pat}{\code{character} - A GitHub Personal Access Token (PAT) with \code{Contents: Write} permission on the \code{AMRZNN/dashboard_data} repository. Defaults to the token returned by \code{\link[gh:gh_token]{gh::gh_token()}}.}
+\item{pat}{A GitHub Personal Access Token (PAT) with \code{Contents: Write} permission on the \code{AMRZNN/dashboard_data} repository. Defaults to the token returned by \code{\link[gh:gh_token]{gh::gh_token()}}.}
 
-\item{commit_message}{\code{character} - Commit message to use. Defaults to \code{"Automated upload: <Sys.Date()>"}.}
+\item{commit_message}{Commit message to use. Defaults to \code{"Automated upload: <Sys.Date()>"}.}
 
-\item{repo}{\code{character} - Target repository in \code{owner/repo} format. Defaults to \code{"AMRZNN/dashboard_data"} and should not normally be changed.}
+\item{repo}{Target repository in \code{owner/repo} format. Defaults to \code{"AMRZNN/dashboard_data"} and should not normally be changed.}
 
-\item{verbose}{\code{logical} - If \code{TRUE}, prints a confirmation message on success. Defaults to \code{TRUE}.}
+\item{verbose}{If \code{TRUE}, prints a confirmation message on success. Defaults to \code{TRUE}.}
 }
 \value{
 Invisibly returns the HTTP status code of the \code{PUT} response (\code{200L} for update, \code{201L} for new file).
@@ -32,11 +32,14 @@ Invisibly returns the HTTP status code of the \code{PUT} response (\code{200L} f
 \description{
 Uploads a local file to the \href{https://github.com/AMRZNN/dashboard_data}{AMRZNN dashboard data repository} via the GitHub Contents API. Creates the file if it does not yet exist, or overwrites it if it does. No local git installation or repository clone is required.
 }
+\details{
+Script taken from \url{https://github.com/AMRZNN/dashboard_data/blob/9c7b65857f5467713fc3e3b01a5c7d4f1144b961/upload_script.R}.
+}
 \examples{
 \dontrun{
 amrznn_upload(
   local_file = "output/weekly_resistance.csv",
-  repo_path  = "umcg/weekly_resistance.csv"
+  repo_path  = "certe/weekly_resistance.csv"
 )
 }
 }

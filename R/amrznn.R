@@ -19,25 +19,28 @@
 
 # COPIED FROM:
 # https://github.com/AMRZNN/dashboard_data/blob/9c7b65857f5467713fc3e3b01a5c7d4f1144b961/upload_script.R
+# (and slightly altered)
 
 #' Upload a File to the AMRZNN Dashboard Data Repository
 #'
 #' Uploads a local file to the [AMRZNN dashboard data repository](https://github.com/AMRZNN/dashboard_data) via the GitHub Contents API. Creates the file if it does not yet exist, or overwrites it if it does. No local git installation or repository clone is required.
-#' @param local_file `character` - Path to the local file to upload.
-#' @param repo_path `character` - Target path within the repository, e.g. `"umcg/weekly_resistance.csv"`. Forward slashes only.
-#' @param pat `character` - A GitHub Personal Access Token (PAT) with `Contents: Write` permission on the `AMRZNN/dashboard_data` repository. Defaults to the token returned by [gh::gh_token()].
-#' @param commit_message `character` - Commit message to use. Defaults to `"Automated upload: <Sys.Date()>"`.
-#' @param repo `character` - Target repository in `owner/repo` format. Defaults to `"AMRZNN/dashboard_data"` and should not normally be changed.
-#' @param verbose `logical` - If `TRUE`, prints a confirmation message on success. Defaults to `TRUE`.
-#' @return Invisibly returns the HTTP status code of the `PUT` response (`200L` for update, `201L` for new file).
-#' @importFrom httr GET PUT add_headers content status_code content_type_json
+#' @param local_file Path to the local file to upload.
+#' @param repo_path Target path within the repository, e.g. `"umcg/weekly_resistance.csv"`. Forward slashes only.
+#' @param pat A GitHub Personal Access Token (PAT) with `Contents: Write` permission on the `AMRZNN/dashboard_data` repository. Defaults to the token returned by [gh::gh_token()].
+#' @param commit_message Commit message to use. Defaults to `"Automated upload: <Sys.Date()>"`.
+#' @param repo Target repository in `owner/repo` format. Defaults to `"AMRZNN/dashboard_data"` and should not normally be changed.
+#' @param verbose If `TRUE`, prints a confirmation message on success. Defaults to `TRUE`.
+#' @return Invisibly returns the HTTP status code of the `PUT` response (`200` for update, `201` for new file).
+#' @details
+#' Script taken from <https://github.com/AMRZNN/dashboard_data/blob/9c7b65857f5467713fc3e3b01a5c7d4f1144b961/upload_script.R>.
+#' @importFrom httr GET PUT add_headers content status_code content_type_json stop_for_status
 #' @importFrom jsonlite base64_enc
 #' @export
 #' @examples
 #' \dontrun{
 #' amrznn_upload(
 #'   local_file = "output/weekly_resistance.csv",
-#'   repo_path  = "umcg/weekly_resistance.csv"
+#'   repo_path  = "certe/weekly_resistance.csv"
 #' )
 #' }
 amrznn_upload <- function(local_file,
@@ -84,11 +87,13 @@ amrznn_upload <- function(local_file,
     body = toJSON(body, auto_unbox = TRUE),
     content_type_json())
   
+  stop_for_status(response)
+  
   status <- status_code(response)
   
   if (verbose) {
     action <- if (status == 201L) "created" else "updated"
-    message("File ", action, " successfully: ", repo_path, " (HTTP ", status, ")")
+    message("File '", local_file, "' ", action, " successfully: ", repo_path, " (HTTP ", status, ")")
   }
   
   invisible(status)
