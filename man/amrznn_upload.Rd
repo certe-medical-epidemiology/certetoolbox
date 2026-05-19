@@ -27,7 +27,7 @@ amrznn_upload(
 \item{verbose}{If \code{TRUE}, prints a confirmation message on success. Defaults to \code{TRUE}.}
 }
 \value{
-Invisibly returns the HTTP status code of the \code{PUT} response (\code{200L} for update, \code{201L} for new file).
+Invisibly returns the HTTP status code of the \code{PUT} response (\code{200} for update, \code{201} for new file).
 }
 \description{
 Uploads a local file to the \href{https://github.com/AMRZNN/dashboard_data}{AMRZNN dashboard data repository} via the GitHub Contents API. Creates the file if it does not yet exist, or overwrites it if it does. No local git installation or repository clone is required.

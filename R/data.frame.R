@@ -1348,7 +1348,7 @@ auto_transform <- function(x,
     
     # AMR-related conversions (evaluate availability once, not per column)
     if (has_AMR) {
-      if (AMR::is_sir_eligible(col_data)) {
+      if (is.character(col_data) && any(unique(col_data) %in% c("S", "I", "R"))) {
         x[[i]] <- try_convert(AMR::as.sir(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
