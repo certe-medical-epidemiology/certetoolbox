@@ -1348,17 +1348,17 @@ auto_transform <- function(x,
     
     # AMR-related conversions (evaluate availability once, not per column)
     if (has_AMR) {
-      if (is.character(col_data) && (col_name %like% "_(sir|ris)$" || all(col_data_unique %in% c("R", "I", "S", "U", "D", "V", "E", "-")))) {
+      if (is.character(col_data) && (col_name %like% "^(sir|ris)_" || col_name %like% "_(sir|ris)$" || all(col_data_unique %in% c("R", "I", "S", "U", "D", "V", "E", "-")))) {
         x[[i]] <- try_convert(AMR::as.sir(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
       }
-      if (col_name %like% "_mic$") {
+      if (col_name %like% "^mic_" || col_name %like% "_mic$") {
         x[[i]] <- try_convert(AMR::as.mic(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
       }
-      if (col_name %like% "_disk$") {
+      if (col_name %like% "^disk_" || col_name %like% "_mic$") {
         x[[i]] <- try_convert(AMR::as.disk(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
