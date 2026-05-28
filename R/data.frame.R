@@ -1353,12 +1353,12 @@ auto_transform <- function(x,
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
       }
-      if (col_name %like% "^mic_" || col_name %like% "_mic$") {
+      if (col_name %like% "^mic_" || col_name %like% "_mic$" || col_name %like% "^etest_" || col_name %like% "_etest$") {
         x[[i]] <- try_convert(AMR::as.mic(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
       }
-      if (col_name %like% "^disk_" || col_name %like% "_mic$") {
+      if (col_name %like% "^disk_" || col_name %like% "_disk$") {
         x[[i]] <- try_convert(AMR::as.disk(col_data),
                               backup = x[[i]], col = i)
         col_data <- x[[i]]
