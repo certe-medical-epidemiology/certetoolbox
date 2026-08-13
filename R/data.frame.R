@@ -1557,7 +1557,7 @@ wikipedia_pageviews <- function(articles,
     )
     
     if (status_code(response) == 404) {
-      stop("Article does not exist on ", language, ".wikipedia.org: '", articles[i], "'")
+      warning("Article not found on ", language, ".wikipedia.org: '", articles[i], "'")
     } else if (status_code(response) == 200) {
       data <- content(response, "parsed")
       sapply(data$items, function(x) {
@@ -1569,6 +1569,8 @@ wikipedia_pageviews <- function(articles,
     } else {
       stop("Failed to retrieve data: ", status_code(response))
     }
+    
+    Sys.sleep(0.25)
   }
   as_tibble(out[order(out$date), ])
 }
