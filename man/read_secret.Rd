@@ -9,8 +9,8 @@ read_secret(property, file = Sys.getenv("secrets_file"))
 \arguments{
 \item{property}{the property to read, case-sensitive}
 
-\item{file}{Either a character string naming a file or a \link{connection}
-open for reading.}
+\item{file}{either a character string naming a file or a \link{connection}
+    open for writing}
 }
 \description{
 This function reads from a local or remote YAML file, as set in the environmental variable \code{"secrets_file"}.
