@@ -19,7 +19,7 @@
 
 #' Format Data Set as Flextable
 #'
-#' Format a [data.frame] as [flextable()] with Certe style, bold headers and Dutch number formats. This function can also transform existing `flextable` and `gtsummary` objects to allow the formatting provided in this [tbl_flextable()] function.
+#' Format a [data.frame] as [`flextable`][flextable::flextable()] with Certe style, bold headers and Dutch number formats. This function can also transform existing `flextable` and `gtsummary` objects to allow the formatting provided in this [tbl_flextable()] function.
 #' @param x a [data.frame] or a [`flextable`][flextable::flextable()] object or a [`gtsummary`][gtsummary::tbl_summary()] object
 #' @param rows.height height of the rows in centimetres
 #' @param row.names.bold display row names in bold
@@ -112,12 +112,11 @@
 #' ```
 #' 
 #' ![tbl_flextable_certelila](flextablelila.png)
-#' @seealso [flextable()]
-#' @return [flextable] object
+#' @seealso [flextable::flextable()]
+#' @return [`flextable`][flextable::flextable()] object
 #' @rdname tbl_flextable
 #' @importFrom certestyle colourpicker format2 current_markdown_colour
 #' @importFrom dplyr bind_cols pull
-#' @importFrom flextable flextable border fp_border_default add_footer_row color bg bold italic set_header_labels fontsize font width height flextable_dim autofit align set_caption hline vline add_header_row set_flextable_defaults hline_top hline_bottom
 #' @importFrom cleaner as.percentage
 #' @export
 #' @examples
@@ -261,7 +260,11 @@ tbl_flextable <- function(x,
                           split.across.pages = NROW(x) > 37,
                           print = !interactive(),
                           ...) {
-  
+
+  if (!requireNamespace("flextable", quietly = TRUE)) {
+    stop("Package 'flextable' is required for tbl_flextable(). Please install it with `install.packages(\"flextable\")`.", call. = FALSE)
+  }
+
   if (any(c("rows.fill.picker", "values.colour.picker", "values.fill.picker", "columns.fill.picker", "vline.border") %in% names(list(...)))) {
     stop("Set a tbl_flextable() theme now with the arguments `theme` or `colours`.", call. = FALSE)
   }
@@ -307,15 +310,15 @@ tbl_flextable <- function(x,
     if (!is.null(gt$table_styling$header$spanning_header) && length(unique(gt$table_styling$header$spanning_header)) > 1) {
       # fix for double header
       x <- x |>
-        border(i = 1:2, j = 1,
-               border.bottom = fp_border_default(NA),
-               border.top = fp_border_default(NA),
+        flextable::border(i = 1:2, j = 1,
+               border.bottom = flextable::fp_border_default(NA),
+               border.top = flextable::fp_border_default(NA),
                part = "header") |>
-        border(i = 1, j = 1,
-               border.top = fp_border_default(width = 2),
+        flextable::border(i = 1, j = 1,
+               border.top = flextable::fp_border_default(width = 2),
                part = "header") |>
-        border(i = 2, j = 1,
-               border.bottom = fp_border_default(width = 2),
+        flextable::border(i = 2, j = 1,
+               border.bottom = flextable::fp_border_default(width = 2),
                part = "header")
     }
   }
@@ -486,7 +489,7 @@ tbl_flextable <- function(x,
       names(colnames_bak) <- colnames(x) # this will make set_header_labels work, further down
     }
     
-    ft <- flextable(x)
+    ft <- flextable::flextable(x)
   }
   
   # row and column names
@@ -529,11 +532,11 @@ tbl_flextable <- function(x,
         row.total.widths <- rep(row.total.widths, ncol(x))
       }
       ft <- ft |>
-        add_footer_row(values = row.total.values,
+        flextable::add_footer_row(values = row.total.values,
                        colwidths = row.total.widths)
       if (row.total.bold == TRUE) {
         ft <- ft |>
-          bold(part = "footer", i = NROW(ft$footer$dataset))
+          flextable::bold(part = "footer", i = NROW(ft$footer$dataset))
       }
     }
   }
@@ -543,7 +546,7 @@ tbl_flextable <- function(x,
         row.extra.header$widths <- rep(row.extra.header$widths, ncol(x))
       }
       ft <- ft |>
-        add_header_row(values = row.extra.header$values,
+        flextable::add_header_row(values = row.extra.header$values,
                        colwidths = row.extra.header$widths)
     }
   }
@@ -553,7 +556,7 @@ tbl_flextable <- function(x,
         row.extra.footer$widths <- rep(row.extra.footer$widths, ncol(x))
       }
       ft <- ft |>
-        add_footer_row(values = row.extra.footer$values,
+        flextable::add_footer_row(values = row.extra.footer$values,
                        colwidths = row.extra.footer$widths)
     }
   }
@@ -562,7 +565,7 @@ tbl_flextable <- function(x,
   if (!is.null(values.colour)) {
     ind <- which(as.matrix(x) == as.character(values.colour), arr.ind = TRUE)
     for (row in seq_len(NROW(ind))) {
-      ft <- ft |> color(i = ind[row, "row"],
+      ft <- ft |> flextable::color(i = ind[row, "row"],
                         j = ind[row, "col"],
                         color = colourpicker(colours$values.colour))
     }
@@ -570,7 +573,7 @@ tbl_flextable <- function(x,
   if (!is.null(values.fill)) {
     ind <- which(as.matrix(x) == as.character(values.fill), arr.ind = TRUE)
     for (row in seq_len(NROW(ind))) {
-      ft <- ft |> bg(i = ind[row, "row"],
+      ft <- ft |> flextable::bg(i = ind[row, "row"],
                      j = ind[row, "col"],
                      bg = colourpicker(colours$values.fill))
     }
@@ -578,52 +581,52 @@ tbl_flextable <- function(x,
   if (!is.null(values.bold)) {
     ind <- which(as.matrix(x) == as.character(values.bold), arr.ind = TRUE)
     for (row in seq_len(NROW(ind))) {
-      ft <- ft |> bold(i = ind[row, "row"],
+      ft <- ft |> flextable::bold(i = ind[row, "row"],
                        j = ind[row, "col"])
     }
   }
   if (!is.null(values.italic)) {
     ind <- which(as.matrix(x) == as.character(values.italic), arr.ind = TRUE)
     for (row in seq_len(NROW(ind))) {
-      ft <- ft |> italic(i = ind[row, "row"],
+      ft <- ft |> flextable::italic(i = ind[row, "row"],
                          j = ind[row, "col"])
     }
   }
   
   # format column total
   if (column.total == TRUE & column.total.bold == TRUE) {
-    ft <- ft |> bold(j = ncol(x.bak), part = "all")
+    ft <- ft |> flextable::bold(j = ncol(x.bak), part = "all")
   }
   
   # vertical lines
   if (!is.null(vline)) {
     for (i in seq_len(length(vline.part))) {
-      ft <- ft |> vline(border = fp_border_default(colourpicker(colours$vline.colour)),
+      ft <- ft |> flextable::vline(border = flextable::fp_border_default(colourpicker(colours$vline.colour)),
                         j = vline,
                         part = vline.part[i])
     }
   }
   # horizontal lines on top and bottom
   ft <- ft |>
-    border(part = "all",
+    flextable::border(part = "all",
            # this is to remove border between multiline headers
-           border.top = fp_border_default(NA),
-           border.bottom = fp_border_default(NA)) |> 
-    hline_top(part = "all",
-              border = fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
-    hline_bottom(part = "all",
-                 border = fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
-    hline_bottom(part = "footer",
-                 border = fp_border_default(NA))
+           border.top = flextable::fp_border_default(NA),
+           border.bottom = flextable::fp_border_default(NA)) |> 
+    flextable::hline_top(part = "all",
+              border = flextable::fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
+    flextable::hline_bottom(part = "all",
+                 border = flextable::fp_border_default(colourpicker(colours$hline.colour), width = 2)) |> 
+    flextable::hline_bottom(part = "footer",
+                 border = flextable::fp_border_default(NA))
   # header colours
   ft <- ft |> 
-    bg(part = "header",
+    flextable::bg(part = "header",
        bg = colourpicker(colours$header.fill)) |> 
-    color(part = "header",
+    flextable::color(part = "header",
           color = colourpicker(colours$header.colour))
   if (!is.null(vline)) {
-    ft <- ft |> vline(part = "header",
-                      border = fp_border_default(colourpicker(colours$vline.header.colour)),
+    ft <- ft |> flextable::vline(part = "header",
+                      border = flextable::fp_border_default(colourpicker(colours$vline.header.colour)),
                       j = vline)
   }
   
@@ -637,50 +640,50 @@ tbl_flextable <- function(x,
   
   # Certe theme
   ft <- ft |>
-    font(fontname = font.family, part = "all") |>
-    fontsize(size = font.size, part = "all")
+    flextable::font(fontname = font.family, part = "all") |>
+    flextable::fontsize(size = font.size, part = "all")
   if (caption != "") {
-    ft <- ft |> set_caption(caption)
+    ft <- ft |> flextable::set_caption(caption)
   }
   # bold headers
   if (column.names.bold == TRUE) {
-    ft <- ft |> bold(part = "header")
+    ft <- ft |> flextable::bold(part = "header")
   }
   # bold row names
   if (!isFALSE(row.names) & row.names.bold == TRUE) {
-    ft <- ft |> bold(j = 1)
+    ft <- ft |> flextable::bold(j = 1)
   }
   if (font.size.header != font.size) {
-    ft <- ft |> fontsize(size = font.size.header, part = "header")
+    ft <- ft |> flextable::fontsize(size = font.size.header, part = "header")
   }
   if (length(columns.italic) > 0) {
-    ft <- ft |> italic(j = columns.italic)
+    ft <- ft |> flextable::italic(j = columns.italic)
   }
   if (length(columns.bold) > 0) {
-    ft <- ft |> bold(j = columns.bold)
+    ft <- ft |> flextable::bold(j = columns.bold)
   }
   if (!is.null(rows.italic)) {
-    ft <- ft |> italic(i = rows.italic)
+    ft <- ft |> flextable::italic(i = rows.italic)
   }
   if (!is.null(rows.bold)) {
-    ft <- ft |> bold(i = rows.bold)
+    ft <- ft |> flextable::bold(i = rows.bold)
   }
   if (!is.null(colnames_bak)) {
-    ft <- ft |> set_header_labels(values = colnames_bak)
+    ft <- ft |> flextable::set_header_labels(values = colnames_bak)
   }
   if (!is.null(rows.fill)) {
     ft <- ft |>
-      bg(i = rows.fill[which(rows.fill %% 2 == 0)],
+      flextable::bg(i = rows.fill[which(rows.fill %% 2 == 0)],
          bg = colourpicker(colours$rows.fill.even),
          part = "body")
     ft <- ft |>
-      bg(i = rows.fill[which(rows.fill %% 2 != 0)],
+      flextable::bg(i = rows.fill[which(rows.fill %% 2 != 0)],
          bg = colourpicker(colours$rows.fill.odd),
          part = "body")
   }
   if (length(columns.fill) > 0) {
     ft <- ft |>
-      bg(j = columns.fill,
+      flextable::bg(j = columns.fill,
          bg = colourpicker(colours$columns.fill),
          part = "body")
   }
@@ -695,11 +698,11 @@ tbl_flextable <- function(x,
       # but ratios of autofit.fullpage.width
       columns.width <- (columns.width / sum(columns.width)) * autofit.fullpage.width
     } else {
-      # otherwise it's centimetres, but flextable() works with inches, so:
+      # otherwise it's centimetres, but flextable works with inches, so:
       columns.width <- columns.width / 2.54
     }
     for (j in seq_len(ncol(x))) {
-      ft <- ft |> width(j = j, width = columns.width[j])
+      ft <- ft |> flextable::width(j = j, width = columns.width[j])
     }
   }
   # set height
@@ -709,16 +712,16 @@ tbl_flextable <- function(x,
     }
     rows.height <- rows.height / 2.54
     for (i in seq_len(NROW(x))) {
-      ft <- ft |> height(i = i, height = rows.height[i])
+      ft <- ft |> flextable::height(i = i, height = rows.height[i])
     }
   }
   
   if (autofit == TRUE) {
-    ft <- ft |> autofit()
+    ft <- ft |> flextable::autofit()
   }
   if (autofit.fullpage == TRUE) {
     # width as inch
-    ft <- ft |> width(width = dim(ft)$widths * (autofit.fullpage.width / 2.54) / (flextable_dim(ft)$widths))
+    ft <- ft |> flextable::width(width = dim(ft)$widths * (autofit.fullpage.width / 2.54) / (flextable::flextable_dim(ft)$widths))
   }
   
   # alignment
@@ -746,16 +749,16 @@ tbl_flextable <- function(x,
     }
     align_setting[align_setting == "u"] <- "j" # 'justify' instead of 'uitlijnen'
     if (any(align_setting == "l")) {
-      ft <- ft |> align(align = "left", j = which(align_setting == "l"), part = align.part)
+      ft <- ft |> flextable::align(align = "left", j = which(align_setting == "l"), part = align.part)
     }
     if (any(align_setting == "c")) {
-      ft <- ft |> align(align = "center", j = which(align_setting == "c"), part = align.part)
+      ft <- ft |> flextable::align(align = "center", j = which(align_setting == "c"), part = align.part)
     }
     if (any(align_setting == "r")) {
-      ft <- ft |> align(align = "right", j = which(align_setting == "r"), part = align.part)
+      ft <- ft |> flextable::align(align = "right", j = which(align_setting == "r"), part = align.part)
     }
     if (any(align_setting == "j")) {
-      ft <- ft |> align(align = "justify", j = which(align_setting == "j"), part = align.part)
+      ft <- ft |> flextable::align(align = "justify", j = which(align_setting == "j"), part = align.part)
     }
   }
   
