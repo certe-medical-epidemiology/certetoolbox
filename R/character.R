@@ -201,8 +201,8 @@ mo_glims <- function (x, language = AMR::get_AMR_locale(), keep_synonyms = getOp
 #' @param agb_code AGB codes
 #' @param property property of the AGB code. Will return a [data.frame] if left blank.
 #' @importFrom certestyle toproper
-#' @importFrom dplyr tibble bind_rows summarise_all
-#' @importFrom rvest read_html html_node html_text2 html_elements html_table
+#' @importFrom dplyr tibble bind_rows summarise across everything
+#' @importFrom rvest read_html html_node html_element html_text2 html_elements html_table
 #' @importFrom cleaner clean_Date
 #' @rdname agb_property
 #' @details
@@ -227,60 +227,129 @@ agb_property <- function(agb_code, property = NULL) {
     url <- paste0("https://www.vektis.nl/agb-register/zorgverlener-", a)
     page <- read_html(url)
     
-    personal <- page |> html_node(".basic-info") |> html_text2()
-    personal <- paste0(personal, "\n")
-    full_name <- gsub(".*Naam.*?\n(.*?)\n.*", "\\1", personal)
-    initials <- gsub(" .*", "", full_name)
-    last_name <- toproper(gsub("^[A-Z.]+ ", "", full_name))
-    sex <- gsub(".*Geslacht.*?\n(.*?)\n.*", "\\1", personal)
-    sex <- toupper(substr(sex, 1, 1))
-    title <- gsub(".*Academische titel.*?\n(.*?)\n.*", "\\1", personal)
-    if (tolower(title) == "doctor") {
-      title <- "dr."
-    } else if (tolower(title) == "doctorandus") {
-      title <- "drs."
-    } else {
-      # can also be "Bachelor", we'll ignore that
-      title <- ""
+    # --- Personal info from <dl> elements under "Basisregistratie" ---
+    dl_nodes <- page |> html_elements("dl")
+    
+    extract_dl_value <- function(dl_nodes, label) {
+      for (dl in dl_nodes) {
+        dt_text <- dl |> html_element("dt") |> html_text2()
+        if (!is.na(dt_text) && trimws(dt_text) == label) {
+          return(trimws(dl |> html_element("dd") |> html_text2()))
+        }
+      }
+      NA_character_
     }
-    full_name <- trimws(paste(toproper(title, every_word = TRUE), full_name))
     
-    competences <- page |> html_node(".competence-list") |> html_text2()
-    specialty <- trimws(gsub("^(.*?)[0-9]+.*", "\\1", competences))
-    specialty_start <- gsub(".*Start\n(.*)\nEinde.*", "\\1", competences)
-    specialty_start <- clean_Date(specialty_start, format = "dd-mm-yyyy")
-    specialty_end <- gsub(".*\nEinde\n([0-9-]+).*", "\\1", competences)
-    specialty_end <- clean_Date(specialty_end, format = "dd-mm-yyyy")
+    full_name_raw <- extract_dl_value(dl_nodes, "Naam")
+    sex <- extract_dl_value(dl_nodes, "Geslacht")
+    sex <- toupper(substr(sex, 1, 1))
+    title_raw <- extract_dl_value(dl_nodes, "Academische titel")
     
-    employer <- page |> html_elements(css = ".card-table") |> html_table()
-    employer_int <- which(vapply(FUN.VALUE = logical(1), employer, function(x) any(x$`AGB-code` %like% "[0-9]+", na.rm = TRUE)))
-    employer <- employer[[employer_int[1]]]
-    employer$Start <- clean_Date(employer$Start, format = "dd-mm-yyyy")
-    employer$Einde <- clean_Date(employer$Einde, format = "dd-mm-yyyy")
-    if (NROW(employer) > 1) {
-      employer <- employer |> summarise_all(paste, collapse = "; ")
-      if (NROW(properties) > 0) {
-        properties$employer_agb <- as.character(properties$employer_agb)
-        properties$employee_since <- as.character(properties$employee_since)
-        properties$employee_until <- as.character(properties$employee_until)
+    initials <- gsub(" .*", "", full_name_raw)
+    last_name <- toproper(gsub("^[A-Z.]+ ", "", full_name_raw))
+    
+    title <- if (!is.na(title_raw) && tolower(title_raw) == "doctor") {
+      "dr."
+    } else if (!is.na(title_raw) && tolower(title_raw) == "doctorandus") {
+      "drs."
+    } else {
+      ""
+    }
+    
+    full_name <- trimws(paste(toproper(title, every_word = TRUE), full_name_raw))
+    
+    # --- Specialty from qualification cards under "Mijn kwalificaties" ---
+    qual_cards <- page |> html_elements(".card")
+    # The first card(s) under "Mijn kwalificaties" hold the specialty
+    # Extract from the first card's h3 and dl elements
+    specialty <- NA_character_
+    specialty_start <- as.Date(NA)
+    specialty_end <- as.Date(NA)
+    
+    if (length(qual_cards) > 0) {
+      # Find the card that contains a qualification (has a code like "0303")
+      for (card in qual_cards) {
+        card_title <- card |> html_element("h3") |> html_text2()
+        if (!is.na(card_title) && grepl("[0-9]{4}", card_title)) {
+          specialty <- trimws(gsub("\\s*[0-9]+\\s*$", "", card_title))
+          card_dls <- card |> html_elements("dl")
+          for (cdl in card_dls) {
+            dt_text <- cdl |> html_element("dt") |> html_text2()
+            dd_text <- cdl |> html_element("dd") |> html_text2()
+            if (!is.na(dt_text) && trimws(dt_text) == "Start") {
+              specialty_start <- clean_Date(trimws(dd_text), format = "dd-mm-yyyy")
+            }
+            if (!is.na(dt_text) && trimws(dt_text) == "Einde") {
+              specialty_end <- clean_Date(trimws(dd_text), format = "dd-mm-yyyy")
+            }
+          }
+          break
+        }
       }
     }
     
+    # --- Employer from "Ik heb een arbeidsrelatie met" table ---
+    table_headers <- page |> html_elements(".card-table-header__title")
+    tables <- page |> html_elements(".card-table") |> html_table()
+    
+    employer_idx <- which(
+      vapply(table_headers, function(h) {
+        grepl("arbeidsrelatie", html_text2(h), ignore.case = TRUE)
+      }, logical(1))
+    )
+    
+    employer <- if (length(employer_idx) > 0 && employer_idx[1] <= length(tables)) {
+      tables[[employer_idx[1]]]
+    } else {
+      # Fallback: table containing numeric AGB codes
+      employer_int <- which(vapply(
+        tables,
+        function(x) any(x$`AGB-code` %like% "[0-9]+", na.rm = TRUE),
+        logical(1)
+      ))
+      if (length(employer_int) > 0) tables[[employer_int[1]]] else tibble()
+    }
+    
+    if (NROW(employer) > 0) {
+      employer$Start <- clean_Date(employer$Start, format = "dd-mm-yyyy")
+      employer$Einde <- clean_Date(employer$Einde, format = "dd-mm-yyyy")
+      
+      if (NROW(employer) > 1) {
+        employer <- employer |> summarise(across(everything(), ~paste(.x, collapse = "; ")))
+        if (NROW(properties) > 0) {
+          properties$employer_agb <- as.character(properties$employer_agb)
+          properties$employee_since <- as.character(properties$employee_since)
+          properties$employee_until <- as.character(properties$employee_until)
+        }
+      }
+      
+      employed_by <- employer$Naam
+      employer_agb <- employer$`AGB-code`
+      employee_since <- employer$Start
+      employee_until <- employer$Einde
+    } else {
+      employed_by <- NA_character_
+      employer_agb <- NA_character_
+      employee_since <- as.Date(NA)
+      employee_until <- as.Date(NA)
+    }
+    
     properties <- properties |>
-      bind_rows(tibble(agb = a,
-                       title = title,
-                       initials = initials,
-                       last_name = last_name,
-                       full_name = full_name,
-                       sex = sex,
-                       specialty = specialty,
-                       specialty_since = specialty_start,
-                       specialty_until = specialty_end,
-                       employed_by = employer$Naam,
-                       employer_agb = employer$`AGB-code`,
-                       employee_since = employer$Start,
-                       employee_until = employer$Einde,
-                       ))
+      bind_rows(tibble(
+        agb = a,
+        title = title,
+        initials = initials,
+        last_name = last_name,
+        full_name = full_name,
+        sex = sex,
+        specialty = specialty,
+        specialty_since = specialty_start,
+        specialty_until = specialty_end,
+        employed_by = employed_by,
+        employer_agb = employer_agb,
+        employee_since = employee_since,
+        employee_until = employee_until
+      ))
   }
   
   if (!is.null(property)) {
@@ -289,20 +358,6 @@ agb_property <- function(agb_code, property = NULL) {
     properties
   }
 }
-
-# #' @rdname agb_property
-# #' @details [agb_lookup()] looks up the AGB code, and returns a [menu][utils::menu()] in an interactive session, and the first hit in a non-interactive session.
-# #' @export
-# agb_lookup <- function(search_term) {
-#   url <- "https://www.vektis.nl/agb-register/zoeken"
-#   form <- url |> rvest::read_html() |> rvest::html_node("main form") |> rvest::html_form()
-#   form <- form |> rvest::html_form_set(agbcode = "Jansen",
-#                                        zorgpartijtype = "zorgverlener",
-#                                        zorgsoort = "00 - Alle zorgsoorten")
-#   click <- form |> rvest::html_form_submit(submit = 3)
-#   s <- rvest::session(url)
-#   click2 <- rvest::session_submit(s, form, submit = 2)
-# }
 
 #' Quick SHA Hash
 #' 
