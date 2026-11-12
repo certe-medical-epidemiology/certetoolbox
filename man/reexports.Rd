@@ -15,10 +15,10 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{certeprojects}{\code{\link[certeprojects:project_properties]{project_get_current_id}}}
+  \item{certeprojects}{\code{\link[certeprojects:project_get_current_id]{project_get_current_id()}}}
 
-  \item{certestyle}{\code{\link[certestyle:dec_mark]{big_mark}}, \code{\link[certestyle]{dec_mark}}}
+  \item{certestyle}{\code{\link[certestyle:big_mark]{big_mark()}}, \code{\link[certestyle:dec_mark]{dec_mark()}}}
 
-  \item{lubridate}{\code{\link[lubridate]{now}}, \code{\link[lubridate:now]{today}}}
+  \item{lubridate}{\code{\link[lubridate:now]{now()}}, \code{\link[lubridate:today]{today()}}}
 }}
 

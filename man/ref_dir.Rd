@@ -13,5 +13,5 @@ ref_dir(sub = "")
 Returns the relative reference directory for non-projects.
 }
 \details{
-This function returns the absolute path using \code{\link[tools:fileutils]{tools::file_path_as_absolute()}}.
+This function returns the absolute path using \code{\link[tools:file_path_as_absolute]{tools::file_path_as_absolute()}}.
 }

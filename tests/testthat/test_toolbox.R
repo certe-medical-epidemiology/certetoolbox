@@ -234,8 +234,31 @@ test_that("import_export works", {
     isTRUE(same)
   }
   # R
+  # rds files are encrypted by default, so use a temporary secrets file with a key
+  secrets_bak <- Sys.getenv("secrets_file")
+  secrets_tmp <- tempfile(fileext = ".yaml")
+  writeLines("tools.encryption_password: test_password", secrets_tmp)
+  Sys.setenv(secrets_file = secrets_tmp)
   expect_true(identical_import_export(import_rds, export_rds, "rds"))
   expect_true(identical_import_export(import, export, "rds"))
+  # decryption must fail with a missing, empty or incorrect key
+  encrypted <- encrypt_object(iris, key = "abc")
+  expect_identical(suppressMessages(decrypt_object(encrypted, key = "abc")), iris)
+  expect_error(decrypt_object(encrypted, key = "wrong_key"), "could not be removed")
+  expect_error(decrypt_object(encrypted, key = ""), "no valid `key`")
+  expect_error(decrypt_object(encrypted, key = NA_character_), "no valid `key`")
+  # encryption without a key must not encrypt
+  expect_identical(suppressMessages(encrypt_object(iris, key = "")), iris)
+  encrypted_file <- tempfile(fileext = ".rds")
+  saveRDS(encrypted, encrypted_file)
+  expect_error(import_rds(encrypted_file, project_number = NULL), "could not be removed")
+  writeLines("other_property: value", secrets_tmp)
+  expect_error(import_rds(encrypted_file, project_number = NULL), "no valid `key`")
+  unencrypted_file <- tempfile(fileext = ".rds")
+  suppressMessages(export_rds(iris, unencrypted_file, project_number = NULL))
+  expect_identical(readRDS(unencrypted_file), iris)
+  Sys.setenv(secrets_file = secrets_bak)
+  unlink(c(secrets_tmp, encrypted_file, unencrypted_file))
   # Text files
   expect_true(identical_import_export(import_csv, export_csv, "csv",
                                       check_factors = FALSE, check_posix = FALSE, digits = 10))

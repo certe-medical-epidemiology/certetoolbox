@@ -140,7 +140,6 @@ as_excel <- function(...,
       wb_add_cell_style(sheet = i,
                         dims = wb_dims(rows = seq_len(NROW(df) + 1),
                                        cols = seq_len(NCOL(df))),
-                        font_id = "Source Sans Pro",
                         horizontal = align,
                         vertical = "center",
                         wrap_text = TRUE)

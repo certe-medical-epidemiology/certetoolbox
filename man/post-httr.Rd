@@ -30,9 +30,9 @@ create_json_body(
 
 \item{compress}{Should the object be compressed/decompressed? At least allowed: \code{"gzip"} (or \code{TRUE}), \code{"bzip2"}, \code{"xz"}, see \code{\link[base:memCompress]{base::memCompress()}}. Use \code{FALSE} to not compress/decompress.}
 
-\item{encrypt}{Should the object be encrypted/decrypted? This applies AES-GCM via \code{\link[openssl:aes_cbc]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. This guarantees both confidentiality and integrity: the file cannot be read without the correct \code{key}, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random \link{raw} vector.}
+\item{encrypt}{Should the object be encrypted/decrypted? This applies AES-GCM via \code{\link[openssl:aes_gcm_encrypt]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. This guarantees both confidentiality and integrity: the file cannot be read without the correct \code{key}, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random \link{raw} vector.}
 
-\item{key}{A character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:hash]{openssl::sha256()}} to ensure a raw high-entropy key of length \code{32}, suitable for AES-GCM encryption. The default is the \link[=Sys.getenv]{system environment variable}: \code{mmbi_epi_encryption_key}.}
+\item{key}{A character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:sha256]{openssl::sha256()}} to ensure a raw high-entropy key of length \code{32}, suitable for AES-GCM encryption. The default is \code{read_secret("tools.encryption_password")}. If the key is missing or empty, e.g. when this secret is not set, the object will not be encrypted.}
 }
 \description{
 Securely transfer any R object with full attribute preservation and cross-platform JSON compatibility. This uses the same approach as the \href{https://github.com/umcg-mmbi-epidemiology/mmbi.epi/blob/1ed61034ad0c68fd0e78843aa1ff253d141ce6d8/R/serialise-encrypt-post.R}{\code{mmbi.epi} package of the UMCG}.
@@ -50,7 +50,8 @@ post_data(iris,
 
 # use create_json_body() to make a(n encrypted) JSON of an object
 
-iris_json <- iris |> create_json_body(compress = TRUE, encrypt = TRUE)
+# (the default key is read_secret("tools.encryption_password"); here, an example key is used)
+iris_json <- iris |> create_json_body(compress = TRUE, encrypt = TRUE, key = "example_key")
 
 # curl -X POST https://some-server:8000/post
 #      -H "Content-Type: application/json"

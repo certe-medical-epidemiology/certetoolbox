@@ -23,7 +23,7 @@
 #' @param object Any object of any size, preferably a data set
 #' @param compress Should the object be compressed/decompressed? At least allowed: `"gzip"` (or `TRUE`), `"bzip2"`, `"xz"`, see [base::memCompress()]. Use `FALSE` to not compress/decompress.
 #' @param encrypt Should the object be encrypted/decrypted? This applies AES-GCM via [openssl::aes_gcm_encrypt()], providing authenticated encryption. This guarantees both confidentiality and integrity: the file cannot be read without the correct `key`, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random [raw] vector.
-#' @param key A character to be used as the encryption key. Internally, this is converted using [openssl::sha256()] to ensure a raw high-entropy key of length `32`, suitable for AES-GCM encryption. The default is the [system environment variable][Sys.getenv()]: `mmbi_epi_encryption_key`.
+#' @param key A character to be used as the encryption key. Internally, this is converted using [openssl::sha256()] to ensure a raw high-entropy key of length `32`, suitable for AES-GCM encryption. The default is `read_secret("tools.encryption_password")`. If the key is missing or empty, e.g. when this secret is not set, the object will not be encrypted.
 #' @param url A character string specifying the target URL for the HTTP POST request. Must include the full scheme (e.g., `"https://"` or `"http://"`), hostname, and path.
 #' @param authorization_header A character string specifying the value of the `Authorization` header to include in the POST request, e.g. `"Bearer <token>"`. Use `NULL` to omit the header.
 #' @importFrom httr POST add_headers stop_for_status
@@ -42,7 +42,8 @@
 #' 
 #' # use create_json_body() to make a(n encrypted) JSON of an object
 #' 
-#' iris_json <- iris |> create_json_body(compress = TRUE, encrypt = TRUE)
+#' # (the default key is read_secret("tools.encryption_password"); here, an example key is used)
+#' iris_json <- iris |> create_json_body(compress = TRUE, encrypt = TRUE, key = "example_key")
 #' 
 #' # curl -X POST https://some-server:8000/post
 #' #      -H "Content-Type: application/json"
@@ -59,7 +60,8 @@ post_data <- function(object,
   
   json_body <- create_json_body(object = object,
                                 compress = compress,
-                                encrypt = encrypt)
+                                encrypt = encrypt,
+                                key = key)
   
   resp <- POST(url = url,
                body = json_body,

@@ -147,120 +147,146 @@ export(year)
 export(year_since_date)
 export(year_to_date)
 export(yesterday)
-importFrom(certeprojects,connect_teams)
-importFrom(certeprojects,download_from_sharepoint)
-importFrom(certeprojects,project_get_current_id)
-importFrom(certeprojects,project_get_file)
-importFrom(certeprojects,project_identifier)
-importFrom(certeprojects,project_set_file)
-importFrom(certeprojects,teams_download_file)
-importFrom(certeprojects,teams_upload_file)
-importFrom(certeprojects,upload_to_sharepoint)
-importFrom(certestyle,big_mark)
-importFrom(certestyle,colourpicker)
-importFrom(certestyle,current_markdown_colour)
-importFrom(certestyle,dec_mark)
-importFrom(certestyle,format2)
-importFrom(certestyle,toproper)
-importFrom(cleaner,as.percentage)
-importFrom(cleaner,clean_Date)
-importFrom(cleaner,clean_POSIXct)
-importFrom(cleaner,clean_logical)
-importFrom(cleaner,format_datetime)
-importFrom(cleaner,format_names)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,across)
-importFrom(dplyr,arrange)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,bind_cols)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,desc)
-importFrom(dplyr,distinct)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,mutate_if)
-importFrom(dplyr,pull)
-importFrom(dplyr,row_number)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,tibble)
-importFrom(dplyr,transmute)
-importFrom(dplyr,ungroup)
-importFrom(dplyr,where)
+importFrom(certeprojects,
+  connect_teams,
+  download_from_sharepoint,
+  project_get_current_id,
+  project_get_file,
+  project_identifier,
+  project_set_file,
+  teams_download_file,
+  teams_upload_file,
+  upload_to_sharepoint
+)
+importFrom(certestyle,
+  big_mark,
+  colourpicker,
+  current_markdown_colour,
+  dec_mark,
+  format2,
+  toproper
+)
+importFrom(cleaner,
+  as.percentage,
+  clean_Date,
+  clean_POSIXct,
+  clean_logical,
+  format_datetime,
+  format_names
+)
+importFrom(dplyr,
+  "%>%",
+  across,
+  arrange,
+  as_tibble,
+  bind_cols,
+  bind_rows,
+  case_when,
+  desc,
+  distinct,
+  everything,
+  filter,
+  left_join,
+  mutate,
+  mutate_if,
+  pull,
+  row_number,
+  select,
+  summarise,
+  tibble,
+  transmute,
+  ungroup,
+  where
+)
 importFrom(glue,glue)
-importFrom(httr,GET)
-importFrom(httr,POST)
-importFrom(httr,PUT)
-importFrom(httr,add_headers)
-importFrom(httr,content)
-importFrom(httr,content_type_json)
-importFrom(httr,status_code)
-importFrom(httr,stop_for_status)
-importFrom(jsonlite,base64_enc)
-importFrom(jsonlite,toJSON)
-importFrom(jsonlite,write_json)
-importFrom(knitr,asis_output)
-importFrom(knitr,is_latex_output)
-importFrom(knitr,kable)
-importFrom(knitr,knit_print)
-importFrom(knitr,opts_chunk)
-importFrom(knitr,opts_current)
-importFrom(knitr,raw_latex)
-importFrom(lubridate,"tz<-")
-importFrom(lubridate,`year<-`)
-importFrom(lubridate,as_date)
-importFrom(lubridate,ceiling_date)
-importFrom(lubridate,dmonths)
-importFrom(lubridate,dweeks)
-importFrom(lubridate,dyears)
-importFrom(lubridate,floor_date)
-importFrom(lubridate,isoweek)
-importFrom(lubridate,now)
-importFrom(lubridate,today)
-importFrom(lubridate,year)
-importFrom(openxlsx2,create_colors_xml)
-importFrom(openxlsx2,wb_add_cell_style)
-importFrom(openxlsx2,wb_add_data_table)
-importFrom(openxlsx2,wb_add_numfmt)
-importFrom(openxlsx2,wb_add_worksheet)
-importFrom(openxlsx2,wb_dims)
-importFrom(openxlsx2,wb_freeze_pane)
-importFrom(openxlsx2,wb_remove_worksheet)
-importFrom(openxlsx2,wb_save)
-importFrom(openxlsx2,wb_set_base_colours)
-importFrom(openxlsx2,wb_set_base_font)
-importFrom(openxlsx2,wb_set_col_widths)
-importFrom(openxlsx2,wb_set_properties)
-importFrom(openxlsx2,wb_workbook)
-importFrom(readr,locale)
-importFrom(readr,parse_guess)
-importFrom(readr,problems)
-importFrom(readr,read_delim)
-importFrom(readr,read_tsv)
-importFrom(readr,write_tsv)
-importFrom(rstudioapi,document_position)
-importFrom(rstudioapi,document_range)
-importFrom(rstudioapi,getActiveDocumentContext)
-importFrom(rstudioapi,getActiveProject)
-importFrom(rstudioapi,insertText)
-importFrom(rstudioapi,modifyRange)
-importFrom(rstudioapi,readRStudioPreference)
-importFrom(rstudioapi,showPrompt)
-importFrom(rvest,html_element)
-importFrom(rvest,html_elements)
-importFrom(rvest,html_node)
-importFrom(rvest,html_table)
-importFrom(rvest,html_text2)
-importFrom(rvest,read_html)
+importFrom(httr,
+  GET,
+  POST,
+  PUT,
+  add_headers,
+  content,
+  content_type_json,
+  status_code,
+  stop_for_status
+)
+importFrom(jsonlite,
+  base64_enc,
+  toJSON,
+  write_json
+)
+importFrom(knitr,
+  asis_output,
+  is_latex_output,
+  kable,
+  knit_print,
+  opts_chunk,
+  opts_current,
+  raw_latex
+)
+importFrom(lubridate,
+  "tz<-",
+  "year<-",
+  as_date,
+  ceiling_date,
+  dmonths,
+  dweeks,
+  dyears,
+  floor_date,
+  isoweek,
+  now,
+  today,
+  year
+)
+importFrom(openxlsx2,
+  create_colors_xml,
+  wb_add_cell_style,
+  wb_add_data_table,
+  wb_add_numfmt,
+  wb_add_worksheet,
+  wb_dims,
+  wb_freeze_pane,
+  wb_remove_worksheet,
+  wb_save,
+  wb_set_base_colours,
+  wb_set_base_font,
+  wb_set_col_widths,
+  wb_set_properties,
+  wb_workbook
+)
+importFrom(readr,
+  locale,
+  parse_guess,
+  problems,
+  read_delim,
+  read_tsv,
+  write_tsv
+)
+importFrom(rstudioapi,
+  document_position,
+  document_range,
+  getActiveDocumentContext,
+  getActiveProject,
+  insertText,
+  modifyRange,
+  readRStudioPreference,
+  showPrompt
+)
+importFrom(rvest,
+  html_element,
+  html_elements,
+  html_node,
+  html_table,
+  html_text2,
+  read_html
+)
 importFrom(tibble,rownames_to_column)
 importFrom(tidyr,pivot_wider)
-importFrom(vctrs,vec_cast.character)
-importFrom(vctrs,vec_cast.double)
-importFrom(vctrs,vec_cast.integer)
-importFrom(vctrs,vec_ptype2.character)
-importFrom(vctrs,vec_ptype2.double)
-importFrom(vctrs,vec_ptype2.integer)
+importFrom(vctrs,
+  vec_cast.character,
+  vec_cast.double,
+  vec_cast.integer,
+  vec_ptype2.character,
+  vec_ptype2.double,
+  vec_ptype2.integer
+)
 importFrom(yaml,read_yaml)

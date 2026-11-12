@@ -263,7 +263,7 @@ import_teams(
 
 \item{encoding}{Default encoding. This only affects how the file is read.}
 
-\item{key}{a character to decrypt the file, see \code{\link[=export]{export()}} for explanation of \code{key}. For manual decryption, run \code{\link[=decrypt_object]{decrypt_object()}}.}
+\item{key}{a character to decrypt the file, see \code{\link[=export]{export()}} for explanation of \code{key}. Importing an encrypted file fails with an error if the key is missing, empty or incorrect. For manual decryption, run \code{\link[=decrypt_object]{decrypt_object()}}.}
 
 \item{...}{arguments passed on to methods}
 
@@ -317,7 +317,7 @@ import_teams(
 
 \item{sort}{initial sorting}
 
-\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect]{certeprojects::connect_teams()}}}
+\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect_teams]{certeprojects::connect_teams()}}}
 
 \item{url}{remote location of any data set, can also be a (non-raw) GitHub/GitLab link}
 
@@ -333,7 +333,7 @@ Importing an Excel file using \code{\link[=import_xlsx]{import_xlsx()}} or \code
 
 Importing an SPSS file using \code{\link[=import_sav]{import_sav()}} or \code{\link[=import_spss]{import_spss()}} requires the \code{haven} package to be installed.
 
-Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
+Importing a Feather file using \code{\link[=import_feather]{import_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Feather (version 2) is the Arrow IPC file format, so files are read with \code{\link[arrow:read_ipc_file]{arrow::read_ipc_file()}}. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
 Importing a Parquet file using \code{\link[=import_parquet]{import_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval. Use the \code{col_select} argument (which supports the \link[tidyselect:language]{tidyselect language}) for specific data selection to improve importing speed.
 
@@ -343,7 +343,7 @@ Importing mail attachments using \code{\link[=import_mail_attachment]{import_mai
 
 The \code{\link[=import_url]{import_url()}} function tries to download the file first, after which it will be imported using the appropriate \verb{import_*()} function.
 
-The \code{\link[=import_teams]{import_teams()}} function uses \code{\link[certeprojects:teams]{certeprojects::teams_download_file()}} to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate \verb{import_*()} function.
+The \code{\link[=import_teams]{import_teams()}} function uses \code{\link[certeprojects:teams_download_file]{certeprojects::teams_download_file()}} to provide an interactive way to select a file in any Team, to download the file, and to import the file using the appropriate \verb{import_*()} function.
 }
 \examples{
 export_csv(iris)

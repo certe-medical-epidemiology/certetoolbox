@@ -69,6 +69,11 @@ export_exec <- function(object,
     return(invisible(object))
   }
   
+  if (isTRUE(encrypt) && !is_valid_encryption_key(key)) {
+    message("No encryption key available (e.g., secret 'tools.encryption_password' not set), so the object will not be encrypted.")
+    encrypt <- FALSE
+  }
+  
   if (any(colnames(object) %like% "bsn|burger.*service") && encrypt == FALSE) {
     warning("Data set might contain social security numbers (BSN) - these must never be shared.", call. = FALSE)
   }
@@ -93,10 +98,10 @@ export_exec <- function(object,
     # SPSS format
     haven::write_sav(object, path = filename, ...)
   } else if (needed_extension == "feather") {
-    # Apache's Feather format
+    # Apache's Feather format, which is the Arrow IPC file format since Feather V2
     object <- rownames_1st_column(object)
     object.bak <- object
-    arrow::write_feather(x = object, sink = filename, ...)
+    arrow::write_ipc_file(x = object, sink = filename, ...)
   } else if (needed_extension == "parquet") {
     # Apache's Parquet format
     object <- rownames_1st_column(object)
@@ -268,8 +273,10 @@ import_exec <- function(filename,
                              na = list(...)$na,
                              skip = list(...)$skip)
   } else if (extension %in% c("feather", "parquet")) {
-    # Apache's Feather and Parquet format
-    fun <- getExportedValue(paste0("read_", extension), ns = asNamespace("arrow"))
+    # Apache's Feather (= Arrow IPC file format) and Parquet format
+    fun <- switch(extension,
+                  feather = arrow::read_ipc_file,
+                  parquet = arrow::read_parquet)
     df <- fun(file = filename,
               # always include first column, might be rownames
               col_select = c(1, list(...)$col_select),
@@ -454,7 +461,7 @@ plot_export_result <- function(filename) {
 #' @param project_number a Microsoft Planner project number
 #' @param overwrite a [logical] value to indicate if an existing file must be overwritten. In [interactive mode][base::interactive()], this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to `filename_datetime.ext` before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.
 #' @param encrypt a [logical] value to indicate if the object must be encrypted before exporting using AES-GCM via [openssl::aes_gcm_encrypt()], providing authenticated encryption. Default is `TRUE` for `rds` files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.
-#' @param key a character to be used as the encryption key. Internally, this is converted using [openssl::sha256()] to ensure a [raw] high-entropy key of length 32, suitable for AES-GCM. The default is `read_secret("tools.encryption_password")`.
+#' @param key a character to be used as the encryption key. Internally, this is converted using [openssl::sha256()] to ensure a [raw] high-entropy key of length 32, suitable for AES-GCM. The default is `read_secret("tools.encryption_password")`. If the key is missing or empty, e.g. when this secret is not set, the object will not be encrypted.
 #' @param ... arguments passed on to methods
 #' @details The [export()] function can export to any file format, also with a manually set export function when passed on to the `fn` argument. This function `fn` has to have the object as first argument and the future file location as second argument. If `fn` is left blank, the `export_*` function will be used based on the filename.
 #' @rdname export
@@ -463,27 +470,29 @@ plot_export_result <- function(filename) {
 #' @examples 
 #' library(dplyr, warn.conflicts = FALSE)
 #' 
+#' # RDS files are encrypted by default, using the key from
+#' # read_secret("tools.encryption_password"); here, an example key is used
+#' 
 #' # export to two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 #' starwars |>
-#'   export_rds("whole_file") |>
+#'   export_rds("whole_file", key = "example_key") |>
 #'   slice(1:10) |>
 #'   export_xlsx("first_ten_rows")
 #'   
 #' # the above is equal to:
 #' # starwars |>
-#' #   export("whole_file.rds") |>
+#' #   export("whole_file.rds", key = "example_key") |>
 #' #   slice(1:10) |>
 #' #   export("first_ten_rows.xlsx")
 #' 
-#' # RDS files are encrypted by default
 #' x <- base::readRDS("whole_file.rds")
 #' head(x)
 #' # use decrypt_object() for manual decryption
-#' x <- decrypt_object(x)
+#' x <- decrypt_object(x, key = "example_key")
 #' head(x)
 #' 
 #' # this goes automatically with import_rds():
-#' x <- import_rds("whole_file.rds")
+#' x <- import_rds("whole_file.rds", key = "example_key")
 #' head(x)
 #' 
 #' 
@@ -798,7 +807,7 @@ export_sav <- function(object,
 export_spss <- export_sav 
 
 #' @rdname export
-#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R).
+#' @details `r doc_requirement("a Feather file", "export_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Feather (version 2) is the Arrow IPC file format, so files are written with [arrow::write_ipc_file()].
 #' @export
 export_feather <- function(object,
                            filename = NULL,
@@ -1101,7 +1110,7 @@ export_html <- function(plot,
 #' @param filename the full path of the file to be imported, will be parsed to a [character], can also be a remote location (from http/https/ftp/ssh, GitHub/GitLab)
 #' @param auto_transform transform the imported data with [auto_transform()]
 #' @param project_number a Microsoft Planner project number
-#' @param key a character to decrypt the file, see [export()] for explanation of `key`. For manual decryption, run [decrypt_object()].
+#' @param key a character to decrypt the file, see [export()] for explanation of `key`. Importing an encrypted file fails with an error if the key is missing, empty or incorrect. For manual decryption, run [decrypt_object()].
 #' @param ... arguments passed on to methods
 #' @details `r doc_requirement("any unlisted filetype", "import", "rio")`.
 #' @rdname import
@@ -1435,7 +1444,7 @@ import_sav <- function(filename,
 import_spss <- import_sav
 
 #' @rdname import
-#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
+#' @details `r doc_requirement("a Feather file", "import_feather", "arrow")`. [Apache Feather](https://arrow.apache.org/docs/python/feather.html) provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Feather (version 2) is the Arrow IPC file format, so files are read with [arrow::read_ipc_file()]. Use the `col_select` argument (which supports the [tidyselect language][tidyselect::language]) for specific data selection to improve importing speed.
 #' @param col_select columns to select, supports the [tidyselect language][tidyselect::language])
 #' @importFrom dplyr everything
 #' @export
@@ -1459,6 +1468,10 @@ import_feather <- function(filename,
 #' @export
 encrypt_object <- function(object, key = read_secret("tools.encryption_password"), serialise = TRUE, compress = TRUE) {
   check_is_installed("openssl")
+  if (!is_valid_encryption_key(key)) {
+    message("No encryption key available (e.g., secret 'tools.encryption_password' not set), so the object is not encrypted.")
+    return(object)
+  }
   if (isTRUE(serialise)) {
     # transform into raw vector
     object <- serialize(object, connection = NULL, xdr = TRUE)
@@ -1483,22 +1496,37 @@ decrypt_object <- function(object, key = read_secret("tools.encryption_password"
   if (is.raw(object) && !is.null(attr(object, "iv"))) {
     # object was encrypted using openssl::aes_gcm_encrypt() in an export_* function
     check_is_installed("openssl")
-    object <- openssl::aes_gcm_decrypt(object,
-                                       key = openssl::sha256(charToRaw(key)),
-                                       iv = attr(object, "iv"))
-    tryCatch({
+    if (!is_valid_encryption_key(key)) {
+      stop("Cannot decrypt the object: no valid `key`. Set the property 'tools.encryption_password' ",
+           "in the secrets file (environment variable 'secrets_file'), or provide `key` as a single, non-empty character string.",
+           call. = FALSE)
+    }
+    # a wrong key does not make aes_gcm_decrypt() fail, it returns other bytes;
+    # these are then caught by memDecompress() or unserialize() below
+    object <- tryCatch({
+      object <- openssl::aes_gcm_decrypt(object,
+                                         key = openssl::sha256(charToRaw(key)),
+                                         iv = attr(object, "iv"))
       if (isTRUE(compressed)) {
         object <- memDecompress(object, type = "gzip")
       }
       if (isTRUE(serialised)) {
         object <- unserialize(object)
       }
-      message("AES-GCM encryption removed using provided `key`.")
+      object
     }, error = function(e) {
-      warning("AES-GCM encryption could not be removed ('", conditionMessage(e), "'), returning raw vector.", call. = FALSE, immediate. = TRUE)
+      stop("AES-GCM encryption could not be removed: the `key` is incorrect or the data is damaged (",
+           conditionMessage(e), ").", call. = FALSE)
     })
+    message("AES-GCM encryption removed using provided `key`.")
   }
   object
+}
+
+is_valid_encryption_key <- function(key) {
+  # read_secret() warns and returns "" when the secret is missing
+  key <- tryCatch(suppressWarnings(force(key)), error = function(e) NULL)
+  is.character(key) && length(key) == 1 && !is.na(key) && key != ""
 }
 
 #' @rdname import

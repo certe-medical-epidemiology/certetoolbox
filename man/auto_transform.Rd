@@ -39,5 +39,5 @@ auto_transform(
 \item{...}{not used as the time, allows for future extension}
 }
 \description{
-This function transforms a \link{data.frame} by guessing the right data classes and applying them, using \code{\link[readr:parse_guess]{readr::parse_guess()}} and \code{cleaner} functions such as \code{\link[cleaner:clean]{cleaner::clean_Date()}}.
+This function transforms a \link{data.frame} by guessing the right data classes and applying them, using \code{\link[readr:parse_guess]{readr::parse_guess()}} and \code{cleaner} functions such as \code{\link[cleaner:clean_Date]{cleaner::clean_Date()}}.
 }

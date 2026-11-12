@@ -257,7 +257,7 @@ next_year <- function(ref = today(), only_start_end = FALSE) {
 
 #' @rdname days_around_today
 #' @details The [last_n_years()], [last_5_years()] and [last_10_years()] functions have their reference date set to [end_of_last_year()] at default.
-#' @importFrom lubridate as_date `year<-`
+#' @importFrom lubridate as_date "year<-"
 #' @export
 last_n_years <- function(n, ref = end_of_last_year(), only_start_end = FALSE) {
   ref <- as_date(ref)

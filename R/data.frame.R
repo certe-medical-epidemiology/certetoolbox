@@ -307,17 +307,18 @@ tbl_flextable <- function(x,
     # apply to gtsummary object
     .eval_list_of_exprs <- get(".eval_list_of_exprs", envir = asNamespace("gtsummary"))
     x <- .eval_list_of_exprs(gt_flex)
-    if (!is.null(gt$table_styling$header$spanning_header) && length(unique(gt$table_styling$header$spanning_header)) > 1) {
-      # fix for double header
+    n_header_rows <- flextable::nrow_part(x, part = "header")
+    if (n_header_rows > 1) {
+      # fix for multiple header rows, e.g. due to spanning headers
       x <- x |>
-        flextable::border(i = 1:2, j = 1,
+        flextable::border(i = seq_len(n_header_rows), j = 1,
                border.bottom = flextable::fp_border_default(NA),
                border.top = flextable::fp_border_default(NA),
                part = "header") |>
         flextable::border(i = 1, j = 1,
                border.top = flextable::fp_border_default(width = 2),
                part = "header") |>
-        flextable::border(i = 2, j = 1,
+        flextable::border(i = n_header_rows, j = 1,
                border.bottom = flextable::fp_border_default(width = 2),
                part = "header")
     }
@@ -1384,9 +1385,9 @@ auto_transform <- function(x,
 #' @param identifier a column name to use as identifier, such as a patient ID or an order ID
 #' @param compare a column name for the two axes of the table: the labels between the outcomes must be compared
 #' @param outcome a column name containing the outcome values to compare
-#' @param positive a [regex] to match the values in `outcome` that must be considered as the Positive class, use `FALSE` to not use a Positive class
-#' @param negative a [regex] to match the values in `outcome` that must be considered as the Negative class, use `FALSE` to not use a Negative class
-#' @param ... manual [regex]es for classes if not using `positive` and `negative`, such as `Class1 = "c1", Class2 = "c2", Class3 = "c3"`
+#' @param positive a [base::regex] to match the values in `outcome` that must be considered as the Positive class, use `FALSE` to not use a Positive class
+#' @param negative a [base::regex] to match the values in `outcome` that must be considered as the Negative class, use `FALSE` to not use a Negative class
+#' @param ... manual [base::regex]es for classes if not using `positive` and `negative`, such as `Class1 = "c1", Class2 = "c2", Class3 = "c3"`
 #' @param na.rm a [logical] to indicate whether empty values must be removed before forming the table
 #' @param ignore_case a [logical] to indicate whether the case in the values of `positive`, `negative` and `...` must be ignored
 #' @importFrom dplyr mutate case_when select pull transmute

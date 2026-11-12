@@ -202,9 +202,9 @@ export_teams(
 
 \item{overwrite}{a \link{logical} value to indicate if an existing file must be overwritten. In \link[base:interactive]{interactive mode}, this will be asked if the file exists. In non-interactive mode, this has a special default behaviour: the original file will be copied to \code{filename_datetime.ext} before overwriting the file. Exporting with existing files is always non-destructive: if exporting fails, the original, existing file will not be altered.}
 
-\item{encrypt}{a \link{logical} value to indicate if the object must be encrypted before exporting using AES-GCM via \code{\link[openssl:aes_cbc]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. Default is \code{TRUE} for \code{rds} files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.}
+\item{encrypt}{a \link{logical} value to indicate if the object must be encrypted before exporting using AES-GCM via \code{\link[openssl:aes_gcm_encrypt]{openssl::aes_gcm_encrypt()}}, providing authenticated encryption. Default is \code{TRUE} for \code{rds} files. This guarantees both confidentiality and integrity: the file cannot be read without the correct key, and any tampering will be detected automatically during decryption. The initialization vector (iv) will be a length-12 random raw vector.}
 
-\item{key}{a character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:hash]{openssl::sha256()}} to ensure a \link{raw} high-entropy key of length 32, suitable for AES-GCM. The default is \code{read_secret("tools.encryption_password")}.}
+\item{key}{a character to be used as the encryption key. Internally, this is converted using \code{\link[openssl:sha256]{openssl::sha256()}} to ensure a \link{raw} high-entropy key of length 32, suitable for AES-GCM. The default is \code{read_secret("tools.encryption_password")}. If the key is missing or empty, e.g. when this secret is not set, the object will not be encrypted.}
 
 \item{fn}{a manual export function, such as \code{haven::write_sas} to write SAS files. This function has to have the object as first argument and the future file location as second argument.}
 
@@ -250,7 +250,7 @@ export_teams(
 
 \item{full_teams_path}{path in Teams to export object to. Can be left blank to use interactive folder picking mode in the console.}
 
-\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect]{certeprojects::connect_teams()}}}
+\item{account}{a Teams account from Azure or an \code{AzureAuth} Microsoft 365 token, e.g. retrieved with \code{\link[certeprojects:connect_teams]{certeprojects::connect_teams()}}}
 }
 \description{
 These functions can be used to export data sets and plots. They invisibly return the object itself again, allowing for usage in pipes (except for the plot-exporting functions \code{\link[=export_pdf]{export_pdf()}}, \code{\link[=export_png]{export_png()}} and \code{\link[=export_html]{export_html()}}). The functions work closely together with the \code{certeprojects} package to support Microsoft Planner project numbers.
@@ -268,7 +268,7 @@ The \code{\link[=export_txt]{export_txt()}} function exports to a tab-separated 
 
 Exporting to an SPSS file using \code{\link[=export_sav]{export_sav()}} or \code{\link[=export_spss]{export_spss()}} requires the \code{haven} package to be installed.
 
-Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R).
+Exporting to a Feather file using \code{\link[=export_feather]{export_feather()}} requires the \code{arrow} package to be installed. \href{https://arrow.apache.org/docs/python/feather.html}{Apache Feather} provides efficient binary columnar serialization for data sets, enabling easy sharing data across data analysis languages (such as between Python and R). Feather (version 2) is the Arrow IPC file format, so files are written with \code{\link[arrow:write_ipc_file]{arrow::write_ipc_file()}}.
 
 Exporting to a Parquet file using \code{\link[=export_parquet]{export_parquet()}} requires the \code{arrow} package to be installed. \href{https://parquet.apache.org}{Apache Parquet} is an open source, column-oriented data file format designed for efficient data storage and retrieval.
 
@@ -285,27 +285,29 @@ Exporting to Microsoft Teams using \code{\link[=export_teams]{export_teams()}} r
 \examples{
 library(dplyr, warn.conflicts = FALSE)
 
+# RDS files are encrypted by default, using the key from
+# read_secret("tools.encryption_password"); here, an example key is used
+
 # export to two files: 'whole_file.rds' and 'first_ten_rows.xlsx'
 starwars |>
-  export_rds("whole_file") |>
+  export_rds("whole_file", key = "example_key") |>
   slice(1:10) |>
   export_xlsx("first_ten_rows")
   
 # the above is equal to:
 # starwars |>
-#   export("whole_file.rds") |>
+#   export("whole_file.rds", key = "example_key") |>
 #   slice(1:10) |>
 #   export("first_ten_rows.xlsx")
 
-# RDS files are encrypted by default
 x <- base::readRDS("whole_file.rds")
 head(x)
 # use decrypt_object() for manual decryption
-x <- decrypt_object(x)
+x <- decrypt_object(x, key = "example_key")
 head(x)
 
 # this goes automatically with import_rds():
-x <- import_rds("whole_file.rds")
+x <- import_rds("whole_file.rds", key = "example_key")
 head(x)
 
 
